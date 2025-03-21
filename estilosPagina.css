@@ -1,0 +1,39 @@
+*{
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    padding: 0px;
+}
+#tablaContenidos{
+    margin-left: 100px;
+    margin-top: 100px;
+}
+.celda{
+    height: 200px;
+    width: 200px;
+    background-color: rgb(208, 255, 0);
+    border: 2px;
+    border: solid;
+    border-color: black;
+    text-align: center;
+}
+.caja{
+    height: 120px;
+    width: 200px;
+    background-color: transparent;
+    color: black;
+    font-size: larger;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+}
+.cajaOculta{
+    height: 0px;
+    width: 0px;
+    background-color: transparent;
+    color: black;
+    font-size: larger;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    transform: rotate3d(1,0,0,90deg);  
+}
