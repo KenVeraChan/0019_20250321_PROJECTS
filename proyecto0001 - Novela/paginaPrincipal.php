@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="estilosPagina.css">
 </head>
 <body onload="activador()">
+<img id="imagenFondo" src="/images/cubos blancos.png" alt="planeta Tierra de fondo">
     <table id="tablaContenidos">
        <tr>
         <td class="celda">
@@ -34,12 +35,22 @@
               ACCEDER A CARTOGRAFÍA
             </div>
         </td>
+       </tr>
+       <tr>
         <td class="celda">
             <div class="caja">
               ACONTECIMIENTOS
             </div>
             <div class="cajaOculta">
               ACCEDER A ACONTECIMIENTOS
+            </div>
+        </td>
+        <td class="celda">
+            <div class="caja">
+              ANOTACIONES
+            </div>
+            <div class="cajaOculta">
+              ACCEDER A ANOTACIONES
             </div>
         </td>
         <td class="celda">
