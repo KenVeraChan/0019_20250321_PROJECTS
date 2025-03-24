@@ -15,7 +15,11 @@
     z-index: -100;
 }
 #tablaContenidos{
+<<<<<<< HEAD
     margin-left: -2000px;      /*COLOCAR Al 20%; TRAS CARGA PAGINA*/
+=======
+    margin-left: 20%;
+>>>>>>> 37fb6fa5d3ab2dc3aa9e160c76998490f92a5b5a
     margin-top: 100px;
 }
 .celda{
@@ -50,4 +54,8 @@
     text-align: center;
     transform: rotate3d(1,0,0,90deg);  
     z-index: -1;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 37fb6fa5d3ab2dc3aa9e160c76998490f92a5b5a
