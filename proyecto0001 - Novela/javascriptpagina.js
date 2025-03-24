@@ -1,34 +1,30 @@
 const matrizCelda= document.getElementsByClassName("celda");
 const matrizCaja= document.getElementsByClassName("caja");
 const matrizCajaOculta= document.getElementsByClassName("cajaOculta");
+const matrizFila= document.getElementById("tablaContenidos");
+
 function activador()
 {
+    //proceso de aparición de la tabla
+        matrizFila.style.transitionDuration = "0.5s";
+        matrizFila.style.marginLeft = "20%"
+    //proceso eventual de cambio de cartel
     for(let puntero=0;puntero<matrizCaja.length;puntero++)
         {
             matrizCelda[puntero].addEventListener("mouseenter", function(){
-                matrizCaja[puntero].style.transitionDuration = "0.5s";
-                matrizCaja[puntero].style.background = "orange";
-                matrizCaja[puntero].style.height = "0px";
-                matrizCaja[puntero].style.width = "0px";
+                matrizCaja[puntero].style.transitionDuration = "0.25s";
                 matrizCaja[puntero].style.transform = "rotate3d(1,0,0,90deg)";
                 //SE DARA LA VUELTA A LA CARA OCULTA MIENTRAS SE MUESTRA LA CARA PRINCIPAL
-                matrizCajaOculta[puntero].style.transitionDuration = "0.5s";
-                matrizCajaOculta[puntero].style.background = "blue";
-                matrizCajaOculta[puntero].style.height = "200px";
-                matrizCajaOculta[puntero].style.width = "200px";
+                matrizCajaOculta[puntero].style.transitionDelay = "0.25s";
+                matrizCajaOculta[puntero].style.transitionDuration = "0.25s";
                 matrizCajaOculta[puntero].style.transform = "rotate3d(1,0,0,0deg)";
             });
             matrizCelda[puntero].addEventListener("mouseleave", function(){
-                matrizCaja[puntero].style.transitionDuration = "0.5s";
-                matrizCaja[puntero].style.background = "rgb(208, 255, 0)";
-                matrizCaja[puntero].style.height = "120px";
-                matrizCaja[puntero].style.width = "200px";
+                matrizCaja[puntero].style.transitionDuration = "0.25s";
                 matrizCaja[puntero].style.transform = "rotate3d(1,0,0,0deg)";
                 //SE DARA LA VUELTA A LA CARA OCULTA PARA DEJARLA EN OCULTA DE NUEVO
-                matrizCajaOculta[puntero].style.transitionDuration = "0.5s";
-                matrizCajaOculta[puntero].style.background = "blue";
-                matrizCajaOculta[puntero].style.height = "0px";
-                matrizCajaOculta[puntero].style.width = "0px";
+                matrizCajaOculta[puntero].style.transitionDelay = "0.25s";
+                matrizCajaOculta[puntero].style.transitionDuration = "0.25s";
                 matrizCajaOculta[puntero].style.transform = "rotate3d(1,0,0,90deg)";
             });
         }
