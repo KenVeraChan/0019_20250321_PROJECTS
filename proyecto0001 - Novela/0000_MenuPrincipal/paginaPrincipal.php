@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="estilosPagina.css">
 </head>
 <body onload="activador()">
-<img id="imagenFondo" src="/images/cubos blancos.png" alt="planeta Tierra de fondo">
+<img id="imagenFondo" src="../0000_MenuPrincipal/images/cubos blancos.png" alt="planeta Tierra de fondo">
+    <div id="titulo">MENU PRINCIPAL</div>
     <table id="tablaContenidos">
        <tr>
         <td class="celda">
@@ -16,7 +17,7 @@
               ARGUMENTO
             </div>
             <div class="cajaOculta">
-              ACCEDER A ARGUMENTO
+              <a class="enlaceActivo" href="../0001_Argumento/argumento.php">ACCEDER A ARGUMENTO</a>
             </div>
         </td>
         <td class="celda">
@@ -24,7 +25,7 @@
               PERSONAJES
             </div>
             <div class="cajaOculta">
-              ACCEDER A PERSONAJES
+              <a class="enlaceActivo" href="../0002_Personajes/personajes.php">ACCEDER A PERSONAJES</a>
             </div>
         </td>
         <td class="celda">
@@ -32,7 +33,7 @@
               CARTOGRAFÍA
             </div>
             <div class="cajaOculta">
-              ACCEDER A CARTOGRAFÍA
+              <a class="enlaceActivo" href="../0003_Cartografia/cartografia.php">ACCEDER A CARTOGRAFÍA</a>
             </div>
         </td>
        </tr>
@@ -42,7 +43,7 @@
               ACONTECIMIENTOS
             </div>
             <div class="cajaOculta">
-              ACCEDER A ACONTECIMIENTOS
+              <a class="enlaceActivo" href="../0004_Acontecimientos/acontecimientos.php">ACCEDER A ACONTECIMIENTOS</a>
             </div>
         </td>
         <td class="celda">
@@ -50,7 +51,7 @@
               ANOTACIONES
             </div>
             <div class="cajaOculta">
-              ACCEDER A ANOTACIONES
+              <a class="enlaceActivo" href="../0005_Anotaciones/anotaciones.php">ACCEDER A ANOTACIONES</a>
             </div>
         </td>
         <td class="celda">
@@ -58,13 +59,12 @@
               CALENDARIOS
             </div>
             <div class="cajaOculta">
-              ACCEDER A CALENDARIOS
+              <a class="enlaceActivo" href="../0006_Calendarios/calendariosPlanetarios.php">ACCEDER A CALENDARIOS</a>
             </div>
         </td>
        </tr> 
 
     </table>
     <script src="javascriptpagina.js"></script>
-
 </body>
 </html>

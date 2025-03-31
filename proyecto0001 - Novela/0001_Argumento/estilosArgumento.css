@@ -1,0 +1,71 @@
+*{
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    padding: 0px;
+}
+#imagenFondo
+{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -100;
+}
+#titulo
+{
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(71, 69, 69, 0.288);
+    text-align: center;
+    font-size: xx-large;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color:rgb(208, 255, 0);
+    text-shadow: black 0.1em 0.1em 0.2em;
+}
+#tablaContenidos{
+    margin-left: -2000px;      /*COLOCAR Al 20%; TRAS CARGA PAGINA*/
+    margin-top: 100px;
+}
+.celda{
+    height: 200px;
+    width: 200px;
+    border: 2px;
+    background-color: transparent;
+    border: solid;
+    border-color: black;
+    text-align: center;
+}
+.caja{
+    height: 130px;
+    width: 200px;
+    padding-top: 70px;
+    background-color: rgb(208, 255, 0);
+    color: black;
+    font-size: larger;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+}
+.cajaOculta{
+    position: absolute;
+    margin-top: -200px;
+    height: 130px;
+    width: 200px;
+    padding-top: 70px;
+    background-color: rgb(0, 238, 255);
+    color: black;
+    font-size: larger;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    transform: rotate3d(1,0,0,90deg);  
+    z-index: -1;
+}
+.enlaceActivo
+{
+    text-decoration: none;
+    color: black;
+}
