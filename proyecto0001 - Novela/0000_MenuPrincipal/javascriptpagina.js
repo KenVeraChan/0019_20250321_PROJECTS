@@ -22,13 +22,15 @@ function activador()
                 matrizCajaOculta[puntero].style.zIndex = "0";
             });
             matrizCelda[puntero].addEventListener("mouseleave", function(){
-                matrizCaja[puntero].style.transitionDuration = "0.25s";
-                matrizCaja[puntero].style.transform = "rotate3d(1,0,0,0deg)";
                 //SE DARA LA VUELTA A LA CARA OCULTA PARA DEJARLA EN OCULTA DE NUEVO
-                matrizCajaOculta[puntero].style.transitionDelay = "0.25s";
+
                 matrizCajaOculta[puntero].style.transitionDuration = "0.25s";
                 matrizCajaOculta[puntero].style.transform = "rotate3d(1,0,0,90deg)";
                 matrizCajaOculta[puntero].style.zIndex = "-1";
+
+                matrizCajaOculta[puntero].style.transitionDelay = "0.25s";
+                matrizCaja[puntero].style.transitionDuration = "0.25s";
+                matrizCaja[puntero].style.transform = "rotate3d(1,0,0,0deg)";
             });
             pulsador[puntero].addEventListener("click", function(){
                 
