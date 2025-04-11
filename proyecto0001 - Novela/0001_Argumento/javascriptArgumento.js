@@ -5,7 +5,7 @@ const matrizFila= document.getElementById("tablaContenidos");
 // CODIGO DEL EFECTO DE ESCRIURA //
 const div= document.querySelector(".caja");
 let texto="";
-const matrizTexto=new Array(30);
+const matrizTexto=new Array(29);
 matrizTexto[0]="Al principio, llegaron a Shunay en un avión 10 ángeles de entre ellos William Wissangel,";
 matrizTexto[1]=" Sharyllin Rousher y Vitrea Horíz. Todos ellos enviados a cumplir un mandato (1 Siglo de misión, ";
 matrizTexto[2]=" libro de justificación) Durante infinidad de siglos y en cada uno de ellos se enviaban siempre 10";
@@ -50,8 +50,8 @@ function efectoTextTyping(elemento, texto,i=0)
     //el setTimeout es el que va a ir imprimiendo cada letra con un intervalo de tiempo
     //el 100 es el intervalo de tiempo que va a ir imprimiendo cada letra
     elemento.textContent +=texto[i];
-    if(i===texto.length-1) return;
-    setTimeout(()=>efectoTextTyping(elemento,texto,i+1),10);
+        if(i===texto.length-1) return;
+        setTimeout(()=>efectoTextTyping(elemento,texto,i+1),5);
 }
 efectoTextTyping(div,texto);
 
@@ -60,18 +60,6 @@ function activador()
 {
     //proceso de aparición de la tabla
         matrizFila.style.transitionDuration = "0.5s";
-        matrizFila.style.marginLeft = "20%"
-    //proceso eventual de cambio de cartel
-    for(let puntero=0;puntero<matrizCaja.length;puntero++)
-        {
-            matrizCelda[puntero].addEventListener("mouseenter", function(){
-                matrizCaja[puntero].style.transitionDuration = "0.25s";
-                matrizCaja[puntero].style.transform = "rotate3d(1,0,0,90deg)";
-            });
-            matrizCelda[puntero].addEventListener("mouseleave", function(){
-                matrizCaja[puntero].style.transitionDuration = "0.25s";
-                matrizCaja[puntero].style.transform = "rotate3d(1,0,0,0deg)";
-            });
-        }
+        matrizFila.style.marginLeft = "5%"
 }
 

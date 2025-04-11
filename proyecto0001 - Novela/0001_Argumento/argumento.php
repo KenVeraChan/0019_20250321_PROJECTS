@@ -9,7 +9,7 @@
 <body onload="activador()">
 <img id="imagenFondo" src="../0000_MenuPrincipal/images/cubos blancos.png" alt="planeta Tierra de fondo">
 <div id="titulo">ARGUMENTO</div>
-<table id="tablaContenidos">
+    <table id="tablaContenidos">
        <tr>
         <td class="celda">
             <div class="caja">
