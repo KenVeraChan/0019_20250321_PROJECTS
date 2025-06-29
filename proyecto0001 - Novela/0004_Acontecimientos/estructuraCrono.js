@@ -126,6 +126,7 @@ function creaTablaDinamica(data)
     //AGREGANDO FILAS Y CELDAS SEGUN ACONTECIMIENTOS
     for (let i = 0; i < 3; i++) 
     {
+        //FILA DE UN EVENTO ACONTECIDO
         const filaEvento = document.createElement("tr");
         filaEvento.setAttribute("class", "datos");
         Object.assign(filaEvento.style, {
@@ -138,6 +139,7 @@ function creaTablaDinamica(data)
                 borderRadius: "8px",
                 overflow: "hidden"
             });
+            //NUMERO DE EVENTO ACONTECIDO
             const celdaDatosId=document.createElement("td");
             celdaDatosId.setAttribute("class", "datoId");
                 Object.assign(celdaDatosId.style, {
@@ -150,6 +152,7 @@ function creaTablaDinamica(data)
                     font: "sans-serif",
                     fontSize: "1em",
                 });
+            //FECHA DEL EVENTO ACONTECIDO
             const celdaDatosFecha=document.createElement("td");
             celdaDatosFecha.setAttribute("class", "datoFecha");
                 Object.assign(celdaDatosFecha.style, {
@@ -162,11 +165,12 @@ function creaTablaDinamica(data)
                     font: "sans-serif",
                     fontSize: "1em",
                 });
+            //DESCRIPCIÓN DEL EVENTO ACONTECIDO
             const celdaDatosAcontecimiento=document.createElement("td");
             celdaDatosAcontecimiento.setAttribute("class", "datoAcontecimiento");
                 Object.assign(celdaDatosAcontecimiento.style, {
                     width: "100%",
-                    height: "20px",
+                    height: "30px",
                     margin: "1px",
                     textAlign: "center",
                     border: "1px solid rgb(197, 93, 7)",
@@ -174,12 +178,58 @@ function creaTablaDinamica(data)
                     font: "sans-serif",
                     fontSize: "1em",
                 });
+            //AREA REDIMENSIONADA DENTRO DE LA DESCRIPCION DEL EVENTO PARA EXPONER LOS DATOS
+            const areaVariable= document.createElement("textarea");
+            areaVariable.setAttribute("class", "areaVariable");
+                Object.assign(areaVariable.style, {
+                    width: "95%",
+                    height: "20px",
+                    margin: "0px",
+                    textAlign: "center",
+                    backgroundColor: "rgba(173, 173, 0, 0.35)",
+                    font: "sans-serif",
+                    fontSize: "1em",
+                    resize: "none",
+                    overflow: "hidden",
+                    zIndex: "1",
+                });
         //CELDAS DE DATOS
         tablaDatos.appendChild(filaEvento);
         filaEvento.appendChild(celdaDatosId);
         filaEvento.appendChild(celdaDatosFecha);
         filaEvento.appendChild(celdaDatosAcontecimiento);
+        celdaDatosAcontecimiento.appendChild(areaVariable);
     }
+    //AREA DE ASIGNACION DE EVENTOS: 
+    // 1) PASANDO EL RATÓN POR ENCIMA
+    $("#container").on("mouseenter",".areaVariable", function(event) {
+        $(this).css({
+            "backgroundColor": "rgba(14, 173, 0, 0.78)",
+            "cursor": "pointer"
+        });
+        event.preventDefault();
+    });
+    $("#container").on("mouseleave",".areaVariable", function(event) {
+        $(this).css({
+            "zIndex": "1",
+            "transitionduration": "1.0s",
+            "backgroundColor": "rgba(173, 173, 0, 0.35)",
+            "height": "20px",
+        });
+        event.preventDefault();
+    });
+    // 2) AL HACER CLIC POR ENCIMA DEL AREA VARIABLE
+    $("#container").on("click",".areaVariable",function(event){
+        $(this).css({
+            "zIndex": "2",
+            "transitionduration": "1.0s",
+            "height": "200px"
+        });
+        event.preventDefault();
+    });
+
+
+    //ASIGNANDO DATOS A LAS CELDAS
     //IMAGEN DE FONDO
     $("#container").append(imagenFondo);
 
