@@ -1,0 +1,35 @@
+.base{
+    float:left;
+    height: 3000px;
+    width: 100%
+}
+.cuadroBaseTabla{
+    width: 100%;
+    border-collapse: collapse;
+    height: auto;
+}
+.cabeceraPagina{
+    width: 100%;
+    height: 300px;
+    background-color: rgb(104, 19, 19);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+.cuerpoPagina{
+    height: 2300px;
+    width: 100%;
+    background-image: url('../../assets/images/ESFbrown.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    justify-content: center;
+    filter: brightness(0.4); /* oscurecer un poco para texto encima */
+}
+.piePagina{
+    width: 100%;
+    height: 400px;
+    background-color: rgb(104, 19, 19);
+}
