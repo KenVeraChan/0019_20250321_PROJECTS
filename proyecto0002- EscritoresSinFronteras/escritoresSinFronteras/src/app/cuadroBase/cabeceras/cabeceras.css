@@ -1,14 +1,16 @@
 .separadorCabeceraPagina
 {
-    height: 10px;
+    background-image: url('../../../assets/images/fondoPie.png');
+    height: 220px;
     width: 100%;
+    z-index:10;
 }
 .imagenCabeceraPagina{
     border-radius: 10px;
     width: 100px;
     height: 110px;
     margin-top: -80px;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
     border-color: black;
     border-width: 2px;
     border-style: solid;
@@ -31,6 +33,7 @@
     margin-right: 30px;
     text-decoration: none;
     list-style: none;
+    position: relative;
 }
 .enlaces{
     text-decoration: none;
@@ -48,6 +51,7 @@
     padding: 10px;
     border-radius: 5px;
     list-style: none;
+    z-index: 10;
 }
 .botonera:hover .subMenu{
     display: block;
@@ -57,6 +61,7 @@
     padding: 10px;
     border-radius: 5px;
     list-style: none;
+    z-index: 10;
 }
 .botonera:nth-child(1){
     margin-left: 0px;

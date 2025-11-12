@@ -17,6 +17,7 @@
     justify-content: center;
     font-size: 24px;
     font-weight: bold;
+    z-index:10;
 }
 .cuerpoPagina{
     height: 2300px;
@@ -27,9 +28,25 @@
     background-size: cover; 
     justify-content: center;
     filter: brightness(0.4); /* oscurecer un poco para texto encima */
+    z-index:0;
 }
 .piePagina{
     width: 100%;
     height: 400px;
     background-color: rgb(104, 19, 19);
+    z-index:10;
+}
+.volverArriba{
+    background-color: rgb(65, 16, 16);
+    width: 100%;
+    height: 40px;
+    color: rgb(211, 203, 203);
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    text-align: center;
+    padding-top: 8px;
+}
+.volverArriba:hover{
+    background-color: rgb(109, 45, 45);
+    color: rgb(253, 251, 251);
+    transition: 1.5s;
 }

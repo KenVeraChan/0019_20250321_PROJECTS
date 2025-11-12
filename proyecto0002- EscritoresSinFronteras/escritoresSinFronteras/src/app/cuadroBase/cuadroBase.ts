@@ -8,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class CuadroBase {
 
+
+  public subirArriba():void
+  {
+    window.scrollTo(0,0);  //Scroll hacia arriba de la página
+  }
 }
