@@ -1,0 +1,4 @@
+Página web definitiva
+1) Inicio desde tamaño movil
+2) Inicio Jueves, 13 de Noviembre de 2025 - 12:00h
+3) Uso de MediaQuerys
