@@ -1,59 +1,61 @@
-<div class="fondoCabecera">
-
-</div>
+<div class="fondoCabecera"></div>
 <div class="separadorMenu"></div>
+<div class="accionamientos">
+    <button type="buttom" class="btn btn primary" id="accionado" (click)="despliegaMenu()"><strong>|||</strong></button>
+</div>
 <div class="menuOpciones">
+    <div class="fondoMenu"><button type="button" class="btn btn primary" id="cerrarMenu" (click)="volverPagina()">X</button></div>
     <table class="tablaOpciones">
         <tbody>
             <tr>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="">INICIO</a></li>
+                    <li class="botonera"><a class="enlaces" href="">{{inicio}}</a></li>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="">NUESTRA HISTORIA</a>
+                    <li class="botonera"><a class="enlaces" href="">{{nuestraHistoria}}</a>
                         <ul class="subMenu">
-                            <li><a class="enlaces" href="">AÑO 2024</a></li>
-                            <li><a class="enlaces" href="">AÑO 2025</a></li>
-                            <li><a class="enlaces" href="">AÑO 2026</a></li>
-                            <li><a class="enlaces" href="">AÑO 2027</a></li>
+                            <li><a class="enlaces" href="">{{anios[0]}}</a></li>
+                            <li><a class="enlaces" href="">{{anios[1]}}</a></li>
+                            <li><a class="enlaces" href="">{{anios[2]}}</a></li>
+                            <li><a class="enlaces" href="">{{anios[3]}}</a></li>
                         </ul>
                     </li>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="">QUIENES SOMOS</a></li>
+                    <li class="botonera"><a class="enlaces" href="">{{quienesSomos}}</a></li>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="">BLOG LITERARIO</a>
+                    <li class="botonera"><a class="enlaces" href="">{{blogLiterario}}</a>
                         <ul class="subMenu">
-                            <li><a class="enlaces" href="">PUBLICACIONES EN PROSA</a></li>
-                            <li><a class="enlaces" href="">PUBLICACIONES EN VERSO</a></li>
-                            <li><a class="enlaces" href="">REFLEXIONES DEL DÍA</a></li>
+                            <li><a class="enlaces" href="">{{enlaces[0]}}</a></li>
+                            <li><a class="enlaces" href="">{{enlaces[1]}}</a></li>
+                            <li><a class="enlaces" href="">{{enlaces[2]}}</a></li>
                         </ul>
                     </li>                
                 </td>
             </tr>
             <tr>
                 <td>
-                    <li class="list-group-item" class="botonera"><a class="enlaces" href="">NUESTROS SERVICIOS</a>
+                    <li class="list-group-item" class="botonera"><a class="enlaces" href="">{{nuestrosServicios}}</a>
                         <ul class="subMenu">
-                            <li class="list-group-item"><a class="enlaces" href="">CURSOS ONLINE</a></li>
-                            <li class="list-group-item"><a class="enlaces" href="">ENTREVISTAS ONLINE</a></li>
-                            <li class="list-group-item"><a class="enlaces" href="">EDICIÓN Y MAQUETACIÓN DE LIBROS</a></li>
-                            <li class="list-group-item"><a class="enlaces" href="">TERTULIAS</a></li>
-                            <li class="list-group-item"><a class="enlaces" href="">CONGRESOS INTERNACIONALES</a></li>
+                            <li class="list-group-item"><a class="enlaces" href="">{{servicios[0]}}</a></li>
+                            <li class="list-group-item"><a class="enlaces" href="">{{servicios[1]}}</a></li>
+                            <li class="list-group-item"><a class="enlaces" href="">{{servicios[2]}}</a></li>
+                            <li class="list-group-item"><a class="enlaces" href="">{{servicios[3]}}</a></li>
+                            <li class="list-group-item"><a class="enlaces" href="">{{servicios[4]}}</a></li>
                         </ul>
                     </li>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <li class="list-group-item" class="botonera"><a class="enlaces" href="">CONTACTO</a></li>
+                    <li class="list-group-item" class="botonera"><a class="enlaces" href="">{{contacto}}</a></li>
                 </td>
             </tr>
         </tbody>
