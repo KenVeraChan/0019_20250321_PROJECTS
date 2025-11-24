@@ -3,6 +3,9 @@
 <div class="accionamientos">
     <button type="buttom" class="btn btn primary" id="accionado" (click)="despliegaMenu()"><strong>|||</strong></button>
 </div>
+
+@if(tamanioPantalla<=1200)
+{
 <div class="menuOpciones">
     <div class="fondoMenu"><button type="button" class="btn btn primary" id="cerrarMenu" (click)="volverPagina()">X</button></div>
     <table class="tablaOpciones">
@@ -61,5 +64,54 @@
         </tbody>
     </table>
 </div>
+}
+@else
+{
+    <table class="tablaOpciones">
+        <tbody>
+            <tr>
+                <td>
+                    <li class="botonera"><a class="enlaces" href="">{{inicio}}</a></li>
+                </td>
+                <td>
+                    <li class="botonera"><a class="enlaces" href="">{{nuestraHistoria}}</a>
+                        <ul class="subMenu">
+                            <li class="subBotonera"><a class="enlaces" href="">{{anios[0]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{anios[1]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{anios[2]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{anios[3]}}</a></li>
+                        </ul>
+                    </li>
+                </td>
+                <td>
+                    <li class="botonera"><a class="enlaces" href="">{{quienesSomos}}</a></li>
+                </td>
+                <td>
+                    <li class="botonera"><a class="enlaces" href="">{{blogLiterario}}</a>
+                        <ul class="subMenu">
+                            <li class="subBotonera"><a class="enlaces" href="">{{enlaces[0]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{enlaces[1]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{enlaces[2]}}</a></li>
+                        </ul>
+                    </li>                
+                </td>
+                <td>
+                    <li class="list-group-item" class="botonera"><a class="enlaces" href="">{{nuestrosServicios}}</a>
+                        <ul class="subMenu">
+                            <li class="subBotonera"><a class="enlaces" href="">{{servicios[0]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{servicios[1]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{servicios[2]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{servicios[3]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{servicios[4]}}</a></li>
+                        </ul>
+                    </li>
+                </td>
+                <td>
+                    <li class="list-group-item" class="botonera"><a class="enlaces" href="">{{contacto}}</a></li>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
 
-
+<div (window:resize)="onResize($event)" style="z-index:100px; background-color:black; font-size:60px; color:white">{{tamanioPantalla}}</div>
