@@ -49,6 +49,7 @@ Escritorio grande: A partir de 1200px
         margin-top:4px;
         width: 60px;
         height: 30px;
+        color:rgb(185, 185, 185);
     }
     #accionado:hover{
         box-shadow: 1px 1px 1px 1px rgb(255,255,255);
@@ -334,7 +335,7 @@ Escritorio grande: A partir de 1200px
         max-width: 600px;
     }
     .enlaces{
-    font-size: 10px;
+    font-size: 12px;
     }
     @media screen and (min-width: 992px) and (max-width: 1050px) {
         .separadorMenu {

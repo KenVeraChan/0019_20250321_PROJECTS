@@ -18,17 +18,27 @@ export class Cabecera implements OnInit {
     public contacto: string="CONTACTO";
     public tamanioPantalla:number=0.0;
 
-    ngOnInit(){
-      this.tamanioPantalla=window.innerWidth;
+    ngOnInit()
+    {
+      if (typeof window !== 'undefined') 
+        {
+          this.tamanioPantalla = window.innerWidth;
+        }
     }
     /*PARA PANTALLAS DE MOVIL Y TABLET */
     public despliegaMenu():void
     {
-     window.scroll(window.screen.width,0);  //Mueve la ventana hacia la izquierda una distancia del ancho pantalla
+      if (typeof window !== 'undefined') 
+      {
+        window.scroll(window.screen.width, 0);
+      }
     }
     public volverPagina():void
     {
-     window.scroll((-1)*window.screen.width,0);  //Mueve la ventana hacia la izquierda una distancia del ancho pantalla
+      if (typeof window !== 'undefined') 
+      {
+        window.scroll((-1) * window.screen.width, 0);
+      }
     }
     @HostListener('window:resize', ['$event'])
     onResize(event:any):number {
