@@ -1,10 +1,12 @@
-@for(escenas of noticia;track escenas;let i=$index)
-{
-    <div class="areaNoticias">
-        <ul class="casilleroNoticias">
-            <li class="titular">{{ escenas.getTitular() }}</li>
-            <li class="subTitular">{{ escenas.getsubTitular() }}</li>
-            <li class="noticia">{{ escenas.getNoticia() }}</li>
-        </ul>
-    </div>
-}
+<div class="fondo">
+    @for(escenas of noticia;track escenas;let i=$index)
+    {
+        <div class="areaNoticias">
+            <ul class="casilleroNoticias">
+                <li class="titular">{{ escenas.getTitular() }}</li>
+                <li class="subTitular">{{ escenas.getsubTitular() }}</li>
+                <li class="noticia">{{ escenas.getNoticia() }}</li>
+            </ul>
+        </div>
+    }
+</div>

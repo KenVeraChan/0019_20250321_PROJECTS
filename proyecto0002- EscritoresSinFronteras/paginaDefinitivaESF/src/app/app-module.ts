@@ -12,6 +12,17 @@ import { Nosotros } from './cuerpo/nosotros/nosotros';
 import { Blogs } from './cuerpo/blogs/blogs';
 import { Servicios } from './cuerpo/servicios/servicios';
 import { Contacto } from './cuerpo/contacto/contacto';
+import {RouterModule, Routes} from '@angular/router';
+
+const appRoutes: Routes=[
+{path:'', component: Inicio},
+{path:'inicio', component: Inicio},
+{path:'nuestraHistoria', component: Historia},
+{path:'quienesSomos', component: Nosotros},
+{path:'blogLiterario', component: Blogs},
+{path:'nuestrosServicios', component: Servicios},
+{path:'contacto', component: Contacto}
+];
 
 @NgModule({
   declarations: [
@@ -29,7 +40,8 @@ import { Contacto } from './cuerpo/contacto/contacto';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    RouterModule.forRoot(appRoutes) 
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
