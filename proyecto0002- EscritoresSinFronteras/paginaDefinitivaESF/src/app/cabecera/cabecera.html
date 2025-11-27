@@ -12,12 +12,12 @@
         <tbody>
             <tr>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(1)">{{inicio}}</a></li>
+                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(1)" [class.active]="activeIndex===0">{{inicio}}</a></li>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(2)">{{nuestraHistoria}}</a>
+                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(2)" [class.active]="activeIndex===1">{{nuestraHistoria}}</a>
                         <ul class="subMenu">
                             <li class="subBotonera"><a class="enlaces" href="">{{anios[0]}}</a></li>
                             <li class="subBotonera"><a class="enlaces" href="">{{anios[1]}}</a></li>
@@ -29,12 +29,12 @@
             </tr>
             <tr>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(3)">{{quienesSomos}}</a></li>
+                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(3)" [class.active]="activeIndex===2">{{quienesSomos}}</a></li>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(4)">{{blogLiterario}}</a>
+                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(4)" [class.active]="activeIndex===3">{{blogLiterario}}</a>
                         <ul class="subMenu">
                             <li class="subBotonera"><a class="enlaces" href="">{{enlaces[0]}}</a></li>
                             <li class="subBotonera"><a class="enlaces" href="">{{enlaces[1]}}</a></li>
@@ -45,7 +45,7 @@
             </tr>
             <tr>
                 <td>
-                    <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(5)">{{nuestrosServicios}}</a>
+                    <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(5)" [class.active]="activeIndex===4">{{nuestrosServicios}}</a>
                         <ul class="subMenu">
                             <li class="subBotonera"><a class="enlaces" href="">{{servicios[0]}}</a></li>
                             <li class="subBotonera"><a class="enlaces" href="">{{servicios[1]}}</a></li>
@@ -58,7 +58,7 @@
             </tr>
             <tr>
                 <td>
-                    <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(6)">{{contacto}}</a></li>
+                    <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(6)" [class.active]="activeIndex===5">{{contacto}}</a></li>
                 </td>
             </tr>
         </tbody>
@@ -71,11 +71,11 @@
 <table class="tablaOpciones">
     <tbody>
         <tr>
-            <td>
-                <li class="botonera"><a class="enlaces" href=""  (click)="accesoHabilitado(1)">{{inicio}}</a></li>
+                <td>
+                <li class="botonera"><a class="enlaces" href=""  (click)="accesoHabilitado(1)" [class.active]="activeIndex===0">{{inicio}}</a></li>
             </td>
             <td>
-                <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(2)">{{nuestraHistoria}}</a>
+                <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(2)" [class.active]="activeIndex===1">{{nuestraHistoria}}</a>
                     <ul class="subMenu">
                         <li class="subBotonera"><a class="enlaces" href="">{{anios[0]}}</a></li>
                         <li class="subBotonera"><a class="enlaces" href="">{{anios[1]}}</a></li>
@@ -85,10 +85,10 @@
                 </li>
             </td>
             <td>
-                <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(3)">{{quienesSomos}}</a></li>
+                <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(3)" [class.active]="activeIndex===2">{{quienesSomos}}</a></li>
             </td>
             <td>
-                <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(4)">{{blogLiterario}}</a>
+                <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(4)" [class.active]="activeIndex===3">{{blogLiterario}}</a>
                     <ul class="subMenu">
                         <li class="subBotonera"><a class="enlaces" href="">{{enlaces[0]}}</a></li>
                         <li class="subBotonera"><a class="enlaces" href="">{{enlaces[1]}}</a></li>
@@ -97,7 +97,7 @@
                 </li>                
             </td>
             <td>
-                <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(5)">{{nuestrosServicios}}</a>
+                <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(5)" [class.active]="activeIndex===4">{{nuestrosServicios}}</a>
                     <ul class="subMenu">
                         <li class="subBotonera"><a class="enlaces" href="">{{servicios[0]}}</a></li>
                         <li class="subBotonera"><a class="enlaces" href="">{{servicios[1]}}</a></li>
@@ -108,7 +108,7 @@
                 </li>
             </td>
             <td>
-                <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(6)">{{contacto}}</a></li>
+                <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(6)" [class.active]="activeIndex===5">{{contacto}}</a></li>
             </td>
         </tr>
     </tbody>

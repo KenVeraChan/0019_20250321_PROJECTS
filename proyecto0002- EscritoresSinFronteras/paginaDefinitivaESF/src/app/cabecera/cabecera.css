@@ -127,6 +127,10 @@ Escritorio grande: A partir de 1200px
             color:rgb(230, 214, 0);
             list-style: none;
             text-align: left;
+            text-decoration: none;
+        }
+        .enlaces.active{
+            text-decoration: underline;
         }
         .enlaces:hover{
             text-shadow: 2px 2px 8px rgb(243, 239, 1);

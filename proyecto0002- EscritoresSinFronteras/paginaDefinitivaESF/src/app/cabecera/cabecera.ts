@@ -18,23 +18,17 @@ export class Cabecera implements OnInit {
     public contacto: string="CONTACTO";
     public tamanioPantalla:number=0.0;
     public puntero: number=0;
+    public activeIndex: number = 0;
 
     ngOnInit()    //Al iniciarse el componente
     {
-      if (typeof window !== 'undefined' && this.puntero===0) 
+      if (typeof window !== 'undefined') 
         {
           this.tamanioPantalla = window.innerWidth;
-          //Se hace que primero no exista subrayado en los enlaces
-          const elementos= document.getElementsByClassName("enlaces");
-          for(let i=1;i<elementos.length;i++)
-            {
-              (elementos[i] as HTMLElement).style.textDecoration = "none";
-            }
-            (elementos[0] as HTMLElement).style.textDecoration = "underline";
-            this.puntero=1;
-            localStorage.setItem('punteroCabecera', this.puntero.toString());
-            this.puntero=Number(localStorage.getItem('punteroCabecera'));
-            //GUARDA EL VALOR EN UN ALMACENAMIENTO INTERNO PARA REGISTRAR EL VALOR ANTES DE RECARGAR LA PÁGINA
+          // Recupera el puntero almacenado y lo sincroniza con la clase activa
+          const stored = localStorage.getItem('punteroCabecera');
+          this.puntero = stored ? Number(stored) : 0;
+          this.activeIndex = this.puntero;
         }
     }
     /*PARA PANTALLAS DE MOVIL Y TABLET */
@@ -43,7 +37,14 @@ export class Cabecera implements OnInit {
       if (typeof window !== 'undefined') 
       {
         window.scroll(window.screen.width, 0);
-        document.body.style.overflow = 'hidden'; //Inhabilita el SCROLL vertical
+        if(window.screen.width < 1200)
+        {
+          document.body.style.overflow = 'hidden'; //Inhabilita el SCROLL vertical
+        }
+        else
+        {
+          document.body.style.overflow = 'visible'; //Habilita el SCROLL vertical
+        }
       }
     }
     public volverPagina():void
@@ -62,84 +63,13 @@ export class Cabecera implements OnInit {
     //Sector de botones y qué componente fue activado
     public accesoHabilitado(opcion:number):void
     {
-      if (typeof window !== 'undefined')
-      {
-        this.puntero=1;
-        switch(opcion)
-        {
-          case 1:
-            {
-              //Se hace que primero no exista subrayado en los enlaces salvo INICIO
-              const elementos= document.getElementsByClassName("enlaces");
-              for(let i=0;i<elementos.length;i++)
-              {
-                (elementos[i] as HTMLElement).style.textDecoration = "none";
-              }
-              //Habilita el subrayado en INICIO
-              (elementos[0] as HTMLElement).style.textDecoration = "underline";
-              break;
-            }
-          case 2:
-            {
-              //Se hace que primero no exista subrayado en los enlaces salvo NUESTRA HISTORIA
-              const elementos= document.getElementsByClassName("enlaces");
-              for(let i=0;i<elementos.length;i++)
-              {
-                (elementos[i] as HTMLElement).style.textDecoration = "none";
-              }
-              //Habilita el subrayado en NUESTRA HISTORIA
-              (elementos[1] as HTMLElement).style.textDecoration = "underline";
-              break;
-            }
-          case 3:
-            {
-              //Se hace que primero no exista subrayado en los enlaces salvo QUIENES SOMOS
-              const elementos= document.getElementsByClassName("enlaces");
-              for(let i=0;i<elementos.length;i++)
-              {
-                (elementos[i] as HTMLElement).style.textDecoration = "none";
-              }
-              //Habilita el subrayado en QUIENES SOMOS
-              (elementos[2] as HTMLElement).style.textDecoration = "underline";
-              break;
-            }
-          case 4:
-            {
-              //Se hace que primero no exista subrayado en los enlaces salvo BLOG LITERARIO
-              const elementos= document.getElementsByClassName("enlaces");
-              for(let i=0;i<elementos.length;i++)
-              {
-                (elementos[i] as HTMLElement).style.textDecoration = "none";
-              }
-              //Habilita el subrayado en BLOG LITERARIO
-              (elementos[3] as HTMLElement).style.textDecoration = "underline";
-              break;
-            }
-          case 5:
-            {
-              //Se hace que primero no exista subrayado en los enlaces salvo NUESTROS SERVICIOS
-              const elementos= document.getElementsByClassName("enlaces");
-              for(let i=0;i<elementos.length;i++)
-              {
-                (elementos[i] as HTMLElement).style.textDecoration = "none";
-              }
-              //Habilita el subrayado en NUESTROS SERVICIOS
-              (elementos[4] as HTMLElement).style.textDecoration = "underline";
-              break;
-            }
-          case 6:
-            {
-              //Se hace que primero no exista subrayado en los enlaces salvo CONTACTO
-              const elementos= document.getElementsByClassName("enlaces");
-              for(let i=0;i<elementos.length;i++)
-              {
-                (elementos[i] as HTMLElement).style.textDecoration = "none";
-              }
-              //Habilita el subrayado en CONTACTO
-              (elementos[5] as HTMLElement).style.textDecoration = "underline";
-              break;
-            }
-        }
+      // Mapear la opción (1..6) a índices (0..5)
+      const indexMap: Record<number, number> = {1:0, 2:1, 3:2, 4:3, 5:4, 6:5};
+      const idx = indexMap[opcion] ?? 0;  //Se asegura que idx siempre tenga un valor numérico
+      this.activeIndex = idx;  //Se actualiza el índice activo
+      this.puntero = idx;  //Se actualiza el puntero
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('punteroCabecera', this.puntero.toString());
       }
     }
   }
