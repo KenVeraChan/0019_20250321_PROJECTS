@@ -6,7 +6,7 @@
 <div class="accionamientos">
     <button type="buttom" class="btn btn primary" id="accionado" (click)="despliegaMenu()"><strong>|||</strong></button>
 </div>
-<div class="menuOpciones">
+<div class="menuOpciones" #fondoMenus>
     <div class="fondoMenu"><button type="button" class="btn btn primary" id="cerrarMenu" (click)="volverPagina()">X</button></div>
     <table class="tablaOpciones">
         <tbody>
@@ -114,6 +114,7 @@
     </tbody>
 </table>
 }
+
 
 <!--
 <div (window:resize)="onResize($event)" style="z-index:100px; background-color:black; font-size:60px; color:white">{{tamanioPantalla}}</div>

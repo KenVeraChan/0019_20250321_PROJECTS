@@ -13,6 +13,7 @@ import { Blogs } from './cuerpo/blogs/blogs';
 import { Servicios } from './cuerpo/servicios/servicios';
 import { Contacto } from './cuerpo/contacto/contacto';
 import {RouterModule, Routes} from '@angular/router';
+import { Opciones } from './cabecera/opciones/opciones';
 
 const appRoutes: Routes=[
 {path:'', component: Inicio},
@@ -35,7 +36,8 @@ const appRoutes: Routes=[
     Nosotros,
     Blogs,
     Servicios,
-    Contacto
+    Contacto,
+    Opciones
   ],
   imports: [
     BrowserModule,
