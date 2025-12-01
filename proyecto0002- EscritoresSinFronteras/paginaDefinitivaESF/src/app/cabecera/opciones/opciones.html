@@ -1,1 +1,58 @@
-<p>opciones works!</p>
+<div class="menuOpciones" #fondoMenus>
+    <div class="fondoMenu"><button type="button" class="btn btn primary" id="cerrarMenu" (click)="volverPagina()">X</button></div>
+    <table class="tablaOpciones">
+        <tbody>
+            <tr>
+                <td>
+                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(1)" [class.active]="activeIndex===0">{{inicio}}</a></li>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(2)" [class.active]="activeIndex===1">{{nuestraHistoria}}</a>
+                        <ul class="subMenu">
+                            <li class="subBotonera"><a class="enlaces" href="">{{anios[0]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{anios[1]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{anios[2]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{anios[3]}}</a></li>
+                        </ul>
+                    </li>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(3)" [class.active]="activeIndex===2">{{quienesSomos}}</a></li>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(4)" [class.active]="activeIndex===3">{{blogLiterario}}</a>
+                        <ul class="subMenu">
+                            <li class="subBotonera"><a class="enlaces" href="">{{enlaces[0]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{enlaces[1]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{enlaces[2]}}</a></li>
+                        </ul>
+                    </li>                
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(5)" [class.active]="activeIndex===4">{{nuestrosServicios}}</a>
+                        <ul class="subMenu">
+                            <li class="subBotonera"><a class="enlaces" href="">{{servicios[0]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{servicios[1]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{servicios[2]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{servicios[3]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" href="">{{servicios[4]}}</a></li>
+                        </ul>
+                    </li>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(6)" [class.active]="activeIndex===5">{{contacto}}</a></li>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

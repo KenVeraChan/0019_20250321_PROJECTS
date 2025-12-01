@@ -1,12 +1,12 @@
-import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-cabecera',
   standalone: false,
   templateUrl: './cabecera.html',
-  styleUrl: './cabecera.css',
+  styleUrls: ['./cabecera.css'],
 })
-export class Cabecera implements OnInit, AfterViewInit {
+export class Cabecera implements OnInit {
     public inicio: string="INICIO";
     public nuestraHistoria: string="NUESTRA HISTORIA";
     public anios: string[]=["2020","2021","2022","2023","2024","2025","2026"];
@@ -19,6 +19,7 @@ export class Cabecera implements OnInit, AfterViewInit {
     public tamanioPantalla:number=0.0;
     public puntero: number=0;
     public activeIndex: number = 0;
+    public semaforo:boolean=false;
     
     ngOnInit()    //Al iniciarse el componente
     {
@@ -31,37 +32,17 @@ export class Cabecera implements OnInit, AfterViewInit {
           this.activeIndex = this.puntero;
         }
     }
-    @ViewChild('fondoMenus') fondoMenus!: ElementRef;
-
-    ngAfterViewInit() {
-    // Acceso seguro al elemento ya renderizado
-    if (window.screen.width < 1200 && this.fondoMenus) {
-      this.fondoMenus.nativeElement.style.overflow = 'scroll';
-    }
-  }
     /*PARA PANTALLAS DE MOVIL Y TABLET */
-    public despliegaMenu():void
+    public despliegaMenu():boolean
     {
       if (typeof window !== 'undefined') 
       {
-        window.scroll(window.screen.width, 0);
-        if(window.screen.width < 1200)
-        {
-          document.body.style.overflow = 'scroll'; //Inhabilita el SCROLL vertical
-          this.fondoMenus.nativeElement.style.color = 'white';
-        }
-        else
-        {
-          document.body.style.overflow = 'scroll'; //Inhabilita el SCROLL vertical    
-        }
+        this.semaforo = true;
+        return this.semaforo;
       }
-    }
-    public volverPagina():void
-    {
-      if (typeof window !== 'undefined') 
+      else
       {
-        window.scroll((-1) * window.screen.width, 0);
-        document.body.style.overflow = 'visible'; //Habilita el SCROLL vertical
+        return false;
       }
     }
     @HostListener('window:resize', ['$event'])
