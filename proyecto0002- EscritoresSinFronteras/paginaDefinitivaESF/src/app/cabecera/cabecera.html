@@ -1,15 +1,11 @@
 <div class="fondoCabecera"></div>
 <div class="separadorMenu"></div>
-
 @if(tamanioPantalla<=1200)
 {
-<div class="accionamientos">
-    <button type="buttom" class="btn btn primary" id="accionado" (click)="despliegaMenu()"><strong>|||</strong></button>
-</div>
-    @if(semaforo)
-    {
-        <app-opciones [menuDesplegado]="true"></app-opciones>
-    }
+    <div class="accionamientos">
+    <button type="buttom" class="btn btn primary" id="accionado" (click)="opciones.abrirMenuOpciones()"><strong>|||</strong></button>
+    </div>
+    <app-opciones #opciones></app-opciones>
 }
 @else
 {

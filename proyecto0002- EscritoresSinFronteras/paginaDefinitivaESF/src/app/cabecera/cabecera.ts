@@ -33,18 +33,6 @@ export class Cabecera implements OnInit {
         }
     }
     /*PARA PANTALLAS DE MOVIL Y TABLET */
-    public despliegaMenu():boolean
-    {
-      if (typeof window !== 'undefined') 
-      {
-        this.semaforo = true;
-        return this.semaforo;
-      }
-      else
-      {
-        return false;
-      }
-    }
     @HostListener('window:resize', ['$event'])
     onResize(event:any):number {
       this.tamanioPantalla = event.target.innerWidth;

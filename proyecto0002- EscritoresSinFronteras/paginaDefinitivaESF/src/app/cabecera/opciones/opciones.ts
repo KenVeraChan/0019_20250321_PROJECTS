@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef, Input, Output } from '@angular/core';
+import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef, Input, Output, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-opciones',
@@ -23,6 +23,9 @@ export class Opciones implements OnInit {
 
     @Input() menuDesplegado: boolean = false;    //VARIABLE RECIBIDA DEL COMPONENTE PADRE
     @ViewChild('fondoMenus') fondoMenus!: ElementRef;   //ELEMENTO DEL DOM MODIFICADO PARA MOVERSE
+    @ViewChild('tablero') tablero!: ElementRef;   //ELEMENTO DEL DOM DE LA BOTONERA
+
+    constructor(private renderer: Renderer2) {}
 
     ngOnInit()    //Al iniciarse el componente
     {
@@ -35,26 +38,57 @@ export class Opciones implements OnInit {
           this.activeIndex = this.puntero;
         }
     }
-
-    ngAfterViewInit() 
+    ngAfterViewInit() {
+      // Acceso seguro al elemento ya renderizado, solo se carga una vez al cargar el componente
+    }
+    public abrirMenuOpciones():void
     {
-    // Acceso seguro al elemento ya renderizado
-    if (this.menuDesplegado===true) 
+      if (typeof window !== 'undefined') 
       {
-        alert("El menú se ha desplegado correctamente: "+this.menuDesplegado);
-        this.fondoMenus.nativeElement.style.marginLeft = '0px';
-        this.fondoMenus.nativeElement.style.zIndex = '100px';
-      }
-      else{
-        alert("El menú no se ha desplegado correctamente: "+this.menuDesplegado);
+      // Acceso seguro al elemento ya renderizado
+        // Usar Renderer2 en lugar de manipular nativeElement.style directamente
+        //Para tener en cuenta en los demás ficheros typescript con Renderer2
+        const elementoMenu = this.fondoMenus.nativeElement as HTMLElement;
+        const elementoTablero= this.tablero.nativeElement as HTMLElement;
+
+        this.renderer.setStyle(elementoMenu, 'transition', 'margin-left 2s ease');
+        this.renderer.setStyle(elementoTablero, 'transition', '2s');
+        this.renderer.setStyle(elementoMenu, 'z-index', '200');
+        this.renderer.setStyle(elementoMenu, 'display', 'block');     /*SE DEVUELVE LA VISIBILIDAD DEL BLOQUE*/
+        this.renderer.setStyle(elementoTablero, 'display', 'block');
+        this.renderer.setStyle(elementoMenu, 'position', 'absolute');
+        // Obliga a ejecutar el cambio justo antes del siguiente repintado.
+        // De esta forma el navegador registrará primero la transición y
+        // animará el cambio de margin-left.
+        requestAnimationFrame(() => {
+          this.renderer.setStyle(elementoMenu, 'margin-left', '35%');
+          this.renderer.setStyle(elementoMenu, 'width', '300px');
+          this.renderer.setStyle(elementoTablero, 'backgroundColor', 'rgba(0, 0, 0, 0.75)');
+        });
       }
     }
     public volverPagina():void
     {
       if (typeof window !== 'undefined') 
       {
-        window.scroll((-1) * window.screen.width, 0);
-        document.body.style.overflow = 'visible'; //Habilita el SCROLL vertical
+        // Usar Renderer2 en lugar de manipular nativeElement.style directamente
+        //Para tener en cuenta en los demás ficheros typescript con Renderer2
+        const elementoMenu = this.fondoMenus.nativeElement as HTMLElement;
+        const elementoTablero= this.tablero.nativeElement as HTMLElement;
+
+        this.renderer.setStyle(elementoTablero, 'transition', 'margin-left 1s ease');
+        this.renderer.setStyle(elementoTablero, 'z-index', '-200');
+        this.renderer.setStyle(elementoTablero, 'transition', '1s');
+        this.renderer.setStyle(elementoMenu, 'display', 'none');     /*SE DEVUELVE LA VISIBILIDAD DEL BLOQUE*/
+        this.renderer.setStyle(elementoTablero, 'display', 'none');
+        this.renderer.setStyle(elementoMenu, 'position', 'absolute');
+        // Obliga a ejecutar el cambio justo antes del siguiente repintado.
+        // De esta forma el navegador registrará primero la transición y
+        // animará el cambio de margin-left.
+        requestAnimationFrame(() => {
+          this.renderer.setStyle(elementoMenu, 'margin-left', '0%');
+          this.renderer.setStyle(elementoMenu, 'width', '300px');
+          this.renderer.setStyle(elementoTablero, 'backgroundColor', 'transparent');        });
       }
     }
     @HostListener('window:resize', ['$event'])
