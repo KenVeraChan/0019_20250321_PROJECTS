@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef, Input, Output, Renderer2 } from '@angular/core';
+import { Window } from '@popperjs/core';
 
 @Component({
   selector: 'app-opciones',
@@ -16,7 +17,8 @@ export class Opciones implements OnInit {
     public nuestrosServicios: string="NUESTROS SERVICIOS";
     public servicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS","CONGRESOS INTERNACIONALES"];
     public contacto: string="CONTACTO";
-    public tamanioPantalla:number=0.0;
+    public tamanioHorizontalPantalla:number=0.0;
+    public tamanioVerticalPantalla:number=0.0;
     public puntero: number=0;
     public activeIndex: number = 0;
     public semaforo:boolean=false;
@@ -24,14 +26,15 @@ export class Opciones implements OnInit {
     @Input() menuDesplegado: boolean = false;    //VARIABLE RECIBIDA DEL COMPONENTE PADRE
     @ViewChild('fondoMenus') fondoMenus!: ElementRef;   //ELEMENTO DEL DOM MODIFICADO PARA MOVERSE
     @ViewChild('tablero') tablero!: ElementRef;   //ELEMENTO DEL DOM DE LA BOTONERA
-
     constructor(private renderer: Renderer2) {}
 
     ngOnInit()    //Al iniciarse el componente
     {
       if (typeof window !== 'undefined') 
         {
-          this.tamanioPantalla = window.innerWidth;
+          this.tamanioHorizontalPantalla = window.innerWidth;  //Ancho de la pantalla
+          this.tamanioVerticalPantalla = document.documentElement.scrollHeight;
+          //Para detectar el alto total de la pantalla tanto la visible como la que se vería con el scroll
           // Recupera el puntero almacenado y lo sincroniza con la clase activa
           const stored = localStorage.getItem('punteroCabecera');
           this.puntero = stored ? Number(stored) : 0;
@@ -44,26 +47,60 @@ export class Opciones implements OnInit {
     public abrirMenuOpciones():void
     {
       if (typeof window !== 'undefined') 
-      {
+      {      
       // Acceso seguro al elemento ya renderizado
         // Usar Renderer2 en lugar de manipular nativeElement.style directamente
         //Para tener en cuenta en los demás ficheros typescript con Renderer2
         const elementoMenu = this.fondoMenus.nativeElement as HTMLElement;
         const elementoTablero= this.tablero.nativeElement as HTMLElement;
 
-        this.renderer.setStyle(elementoMenu, 'transition', 'margin-left 2s ease');
-        this.renderer.setStyle(elementoTablero, 'transition', '2s');
+        this.renderer.setStyle(elementoMenu, 'transform', 'translateX(400%)');
+        this.renderer.setStyle(elementoMenu, 'transition', 'transform 1s ease');
+        this.renderer.setStyle(elementoTablero, 'transition', '1.5s');
+        this.renderer.setStyle(elementoTablero, 'height', this.tamanioVerticalPantalla + 'px');      
+
         this.renderer.setStyle(elementoMenu, 'z-index', '200');
+        this.renderer.setStyle(elementoTablero, 'z-index', '199');
+
         this.renderer.setStyle(elementoMenu, 'display', 'block');     /*SE DEVUELVE LA VISIBILIDAD DEL BLOQUE*/
         this.renderer.setStyle(elementoTablero, 'display', 'block');
+        
         this.renderer.setStyle(elementoMenu, 'position', 'absolute');
+        this.renderer.setStyle(elementoTablero, 'position', 'absolute');
+
         // Obliga a ejecutar el cambio justo antes del siguiente repintado.
         // De esta forma el navegador registrará primero la transición y
         // animará el cambio de margin-left.
         requestAnimationFrame(() => {
-          this.renderer.setStyle(elementoMenu, 'margin-left', '35%');
+            //SE DEFINE LA TRANSICION EN FUNCION DEL TAMANIO HORIZONTAL DE LA PANTALLA
+                if(this.tamanioHorizontalPantalla>100 && this.tamanioHorizontalPantalla<=380)   //MOVIL PEQUEÑO
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(10%)');
+                }
+                if(this.tamanioHorizontalPantalla>381 && this.tamanioHorizontalPantalla<=576)   //MOVIL MEDIANO
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(16%)');
+                }
+                if(this.tamanioHorizontalPantalla>577 && this.tamanioHorizontalPantalla<=768)   //TABLET PEQUEÑO
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(80%)');
+                }
+                if(this.tamanioHorizontalPantalla>769 && this.tamanioHorizontalPantalla<=992)   //TABLET GRANDE
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(85%)');
+                }
+                if(this.tamanioHorizontalPantalla>993 && this.tamanioHorizontalPantalla<=1200)   //ESCRITORIO PEQUEÑO
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(150%)');
+                } 
+                if(this.tamanioHorizontalPantalla>1201)   //ESCRITORIO GRANDE
+                {
+                    
+                }
           this.renderer.setStyle(elementoMenu, 'width', '300px');
-          this.renderer.setStyle(elementoTablero, 'backgroundColor', 'rgba(0, 0, 0, 0.75)');
+          this.renderer.setStyle(elementoTablero, 'backgroundColor', 'rgba(0, 0, 0, 0.8)');
+          this.renderer.setStyle(elementoMenu, 'box-shadow', '0 0 20px #fff');
+          //this.renderer.setStyle(elementoMenu, 'transform', 'translateX(140%)');
         });
       }
     }
@@ -76,25 +113,25 @@ export class Opciones implements OnInit {
         const elementoMenu = this.fondoMenus.nativeElement as HTMLElement;
         const elementoTablero= this.tablero.nativeElement as HTMLElement;
 
-        this.renderer.setStyle(elementoTablero, 'transition', 'margin-left 1s ease');
-        this.renderer.setStyle(elementoTablero, 'z-index', '-200');
-        this.renderer.setStyle(elementoTablero, 'transition', '1s');
+        this.renderer.setStyle(elementoMenu, 'transform', 'translateX(140%)');
+        this.renderer.setStyle(elementoMenu, 'transition', 'transform 1s ease');
         this.renderer.setStyle(elementoMenu, 'display', 'none');     /*SE DEVUELVE LA VISIBILIDAD DEL BLOQUE*/
         this.renderer.setStyle(elementoTablero, 'display', 'none');
-        this.renderer.setStyle(elementoMenu, 'position', 'absolute');
+        this.renderer.setStyle(elementoTablero, 'transition', '1.5s');
+
         // Obliga a ejecutar el cambio justo antes del siguiente repintado.
         // De esta forma el navegador registrará primero la transición y
         // animará el cambio de margin-left.
         requestAnimationFrame(() => {
-          this.renderer.setStyle(elementoMenu, 'margin-left', '0%');
           this.renderer.setStyle(elementoMenu, 'width', '300px');
-          this.renderer.setStyle(elementoTablero, 'backgroundColor', 'transparent');        });
+          this.renderer.setStyle(elementoTablero, 'backgroundColor', 'transparent');  
+      });
       }
     }
     @HostListener('window:resize', ['$event'])
     onResize(event:any):number {
-      this.tamanioPantalla = event.target.innerWidth;
-      return(this.tamanioPantalla);
+      this.tamanioHorizontalPantalla = event.target.innerWidth;
+      return(this.tamanioHorizontalPantalla);
     }
     //Sector de botones y qué componente fue activado
     public accesoHabilitado(opcion:number):void

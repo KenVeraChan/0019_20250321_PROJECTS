@@ -209,7 +209,7 @@ Escritorio grande: A partir de 1200px
         }
     }
 }
-@media screen and (min-width: 768px) and (max-width:992px)
+@media screen and (min-width: 769px) and (max-width:992px)
 {
     .separadorMenu{
         background-size: 60%;  /*Imagen se muestre completa aunque se reduzca su tamaño*/
@@ -237,7 +237,7 @@ Escritorio grande: A partir de 1200px
         }
     }
 }
-@media screen and (min-width: 992px) and (max-width:1200px)
+@media screen and (min-width: 993px) and (max-width:1200px)
 {
     /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
     .separadorMenu{
@@ -287,9 +287,11 @@ Escritorio grande: A partir de 1200px
     }
     .accionamientos
     {
-        height: 40px;
-        padding-top:5px;
-        margin-top:10px;
+        height: 80px;
+    }
+    .tablaOpciones{
+        margin-top: -52px;   /*TABLA BASE DEL MENU DE OPCIONES*/
+        width:100%;
     }
     @media screen and (min-width: 1201px) and (max-width: 1300px) {
         .separadorMenu {
