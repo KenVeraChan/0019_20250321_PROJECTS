@@ -91,16 +91,15 @@ export class Opciones implements OnInit {
                 }
                 if(this.tamanioHorizontalPantalla>993 && this.tamanioHorizontalPantalla<=1200)   //ESCRITORIO PEQUEÑO
                 {
-                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(150%)');
+                    this.renderer.setStyle(elementoMenu, 'transform', 'translate(130%,-15%)');
                 } 
                 if(this.tamanioHorizontalPantalla>1201)   //ESCRITORIO GRANDE
                 {
-                    
+                   //No se configura nada porque desaparece el menú de opciones deslizante 
                 }
           this.renderer.setStyle(elementoMenu, 'width', '300px');
           this.renderer.setStyle(elementoTablero, 'backgroundColor', 'rgba(0, 0, 0, 0.8)');
           this.renderer.setStyle(elementoMenu, 'box-shadow', '0 0 20px #fff');
-          //this.renderer.setStyle(elementoMenu, 'transform', 'translateX(140%)');
         });
       }
     }

@@ -47,7 +47,7 @@ export class Cabecera implements OnInit {
       this.activeIndex = idx;  //Se actualiza el índice activo
       this.puntero = idx;  //Se actualiza el puntero
       if (typeof window !== 'undefined') {
-        localStorage.setItem('punteroCabecera', this.puntero.toString());
+        localStorage.setItem('punteroCabecera', this.puntero.toString());  //Y también se usa para el cambio de pagina   
       }
     }
   }

@@ -14,6 +14,8 @@ import { Servicios } from './cuerpo/servicios/servicios';
 import { Contacto } from './cuerpo/contacto/contacto';
 import {RouterModule, Routes} from '@angular/router';
 import { Opciones } from './cabecera/opciones/opciones';
+import { PaginaError } from './paginaerror/paginaerror'
+import { VariablesCompartidas } from './servicios/variablesCompartidas'
 
 const appRoutes: Routes=[
 {path:'', component: Inicio},
@@ -22,7 +24,8 @@ const appRoutes: Routes=[
 {path:'quienesSomos', component: Nosotros},
 {path:'blogLiterario', component: Blogs},
 {path:'nuestrosServicios', component: Servicios},
-{path:'contacto', component: Contacto}
+{path:'contacto', component: Contacto},
+{ path: '**', component: PaginaError }
 ];
 
 @NgModule({
@@ -37,7 +40,8 @@ const appRoutes: Routes=[
     Blogs,
     Servicios,
     Contacto,
-    Opciones
+    Opciones,
+    PaginaError
   ],
   imports: [
     BrowserModule,
@@ -47,6 +51,7 @@ const appRoutes: Routes=[
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
+    VariablesCompartidas,
     provideClientHydration(withEventReplay())
   ],
   bootstrap: [App]
