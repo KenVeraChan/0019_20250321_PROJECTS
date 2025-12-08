@@ -58,25 +58,13 @@ Escritorio grande: A partir de 1200px
         margin-top: 25px;
     }
 
-
-
-
-
-
-
-
-
-
 @media screen and (min-width: 100px) and (max-width:380px)
 {
-    @media screen and (min-width: 100px) and (max-width: 300px) {
-
-    }
-    @media screen and (min-width: 301px) and (max-width: 330px) {
-
-    }
-    @media screen and (min-width: 331px) and (max-width: 360px) {
-
+    @media screen and (min-width: 100px) and (max-width: 360px) {
+        .fondoCuerpoSuperior{
+            width: 360px;
+            height: 800px;
+        }
     }
     @media screen and (min-width: 361px) and (max-width: 380px) {
 

@@ -1,0 +1,257 @@
+.fondo{
+    margin-top:27px;
+    background-color: rgb(0, 0, 71);
+}
+.areaAnios{
+    position:absolute;
+    margin-top:100px;
+    border: 3px;
+    color: yellow;
+}
+.bloqueAcontecimientos{
+    position:absolute;
+    border: 3px solid;
+    border-color: black;
+    border-radius: 60px;
+    width:200px;
+    height:47px;
+    margin-top: 30px;
+    justify-content:center;
+    text-align:center;
+    font-size:x-large;
+    padding-bottom: 10px;
+    background: linear-gradient(145deg, #0f0f0f, #1c1c1c);
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: white;
+}
+.bloqueAcontecimientos:hover{
+    border-color:rgb(71, 89, 97);
+    border-radius: 60px;
+    box-shadow: linear-gradient(60deg,white,rgb(1, 1, 71));
+    font-size:large;
+    color:rgb(253, 253, 255);
+    width: 170px;
+    height:40px;
+    margin-left:27%;
+    transition:1s;
+}
+
+/*ESTILOS DE CADA UNO DE LOS BOTONES DEL MES Y AÑO*/
+    .boton {
+    position: absolute;
+    margin-top:50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 28px;
+    background: linear-gradient(145deg, #0f0f0f, #1c1c1c);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 100px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    z-index: 1;
+    display:none;
+    }
+
+    .boton::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, #00ffff, #00054d, #00ffff);
+    animation: rotate 4s linear infinite;
+    z-index: -2;
+    }
+
+    .boton::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: #0a0a0a;
+    border-radius: inherit;
+    z-index: -1;
+    }
+
+    .boton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+    }
+
+    .boton:hover .arrow {
+    transform: translateX(6px);
+    }
+
+    .arrow {
+    width: 22px;
+    height: 22px;
+    transition: transform 0.3s ease-in-out;
+    color: #00ffff;
+    }
+
+    @keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    }
+/*FIN DE LOS ESTILOS DE CADA UNO DE LOS BOTONES*/
+
+/*AJUSTE DEL BLOQUE DE GENERACION DE AÑOS*/
+@media screen and (min-width: 100px) and (max-width:380px)
+{
+    @media screen and (min-width: 100px) and (max-width: 300px) {
+    .bloqueAcontecimientos{
+        margin-left: 5%;
+        }
+    }
+    @media screen and (min-width: 301px) and (max-width: 330px) {
+    .bloqueAcontecimientos{
+        margin-left: 15%;
+        }
+    }
+    @media screen and (min-width: 331px) and (max-width: 360px) {
+    .bloqueAcontecimientos{
+        margin-left: 20%;
+        }
+    .boton{
+        margin-left:25%;
+    }
+    }
+    @media screen and (min-width: 361px) and (max-width: 380px) {
+    .bloqueAcontecimientos{
+        margin-left: 22%;
+        }
+    }
+}
+@media screen and (min-width: 381px) and (max-width:576px)
+{
+    @media screen and (min-width: 381px) and (max-width: 440px) {
+
+        /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+    }
+    @media screen and (min-width: 441px) and (max-width: 480px) {
+
+        /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+    }
+    @media screen and (min-width: 481px) and (max-width: 520px) {
+
+        /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+    }
+    @media screen and (min-width: 521px) and (max-width: 576px) {
+
+        /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+    }
+}
+@media screen and (min-width: 577px) and (max-width:768px)
+{
+        /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+    @media screen and (min-width: 577px) and (max-width: 650px) {
+
+    }
+    @media screen and (min-width: 651px) and (max-width: 700px) {
+
+    }
+    @media screen and (min-width: 701px) and (max-width: 768px) {
+
+    }
+}
+@media screen and (min-width: 769px) and (max-width:992px)
+{
+
+    @media screen and (min-width: 768px) and (max-width: 790px) {
+
+    }
+    @media screen and (min-width: 791px) and (max-width: 850px) {
+
+    }
+    @media screen and (min-width: 851px) and (max-width: 991px) {
+
+    }
+}
+@media screen and (min-width: 993px) and (max-width:1200px)
+{
+    /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+
+    @media screen and (min-width: 992px) and (max-width: 1050px) {
+        .separadorMenu {
+            margin-left: 20%;
+        }
+    }
+    @media screen and (min-width: 1051px) and (max-width: 1100px) {
+        .separadorMenu {
+            margin-left: 23%;
+        }
+        .botonera{
+            position: absolute;
+        }
+    }
+    @media screen and (min-width: 1101px) and (max-width: 1200px) {
+        .separadorMenu {
+            margin-left: 25%;
+        }
+        .enlaces{
+            font-size: 15px;
+        }
+    }
+}
+@media screen and (min-width: 1201px)
+{
+    .fondoCabecera{
+        height: 150px;
+        margin-bottom:-20px;
+    }
+    .separadorMenu{
+        background-size: 60%;  /*Imagen se muestre completa aunque se reduzca su tamaño*/
+        background-position: 120px;
+        max-width: 600px;
+    }
+    /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+    .enlaces{
+    font-size: 18px;
+    }
+    .accionamientos
+    {
+        height: 80px;
+    }
+    .tablaOpciones{
+        margin-top: -52px;   /*TABLA BASE DEL MENU DE OPCIONES*/
+        width:100%;
+    }
+    @media screen and (min-width: 1201px) and (max-width: 1300px) {
+        .separadorMenu {
+            margin-left: 27%;
+        }
+    }
+    @media screen and (min-width: 1301px) and (max-width: 1800px) {
+        .separadorMenu {
+            margin-left: 33%;
+        }
+    }
+    @media screen and (min-width: 1801px) and (max-width: 2000px) {
+        .separadorMenu {
+            margin-left: 35%;
+        }
+    }
+    @media screen and (min-width: 2001px) and (max-width: 2500px) {
+    .separadorMenu {
+        margin-left: 35%;
+        }
+    }
+    @media screen and (min-width: 2501px) {
+    .separadorMenu {
+        margin-left: 43%;
+        }
+    }
+}

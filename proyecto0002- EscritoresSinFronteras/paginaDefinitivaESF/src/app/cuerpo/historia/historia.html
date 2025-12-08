@@ -1,1 +1,34 @@
-<p>historia works!</p>
+<div class="fondo">
+    <div class="bloqueAcontecimientos" (click)="cargarHistorial()">HISTORIA</div>
+    @for(escenas of objetoHistorias.historias;track escenas;let i=$index)
+    {
+        <!-- From Uiverse.io by jawad_8494 --> 
+        <button class="boton" #botones>
+            <span>{{ escenas.getMes() }} - {{ escenas.getAnio()}}</span>
+            <svg fill="none" viewBox="0 0 24 24" class="arrow">
+                <path
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                stroke-width="2"
+                stroke="currentColor"
+                d="M5 12h14M13 6l6 6-6 6"
+                ></path>
+            </svg>
+        </button>
+    }
+        <button class="boton" #botones>
+            <span (click)="cerrarHistorial()">CERRAR</span>
+            <svg fill="none" viewBox="0 0 24 24" class="arrow">
+                <path
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                stroke-width="2"
+                stroke="currentColor"
+                d="M5 12h14M13 6l6 6-6 6"
+                ></path>
+            </svg>
+        </button>
+</div>
+<!--
+<div (window:resize)="onResize($event)" style="z-index:100px; background-color:black; font-size:60px; color:white">{{tamanioPantalla}}</div>
+-->
