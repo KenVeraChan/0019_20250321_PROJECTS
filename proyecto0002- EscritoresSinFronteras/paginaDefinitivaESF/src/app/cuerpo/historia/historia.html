@@ -1,5 +1,5 @@
-<div class="fondo">
-    <div class="bloqueAcontecimientos" (click)="cargarHistorial()">HISTORIA</div>
+<div class="fondo" #fondoHistoria>
+    <div class="bloqueAcontecimientos" (click)="cargarHistorial()">HISTORIA COMPLETA</div>
     @for(escenas of objetoHistorias.historias;track escenas;let i=$index)
     {
         <!-- From Uiverse.io by jawad_8494 --> 
