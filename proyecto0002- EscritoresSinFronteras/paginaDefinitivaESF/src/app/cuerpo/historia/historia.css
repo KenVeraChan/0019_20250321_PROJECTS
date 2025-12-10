@@ -35,11 +35,19 @@
     height:40px;
     transition:1s;
 }
+.bloqueAcontecimientos:nth-child(2)
+{
+    margin-top:100px;
+}
+.bloqueAcontecimientos:nth-child(3)
+{
+    margin-top:170px;
+}
 
 /*ESTILOS DE CADA UNO DE LOS BOTONES DEL MES Y AÑO*/
     .boton {
     position: absolute;
-    margin-top:50px;
+    margin-top:20px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -126,7 +134,9 @@
         margin-left: 20%;
         }
     .boton{
-        margin-left:25%;
+        margin-left:12%;
+        width:250px;
+        height:60px;
     }
     }
     @media screen and (min-width: 361px) and (max-width: 380px) {

@@ -1,21 +1,71 @@
 <div class="fondo" #fondoHistoria>
-    <div class="bloqueAcontecimientos" (click)="cargarHistorial()">HISTORIA COMPLETA</div>
-    @for(escenas of objetoHistorias.historias;track escenas;let i=$index)
-    {
-        <!-- From Uiverse.io by jawad_8494 --> 
-        <button class="boton" #botones>
-            <span>{{ escenas.getMes() }} - {{ escenas.getAnio()}}</span>
-            <svg fill="none" viewBox="0 0 24 24" class="arrow">
-                <path
-                stroke-linejoin="round"
-                stroke-linecap="round"
-                stroke-width="2"
-                stroke="currentColor"
-                d="M5 12h14M13 6l6 6-6 6"
-                ></path>
-            </svg>
-        </button>
-    }
+    <div class="bloqueAcontecimientos" (click)="cargarHistorial(1)">HISTORIA COMPLETA</div>
+    <div class="bloqueAcontecimientos" (click)="cargarHistorial(2)">HISTORIA POR AÑOS</div>
+    <div class="bloqueAcontecimientos" (click)="cargarHistorial(3)">HISTORIA POR MESES</div>
+       @switch (eleccion)
+       {
+        @case(1)
+        {
+            <!--SI ES EL PRIMER CASO CARGA TODO EL HISTORIAL EN MESES Y AÑOS-->
+            @for(escenas of objetoHistorias.historias;track escenas;let i=$index)
+            {
+                <!-- From Uiverse.io by jawad_8494 --> 
+                <button class="boton" #botones>
+                    <span>{{ escenas.getMes() }} - {{ escenas.getAnio()}}</span>
+                    <svg fill="none" viewBox="0 0 24 24" class="arrow">
+                        <path
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        d="M5 12h14M13 6l6 6-6 6"
+                        ></path>
+                    </svg>
+                </button>
+            }
+        }
+        @case(2)
+        {
+            <!--SI ES EL SEGUNDO CASO CARGA TODO EL HISTORIAL EN AÑOS-->
+            @for(item of aniosNumero; track item)
+            {
+                <!-- From Uiverse.io by jawad_8494 --> 
+                <button class="boton" #botones>
+                    <span>{{ item }}</span>
+                    <svg fill="none" viewBox="0 0 24 24" class="arrow">
+                        <path
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        d="M5 12h14M13 6l6 6-6 6"
+                        ></path>
+                    </svg>
+                </button>
+            }
+        }
+        @case(3)
+        {
+            <!--SI ES EL SEGUNDO CASO CARGA TODO EL HISTORIAL EN MESES-->
+            @for(item of mesesTexto; track item)
+            {
+                <!-- From Uiverse.io by jawad_8494 --> 
+                <button class="boton" #botones>
+                    <span>{{ item }}</span>
+                    <svg fill="none" viewBox="0 0 24 24" class="arrow">
+                        <path
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        d="M5 12h14M13 6l6 6-6 6"
+                        ></path>
+                    </svg>
+                </button>
+            }
+        }
+        @default {}
+       }
         <button class="boton" #botones>
             <span (click)="cerrarHistorial()">CERRAR</span>
             <svg fill="none" viewBox="0 0 24 24" class="arrow">
