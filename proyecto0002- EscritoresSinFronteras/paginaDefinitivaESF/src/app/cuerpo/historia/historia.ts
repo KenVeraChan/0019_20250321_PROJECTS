@@ -11,9 +11,8 @@ export class Historia implements OnInit, AfterViewInit {
   public tamanioHorizontalPantalla:number=0.0;
   public punteroAvance:number=0.0;
   public eleccion:number=0;
-  public aniosNumero:number[]=[];     //Para el vector de años para exponer
-  public mesesTexto:string[]=[];      //Para el vector de meses para exponer
   public objetoHistorias= new VariablesCompartidas();
+  public objetoHistoriasFiltrado= new VariablesCompartidas();
   constructor(private renderer: Renderer2,private deteccionCambio: ChangeDetectorRef) {}
         //Renderer2 permite modificar elementos DOM y ChangeDetectorRef pemirte detectar cambios en variables
   @ViewChild('fondoHistoria') fondoHistoria!:ElementRef;  
@@ -23,6 +22,9 @@ export class Historia implements OnInit, AfterViewInit {
   ngOnInit()
   {
     this.tamanioHorizontalPantalla = window.innerWidth;  //Ancho de la pantalla
+    //Para filtrar objetos buscados por años
+    this.objetoHistoriasFiltrado.historias=this.objetoHistoriasFiltrado.historias.filter
+    ((historia, indice, self) =>  indice === self.findIndex(h => h.getAnio() === historia.getAnio()));
   }
   ngAfterViewInit(): void {
     // Llamar aquí cuando los elementos del DOM ya existen
@@ -33,8 +35,7 @@ export class Historia implements OnInit, AfterViewInit {
     if (typeof window !== 'undefined') 
     {   
      this.eleccion=opcion; //Se elige la primera opción
-     this.deteccionCambio.detectChanges(); // fuerza actualización inmediata
-     
+     this.deteccionCambio.detectChanges();
       const fondos= this.fondoHistoria.nativeElement as HTMLElement;
       this.botones.forEach((item: ElementRef, index: number) => {
         const botonesAccionados = item.nativeElement as HTMLElement;
