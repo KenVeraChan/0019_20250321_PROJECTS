@@ -78,6 +78,7 @@ class Historias
     private anio:string="";
     private contenido: string="";
     private mesTexto: string="";
+    public aniosFiltrados:string[]=[];
 
     constructor(id:number,mes: number,anio: string,contenido:string)
     {
@@ -96,7 +97,7 @@ class Historias
     }
     public setAnio(anio:string):void
     {
-      this.anio=anio
+      this.anio=anio;
     }
     public setContenido(contenido:string):void
     {
