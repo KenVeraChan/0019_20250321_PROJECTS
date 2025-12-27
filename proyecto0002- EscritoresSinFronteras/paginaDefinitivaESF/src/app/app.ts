@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal,OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -6,6 +6,14 @@ import { Component, signal } from '@angular/core';
   standalone: false,
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit{
+  private tamanioPantallaHorizontal:number=0.0;
   protected readonly title = signal('paginaDefinitivaESF');
-}
+  ngOnInit(): void 
+  {
+    if (typeof window !== 'undefined') 
+    {
+      this.tamanioPantallaHorizontal = window.innerWidth;  //Ancho de la pantalla
+    }
+  }
+}  

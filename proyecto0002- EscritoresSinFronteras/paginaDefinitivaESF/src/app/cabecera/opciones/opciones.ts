@@ -32,7 +32,7 @@ export class Opciones implements OnInit {
     {
       if (typeof window !== 'undefined') 
         {
-          this.tamanioHorizontalPantalla = window.innerWidth;  //Ancho de la pantalla
+          this.tamanioHorizontalPantalla = document.documentElement.scrollWidth;  //Ancho de la pantalla
           this.tamanioVerticalPantalla = document.documentElement.scrollHeight;
           //Para detectar el alto total de la pantalla tanto la visible como la que se vería con el scroll
           // Recupera el puntero almacenado y lo sincroniza con la clase activa
@@ -54,10 +54,11 @@ export class Opciones implements OnInit {
         const elementoMenu = this.fondoMenus.nativeElement as HTMLElement;
         const elementoTablero= this.tablero.nativeElement as HTMLElement;
 
-        this.renderer.setStyle(elementoMenu, 'transform', 'translateX(400%)');
+        this.renderer.setStyle(elementoMenu, 'transform', 'translateX(4%)');
         this.renderer.setStyle(elementoMenu, 'transition', 'transform 1s ease');
-        this.renderer.setStyle(elementoTablero, 'transition', '1.5s');
+        this.renderer.setStyle(elementoTablero, 'transition', '1s');
         this.renderer.setStyle(elementoTablero, 'height', this.tamanioVerticalPantalla + 'px');      
+        this.renderer.setStyle(elementoTablero, 'width', this.tamanioHorizontalPantalla + 'px');      
 
         this.renderer.setStyle(elementoMenu, 'z-index', '200');
         this.renderer.setStyle(elementoTablero, 'z-index', '199');
@@ -76,22 +77,28 @@ export class Opciones implements OnInit {
                 if(this.tamanioHorizontalPantalla>100 && this.tamanioHorizontalPantalla<=380)   //MOVIL PEQUEÑO
                 {
                     this.renderer.setStyle(elementoMenu, 'transform', 'translateX(10%)');
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.8 + 'px');
+
                 }
                 if(this.tamanioHorizontalPantalla>381 && this.tamanioHorizontalPantalla<=576)   //MOVIL MEDIANO
                 {
-                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(16%)');
+                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(25%)');
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.6 + 'px');
                 }
                 if(this.tamanioHorizontalPantalla>577 && this.tamanioHorizontalPantalla<=768)   //TABLET PEQUEÑO
                 {
                     this.renderer.setStyle(elementoMenu, 'transform', 'translateX(80%)');
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.45 + 'px');
                 }
                 if(this.tamanioHorizontalPantalla>769 && this.tamanioHorizontalPantalla<=992)   //TABLET GRANDE
                 {
                     this.renderer.setStyle(elementoMenu, 'transform', 'translateX(85%)');
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.45 + 'px');
                 }
                 if(this.tamanioHorizontalPantalla>993 && this.tamanioHorizontalPantalla<=1200)   //ESCRITORIO PEQUEÑO
                 {
-                    this.renderer.setStyle(elementoMenu, 'transform', 'translate(130%,-15%)');
+                    this.renderer.setStyle(elementoMenu, 'transform', 'translate(130%,-5%)');
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.4 + 'px');
                 } 
                 if(this.tamanioHorizontalPantalla>1201)   //ESCRITORIO GRANDE
                 {
@@ -130,6 +137,7 @@ export class Opciones implements OnInit {
     @HostListener('window:resize', ['$event'])
     onResize(event:any):number {
       this.tamanioHorizontalPantalla = event.target.innerWidth;
+      this.volverPagina();   //Cierra el menú al cambiar el tamaño de la pantalla
       return(this.tamanioHorizontalPantalla);
     }
     //Sector de botones y qué componente fue activado

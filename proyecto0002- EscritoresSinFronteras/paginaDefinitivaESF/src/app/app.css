@@ -1,0 +1,24 @@
+*{
+    margin-left: 0px;
+    padding-left: 0px;
+    margin-top: 0px;
+    padding-top: 0px;
+    
+}
+#tablerolayout{
+    background-color: rgb(1, 1, 37);
+    width: 100vw;
+    height: 100vh;
+}
+.cabecera{
+    width: 100%;
+    height: auto;
+}
+.cuerpo{
+    width: 100%;
+    height: auto;
+}
+.pie{
+    width: 100%;
+    height: auto;
+}
