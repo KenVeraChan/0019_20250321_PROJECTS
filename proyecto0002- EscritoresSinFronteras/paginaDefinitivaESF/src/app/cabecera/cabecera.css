@@ -140,11 +140,35 @@ Escritorio grande: A partir de 1200px
         }
     /***********************************************/
 
-@media screen and (min-width: 100px) and (max-width:380px)
+@media screen and (min-width: 0px) and (max-width:380px)
 {
-    @media screen and (min-width: 100px) and (max-width: 359px) {
+    @media screen and (min-width: 0px) and (max-width: 200px) {
         .separadorMenu{
             margin-left: 14%;
+            width:360px;
+        }
+        .fondoCabecera{
+            width: 360px;
+        }
+        .accionamientos{
+            width: 360px;
+        }
+    }
+    @media screen and (min-width: 200px) and (max-width: 300px) {
+        .separadorMenu{
+            margin-left: 13%;
+            width:360px;
+        }
+        .fondoCabecera{
+            width: 360px;
+        }
+        .accionamientos{
+            width: 360px;
+        }
+    }
+    @media screen and (min-width: 300px) and (max-width: 360px) {
+        .separadorMenu{
+            margin-left: 10%;
             width:360px;
         }
         .fondoCabecera{
@@ -235,7 +259,7 @@ Escritorio grande: A partir de 1200px
             margin-left: 14%;
         }
     }
-    @media screen and (min-width: 851px) and (max-width: 991px) {
+    @media screen and (min-width: 851px) and (max-width: 992px) {
         .separadorMenu {
             margin-left: 18%;
         }

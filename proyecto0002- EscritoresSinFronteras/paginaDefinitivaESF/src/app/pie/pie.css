@@ -1,0 +1,97 @@
+#fondoPie{
+    width:100%;
+    height:200px;
+    background-color: #000124;
+    padding: 20px;
+    text-align: center;
+}
+#derechos{
+    color: white;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-style:oblique;
+    font-size:small;
+    margin-top: 20px;
+}
+
+/* AREA DE DECORACION DE LOS ICONOS DE LAS REDES SOCIALES */
+    #apple,#twitter,#github,#facebook,#youtube,#linkedin,#whatsapp,#instagram,#mapsg
+        {
+            width:10px;
+            height: 10px;
+            font-size: 2.5em;
+            color: #919191;
+            border-radius: 100px;
+            padding: 10px 15px;
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-right: 5px;  
+            animation: animate 3s linear infinite;
+            text-shadow: 0 0 0.5px #494b0b, 
+                        0 0 3px #494b0b,
+                        0 0 5.5px #494b0b, 
+                        0 0 8px #494b0b, 
+                        0 0 0.5px #494b0b, 
+                        0 0 3px #494b0b,
+                        0 0 5.5px #494b0b, 
+                        0 0 8px #494b0b, 
+                        0 0 0.5px #494b0b;
+        }
+        #apple
+        {
+            animation-delay: 0.1s;
+        }
+        #twitter
+        {
+            animation-delay: 0.3s;
+        }
+        #github
+        {
+            animation-delay: 0.5s;
+        }
+        #facebook
+        {
+            animation-delay: 0.7s;
+        }
+        #youtube
+        {
+            animation-delay: 0.9s;
+        }
+        #linkedin
+        {
+            animation-delay: 1.1s;
+        }
+        #whatsapp
+        {
+            animation-delay: 1.3s;
+        }
+        #instagram
+        {
+            animation-delay: 1.5s;
+        }
+        #mapsg
+        {
+            animation-delay: 1.7s;
+        }
+        @keyframes animate
+        {
+            from
+            {
+                filter: hue-rotate(0deg);
+            }
+            to
+            {
+                filter: hue-rotate(360deg);
+            }
+        }
+#redesSociales
+{
+    float: left;
+    width:100%;
+    height: 80px; 
+    background-color: #000124;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-style:oblique;
+    font-size:small;
+    text-align: center;  
+}
+/* FIN AREA DE DECORACION DE LOS ICONOS DE LAS REDES SOCIALES*/

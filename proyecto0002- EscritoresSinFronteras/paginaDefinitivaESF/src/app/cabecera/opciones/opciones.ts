@@ -1,5 +1,4 @@
-import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef, Input, Output, Renderer2 } from '@angular/core';
-import { Window } from '@popperjs/core';
+import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef, Input, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-opciones',
@@ -7,7 +6,7 @@ import { Window } from '@popperjs/core';
   templateUrl: './opciones.html',
   styleUrl: './opciones.css',
 })
-export class Opciones implements OnInit {
+export class Opciones implements OnInit, AfterViewInit {
     public inicio: string="INICIO";
     public nuestraHistoria: string="NUESTRA HISTORIA";
     public anios: string[]=["2020","2021","2022","2023","2024","2025","2026"];
@@ -18,6 +17,7 @@ export class Opciones implements OnInit {
     public servicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS","CONGRESOS INTERNACIONALES"];
     public contacto: string="CONTACTO";
     public tamanioHorizontalPantalla:number=0.0;
+    public tamanioHorizontalPantallaSegundo:number=0.0;
     public tamanioVerticalPantalla:number=0.0;
     public puntero: number=0;
     public activeIndex: number = 0;
@@ -26,8 +26,27 @@ export class Opciones implements OnInit {
     @Input() menuDesplegado: boolean = false;    //VARIABLE RECIBIDA DEL COMPONENTE PADRE
     @ViewChild('fondoMenus') fondoMenus!: ElementRef;   //ELEMENTO DEL DOM MODIFICADO PARA MOVERSE
     @ViewChild('tablero') tablero!: ElementRef;   //ELEMENTO DEL DOM DE LA BOTONERA
+    @HostListener('window:resize', ['$event'])
+      onResize(event:any):number {
+      this.tamanioHorizontalPantallaSegundo = event.target.innerWidth; 
+      this.tamanioVerticalPantalla = event.target.innerHeight;  
+      if(this.tamanioHorizontalPantalla!=this.tamanioHorizontalPantallaSegundo)
+      {
+          this.volverPagina();   
+          //Cierra el menú al cambiar el tamaño de la pantalla
+          //Ha cambiado el tamanio de pantalla
+          this.tamanioHorizontalPantalla=this.tamanioHorizontalPantallaSegundo;
+      }
+      return(this.tamanioHorizontalPantallaSegundo);
+    }
+    
     constructor(private renderer: Renderer2) {}
-
+    ngAfterViewInit() {
+      if (typeof window !== 'undefined') 
+      {
+       this.tamanioHorizontalPantalla = window.innerWidth;
+      }
+    }
     ngOnInit()    //Al iniciarse el componente
     {
       if (typeof window !== 'undefined') 
@@ -40,9 +59,6 @@ export class Opciones implements OnInit {
           this.puntero = stored ? Number(stored) : 0;
           this.activeIndex = this.puntero;
         }
-    }
-    ngAfterViewInit() {
-      // Acceso seguro al elemento ya renderizado, solo se carga una vez al cargar el componente
     }
     public abrirMenuOpciones():void
     {
@@ -57,8 +73,8 @@ export class Opciones implements OnInit {
         this.renderer.setStyle(elementoMenu, 'transform', 'translateX(4%)');
         this.renderer.setStyle(elementoMenu, 'transition', 'transform 1s ease');
         this.renderer.setStyle(elementoTablero, 'transition', '1s');
-        this.renderer.setStyle(elementoTablero, 'height', this.tamanioVerticalPantalla + 'px');      
         this.renderer.setStyle(elementoTablero, 'width', this.tamanioHorizontalPantalla + 'px');      
+        this.renderer.setStyle(elementoTablero, 'height', this.tamanioVerticalPantalla + 'px');
 
         this.renderer.setStyle(elementoMenu, 'z-index', '200');
         this.renderer.setStyle(elementoTablero, 'z-index', '199');
@@ -76,29 +92,54 @@ export class Opciones implements OnInit {
             //SE DEFINE LA TRANSICION EN FUNCION DEL TAMANIO HORIZONTAL DE LA PANTALLA
                 if(this.tamanioHorizontalPantalla>100 && this.tamanioHorizontalPantalla<=380)   //MOVIL PEQUEÑO
                 {
-                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(10%)');
+                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.025}%)`);
                     this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.8 + 'px');
 
                 }
-                if(this.tamanioHorizontalPantalla>381 && this.tamanioHorizontalPantalla<=576)   //MOVIL MEDIANO
+                if(this.tamanioHorizontalPantalla>381 && this.tamanioHorizontalPantalla<=420)   //MOVIL MEDIANO
                 {
-                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(25%)');
+                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.045}%)`);
                     this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.6 + 'px');
                 }
-                if(this.tamanioHorizontalPantalla>577 && this.tamanioHorizontalPantalla<=768)   //TABLET PEQUEÑO
+                if(this.tamanioHorizontalPantalla>420 && this.tamanioHorizontalPantalla<=479)   //MOVIL MEDIANO-2
                 {
-                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(80%)');
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.45 + 'px');
+                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.06}%)`);
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.6 + 'px');
                 }
-                if(this.tamanioHorizontalPantalla>769 && this.tamanioHorizontalPantalla<=992)   //TABLET GRANDE
+                if(this.tamanioHorizontalPantalla>480 && this.tamanioHorizontalPantalla<=576)   //MOVIL MEDIANO-3
                 {
-                    this.renderer.setStyle(elementoMenu, 'transform', 'translateX(85%)');
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.45 + 'px');
+                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.07}%)`);
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.6 + 'px');
+                }
+                if(this.tamanioHorizontalPantalla>577 && this.tamanioHorizontalPantalla<=650)   //TABLET PEQUEÑO-1
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.085}%)`);
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
+                }
+                if(this.tamanioHorizontalPantalla>651 && this.tamanioHorizontalPantalla<=700)   //TABLET PEQUEÑO-2
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.09}%)`);
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
+                }
+                if(this.tamanioHorizontalPantalla>701 && this.tamanioHorizontalPantalla<=768)   //TABLET PEQUEÑO-3
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.095}%)`);
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
+                }
+                if(this.tamanioHorizontalPantalla>769 && this.tamanioHorizontalPantalla<=800)   //TABLET GRANDE-1
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.1}%)`);
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
+                }
+                if(this.tamanioHorizontalPantalla>801 && this.tamanioHorizontalPantalla<=992)   //TABLET GRANDE-2
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.12}%)`);
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
                 }
                 if(this.tamanioHorizontalPantalla>993 && this.tamanioHorizontalPantalla<=1200)   //ESCRITORIO PEQUEÑO
                 {
-                    this.renderer.setStyle(elementoMenu, 'transform', 'translate(130%,-5%)');
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.4 + 'px');
+                    this.renderer.setStyle(elementoMenu, 'transform', `translate(${this.tamanioHorizontalPantalla*0.13}%,-5%`);
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
                 } 
                 if(this.tamanioHorizontalPantalla>1201)   //ESCRITORIO GRANDE
                 {
@@ -133,12 +174,6 @@ export class Opciones implements OnInit {
           this.renderer.setStyle(elementoTablero, 'backgroundColor', 'transparent');  
       });
       }
-    }
-    @HostListener('window:resize', ['$event'])
-    onResize(event:any):number {
-      this.tamanioHorizontalPantalla = event.target.innerWidth;
-      this.volverPagina();   //Cierra el menú al cambiar el tamaño de la pantalla
-      return(this.tamanioHorizontalPantalla);
     }
     //Sector de botones y qué componente fue activado
     public accesoHabilitado(opcion:number):void

@@ -130,7 +130,7 @@ Escritorio grande: A partir de 1200px
         }
     /***********************************************/
 
-@media screen and (min-width: 100px) and (max-width: 380px)
+@media screen and (min-width: 0px) and (max-width: 380px)
 {
    /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES, para SmartWatches*/
     .separadorMenu{
