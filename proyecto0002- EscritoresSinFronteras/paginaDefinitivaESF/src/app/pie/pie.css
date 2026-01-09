@@ -14,7 +14,7 @@
 }
 
 /* AREA DE DECORACION DE LOS ICONOS DE LAS REDES SOCIALES */
-    #apple,#twitter,#github,#facebook,#youtube,#linkedin,#whatsapp,#instagram,#mapsg
+        #github,#facebook,#youtube,#linkedin,#whatsapp,#instagram
         {
             width:10px;
             height: 10px;
@@ -35,14 +35,6 @@
                         0 0 5.5px #494b0b, 
                         0 0 8px #494b0b, 
                         0 0 0.5px #494b0b;
-        }
-        #apple
-        {
-            animation-delay: 0.1s;
-        }
-        #twitter
-        {
-            animation-delay: 0.3s;
         }
         #github
         {
@@ -68,10 +60,6 @@
         {
             animation-delay: 1.5s;
         }
-        #mapsg
-        {
-            animation-delay: 1.7s;
-        }
         @keyframes animate
         {
             from
@@ -95,3 +83,45 @@
     text-align: center;  
 }
 /* FIN AREA DE DECORACION DE LOS ICONOS DE LAS REDES SOCIALES*/
+@media screen and (min-width: 0px) and (max-width:360px)
+{
+    #fondoPie{
+    width:360px;
+    height: 200px;
+    }
+}
+@media screen and (min-width: 360px) and (max-width:380px)
+{
+
+}
+@media screen and (min-width: 381px) and (max-width:576px)
+{
+    @media screen and (min-width: 381px) and (max-width: 480px) {
+
+    }
+    @media screen and (min-width: 481px) and (max-width: 576px) {
+
+    }
+}
+@media screen and (min-width: 577px) and (max-width:768px)
+{
+        /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+
+}
+@media screen and (min-width: 768px) and (max-width:992px)
+{
+
+}
+@media screen and (min-width: 992px) and (max-width:1200px)
+{
+    /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+
+}
+@media screen and (min-width: 1201px) and (max-width:1400px)
+{
+
+}
+@media screen and (min-width: 1400px)
+{
+
+}

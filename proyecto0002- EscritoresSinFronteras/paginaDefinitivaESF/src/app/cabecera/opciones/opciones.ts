@@ -64,6 +64,9 @@ export class Opciones implements OnInit, AfterViewInit {
     {
       if (typeof window !== 'undefined') 
       {      
+        //Se carga primero el tamaño de la pagina web
+          this.tamanioHorizontalPantalla = document.documentElement.scrollWidth;  //Ancho de la pantalla
+          this.tamanioVerticalPantalla = document.documentElement.scrollHeight;
       // Acceso seguro al elemento ya renderizado
         // Usar Renderer2 en lugar de manipular nativeElement.style directamente
         //Para tener en cuenta en los demás ficheros typescript con Renderer2
@@ -90,11 +93,15 @@ export class Opciones implements OnInit, AfterViewInit {
         // animará el cambio de margin-left.
         requestAnimationFrame(() => {
             //SE DEFINE LA TRANSICION EN FUNCION DEL TAMANIO HORIZONTAL DE LA PANTALLA
+                if(this.tamanioHorizontalPantalla<=99)   //MOVIL PEQUEÑO
+                {
+                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.025}%)`);
+                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.8 + 'px');
+                }
                 if(this.tamanioHorizontalPantalla>100 && this.tamanioHorizontalPantalla<=380)   //MOVIL PEQUEÑO
                 {
                     this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.025}%)`);
                     this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.8 + 'px');
-
                 }
                 if(this.tamanioHorizontalPantalla>381 && this.tamanioHorizontalPantalla<=420)   //MOVIL MEDIANO
                 {

@@ -36,6 +36,15 @@ export class VariablesCompartidas {
 
       //AREA HISTORIAS DEL APARTADO "NUESTRA HISTORIA"
       public historias: Historias[]=[
+        new Historias(0,9,"2015","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2016","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2017","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2018","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2019","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2020","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2021","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2022","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2023","Inicio en un grupo de escritura y lectura online"),
         new Historias(0,9,"2024","Inicio en un grupo de escritura y lectura online"),
         new Historias(1,12,"2024","Escritores Sin Fronteras, crea su primer logo corporativo"),
         new Historias(2,1,"2025","Escritores Sin Fronteras, crece en usuarios suscritos tanto de Facebook como de Instagram"),
