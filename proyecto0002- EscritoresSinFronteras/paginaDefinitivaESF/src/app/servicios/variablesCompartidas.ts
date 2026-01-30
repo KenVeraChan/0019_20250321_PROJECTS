@@ -31,11 +31,46 @@ export class VariablesCompartidas {
               "Quinto titular de la noticia",
               "Quinto subtítulo de la noticia",
               "Contenido detallado del quinto noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Sexto titular de la noticia",
+              "Sexto subtítulo de la noticia",
+              "Contenido detallado del sexto noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Séptimo titular de la noticia",
+              "Séptimo subtítulo de la noticia",
+              "Contenido detallado del séptimo noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Octavo titular de la noticia",
+              "Octavo subtítulo de la noticia",
+              "Contenido detallado del octavo noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Noveno titular de la noticia",
+              "Noveno subtítulo de la noticia",
+              "Contenido detallado del noveno noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Décimo titular de la noticia",
+              "Décimo subtítulo de la noticia",
+              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
           )
     ];
 
       //AREA HISTORIAS DEL APARTADO "NUESTRA HISTORIA"
       public historias: Historias[]=[
+        new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2009","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2010","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2011","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2012","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2013","Inicio en un grupo de escritura y lectura online"),
+        new Historias(0,9,"2014","Inicio en un grupo de escritura y lectura online"),
         new Historias(0,9,"2015","Inicio en un grupo de escritura y lectura online"),
         new Historias(0,9,"2016","Inicio en un grupo de escritura y lectura online"),
         new Historias(0,9,"2017","Inicio en un grupo de escritura y lectura online"),

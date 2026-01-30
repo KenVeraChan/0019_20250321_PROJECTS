@@ -64,7 +64,7 @@ Escritorio grande: A partir de 1200px
         width: 360px;
         height: 1000px;
     }
-    @media screen and (min-width: 360px) and (max-width:380px)
+    @media screen and (min-width: 361px) and (max-width:380px)
     {
     .fondoCuerpoSuperior{
         width: 380px;
@@ -74,17 +74,9 @@ Escritorio grande: A partir de 1200px
 }
 @media screen and (min-width: 381px) and (max-width:576px)
 {
-    @media screen and (min-width: 381px) and (max-width: 480px) {
-        .fondoCuerpoSuperior{
-            width: 100%;
-            height: 1000px;
-        }
-    }
-    @media screen and (min-width: 481px) and (max-width: 576px) {
-        .fondoCuerpoSuperior{
-            width: 100%;
-            height: 1000px;
-        }
+    .fondoCuerpoSuperior{
+        width: 100%;
+        height: 1000px;
     }
 }
 @media screen and (min-width: 577px) and (max-width:768px)

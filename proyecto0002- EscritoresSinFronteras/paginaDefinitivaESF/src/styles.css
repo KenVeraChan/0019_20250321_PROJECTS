@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+html, body { 
+    background-color: #000124;
+} 
+@media screen and (min-width: 0px) and (max-width: 360px){
+app-root { 
+    height: 100%; 
+    display: block; /* importante para que respete el alto */ 
+    min-width: 360px;
+}
+}
+@media screen and (min-width: 361px){
+app-root { 
+    min-height: 100vh; 
+    display: block; /* importante para que respete el alto */ 
+    min-width: 100vw;
+}
+}

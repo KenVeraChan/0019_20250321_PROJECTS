@@ -1,12 +1,17 @@
+<h2 class="tituloNoticias">Noticias Recientes</h2>
+<h2 class="tituloNoticias">en</h2>
+<h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
 <div class="fondo">
-    @for(escenas of objetoNoticias.noticia;track escenas;let i=$index)
-    {
-        <div class="areaNoticias">
-            <ul class="casilleroNoticias">
-                <li class="titular">{{ escenas.getTitular() }}</li>
-                <li class="subTitular">{{ escenas.getsubTitular() }}</li>
-                <li class="noticia">{{ escenas.getNoticia()}}</li>
-            </ul>
-        </div>
-    }
+    <div class="cajaNoticias">
+        @for(escenas of objetoNoticias.noticia;track escenas;let i=$index)
+        {
+            <div class="areaNoticias">
+                <ul class="casilleroNoticias">
+                    <li class="titular">{{ escenas.getTitular() }}</li>
+                    <li class="subTitular">{{ escenas.getsubTitular() }}</li>
+                    <li class="noticia">{{ escenas.getNoticia()}}</li>
+                </ul>
+            </div>
+        }
+    </div>
 </div>
