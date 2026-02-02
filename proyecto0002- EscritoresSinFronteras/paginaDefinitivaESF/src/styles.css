@@ -6,6 +6,7 @@ app-root {
     height: 100%; 
     display: block; /* importante para que respete el alto */ 
     min-width: 360px;
+    background-color: #000124;
 }
 }
 @media screen and (min-width: 361px){
@@ -13,5 +14,6 @@ app-root {
     min-height: 100vh; 
     display: block; /* importante para que respete el alto */ 
     min-width: 100vw;
+    background-color: #000124;
 }
 }

@@ -1,8 +1,12 @@
+<h2 class="tituloNoticias">Nuestra Historia</h2>
+<h2 class="tituloNoticias">en</h2>
+<h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
 <div class="fondo" #fondoHistoria>
     <button type="button " class="bloqueAcontecimientos" (click)="cargarHistorial(1)" #botonesPrincipales>HISTORIA COMPLETA</button>
     <button type="button" class="bloqueAcontecimientos" (click)="cargarHistorial(2)" #botonesPrincipales>HISTORIA POR AÑOS</button>
         @if(eleccion===1)
         {
+            <div id="areaHistoria">
             <!--SI ES EL PRIMER CASO CARGA TODO EL HISTORIAL EN MESES Y AÑOS-->
             @for(escenas of objetoHistorias.historias;track escenas;let i=$index)
             {
@@ -20,6 +24,7 @@
                     </svg>
                 </button>
             }
+            </div>
         }
         @else if(eleccion===2)
         {
