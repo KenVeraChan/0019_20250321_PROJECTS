@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
 
 @Component({
   selector: 'app-nosotros',
@@ -7,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './nosotros.css',
 })
 export class Nosotros {
-
+  public equipo= new VariablesCompartidas();
+  
 }
