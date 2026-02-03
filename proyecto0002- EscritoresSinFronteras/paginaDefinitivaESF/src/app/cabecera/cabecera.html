@@ -1,6 +1,14 @@
 <div class="fondoCabecera"></div>
 <div class="separadorMenu"></div>
-@if(tamanioPantalla<=1200)
+<!-- 
+  Mostrar menú compacto (hamburguesa) SOLO si es un dispositivo móvil REAL.
+  Usamos detección por User-Agent porque:
+  - El User-Agent NO cambia con el zoom del navegador
+  - El User-Agent NO cambia con el escalado de Windows (125%, 150%, etc.)
+  - Solo los móviles y tablets reales (Android, iPhone, iPad) activarán el menú hamburguesa
+  - Los ordenadores SIEMPRE mostrarán la barra completa, sin importar el zoom
+-->
+@if(esDispositivoMovilReal)
 {
     <div class="accionamientos">
     <button type="buttom" class="btn btn primary" id="accionado" (click)="opciones.abrirMenuOpciones()"><strong>|||</strong></button>

@@ -77,6 +77,20 @@ Escritorio grande: A partir de 1200px
         .tablaOpciones{
             margin-top: 10px;   /*TABLA BASE DEL MENU DE OPCIONES*/
             width:100%;
+            display: table;  /* Asegurar que siempre se muestre como tabla */
+            table-layout: auto;  /* Permitir que las celdas se ajusten */
+        }
+        /* Contenedor de la fila para hacerla flexible con zoom */
+        .tablaOpciones tbody tr {
+            display: flex;
+            flex-wrap: wrap;  /* Permitir que los elementos se envuelvan con zoom */
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+        .tablaOpciones tbody tr td {
+            flex: 0 1 auto;  /* No crecer, permitir encogerse */
+            min-width: fit-content;
         }
         .botonera{
             text-align: center;
@@ -92,6 +106,7 @@ Escritorio grande: A partir de 1200px
             text-decoration: none;
             list-style: none;
             position: relative;
+            white-space: nowrap;  /* Evitar que el texto se rompa */
         }
         .enlaces{
             font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -142,6 +157,23 @@ Escritorio grande: A partir de 1200px
 
 @media screen and (min-width: 0px) and (max-width:380px)
 {
+    /* Estilos para que el menú sea visible cuando el viewport es extremadamente pequeño (zoom extremo) */
+    .tablaOpciones {
+        margin-top: 5px;
+    }
+    .tablaOpciones tbody tr {
+        flex-wrap: wrap;
+        gap: 1px;
+    }
+    .enlaces{
+        font-size: 8px;
+    }
+    .botonera {
+        margin-left: 2px;
+        margin-right: 2px;
+        height: 25px;
+        padding-top: 0px;
+    }
     @media screen and (min-width: 0px) and (max-width: 200px) {
         .separadorMenu{
             margin-left: 14%;
@@ -193,6 +225,23 @@ Escritorio grande: A partir de 1200px
 }
 @media screen and (min-width: 381px) and (max-width:576px)
 {
+    /* Estilos para que el menú sea visible cuando el viewport es muy pequeño (zoom muy alto) */
+    .tablaOpciones {
+        margin-top: 5px;
+    }
+    .tablaOpciones tbody tr {
+        flex-wrap: wrap;
+        gap: 2px;
+    }
+    .enlaces{
+        font-size: 9px;
+    }
+    .botonera {
+        margin-left: 3px;
+        margin-right: 3px;
+        height: 28px;
+        padding-top: 1px;
+    }
     @media screen and (min-width: 381px) and (max-width: 440px) {
         .separadorMenu {
             margin-left: 12%;
@@ -221,6 +270,19 @@ Escritorio grande: A partir de 1200px
 @media screen and (min-width: 577px) and (max-width:768px)
 {
         /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+    /* Estilos para que el menú sea visible cuando el viewport es muy pequeño (zoom alto) */
+    .tablaOpciones {
+        margin-top: 5px;
+    }
+    .enlaces{
+        font-size: 10px;
+    }
+    .botonera {
+        margin-left: 5px;
+        margin-right: 5px;
+        height: 30px;
+        padding-top: 2px;
+    }
     @media screen and (min-width: 577px) and (max-width: 650px) {
         .separadorMenu {
             margin-left: 25%;
@@ -246,8 +308,17 @@ Escritorio grande: A partir de 1200px
         max-width: 600px;
     }
     /*AREA DESPLAZABLE VARIABLE PARA LAS OPCIONES*/
+    /* Estilos para que el menú sea visible cuando el viewport es pequeño (por zoom) */
+    .tablaOpciones {
+        margin-top: 5px;
+    }
     .enlaces{
-        font-size: 13px;
+        font-size: 11px;
+    }
+    .botonera {
+        margin-left: 10px;
+        margin-right: 10px;
+        height: 35px;
     }
     @media screen and (min-width: 768px) and (max-width: 790px) {
         .separadorMenu {
@@ -273,8 +344,17 @@ Escritorio grande: A partir de 1200px
         background-position: 120px;
         max-width: 600px;
     }
+    /* Estilos para que el menú sea visible cuando el viewport es mediano (zoom moderado) */
+    .tablaOpciones {
+        margin-top: 5px;
+    }
     .enlaces{
-    font-size: 12px;
+        font-size: 12px;
+    }
+    .botonera {
+        margin-left: 15px;
+        margin-right: 15px;
+        height: 38px;
     }
     @media screen and (min-width: 992px) and (max-width: 1050px) {
         .separadorMenu {
@@ -284,9 +364,6 @@ Escritorio grande: A partir de 1200px
     @media screen and (min-width: 1051px) and (max-width: 1100px) {
         .separadorMenu {
             margin-left: 23%;
-        }
-        .botonera{
-            position: absolute;
         }
     }
     @media screen and (min-width: 1101px) and (max-width: 1200px) {

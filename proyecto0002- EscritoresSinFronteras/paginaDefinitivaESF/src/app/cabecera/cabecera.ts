@@ -17,6 +17,7 @@ export class Cabecera implements OnInit {
     public servicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS","CONGRESOS INTERNACIONALES"];
     public contacto: string="CONTACTO";
     public tamanioPantalla:number=0.0;
+    public esDispositivoMovilReal: boolean = false; // Detecta móviles/tablets por User-Agent (no cambia con zoom)
     public puntero: number=0;
     public activeIndex: number = 0;
     public semaforo:boolean=false;
@@ -26,12 +27,47 @@ export class Cabecera implements OnInit {
       if (typeof window !== 'undefined') 
         {
           this.tamanioPantalla = window.innerWidth;
+          // Detectar si es un dispositivo móvil REAL usando User-Agent
+          // El User-Agent NO cambia con el zoom del navegador ni con el escalado de Windows
+          this.esDispositivoMovilReal = this.detectarMovilPorUserAgent();
           // Recupera el puntero almacenado y lo sincroniza con la clase activa
           const stored = localStorage.getItem('punteroCabecera');
           this.puntero = stored ? Number(stored) : 0;
           this.activeIndex = this.puntero;
         }
     }
+
+    /**
+     * Detecta si el dispositivo es móvil o tablet usando el User-Agent.
+     * Este método es confiable porque el User-Agent NO cambia con:
+     * - El zoom del navegador
+     * - El escalado de Windows (125%, 150%, etc.)
+     * - El tamaño de la ventana
+     */
+    private detectarMovilPorUserAgent(): boolean {
+      if (typeof navigator === 'undefined') return false;
+      
+      const userAgent = navigator.userAgent.toLowerCase();
+      
+      // Lista de identificadores de dispositivos móviles reales
+      const dispositivosMoviles = [
+        'android',
+        'iphone',
+        'ipad',
+        'ipod',
+        'blackberry',
+        'windows phone',
+        'opera mini',
+        'iemobile',
+        'mobile safari',
+        'silk',  // Amazon Kindle
+        'kindle'
+      ];
+      
+      // Verificar si el User-Agent contiene algún identificador de móvil
+      return dispositivosMoviles.some(dispositivo => userAgent.includes(dispositivo));
+    }
+
     /*PARA PANTALLAS DE MOVIL Y TABLET */
     @HostListener('window:resize', ['$event'])
     onResize(event:any):number {
