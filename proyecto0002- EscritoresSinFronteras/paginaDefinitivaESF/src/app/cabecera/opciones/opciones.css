@@ -54,7 +54,6 @@ Escritorio grande: A partir de 1200px
         background-color: rgb(8, 8, 83);
         border-radius: 14px;
         box-shadow: 0 0 20px rgba(255,255,255,0.45);
-
         transform: translate(-50%, -50%) translateY(24px) scale(0.98);
         opacity: 0;
         visibility: hidden;
@@ -62,7 +61,7 @@ Escritorio grande: A partir de 1200px
         z-index: 200;
     }
     .tableroMenuOpciones.is-open .menuOpciones{
-        transform: translate(-50%, -50%) translateY(0) scale(1);
+        transform: translate(-50%, -50%) translateY(0) scale(0.9);
         opacity: 1;
         visibility: visible;
         transition: transform 260ms ease, opacity 260ms ease, visibility 0ms linear 0ms;
@@ -103,7 +102,7 @@ Escritorio grande: A partir de 1200px
             width:100%;
         }
         .botonera{
-            text-align: left;
+            text-align: center;
             margin: 6px 12px;
             color:rgb(255, 255, 255);
             padding: 0;
@@ -120,7 +119,7 @@ Escritorio grande: A partir de 1200px
             line-height: var(--menu-item-h);
             color:rgb(230, 214, 0);
             list-style: none;
-            text-align: left;
+            text-align: center;
             text-decoration: none;
         }
         .enlaces.active{
@@ -141,7 +140,7 @@ Escritorio grande: A partir de 1200px
             list-style: none;
             overflow: hidden;
             max-height: 0;
-            transition: max-height 220ms ease;
+            transition: max-height 1200ms ease;
         }
         .subBotonera .enlaces{
             font-size: var(--menu-sub-font-size);
