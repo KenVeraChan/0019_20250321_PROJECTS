@@ -64,98 +64,44 @@ export class Opciones implements OnInit, AfterViewInit {
     {
       if (typeof window !== 'undefined') 
       {      
-        //Se carga primero el tamaño de la pagina web
-          this.tamanioHorizontalPantalla = document.documentElement.scrollWidth;  //Ancho de la pantalla
-          this.tamanioVerticalPantalla = document.documentElement.scrollHeight;
-      // Acceso seguro al elemento ya renderizado
-        // Usar Renderer2 en lugar de manipular nativeElement.style directamente
-        //Para tener en cuenta en los demás ficheros typescript con Renderer2
+        // Tamaño visible del viewport
+        this.tamanioHorizontalPantalla = window.innerWidth;
+        this.tamanioVerticalPantalla = window.innerHeight;
+
         const elementoMenu = this.fondoMenus.nativeElement as HTMLElement;
         const elementoTablero= this.tablero.nativeElement as HTMLElement;
 
-        this.renderer.setStyle(elementoMenu, 'transform', 'translateX(4%)');
-        this.renderer.setStyle(elementoMenu, 'transition', 'transform 1s ease');
-        this.renderer.setStyle(elementoTablero, 'transition', '1s');
-        this.renderer.setStyle(elementoTablero, 'width', this.tamanioHorizontalPantalla + 'px');      
-        this.renderer.setStyle(elementoTablero, 'height', this.tamanioVerticalPantalla + 'px');
+        // Bloquear scroll del documento para que el overlay oscurezca siempre lo visible
+        this.renderer.setStyle(document.body, 'overflow', 'hidden');
 
-        this.renderer.setStyle(elementoMenu, 'z-index', '200');
-        this.renderer.setStyle(elementoTablero, 'z-index', '199');
+        // Asegurar que no queden estilos inline antiguos que rompan la animación CSS
+        this.renderer.removeStyle(elementoMenu, 'transform');
+        this.renderer.removeStyle(elementoMenu, 'transition');
+        this.renderer.removeStyle(elementoMenu, 'height');
+        this.renderer.removeStyle(elementoMenu, 'maxHeight');
+        this.renderer.removeStyle(elementoMenu, 'overflowY');
 
-        this.renderer.setStyle(elementoMenu, 'display', 'block');     /*SE DEVUELVE LA VISIBILIDAD DEL BLOQUE*/
-        this.renderer.setStyle(elementoTablero, 'display', 'block');
-        
-        this.renderer.setStyle(elementoMenu, 'position', 'absolute');
-        this.renderer.setStyle(elementoTablero, 'position', 'absolute');
+        // Abrir overlay + panel (la animación la hace el CSS)
+        this.renderer.addClass(elementoTablero, 'is-open');
 
-        // Obliga a ejecutar el cambio justo antes del siguiente repintado.
-        // De esta forma el navegador registrará primero la transición y
-        // animará el cambio de margin-left.
-        requestAnimationFrame(() => {
-            //SE DEFINE LA TRANSICION EN FUNCION DEL TAMANIO HORIZONTAL DE LA PANTALLA
-                if(this.tamanioHorizontalPantalla<=99)   //MOVIL PEQUEÑO
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.025}%)`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.8 + 'px');
-                }
-                if(this.tamanioHorizontalPantalla>100 && this.tamanioHorizontalPantalla<=380)   //MOVIL PEQUEÑO
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.025}%)`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.8 + 'px');
-                }
-                if(this.tamanioHorizontalPantalla>381 && this.tamanioHorizontalPantalla<=420)   //MOVIL MEDIANO
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.045}%)`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.6 + 'px');
-                }
-                if(this.tamanioHorizontalPantalla>420 && this.tamanioHorizontalPantalla<=479)   //MOVIL MEDIANO-2
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.06}%)`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.6 + 'px');
-                }
-                if(this.tamanioHorizontalPantalla>480 && this.tamanioHorizontalPantalla<=576)   //MOVIL MEDIANO-3
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.07}%)`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.6 + 'px');
-                }
-                if(this.tamanioHorizontalPantalla>577 && this.tamanioHorizontalPantalla<=650)   //TABLET PEQUEÑO-1
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.085}%)`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
-                }
-                if(this.tamanioHorizontalPantalla>651 && this.tamanioHorizontalPantalla<=700)   //TABLET PEQUEÑO-2
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.09}%)`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
-                }
-                if(this.tamanioHorizontalPantalla>701 && this.tamanioHorizontalPantalla<=768)   //TABLET PEQUEÑO-3
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.095}%)`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
-                }
-                if(this.tamanioHorizontalPantalla>769 && this.tamanioHorizontalPantalla<=800)   //TABLET GRANDE-1
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.1}%)`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
-                }
-                if(this.tamanioHorizontalPantalla>801 && this.tamanioHorizontalPantalla<=992)   //TABLET GRANDE-2
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translateX(${this.tamanioHorizontalPantalla*0.12}%)`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
-                }
-                if(this.tamanioHorizontalPantalla>993 && this.tamanioHorizontalPantalla<=1200)   //ESCRITORIO PEQUEÑO
-                {
-                    this.renderer.setStyle(elementoMenu, 'transform', `translate(${this.tamanioHorizontalPantalla*0.13}%,-5%`);
-                    this.renderer.setStyle(elementoMenu, 'height', this.tamanioVerticalPantalla*0.7 + 'px');
-                } 
-                if(this.tamanioHorizontalPantalla>1201)   //ESCRITORIO GRANDE
-                {
-                   //No se configura nada porque desaparece el menú de opciones deslizante 
-                }
-          this.renderer.setStyle(elementoMenu, 'width', '300px');
-          this.renderer.setStyle(elementoTablero, 'backgroundColor', 'rgba(0, 0, 0, 0.8)');
-          this.renderer.setStyle(elementoMenu, 'box-shadow', '0 0 20px #fff');
-        });
+        // Calcular tamaños para que quepa TODO sin scroll:
+        // - contamos items principales + items de submenú (peor caso: submenús abiertos)
+        const mainItems = elementoMenu.querySelectorAll('.botonera').length || 6;
+        const subItems = elementoMenu.querySelectorAll('.subMenu .subBotonera').length || 0;
+        const totalRowsMax = mainItems + subItems;
+
+        const headerEl = elementoMenu.querySelector('.fondoMenu') as HTMLElement | null;
+        const headerHeight = headerEl?.offsetHeight ?? 100;
+        const padding = 24;
+
+        const available = Math.round(this.tamanioVerticalPantalla * 0.86) - headerHeight - padding;
+        const rowH = Math.max(26, Math.min(44, Math.floor(available / Math.max(1, totalRowsMax))));
+        const fontSize = Math.max(10, Math.min(18, Math.floor(rowH * 0.48)));
+        const subFontSize = Math.max(10, Math.min(16, Math.floor(fontSize * 0.9)));
+
+        elementoMenu.style.setProperty('--menu-item-h', `${rowH}px`);
+        elementoMenu.style.setProperty('--menu-font-size', `${fontSize}px`);
+        elementoMenu.style.setProperty('--menu-sub-font-size', `${subFontSize}px`);
       }
     }
     public volverPagina():void
@@ -167,18 +113,20 @@ export class Opciones implements OnInit, AfterViewInit {
         const elementoMenu = this.fondoMenus.nativeElement as HTMLElement;
         const elementoTablero= this.tablero.nativeElement as HTMLElement;
 
-        this.renderer.setStyle(elementoMenu, 'transform', 'translateX(140%)');
-        this.renderer.setStyle(elementoMenu, 'transition', 'transform 1s ease');
-        this.renderer.setStyle(elementoMenu, 'display', 'none');     /*SE DEVUELVE LA VISIBILIDAD DEL BLOQUE*/
-        this.renderer.setStyle(elementoTablero, 'display', 'none');
-        this.renderer.setStyle(elementoTablero, 'transition', '1.5s');
+        // Cerrar overlay + panel (la transición la hace el CSS)
+        this.renderer.removeClass(elementoTablero, 'is-open');
+
+        // Restaurar scroll del documento
+        this.renderer.removeStyle(document.body, 'overflow');
 
         // Obliga a ejecutar el cambio justo antes del siguiente repintado.
         // De esta forma el navegador registrará primero la transición y
         // animará el cambio de margin-left.
         requestAnimationFrame(() => {
-          this.renderer.setStyle(elementoMenu, 'width', '300px');
-          this.renderer.setStyle(elementoTablero, 'backgroundColor', 'transparent');  
+          // Limpiar variables CSS
+          elementoMenu.style.removeProperty('--menu-item-h');
+          elementoMenu.style.removeProperty('--menu-font-size');
+          elementoMenu.style.removeProperty('--menu-sub-font-size');
       });
       }
     }

@@ -16,22 +16,56 @@ Escritorio grande: A partir de 1200px
         height: 40px;
         background-color: rgb(1, 12, 37);
     }
-    .tableroMenuOpciones
-    {
-        display: none;  /*PARA OCULTAR UN ELEMENTO*/
-        width:100%;
-        margin-top: -140px;  /*Medida que corresponde con la altura de la cabecera previa superior*/
-        margin-bottom: 0px;
-        margin-left: 0px;
-        margin-right: 0px;
-        background-color: transparent;
+
+    /* Overlay de pantalla completa (oscurece todo, incluso con scroll) */
+    .tableroMenuOpciones{
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        background-color: rgba(0, 0, 0, 0.0);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 220ms ease, visibility 0ms linear 220ms, background-color 220ms ease;
+        z-index: 199;
     }
+    .tableroMenuOpciones.is-open{
+        background-color: rgba(0, 0, 0, 0.78);
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transition: opacity 220ms ease, visibility 0ms linear 0ms, background-color 220ms ease;
+    }
+
+    /* Panel del menú: centrado y animado */
     .menuOpciones{
-        display: none;  /*PARA OCULTAR UN ELEMENTO*/
-        margin-top: 100px;
-        width: 100%;
-        height: 50%;
+        /* Variables controladas desde TS para que quepa TODO sin scroll */
+        --menu-item-h: 40px;
+        --menu-font-size: 16px;
+        --menu-sub-font-size: 14px;
+
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        width: min(420px, 92vw);
+        height: auto; /* sin scroll interno */
         background-color: rgb(8, 8, 83);
+        border-radius: 14px;
+        box-shadow: 0 0 20px rgba(255,255,255,0.45);
+
+        transform: translate(-50%, -50%) translateY(24px) scale(0.98);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 260ms ease, opacity 260ms ease, visibility 0ms linear 260ms;
+        z-index: 200;
+    }
+    .tableroMenuOpciones.is-open .menuOpciones{
+        transform: translate(-50%, -50%) translateY(0) scale(1);
+        opacity: 1;
+        visibility: visible;
+        transition: transform 260ms ease, opacity 260ms ease, visibility 0ms linear 0ms;
     }
     .fondoMenu{
         height: 150px;
@@ -69,23 +103,21 @@ Escritorio grande: A partir de 1200px
             width:100%;
         }
         .botonera{
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 22px;
+            text-align: left;
+            margin: 6px 12px;
             color:rgb(255, 255, 255);
-            padding-top: 3px;
-            height: 40px;
+            padding: 0;
             background-color: transparent;
             width: 100%;
-            margin-left: 30px;
-            margin-right: 30px;
             text-decoration: none;
             list-style: none;
             position: relative;
         }
         .enlaces{
             font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            font-size: 18px;
+            display: block;
+            font-size: var(--menu-font-size); /* se ajusta en TS para que quepa todo */
+            line-height: var(--menu-item-h);
             color:rgb(230, 214, 0);
             list-style: none;
             text-align: left;
@@ -98,26 +130,25 @@ Escritorio grande: A partir de 1200px
             text-shadow: 2px 2px 8px rgb(243, 239, 1);
             transition: 0.25s;
         }
+        /* En hamburguesa: submenú "empuja" hacia abajo (no absoluto) */
         .subMenu{
-            display: none;
-            position: absolute;
-            background-color: #060396;
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 5px;
+            display: block;
+            position: static;
+            background-color: rgb(2, 56, 59);
+            margin: 0 0 0 14px;
+            padding: 0 10px;
+            border-radius: 8px;
             list-style: none;
-            z-index: 10;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 220ms ease;
+        }
+        .subBotonera .enlaces{
+            font-size: var(--menu-sub-font-size);
+            line-height: var(--menu-item-h);
         }
         .botonera:hover .subMenu{
-            display: block;
-            position: absolute;
-            width:100%;
-            background-color: rgb(2, 56, 59);
-            margin-top: 5px;
-            padding: 10px;
-            border-radius: 5px;
-            list-style: none;
-            z-index: 10;
+            max-height: 500px; /* suficiente para mostrar items; el TS ajusta tamaños para que quepa */
         }
         .botonera:hover, .subBotonera:hover{
             background-color: #596301;
