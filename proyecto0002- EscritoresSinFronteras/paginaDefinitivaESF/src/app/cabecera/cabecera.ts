@@ -1,5 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 
+export type TipoDispositivo = 'mobile' | 'tablet' | 'desktop';
+
 @Component({
   selector: 'app-cabecera',
   standalone: false,
@@ -17,7 +19,8 @@ export class Cabecera implements OnInit {
     public servicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS","CONGRESOS INTERNACIONALES"];
     public contacto: string="CONTACTO";
     public tamanioPantalla:number=0.0;
-    public esDispositivoMovilReal: boolean = false; // Detecta móviles/tablets por User-Agent (no cambia con zoom)
+    public esDispositivoMovilReal: boolean = false;
+    public tipoDispositivo: TipoDispositivo = 'desktop'; // 'mobile', 'tablet' o 'desktop'
     public puntero: number=0;
     public activeIndex: number = 0;
     public semaforo:boolean=false;
@@ -27,14 +30,113 @@ export class Cabecera implements OnInit {
       if (typeof window !== 'undefined') 
         {
           this.tamanioPantalla = window.innerWidth;
-          // Detectar si es un dispositivo móvil REAL usando User-Agent
-          // El User-Agent NO cambia con el zoom del navegador ni con el escalado de Windows
+          
+          // Detectar tipo de dispositivo con múltiples métodos para máxima precisión
           this.esDispositivoMovilReal = this.detectarMovilPorUserAgent();
+          this.tipoDispositivo = this.detectarTipoDispositivo();
+          
+          // Esperar a que la página esté completamente cargada antes de detectar nuevamente
+          if (document.readyState === 'complete') {
+            this.reinicializarDeteccion();
+          } else {
+            window.addEventListener('load', () => this.reinicializarDeteccion());
+          }
+          
           // Recupera el puntero almacenado y lo sincroniza con la clase activa
           const stored = localStorage.getItem('punteroCabecera');
           this.puntero = stored ? Number(stored) : 0;
           this.activeIndex = this.puntero;
         }
+    }
+
+    /**
+     * Reinicializa la detección tras cargar completamente la página
+     * Importante para asegurar dimensiones exactas
+     */
+    private reinicializarDeteccion(): void {
+      if (typeof window !== 'undefined') {
+        this.tamanioPantalla = window.innerWidth;
+        this.tipoDispositivo = this.detectarTipoDispositivo();
+      }
+    }
+
+    /**
+     * Detecta el tipo de dispositivo con máxima precisión combinando:
+     * 1. User-Agent (más confiable, no cambia con zoom)
+     * 2. Tamaño de pantalla física (devicePixelRatio)
+     * 3. Capacidades táctiles
+     * 4. Orientación del dispositivo
+     * 5. Media Queries
+     */
+    public detectarTipoDispositivo(): TipoDispositivo {
+      if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+        return 'desktop';
+      }
+
+      const userAgent = navigator.userAgent.toLowerCase();
+      
+      // PASO 1: Detectar por User-Agent (identificadores específicos)
+      const esIPhone = /iphone/i.test(userAgent);
+      const esAndroidMovil = /android.*mobile|mobile.*android/i.test(userAgent);
+      const esIPad = /ipad/i.test(userAgent);
+      const esAndroidTablet = /android/i.test(userAgent) && !/mobile/i.test(userAgent);
+      const esTabletWindows = /windows phone|iemobile|blackberry/i.test(userAgent);
+      
+      // PASO 2: Detectar por tamaño de pantalla (ancho físico)
+      const ancho = window.innerWidth;
+      const alto = window.innerHeight;
+      const devicePixelRatio = window.devicePixelRatio || 1;
+      const anchoPadre = window.parent?.innerWidth || ancho;
+      
+      // PASO 3: Detectar capacidades táctiles
+      const tieneTouch = this.detectarCapacidadesToactiles();
+      
+      // PASO 4: Usar Media Queries (CSS breakpoints)
+      const esMobileMedia = window.matchMedia('(max-width: 767px)').matches;
+      const esTabletMedia = window.matchMedia('(min-width: 768px) and (max-width: 1024px)').matches;
+      
+      // PASO 5: Orientación
+      const esPortrait = alto > ancho;
+      
+      // LÓGICA DE DETECCIÓN COMBINADA (en orden de confiabilidad)
+      
+      // Si el User-Agent indica claramente móvil
+      if (esIPhone || esAndroidMovil) {
+        return 'mobile';
+      }
+      
+      // Si el User-Agent indica claramente tablet
+      if (esIPad || esAndroidTablet || esTabletWindows) {
+        return 'tablet';
+      }
+      
+      // Si no detectó nada en User-Agent, usar combinación de métodos
+      // Tablet: entre 768px y 1024px, con touch, o User-Agent de tablet
+      if ((ancho >= 768 && ancho <= 1024) || (esTabletMedia && tieneTouch)) {
+        return 'tablet';
+      }
+      
+      // Mobile: menos de 768px, con touch, o en portrait con ancho pequeño
+      if (ancho < 768 || (tieneTouch && ancho <= 880 && esPortrait)) {
+        return 'mobile';
+      }
+      
+      // Por defecto, desktop
+      return 'desktop';
+    }
+
+    /**
+     * Detecta si el dispositivo tiene capacidades táctiles
+     */
+    private detectarCapacidadesToactiles(): boolean {
+      if (typeof window === 'undefined') return false;
+      
+      // Métodos modernos para detectar touch
+      return (
+        (('ontouchstart' in window) ||
+        (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) ||
+        ((navigator as any).msMaxTouchPoints && (navigator as any).msMaxTouchPoints > 0)) ?? false
+      );
     }
 
     /**
@@ -72,7 +174,37 @@ export class Cabecera implements OnInit {
     @HostListener('window:resize', ['$event'])
     onResize(event:any):number {
       this.tamanioPantalla = event.target.innerWidth;
+      // Actualizar tipo de dispositivo al cambiar el tamaño
+      this.tipoDispositivo = this.detectarTipoDispositivo();
       return(this.tamanioPantalla);
+    }
+
+    /**
+     * Obtiene el tipo de dispositivo actual como string para usar en templates
+     */
+    public obtenerTipoDispositivo(): string {
+      return this.tipoDispositivo;
+    }
+
+    /**
+     * Verifica si el dispositivo es móvil
+     */
+    public esMovil(): boolean {
+      return this.tipoDispositivo === 'mobile';
+    }
+
+    /**
+     * Verifica si el dispositivo es tablet
+     */
+    public esTablet(): boolean {
+      return this.tipoDispositivo === 'tablet';
+    }
+
+    /**
+     * Verifica si el dispositivo es desktop
+     */
+    public esDesktop(): boolean {
+      return this.tipoDispositivo === 'desktop';
     }
     //Sector de botones y qué componente fue activado
     public accesoHabilitado(opcion:number):void
