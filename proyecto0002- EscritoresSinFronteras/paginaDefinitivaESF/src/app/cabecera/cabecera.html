@@ -11,7 +11,7 @@
   <!-- Así se muestra el menú hamburguesa SOLO en móviles reales con pantallas pequeñas (menor o igual a 1200px)-->
 @if(esDispositivoMovilReal || tamanioPantalla <= 768)   
 {
-    <div class="accionamientos">
+    <div class="accionamientos">   
     <button type="buttom" class="btn btn primary" id="accionado" (click)="opciones.abrirMenuOpciones()"><strong>|||</strong></button>
     </div>
     <app-opciones #opciones></app-opciones>
