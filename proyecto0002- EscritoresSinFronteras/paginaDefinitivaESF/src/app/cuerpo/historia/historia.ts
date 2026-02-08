@@ -97,4 +97,8 @@ export class Historia implements OnInit, AfterViewInit {
     this.semaforo=true;  //Se activa el semáforo para mostrar el libro de la historia con mes y año
     }
   }
+  public cargaContenidoLibroHistoria(mes:string,anio:string):void
+  {
+ 
+  }
 }
