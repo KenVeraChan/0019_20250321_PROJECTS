@@ -4,8 +4,15 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class VariablesCompartidas {
-      //AREA NOTICIAS DEL APARTADO "INICIO"
-      public noticia:Noticias[]=[
+  constructor() 
+  {
+    //No precisa de instanciar nada
+  }
+    //VARIABLES COMPARTIDAS ENTRE COMPONENTES
+    public menuPrincipal: Apartados=new Apartados();
+
+    //AREA NOTICIAS DEL APARTADO "INICIO"
+    public noticia:Noticias[]=[
         new Noticias(    
         "Titular de la noticia",
         "Subtítulo de la noticia",
@@ -57,6 +64,7 @@ export class VariablesCompartidas {
               "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
           )
     ];
+
       //AREA HISTORIAS DEL APARTADO "NUESTRA HISTORIA"
       public historias: Historias[]=[
         new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
@@ -83,7 +91,8 @@ export class VariablesCompartidas {
         new Historias(2,1,"2025","Escritores Sin Fronteras, crece en usuarios suscritos tanto de Facebook como de Instagram"),
         new Historias(3,5,"2025","Escritores Sin Fronteras, consigue su registro mercantil en Colombia como corporación online en existencia"),
         new Historias(4,8,"2025","Escritores Sin Fronteras, registra sus primeras ganancias")];
-      //AREA DE QUIENES SOMOS PARA EL APARTADO DE NOSOTROS
+      
+        //AREA DE QUIENES SOMOS PARA EL APARTADO DE NOSOTROS
       public quienesSomos:QuienesSomos[]=[
         new QuienesSomos("Ken","Vera Chan","Español","Escritor y Fundador","Ken Vera Chan es un escritor apasionado por la literatura contemporánea y la narrativa innovadora. Con una carrera que abarca más de una década, Ken ha publicado varias novelas y colecciones de cuentos que han sido aclamadas por la crítica. Además de su trabajo literario, Ken es el fundador de 'Escritores Sin Fronteras', una plataforma dedicada a apoyar a escritores emergentes de todo el mundo.","assets/images/equipoESF/kenVeraChan.png"),
         new QuienesSomos("Diana","Emilce Zamora","Colombiana","Editora y Co-Fundadora","Diana Emilce Zamora es una editora experimentada con un profundo amor por la literatura hispanoamericana. Ha trabajado en diversas editoriales, ayudando a dar forma a las voces de nuevos escritores. Como co-fundadora de 'Escritores Sin Fronteras', Diana se dedica a crear oportunidades para que los escritores de diferentes culturas puedan compartir sus historias con una audiencia global.","assets/images/equipoESF/dianaEmilceZamora.png"),
@@ -101,6 +110,37 @@ export class VariablesCompartidas {
         "Noticia 4: Lanzamiento de la nueva plataforma para compartir relatos cortos.",
         "Noticia 5: Evento virtual con autores reconocidos a nivel internacional."
       ];
+}
+class Apartados{
+    public matrizApartados: string[]= ["INICIO","NUESTRA HISTORIA","QUIENES SOMOS","BLOG LITERARIO","NUESTROS SERVICIOS","CONTACTO"];
+    public subApartadosBlog: string[]= ["PROSA","VERSO","REFLEXIONES"];
+    public enlacesBlogLiterario: string[]= ["PUBLICACIONES EN PROSA","PUBLICACIONES EN VERSO","REFLEXIONES DEL DÍA"];
+    public enlacesServicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS","CONGRESOS INTERNACIONALES"];
+    public subApartadosServicios: string[]= ["CURSOS","ENTREVISTAS","EDICIONES","TERTULIAS","CONGRESOS"];
+    public constructor()
+    {
+      //El constructor no solicita nada porque simplemente es de lectura o escritura de las variables, no se necesita instanciar nada, se accede directamente a las variables públicas.
+    }
+    public getMatrizApartados():string[]
+    {
+      return this.matrizApartados;
+    }
+    public getEnlacesBlogLiterario():string[]
+    {
+      return this.enlacesBlogLiterario;
+    }   
+    public getEnlacesServicios():string[]
+    {
+      return this.enlacesServicios;
+    }
+    public getSubApartadosBlog():string[]
+    {
+      return this.subApartadosBlog;
+    }
+    public getSubApartadosServicios():string[]
+    {
+      return this.subApartadosServicios;
+    }
 }
 class Noticias
 {

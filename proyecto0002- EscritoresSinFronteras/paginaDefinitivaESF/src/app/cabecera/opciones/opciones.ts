@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef, Input, Renderer2 } from '@angular/core';
+import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
 
 @Component({
   selector: 'app-opciones',
@@ -7,15 +8,7 @@ import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef, 
   styleUrl: './opciones.css',
 })
 export class Opciones implements OnInit, AfterViewInit {
-    public inicio: string="INICIO";
-    public nuestraHistoria: string="NUESTRA HISTORIA";
-    public anios: string[]=["2020","2021","2022","2023","2024","2025","2026"];
-    public quienesSomos: string="QUIENES SOMOS";
-    public blogLiterario: string="BLOG LITERARIO";
-    public enlaces: string[]= ["PUBLICACIONES EN PROSA","PUBLICACIONES EN VERSO","REFLEXIONES DEL DÍA"];
-    public nuestrosServicios: string="NUESTROS SERVICIOS";
-    public servicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS","CONGRESOS INTERNACIONALES"];
-    public contacto: string="CONTACTO";
+    public matrizApartados= new VariablesCompartidas();
     public tamanioHorizontalPantalla:number=0.0;
     public tamanioHorizontalPantallaSegundo:number=0.0;
     public tamanioVerticalPantalla:number=0.0;

@@ -313,7 +313,7 @@ Escritorio grande: A partir de 1200px
         margin-top: 5px;
     }
     .enlaces{
-        font-size: 11px;
+        font-size: 15px;
     }
     .botonera {
         margin-left: 10px;
@@ -349,7 +349,7 @@ Escritorio grande: A partir de 1200px
         margin-top: 5px;
     }
     .enlaces{
-        font-size: 12px;
+        font-size: 15px;
     }
     .botonera {
         margin-left: 15px;
@@ -392,11 +392,15 @@ Escritorio grande: A partir de 1200px
     }
     .accionamientos
     {
-        height: 80px;
+        padding-top:15px;
+        height: 70px;
     }
     .tablaOpciones{
-        margin-top: -52px;   /*TABLA BASE DEL MENU DE OPCIONES*/
+        margin-top: -22px;   /*TABLA BASE DEL MENU DE OPCIONES*/
         width:100%;
+        height:50px;
+        margin-top: 10px;
+        margin-bottom: 0px;
     }
     @media screen and (min-width: 1201px) and (max-width: 1300px) {
         .separadorMenu {

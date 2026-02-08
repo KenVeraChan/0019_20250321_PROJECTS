@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { VariablesCompartidas } from '../servicios/variablesCompartidas';
 
 @Component({
   selector: 'app-cabecera',
@@ -7,15 +8,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
   styleUrls: ['./cabecera.css'],
 })
 export class Cabecera implements OnInit {
-    public inicio: string="INICIO";
-    public nuestraHistoria: string="NUESTRA HISTORIA";
-    public anios: string[]=["2020","2021","2022","2023","2024","2025","2026"];
-    public quienesSomos: string="QUIENES SOMOS";
-    public blogLiterario: string="BLOG LITERARIO";
-    public enlaces: string[]= ["PUBLICACIONES EN PROSA","PUBLICACIONES EN VERSO","REFLEXIONES DEL DÍA"];
-    public nuestrosServicios: string="NUESTROS SERVICIOS";
-    public servicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS","CONGRESOS INTERNACIONALES"];
-    public contacto: string="CONTACTO";
+    public matrizApartados= new VariablesCompartidas();
     public tamanioPantalla:number=0.0;
     public esDispositivoMovilReal: boolean = false; // Detecta móviles/tablets por User-Agent (no cambia con zoom)
     public puntero: number=0;
@@ -27,9 +20,10 @@ export class Cabecera implements OnInit {
       if (typeof window !== 'undefined') 
         {
           this.tamanioPantalla = window.innerWidth;
-          // Detectar si es un dispositivo móvil REAL usando User-Agent
-          // El User-Agent NO cambia con el zoom del navegador ni con el escalado de Windows
-          this.esDispositivoMovilReal = this.detectarMovilPorUserAgent();
+          // Detectar si es un dispositivo móvil o tablet REAL usando múltiples heurísticas
+          // Combina User-Agent + capacidades táctiles + media queries + ancho de pantalla
+          // para evitar falsos positivos en desktops con touch o UA inusuales.
+          this.esDispositivoMovilReal = this.detectarEsDispositivoMovilOTablet();
           // Recupera el puntero almacenado y lo sincroniza con la clase activa
           const stored = localStorage.getItem('punteroCabecera');
           this.puntero = stored ? Number(stored) : 0;
@@ -44,28 +38,60 @@ export class Cabecera implements OnInit {
      * - El escalado de Windows (125%, 150%, etc.)
      * - El tamaño de la ventana
      */
-    private detectarMovilPorUserAgent(): boolean {
-      if (typeof navigator === 'undefined') return false;
-      
-      const userAgent = navigator.userAgent.toLowerCase();
-      
-      // Lista de identificadores de dispositivos móviles reales
-      const dispositivosMoviles = [
-        'android',
-        'iphone',
-        'ipad',
-        'ipod',
-        'blackberry',
-        'windows phone',
-        'opera mini',
-        'iemobile',
-        'mobile safari',
-        'silk',  // Amazon Kindle
-        'kindle'
-      ];
-      
-      // Verificar si el User-Agent contiene algún identificador de móvil
-      return dispositivosMoviles.some(dispositivo => userAgent.includes(dispositivo));
+    private detectarEsDispositivoMovilOTablet(): boolean {
+      if (typeof navigator === 'undefined' || typeof window === 'undefined') return false;
+
+      const ua = (navigator.userAgent || navigator.vendor || (window as any).opera || '').toLowerCase();
+
+      // Detectores explícitos por User-Agent
+      const isPhoneUA = /iphone|ipod|android.*mobile|windows phone|blackberry|bb10|mobile/i.test(ua);
+      const isTabletUA = /ipad|tablet|(android(?!.*mobile))|silk|kindle/i.test(ua);
+
+      // Capacidades de interacción
+      const hasMaxTouchPoints = 'maxTouchPoints' in navigator && (navigator as any).maxTouchPoints > 0;
+      const hasOntouch = 'ontouchstart' in window;
+      const prefersCoarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+      const hasTouch = hasMaxTouchPoints || hasOntouch || prefersCoarsePointer;
+
+      const width = window.innerWidth || (screen && (screen as any).width) || 0;
+
+      // ===== DEBUG: Log detalles =====
+      console.log('[Detección de Dispositivo]', {
+        userAgent: ua.substring(0, 100),
+        isPhoneUA,
+        isTabletUA,
+        hasMaxTouchPoints,
+        maxTouchPointsCount: (navigator as any).maxTouchPoints || 0,
+        hasOntouch,
+        prefersCoarsePointer,
+        hasTouch,
+        width,
+        timestamp: new Date().toISOString()
+      });
+
+      // Heurística combinada para minimizar falsos positivos en desktop:
+      // - Si el UA indica teléfono, considerarlo móvil.
+      // - Si el UA indica tablet, requerir además touch o un ancho razonable de tablet.
+      // - Si NO hay UA claro, requerir touch + pointer coarse + ancho pequeño.
+      if (isPhoneUA) {
+        console.log('[RESULTADO] Detectado como TELÉFONO por UA');
+        return true;
+      }
+      if (isTabletUA) {
+        if (hasTouch || width <= 1024) {
+          console.log('[RESULTADO] Detectado como TABLET (touch o ancho <= 1024)');
+          return true;
+        }
+        console.log('[RESULTADO] Detectado TABLET en UA pero sin touch y ancho > 1024 → NO es móvil');
+        return false;
+      }
+
+      if (hasTouch && prefersCoarsePointer && width <= 767) {
+        console.log('[RESULTADO] Detectado como MÓVIL/TABLET por touch + pointer coarse + ancho <= 767');
+        return true;
+      }
+      console.log('[RESULTADO] NO es móvil/tablet');
+      return false;
     }
 
     /*PARA PANTALLAS DE MOVIL Y TABLET */
