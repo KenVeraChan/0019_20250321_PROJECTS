@@ -2,8 +2,12 @@
 <h2 class="tituloNoticias">en</h2>
 <h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
 <div class="fondo" #fondoHistoria>
+    <!-- solo se muestra si no está activado el libro peticionado bajo mes y año-->
+    @if(!semaforo)  
+    {
     <button type="button " class="bloqueAcontecimientos" (click)="cargarHistorial(1)" #botonesPrincipales>HISTORIA COMPLETA</button>
     <button type="button" class="bloqueAcontecimientos" (click)="cargarHistorial(2)" #botonesPrincipales>HISTORIA POR AÑOS</button>
+    }
         @if(eleccion===1)
         {
             <div id="areaHistoria">
@@ -11,7 +15,7 @@
             @for(escenas of objetoHistorias.historias;track escenas;let i=$index)
             {
                 <!-- From Uiverse.io by jawad_8494 --> 
-                <button class="boton" #botones>
+                <button class="boton" #botones (click)="accionarBoton($index,escenas.getMes(), escenas.getAnio())">
                     <span>{{ escenas.getMes() }} - {{ escenas.getAnio()}}</span>
                     <svg fill="none" viewBox="0 0 24 24" class="arrow">
                         <path
@@ -58,6 +62,25 @@
                 ></path>
             </svg>
         </button>
+        @if(semaforo)
+        {
+            <div id="libroHistoria">
+                <h2 class="tituloNoticias">Libro de la historia de Escritores Sin Fronteras</h2>
+                <!-- Aquí puedes agregar el contenido del libro de la historia con mes y año -->
+            <button class="accionCerrar">
+            <span (click)="cerrarHistorial()">CERRAR</span>
+                <svg fill="none" viewBox="0 0 24 24" class="arrow">
+                    <path
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    d="M5 12h14M13 6l6 6-6 6"
+                    ></path>
+                </svg>
+            </button>
+            </div>
+        }
 </div>
 <!--
 <div (window:resize)="onResize($event)" style="z-index:100px; background-color:black; font-size:60px; color:white">{{tamanioPantalla}}</div>

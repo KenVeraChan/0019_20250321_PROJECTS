@@ -110,6 +110,28 @@
     transform: translateX(6px);
     }
 
+    .accionCerrar
+    {
+    position: absolute;
+    margin-top:20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 28px;
+    background: linear-gradient(145deg, #0f0f0f, #1c1c1c);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 100px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    z-index: 1; 
+    }
     .arrow {
     width: 22px;
     height: 22px;

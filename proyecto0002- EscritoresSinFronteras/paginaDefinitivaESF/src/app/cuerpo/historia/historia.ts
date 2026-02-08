@@ -11,6 +11,7 @@ export class Historia implements OnInit, AfterViewInit {
   public tamanioHorizontalPantalla:number=0.0;
   public punteroAvance:number=0.0;
   public eleccion:number=0;
+  public semaforo:boolean=false;  //Para controlar la aparición del libro de la historia con mes y año
   public objetoHistorias= new VariablesCompartidas();
   public objetoHistoriasFiltrado= new VariablesCompartidas();
   constructor(private renderer: Renderer2,private deteccionCambio: ChangeDetectorRef) {}
@@ -84,6 +85,16 @@ export class Historia implements OnInit, AfterViewInit {
             const botonesPrincipales= item.nativeElement as HTMLElement;   //Para hacerlos desaparecer mientras aparecen los otros
             this.renderer.setStyle(botonesPrincipales,'display','block');
       });
+      this.semaforo=false;  //Se desactiva el semáforo para ocultar el libro de la historia con mes y año
+    }
+  }
+  public accionarBoton(puntero:number,mes:string,anio:string):void
+  {
+    if (typeof window !== 'undefined') 
+    {  
+    //Lógica para accionar el botón
+    this.cerrarHistorial(); //cierra primero el menú de meses - años ante de proseguir
+    this.semaforo=true;  //Se activa el semáforo para mostrar el libro de la historia con mes y año
     }
   }
 }
