@@ -15,7 +15,8 @@ import { Contacto } from './cuerpo/contacto/contacto';
 import {RouterModule, Routes} from '@angular/router';
 import { Opciones } from './cabecera/opciones/opciones';
 import { PaginaError } from './paginaerror/paginaerror'
-import { VariablesCompartidas } from './servicios/variablesCompartidas'
+import { VariablesCompartidas } from './servicios/variablesCompartidas';
+import { Librointeractivo } from './cuerpo/historia/librointeractivo/librointeractivo';
 
 const appRoutes: Routes=[
 {path:'', component: Inicio},
@@ -41,7 +42,8 @@ const appRoutes: Routes=[
     Servicios,
     Contacto,
     Opciones,
-    PaginaError
+    PaginaError,
+    Librointeractivo
   ],
   imports: [
     BrowserModule,

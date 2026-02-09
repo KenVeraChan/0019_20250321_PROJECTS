@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, QueryList,ViewChild, ViewChildren, Renderer2, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, QueryList,ViewChild, ViewChildren, Renderer2, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
 
 @Component({
@@ -7,15 +7,16 @@ import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
   templateUrl: './historia.html',
   styleUrl: './historia.css',
 })
-export class Historia implements OnInit, AfterViewInit {
+export class Historia implements OnInit {
   public tamanioHorizontalPantalla:number=0.0;
   public punteroAvance:number=0.0;
   public eleccion:number=0;
   public semaforo:boolean=false;  //Para controlar la aparición del libro de la historia con mes y año
   public objetoHistorias= new VariablesCompartidas();
   public objetoHistoriasFiltrado= new VariablesCompartidas();
+
   constructor(private renderer: Renderer2,private deteccionCambio: ChangeDetectorRef) {}
-        //Renderer2 permite modificar elementos DOM y ChangeDetectorRef pemirte detectar cambios en variables
+    //Renderer2 permite modificar elementos DOM y ChangeDetectorRef pemirte detectar cambios en variables
   @ViewChild('fondoHistoria') fondoHistoria!:ElementRef;  
   @ViewChildren('botones') botones!: QueryList<ElementRef>;   //ELEMENTOS DEL DOM PARA MOVERSE (múltiples)
   @ViewChildren('botonesPrincipales') botonesPrincipales!:QueryList<ElementRef>;   //BOTONES PRINCIPALES DEL MENU
@@ -26,9 +27,6 @@ export class Historia implements OnInit, AfterViewInit {
     //Para filtrar objetos buscados por años
     this.objetoHistoriasFiltrado.historias=this.objetoHistoriasFiltrado.historias.filter
     ((historia, indice, self) =>  indice === self.findIndex(h => h.getAnio() === historia.getAnio()));
-  }
-  ngAfterViewInit(): void {
-    // Llamar aquí cuando los elementos del DOM ya existen
   }
 
   public cargarHistorial(opcion:number):void
@@ -95,10 +93,8 @@ export class Historia implements OnInit, AfterViewInit {
     //Lógica para accionar el botón
     this.cerrarHistorial(); //cierra primero el menú de meses - años ante de proseguir
     this.semaforo=true;  //Se activa el semáforo para mostrar el libro de la historia con mes y año
+      const fondos= this.fondoHistoria.nativeElement as HTMLElement;
+    this.renderer.setStyle(fondos, 'height', '600px'); //Se estira la longitud hasta cubrir todas las fechas encontradas  
     }
-  }
-  public cargaContenidoLibroHistoria(mes:string,anio:string):void
-  {
- 
   }
 }

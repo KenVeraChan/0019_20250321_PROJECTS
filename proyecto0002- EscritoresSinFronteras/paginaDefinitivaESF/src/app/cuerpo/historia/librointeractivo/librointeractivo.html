@@ -1,0 +1,15 @@
+<div #libroAbierto id="libroAbierto">
+    <div id="portada">
+        @for (pagina of paginas; track $index) {
+        <div class="pagina"
+            [class.rotado]="pagina.rotado"
+            [class.decolorado]="pagina.decolorado"
+            [class.invisible]="pagina.invisible"
+            [style.z-index]="pagina.zIndex"
+            (click)="onPaginaClick($index, $event)"
+        >
+            {{ pagina.titulo }}
+        </div>
+        }
+    </div>
+</div>
