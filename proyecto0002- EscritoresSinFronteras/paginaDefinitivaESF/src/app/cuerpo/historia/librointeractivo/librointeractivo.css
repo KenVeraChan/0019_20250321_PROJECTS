@@ -44,7 +44,8 @@
         transform-origin: left center; 
         /* Para efectos 3D */ 
         transform-style: preserve-3d;
-        backface-visibility: hidden; /* evita ver el reverso del elemento */
+        backface-visibility:visible; /* evita ver el reverso del elemento */
+        /*FALTA PONER COMANDO PARA HACER DESAPARECER EL TEXTO AL REVERSO*/
     }
     .rotado{
         transform: rotateY(180deg) translateX(15px);

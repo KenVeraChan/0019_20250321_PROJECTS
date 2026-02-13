@@ -76,8 +76,10 @@ export class Librointeractivo implements AfterViewInit {
         p.invisible = false;   //mostrar contenido después de girar
         this.isAnimating = false; // permitir clicks después de la animación
       }, 750);
-    } else if (posicionX < limiteDerecho && posicionX >= limiteIzquierdo) {
-      // Pasa a la página anterior (clic en la izquierda)
+    } 
+    
+    // Pasa a la página anterior (clic en la izquierda)
+    else if (posicionX < limiteDerecho && posicionX >= limiteIzquierdo) {
       if (!p.rotado) return; // ya está plana
       this.isAnimating = true;
       p.invisible = false; // mostrar contenido antes de girar de vuelta
