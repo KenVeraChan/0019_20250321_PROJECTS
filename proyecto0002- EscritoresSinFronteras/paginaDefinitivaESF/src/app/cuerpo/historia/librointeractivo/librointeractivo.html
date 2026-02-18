@@ -1,4 +1,16 @@
-<div #libroAbierto id="libroAbierto">
+@if(anchoPantalla <670)
+{
+ <div #libroAbierto id="libroAbierto">
+    <div id="epocaAnual">{{this.mesSeleccionado}} y {{this.anioSeleccionado}}</div>
+    <div id="portada">
+            Hola mundo!
+            lorem ipsum dolor sit amet consectetur adipisicing elit lorem ipsum dolor sit amet consectetur adipisicing elit lorem ipsum dolor sit amet consectetur adipisicing elitlorem ipsum dolor sit amet consectetur adipisicing elit lorem ipsum dolor sit amet consectetur adipisicing elit
+    </div>
+</div>
+}
+@else 
+{
+ <div #libroAbierto id="libroAbierto">
     <div id="portada">
         @for (pagina of paginas; track $index) {
         <div class="pagina"
@@ -13,3 +25,4 @@
         }
     </div>
 </div>
+}

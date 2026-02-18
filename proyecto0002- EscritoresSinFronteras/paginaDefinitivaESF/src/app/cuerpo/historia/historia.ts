@@ -95,6 +95,10 @@ export class Historia implements OnInit {
     this.semaforo=true;  //Se activa el semáforo para mostrar el libro de la historia con mes y año
       const fondos= this.fondoHistoria.nativeElement as HTMLElement;
     this.renderer.setStyle(fondos, 'height', '600px'); //Se estira la longitud hasta cubrir todas las fechas encontradas  
+    //Se gaurda la eleccion generada por el botón
+      this.objetoHistorias.setPunteroSeleccionador(puntero);
+      this.objetoHistorias.historias[puntero].setMesTexto(mes);
+      this.objetoHistorias.historias[puntero].setAnio(anio);
     }
   }
 }

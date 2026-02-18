@@ -1,4 +1,5 @@
-import { Component, OnInit, AfterViewInit, QueryList,ViewChild, ViewChildren, Renderer2, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit,ViewChild, ElementRef, HostListener } from '@angular/core';
+import { VariablesCompartidas } from '../../../servicios/variablesCompartidas';
 
 interface PaginaState {   //Interfaz para controlar el estado de cada página del libro de historia
   titulo: string;
@@ -23,6 +24,11 @@ export class Librointeractivo implements AfterViewInit {
   public guardaPagina = 0;
   public mostrarBotonAbrir = true;
   public isAnimating = false;
+  public anchoPantalla: number = window.innerWidth; 
+  public fechaSeleccionada= new VariablesCompartidas();    //Se necesita recoger el valor de la fecha seleccionada
+  public mesSeleccionado:string='';
+  public anioSeleccionado:string='';
+  public puntero:number=0;
 
   public paginas: PaginaState[] = [
     { titulo: 'Vida de Rasselín Wissangel Rousher', mostrarBoton: true, rotado: false, decolorado: false, invisible: false, zIndex: 0 },
@@ -36,12 +42,22 @@ export class Librointeractivo implements AfterViewInit {
     { titulo: 'Vida de Jill Anherson', mostrarBoton: false, rotado: false, decolorado: false, invisible: false, zIndex: 0 },
   ];
 
+  @HostListener('window:resize', ['$event']) 
+  onResize(event: Event) 
+  { 
+    this.anchoPantalla = window.innerWidth; 
+  } 
+
   public ngAfterViewInit(): void 
   {
       // Llamar aquí cuando los elementos del DOM ya existen
       const total = this.paginas.length;
       this.paginas.forEach((p, index) => {
       p.zIndex = total - index;
+      // Invoca al botón mes y anio seleccionado
+      this.puntero = this.fechaSeleccionada.getPunteroSeleccionador();
+      this.mesSeleccionado=this.fechaSeleccionada.historias[this.puntero].getMesTexto();
+      this.anioSeleccionado=this.fechaSeleccionada.historias[this.puntero].getAnio();
     });
   }
 

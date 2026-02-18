@@ -4,11 +4,23 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class VariablesCompartidas {
+
+  public punteroSeleccionador:number=0;   //VARIABLE AUXILIAR PARA SELECCIONAR UNA FECHA Y MES DE LA CLASE HISTORIAS
   constructor() 
   {
     //No precisa de instanciar nada
   }
-    //VARIABLES COMPARTIDAS ENTRE COMPONENTES
+  //VARIABLES PARA EL APARTADO DE HISTORIAS PUNTUALMENTE
+  public setPunteroSeleccionador(puntero:number):void
+  {
+    this.punteroSeleccionador=puntero;
+  }
+  public getPunteroSeleccionador():number
+  {
+    return this.punteroSeleccionador;
+  }
+  
+  //VARIABLES COMPARTIDAS ENTRE COMPONENTES
     public menuPrincipal: Apartados=new Apartados();
 
     //AREA NOTICIAS DEL APARTADO "INICIO"
@@ -187,6 +199,10 @@ class Historias
     {
       this.mes=mes;
     }
+    public setMesTexto(mes:string):void
+    {
+      this.mesTexto=mes;
+    }
     public setAnio(anio:string):void
     {
       this.anio=anio;
@@ -273,6 +289,10 @@ class Historias
           }
       }
     return this.mesTexto;
+    }
+    public getMesTexto():string
+    {
+      return this.mesTexto;
     }
     public getContenido():string
     {
