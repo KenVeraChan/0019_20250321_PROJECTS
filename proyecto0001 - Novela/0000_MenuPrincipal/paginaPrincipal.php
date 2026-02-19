@@ -26,7 +26,6 @@
 <footer>
 
 </footer>
-
     <script src="javascriptpagina.js"></script>
 </body>
 </html>
