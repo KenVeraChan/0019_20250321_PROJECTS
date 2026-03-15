@@ -1,2 +1,3 @@
 <?php
-echo "¡Hola desde saludo.php!";
+echo "Hola Mundo desde index.php";
+?>

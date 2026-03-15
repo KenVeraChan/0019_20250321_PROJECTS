@@ -1,15 +1,17 @@
 $(document).ready(()=> {
     $.ajax({
-        //url: "",
-        //type: "GET",
-        //dataType: "json",
-        success: function(data) 
+        url: "transformadorJSON.php",   // Recoge el JSON generado por el PHP
+        type: "GET",    // Método de solicitud
+        dataType: "json",  // Tipo de datos esperado
+        success: function(data)  // Función a ejecutar si la solicitud es exitosa
         {
             const tablaDatos= creaTablaDinamica(data);
             $("#container").append(tablaDatos);
         },
         error: function(xhr, status, error) {
-            console.error("Error al cargar los datos:", error);
+            console.log("ERROR → Estado:", xhr.status);
+            console.log("ERROR → Respuesta:", xhr.responseText);
+            console.log("ERROR → Detalle:", error);
         },
         complete: function() {
             // Aquí puedes realizar acciones después de que la solicitud se complete
@@ -44,7 +46,7 @@ function creaTablaDinamica(data)
 
     const celdaCabecera= document.createElement("td");
     celdaCabecera.setAttribute("id", "celdaCabecera");
-    celdaCabecera.setAttribute("colspan","3");
+    celdaCabecera.setAttribute("colspan","4");
     celdaCabecera.textContent="CRONOLOGÍA DE LA NOVELA COMETIDO 4321";
         Object.assign(celdaCabecera.style, {
             width: "100%",
@@ -68,7 +70,7 @@ function creaTablaDinamica(data)
     celdaEncabezadoId.setAttribute("class", "encabezado");
     celdaEncabezadoId.textContent = "ID";
         Object.assign(celdaEncabezadoId.style, {
-            width: "10%",
+            width: "5%",
             textAlign: "center",
             border: "1px solid rgb(255, 255, 255)",
             backgroundColor: "rgba(233, 124, 0, 0.42)",
@@ -81,7 +83,7 @@ function creaTablaDinamica(data)
     celdaEncabezadoFecha.setAttribute("class", "encabezado");
     celdaEncabezadoFecha.textContent = "FECHA";
         Object.assign(celdaEncabezadoFecha.style, {
-            width: "20%",
+            width: "10%",
             textAlign: "center",
             border: "1px solid rgb(255, 255, 255)",
             backgroundColor: "rgba(233, 124, 0, 0.42)",
@@ -89,6 +91,18 @@ function creaTablaDinamica(data)
             fontSize: "1em",
         });
 
+    //CELDA DEL TITULO
+    const celdaEncabezadoTitulo= document.createElement("td");
+    celdaEncabezadoTitulo.setAttribute("class", "encabezado");
+    celdaEncabezadoTitulo.textContent = "TÍTULO";
+        Object.assign(celdaEncabezadoTitulo.style, {
+            width: "20%",
+            textAlign: "center",
+            border: "1px solid rgb(255, 255, 255)",
+            backgroundColor: "rgba(233, 124, 0, 0.42)",
+            font: "sans-serif",
+            fontSize: "1em",
+        });
     //CELDA DEL CONCEPTO
     const celdaEncabezadoConcepto= document.createElement("td");
     celdaEncabezadoConcepto.setAttribute("class", "encabezado");
@@ -121,6 +135,7 @@ function creaTablaDinamica(data)
     tablaDatos.appendChild(filaEncabezado);
     filaEncabezado.appendChild(celdaEncabezadoId);
     filaEncabezado.appendChild(celdaEncabezadoFecha);
+    filaEncabezado.appendChild(celdaEncabezadoTitulo);
     filaEncabezado.appendChild(celdaEncabezadoConcepto);
 
     //AGREGANDO FILAS Y CELDAS SEGUN ACONTECIMIENTOS
@@ -152,6 +167,7 @@ function creaTablaDinamica(data)
                     font: "sans-serif",
                     fontSize: "1em",
                 });
+            celdaDatosId.textContent = data[i].ID;
             //FECHA DEL EVENTO ACONTECIDO
             const celdaDatosFecha=document.createElement("td");
             celdaDatosFecha.setAttribute("class", "datoFecha");
@@ -165,6 +181,21 @@ function creaTablaDinamica(data)
                     font: "sans-serif",
                     fontSize: "1em",
                 });
+            celdaDatosFecha.textContent = data[i].fecha;
+            //TITULO DEL EVENTO ACONTECIDO
+            const celdaDatosTitulo=document.createElement("td");
+            celdaDatosTitulo.setAttribute("class", "datoTitulo");
+                Object.assign(celdaDatosTitulo.style, {
+                    width: "20%",
+                    height: "20px",
+                    margin: "1px",
+                    textAlign: "center",
+                    border: "1px solid rgb(197, 93, 7)",
+                    backgroundColor: "rgba(252, 252, 251, 0.2)",
+                    font: "sans-serif",
+                    fontSize: "1em",
+                });
+            celdaDatosTitulo.textContent = data[i].titulo;
             //DESCRIPCIÓN DEL EVENTO ACONTECIDO
             const celdaDatosAcontecimiento=document.createElement("td");
             celdaDatosAcontecimiento.setAttribute("class", "datoAcontecimiento");
@@ -178,6 +209,7 @@ function creaTablaDinamica(data)
                     font: "sans-serif",
                     fontSize: "1em",
                 });
+            celdaDatosAcontecimiento.textContent = data[i].acontecimiento;
             //AREA REDIMENSIONADA DENTRO DE LA DESCRIPCION DEL EVENTO PARA EXPONER LOS DATOS
             const areaVariable= document.createElement("textarea");
             areaVariable.setAttribute("class", "areaVariable");
@@ -197,6 +229,7 @@ function creaTablaDinamica(data)
         tablaDatos.appendChild(filaEvento);
         filaEvento.appendChild(celdaDatosId);
         filaEvento.appendChild(celdaDatosFecha);
+        filaEvento.appendChild(celdaDatosTitulo);
         filaEvento.appendChild(celdaDatosAcontecimiento);
         celdaDatosAcontecimiento.appendChild(areaVariable);
     }
