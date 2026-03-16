@@ -9,7 +9,9 @@ class Database{
     public function connexion()
     {
         try {
-            $conn = new PDO("mysql:host=$this->host;dbname=$this->dbname", $this->username, $this->password);
+            $dbPath = __DIR__ . "/data/cronologia.db";    //Ahora no se usa mysql sino sqlite, por lo que se define la ruta del archivo de la base de datos sqlite
+            $dsn = "sqlite:" . $dbPath;                   //Se define el DSN para sqlite, que es diferente al de mysql
+            $conn = new PDO($dsn, $this->username, $this->password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
         } catch(PDOException $e) {

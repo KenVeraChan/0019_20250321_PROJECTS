@@ -1,7 +1,17 @@
-FROM php:8.2-apache-bookworm
-# Instalar extensiones necesarias para MySQL
-RUN docker-php-ext-install pdo pdo_mysql mysqli
-# Copiar tu proyecto al servidor web
-COPY . /var/www/html/
-# Dar permisos
-RUN chown -R www-data:www-data /var/www/html
+FROM php:8.2-apache
+# Instalar dependencias necesarias para SQLite
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    sqlite3 \
+    libsqlite3-dev
+
+# Instalar la extensión PDO_SQLite
+RUN docker-php-ext-install pdo_sqlite
+
+# Habilitar el módulo de reescritura de Apache y copiar los archivos de la aplicación al contenedor
+RUN a2enmod rewrite
+
+# Copiar los archivos de la aplicación al directorio raíz de Apache
+COPY . /var/www/html
+
+
+

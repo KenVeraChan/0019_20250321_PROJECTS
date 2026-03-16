@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS cronologia(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    fecha date NOT NULL,
+    titulo VARCHAR(500) NOT NULL,
+    acontecimiento VARCHAR(1000) NOT NULL
+);
