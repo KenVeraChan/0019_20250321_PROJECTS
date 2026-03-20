@@ -13,5 +13,12 @@ RUN a2enmod rewrite
 # Copiar los archivos de la aplicación al directorio raíz de Apache
 COPY . /var/www/html
 
-
+# Establecer el directorio de trabajo en el contenedor haciendo referencia a la carpeta de la aplicación
+# Copia el script de inicialización al contenedor
+COPY docker-entrypoint-init.sh /usr/local/bin/   
+# Dar permisos de ejecución al script de inicialización 
+RUN chmod +x /usr/local/bin/docker-entrypoint-init.sh
+# Con el ENTRYPOINT, el script se ejecutará cada vez que se inicie el contenedor, asegurando 
+#que la base de datos se inicialice correctamente antes de que Apache comience a servir la aplicación.
+ENTRYPOINT ["docker-entrypoint-init.sh"]
 

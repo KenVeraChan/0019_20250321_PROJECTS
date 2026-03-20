@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acontecimientos de la Novela</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="estructuraCrono.js"></script>
+    <script src="estructuraCrono.js?v=<?= time()?>"></script>
     <link rel="stylesheet" href="../0004_Acontecimientos/acontecimiento.css">
-
 </head>
 <body>
     <div id="container">

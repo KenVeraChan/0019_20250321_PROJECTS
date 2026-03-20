@@ -167,7 +167,7 @@ function creaTablaDinamica(data)
                     font: "sans-serif",
                     fontSize: "1em",
                 });
-            celdaDatosId.textContent = data[i].ID;
+            celdaDatosId.textContent = data[i].id;
             //FECHA DEL EVENTO ACONTECIDO
             const celdaDatosFecha=document.createElement("td");
             celdaDatosFecha.setAttribute("class", "datoFecha");
