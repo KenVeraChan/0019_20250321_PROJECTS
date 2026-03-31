@@ -1,17 +1,170 @@
-.btnCargaDatos{
-    background-color: #4CAF50; /* Verde */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-.btnCargaDatos:hover {
-    background-color: #a57203; /* Verde oscuro */
-    font-weight: bold;
-    color:black;
+
+html,
+body{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#container{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#imagenFondo{
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.55;
+    z-index: -2;
+}
+
+.cabecera{
+    width: min(1100px, 92vw);
+    margin: 0 auto;
+    padding: 16px 0 6px;
+    color: #1b2734;
+}
+
+.cabecera h1{
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    margin-bottom: 4px;
+}
+
+.cabecera p{
+    font-size: 0.95rem;
+}
+
+.btn-volver, .btn-registrar{
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(15, 45, 76, 0.45);
+    background: rgba(255, 255, 255, 0.9);
+    color: #153454;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.btn-volver:hover, .btn-registrar:hover{
+    background: rgba(21, 52, 84, 0.93);
+    color: #ffffff;
+}
+
+.visor{
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 84px);
+    overflow: hidden;
+    padding: 14px 0 40px;
+}
+
+.linea-tiempo{
+    position: relative;
+    width: min(1100px, 92vw);
+    margin: 0 auto;
+    transition: transform 0.22s ease-out;
+    will-change: transform;
+}
+
+.linea-tiempo::before{
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: rgba(24, 63, 102, 0.9);
+    z-index: -1;
+}
+
+@media (min-width: 150px)
+{
+    .cabecera{
+        width: 95vw;
+    }
+
+    .visor{
+        height: calc(100vh - 96px);
+    }
+
+    .linea-tiempo{
+        width: 95vw;
+    }
+
+    .linea-tiempo::before{
+        left: 24px;
+    }
+
+    .nexo{
+        position: relative;
+        width: 500px;
+        height: 4px;
+        border-radius: 999px;
+        background:rgb(24, 63, 102);  /* PRIMERO SIN APARECER Y LUEGO ASIGNAR: background: rgba(24, 63, 102, 0.95); */
+        z-index: -1;
+    }
+    .tarjeta{
+        max-width: 1400px;
+        margin-left: 35px;
+        margin-top: -55px;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 10px;
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
+        padding: 14px 16px;
+        min-height: 120px;
+        overflow: visible;
+        display: none;   /*PRIMERO SIN MOSTRARSE PARA LUEGO MOSTRARSE*/
+    }
+    .tarjeta:hover{
+        background: rgba(246, 250, 1, 0.98);
+        box-shadow: 0 12px 28px rgba(255, 255, 255, 0.863);
+        font: bold #011c36;
+        transition: background 0.8s ease, box-shadow 0.8s ease;
+    }
+    .fecha-larga{
+        position: absolute;
+        top: 10px;
+        left: 235px;
+        transform: translateX(-50%);
+        min-height: 24px;
+        width: 400px;
+        border-radius: 7px;
+        padding: 5px 10px;
+        text-align: center;
+        font: bold 1rem Arial, Helvetica, sans-serif;
+        line-height: 1.25;
+        white-space: normal;
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(0, 0, 0, 0.14);
+        color: #1f2c3d;
+    }
+    .imagen-evento{
+        display: block;
+        width: 100%;
+        max-height: 360px;
+        object-fit: cover;
+        margin-top: 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+    }
+    .fila.lado-izquierdo, .fila.lado-derecho{
+        display: grid;
+        grid-template-rows: 50px auto auto;  /*PRIMERO SE MANTIENE TODO CERRADO Y PUESTO ABIERTO 100px*/
+    }
 }

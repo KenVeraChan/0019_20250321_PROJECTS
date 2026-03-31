@@ -1,270 +1,247 @@
-$(document).ready(()=> {
-    $.ajax({
-        url: "transformadorJSON.php",   // Recoge el JSON generado por el PHP
-        type: "GET",    // Método de solicitud
-        dataType: "json",  // Tipo de datos esperado
-        success: function(data)  // Función a ejecutar si la solicitud es exitosa
-        {
-            const tablaDatos= creaTablaDinamica(data);
-            $("#container").append(tablaDatos);
-        },
-        error: function(xhr, status, error) {
-            console.log("ERROR → Estado:", xhr.status);
-            console.log("ERROR → Respuesta:", xhr.responseText);
-            console.log("ERROR → Detalle:", error);
-        },
-        complete: function() {
-            // Aquí puedes realizar acciones después de que la solicitud se complete
-            console.log("Solicitud completada");
-        }
-    });
+const lineaTiempo = document.getElementById("lineaTiempo");
+const visor = document.querySelector(".visor");
+const tamHorizPantalla= window.addEventListener("resize", function() {
+    return window.innerWidth.toString();  //devuelve el tamaño de la pantalla para fijar condiciones
 });
 
-function creaTablaDinamica(data)
-{
-    //CREANDO LOS ELEMENTOS DE LA TABLA
-    const tablaDatos= document.createElement("table");
-    tablaDatos.setAttribute("id", "tablaDatos");
-        Object.assign(tablaDatos.style, {
-            width: "100%",
-            borderCollapse: "collapse",
-            margin: "20px auto",
-            marginBottom: "0px",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-            borderRadius: "8px",
-            overflow: "hidden"
-        });
-    
-    const filaCabecera= document.createElement("tr");
-    filaCabecera.setAttribute("id", "filaCabecera");
-        Object.assign(filaCabecera.style, {
-            width: "100%",
-            height: "10px",
-            textAlign: "center",
-        });
+let desplazamientoY = 0;
+const pasoRueda = 85;
 
-    const celdaCabecera= document.createElement("td");
-    celdaCabecera.setAttribute("id", "celdaCabecera");
-    celdaCabecera.setAttribute("colspan","4");
-    celdaCabecera.textContent="CRONOLOGÍA DE LA NOVELA COMETIDO 4321";
-        Object.assign(celdaCabecera.style, {
-            width: "100%",
-            height: "10px",
-            textAlign: "center",
-            backgroundColor: "rgba(247, 148, 0, 0.49)",
-            font: "sans-serif",
-            fontSize: "1.25em",
-            padding: "10px"
-        });
-
-    const filaEncabezado= document.createElement("tr");
-    filaEncabezado.setAttribute("id", "filaEncabezado");
-        Object.assign(filaEncabezado.style, {
-            width: "100%",
-            textAlign: "center",
-        });
-
-    //CELDA DEL ID
-    const celdaEncabezadoId= document.createElement("td");
-    celdaEncabezadoId.setAttribute("class", "encabezado");
-    celdaEncabezadoId.textContent = "ID";
-        Object.assign(celdaEncabezadoId.style, {
-            width: "5%",
-            textAlign: "center",
-            border: "1px solid rgb(255, 255, 255)",
-            backgroundColor: "rgba(233, 124, 0, 0.42)",
-            font: "sans-serif",
-            fontSize: "1em",
-        });
-
-    //CELDA DE LA FECHA
-    const celdaEncabezadoFecha= document.createElement("td");
-    celdaEncabezadoFecha.setAttribute("class", "encabezado");
-    celdaEncabezadoFecha.textContent = "FECHA";
-        Object.assign(celdaEncabezadoFecha.style, {
-            width: "10%",
-            textAlign: "center",
-            border: "1px solid rgb(255, 255, 255)",
-            backgroundColor: "rgba(233, 124, 0, 0.42)",
-            font: "sans-serif",
-            fontSize: "1em",
-        });
-
-    //CELDA DEL TITULO
-    const celdaEncabezadoTitulo= document.createElement("td");
-    celdaEncabezadoTitulo.setAttribute("class", "encabezado");
-    celdaEncabezadoTitulo.textContent = "TÍTULO";
-        Object.assign(celdaEncabezadoTitulo.style, {
-            width: "20%",
-            textAlign: "center",
-            border: "1px solid rgb(255, 255, 255)",
-            backgroundColor: "rgba(233, 124, 0, 0.42)",
-            font: "sans-serif",
-            fontSize: "1em",
-        });
-    //CELDA DEL CONCEPTO
-    const celdaEncabezadoConcepto= document.createElement("td");
-    celdaEncabezadoConcepto.setAttribute("class", "encabezado");
-    celdaEncabezadoConcepto.textContent = "ACONTECIMIENTO";
-        Object.assign(celdaEncabezadoConcepto.style, {
-            width: "100%",
-            textAlign: "center",
-            border: "1px solid rgb(255, 255, 255)",
-            backgroundColor: "rgba(233, 124, 0, 0.42)",
-            font: "sans-serif",
-            fontSize: "1em",
-        });
-    
-        const imagenFondo= document.createElement("img");
-        imagenFondo.setAttribute("id", "imagenFondo");
-        imagenFondo.setAttribute("src", "/0004_Acontecimientos/images/manuscritos.png","alt", "libros antiguos de fondo");
-        imagenFondo.style.width = "100%";
-        imagenFondo.style.height = "auto";
-        imagenFondo.style.position = "fixed";
-        imagenFondo.style.top = "0";
-        imagenFondo.style.left = "0";
-        imagenFondo.style.zIndex = "-1";
-        imagenFondo.style.opacity = "0.75";  
-    
-    //AGREGANDO LA FILA DE ENCABEZADO A LA TABLA
-    //FILA 1
-    tablaDatos.appendChild(filaCabecera);
-    filaCabecera.appendChild(celdaCabecera);
-    //FILA 2
-    tablaDatos.appendChild(filaEncabezado);
-    filaEncabezado.appendChild(celdaEncabezadoId);
-    filaEncabezado.appendChild(celdaEncabezadoFecha);
-    filaEncabezado.appendChild(celdaEncabezadoTitulo);
-    filaEncabezado.appendChild(celdaEncabezadoConcepto);
-
-    //AGREGANDO FILAS Y CELDAS SEGUN ACONTECIMIENTOS
-    for (let i = 0; i < 3; i++) 
-    {
-        //FILA DE UN EVENTO ACONTECIDO
-        const filaEvento = document.createElement("tr");
-        filaEvento.setAttribute("class", "datos");
-        Object.assign(filaEvento.style, {
-                width: "100%",
-                borderCollapse: "collapse",
-                margin: "20px auto",
-                marginBottom: "0px",
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-                borderRadius: "8px",
-                overflow: "hidden"
-            });
-            //NUMERO DE EVENTO ACONTECIDO
-            const celdaDatosId=document.createElement("td");
-            celdaDatosId.setAttribute("class", "datoId");
-                Object.assign(celdaDatosId.style, {
-                    width: "10%",
-                    height: "20px",
-                    margin: "1px",
-                    textAlign: "center",
-                    border: "1px solid rgb(197, 93, 7)",
-                    backgroundColor: "rgba(252, 252, 251, 0.2)",
-                    font: "sans-serif",
-                    fontSize: "1em",
-                });
-            celdaDatosId.textContent = data[i].id;
-            //FECHA DEL EVENTO ACONTECIDO
-            const celdaDatosFecha=document.createElement("td");
-            celdaDatosFecha.setAttribute("class", "datoFecha");
-                Object.assign(celdaDatosFecha.style, {
-                    width: "20%",
-                    height: "20px",
-                    margin: "1px",
-                    textAlign: "center",
-                    border: "1px solid rgb(197, 93, 7)",
-                    backgroundColor: "rgba(252, 252, 251, 0.2)",
-                    font: "sans-serif",
-                    fontSize: "1em",
-                });
-            celdaDatosFecha.textContent = data[i].fecha;
-            //TITULO DEL EVENTO ACONTECIDO
-            const celdaDatosTitulo=document.createElement("td");
-            celdaDatosTitulo.setAttribute("class", "datoTitulo");
-                Object.assign(celdaDatosTitulo.style, {
-                    width: "20%",
-                    height: "20px",
-                    margin: "1px",
-                    textAlign: "center",
-                    border: "1px solid rgb(197, 93, 7)",
-                    backgroundColor: "rgba(252, 252, 251, 0.2)",
-                    font: "sans-serif",
-                    fontSize: "1em",
-                });
-            celdaDatosTitulo.textContent = data[i].titulo;
-            //DESCRIPCIÓN DEL EVENTO ACONTECIDO
-            const celdaDatosAcontecimiento=document.createElement("td");
-            celdaDatosAcontecimiento.setAttribute("class", "datoAcontecimiento");
-                Object.assign(celdaDatosAcontecimiento.style, {
-                    width: "100%",
-                    height: "30px",
-                    margin: "1px",
-                    textAlign: "center",
-                    border: "1px solid rgb(197, 93, 7)",
-                    backgroundColor: "rgba(252, 252, 251, 0.2)",
-                    font: "sans-serif",
-                    fontSize: "1em",
-                });
-            celdaDatosAcontecimiento.textContent = data[i].acontecimiento;
-            //AREA REDIMENSIONADA DENTRO DE LA DESCRIPCION DEL EVENTO PARA EXPONER LOS DATOS
-            const areaVariable= document.createElement("textarea");
-            areaVariable.setAttribute("class", "areaVariable");
-                Object.assign(areaVariable.style, {
-                    width: "95%",
-                    height: "20px",
-                    margin: "0px",
-                    textAlign: "center",
-                    backgroundColor: "rgba(173, 173, 0, 0.35)",
-                    font: "sans-serif",
-                    fontSize: "1em",
-                    resize: "none",
-                    overflow: "hidden",
-                    zIndex: "1",
-                });
-        //CELDAS DE DATOS
-        tablaDatos.appendChild(filaEvento);
-        filaEvento.appendChild(celdaDatosId);
-        filaEvento.appendChild(celdaDatosFecha);
-        filaEvento.appendChild(celdaDatosTitulo);
-        filaEvento.appendChild(celdaDatosAcontecimiento);
-        celdaDatosAcontecimiento.appendChild(areaVariable);
+function escapeHtml(texto) {
+    if (texto === null || texto === undefined) {
+        return "";
     }
-    //AREA DE ASIGNACION DE EVENTOS: 
-    // 1) PASANDO EL RATÓN POR ENCIMA
-    $("#container").on("mouseenter",".areaVariable", function(event) {
-        $(this).css({
-            "backgroundColor": "rgba(14, 173, 0, 0.78)",
-            "cursor": "pointer"
-        });
-        event.preventDefault();
-    });
-    $("#container").on("mouseleave",".areaVariable", function(event) {
-        $(this).css({
-            "zIndex": "1",
-            "transitionduration": "1.0s",
-            "backgroundColor": "rgba(173, 173, 0, 0.35)",
-            "height": "20px",
-        });
-        event.preventDefault();
-    });
-    // 2) AL HACER CLIC POR ENCIMA DEL AREA VARIABLE
-    $("#container").on("click",".areaVariable",function(event){
-        $(this).css({
-            "zIndex": "2",
-            "transitionduration": "1.0s",
-            "height": "200px"
-        });
-        event.preventDefault();
-    });
 
-
-    //ASIGNANDO DATOS A LAS CELDAS
-    //IMAGEN DE FONDO
-    $("#container").append(imagenFondo);
-
-return tablaDatos;
+    return String(texto)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
 }
+
+function limiteInferior() {
+    const altoContenido = lineaTiempo.scrollHeight;
+    const altoVisor = visor.clientHeight;
+    return Math.min(0, altoVisor - altoContenido - 30);
+}
+
+function aplicarDesplazamiento() {
+    const minimo = limiteInferior();
+
+    if (desplazamientoY > 0) {
+        desplazamientoY = 0;
+    }
+    if (desplazamientoY < minimo) {
+        desplazamientoY = minimo;
+    }
+
+    lineaTiempo.style.transform = `translateY(${desplazamientoY}px)`;
+}
+
+function plantillaEvento(evento, indice) 
+{
+    const ladoIzquierdo = indice % 2 === 0;
+    const claseFila = ladoIzquierdo ? "fila lado-izquierdo" : "fila lado-derecho";
+    const titulo = escapeHtml(evento.titulo || "ACONTECIMIENTO");
+    const descripcion = escapeHtml(evento.acontecimiento || evento.descripcion || "");
+    const fechaLarga = escapeHtml(evento.fecha || "Fecha pendiente");
+    const imagen = evento.imagen ? `<img class="imagen-evento" src="${escapeHtml(evento.imagen)}" alt="imagen del acontecimiento">` : "";
+
+if(tamHorizPantalla >= 900)
+    {
+        if (ladoIzquierdo) {
+            return `
+                <article class="${claseFila}" onclick="mostrarTarjeta(${indice})">
+                    <div class="tarjeta">
+                        <h2>${titulo}</h2>
+                        <p>${descripcion}</p>
+                        ${imagen}
+                    </div>
+                    <div class="nexo">
+                        <span class="fecha-larga">${fechaLarga}</span>
+                    </div>
+                </article>
+            `;
+        }
+        return `
+            <article class="${claseFila}" onclick="mostrarTarjeta(${indice})">
+                <div class="nexo">
+                    <span class="fecha-larga">${fechaLarga}</span>
+                </div>
+                <div class="tarjeta">
+                    <h2>${titulo}</h2>
+                    <p>${descripcion}</p>
+                    ${imagen}
+                </div>
+            </article>
+        `;
+    } 
+    else 
+    {
+        return `
+        <article class="${claseFila}" onclick="mostrarTarjeta(${indice})">
+            <div class="nexo">
+                <span class="fecha-larga">${fechaLarga}</span>   
+            </div>
+            <div class="tarjeta">
+                <h2>${titulo}</h2>
+                <p>${descripcion}</p>
+                ${imagen}
+            </div>
+        </article>
+    `;
+    }
+}
+
+window.mostrarTarjeta = function(elementoFecha) 
+{
+    //Gestion del elemento clase TARJETA
+    const tarjeta = document.querySelectorAll(".tarjeta")[elementoFecha];
+    if (tarjeta.style.display === "block") {
+        tarjeta.style.display = "none";
+    } else {
+        tarjeta.style.display = "block";
+        tarjeta.style.marginTop = "-40px";
+    }  
+
+    //Gestion del elemento clase FILA
+    const fila = document.querySelectorAll(".fila")[elementoFecha]; 
+    if (fila.style.gridTemplateRows === "100px auto auto") {
+        fila.style.gridTemplateRows = "50px auto auto";
+    } else {
+        fila.style.gridTemplateRows = "100px auto auto";
+    }   
+    const ladoIzquierdo = elementoFecha % 2 === 0;
+    if (ladoIzquierdo) {
+        fila.style.gridTemplateRows = "50px auto auto";    
+    } else {
+        fila.style.gridTemplateRows = "50px auto auto";
+    }
+    const ladoDerecho = elementoFecha % 2 !== 0;
+    if (ladoDerecho) {
+        fila.style.gridTemplateRows = "50px auto auto";    
+    } else {
+        fila.style.gridTemplateRows = "50px auto auto";
+    }  
+};
+
+function pintarEventos(data) {
+    const eventos = Array.isArray(data) ? data : [];
+    const html = eventos.map((evento, indice) => plantillaEvento(evento, indice)).join("");
+    lineaTiempo.innerHTML = html;
+    aplicarDesplazamiento();
+}
+
+function datosEjemplo() {
+    return [
+        {
+            fecha: "Lunes, 21 de octubre de 2426 a las 08:45",
+            titulo: "Inicio de la expedicion",
+            acontecimiento: "La tripulacion llega al punto de insercion y comienza la primera fase de reconocimiento."
+        },
+        {
+            fecha: "Martes, 22 de octubre de 2426 a las 19:10",
+            titulo: "Primer contacto",
+            acontecimiento: "Se detecta una señal no prevista. El equipo redefine objetivos para evitar riesgos mayores. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Se detecta una señal no prevista. El equipo redefine objetivos para evitar riesgos mayores. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Se detecta una señal no prevista. El equipo redefine objetivos para evitar riesgos mayores. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Se detecta una señal no prevista. El equipo redefine objetivos para evitar riesgos mayores. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Se detecta una señal no prevista. El equipo redefine objetivos para evitar riesgos mayores. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Se detecta una señal no prevista. El equipo redefine objetivos para evitar riesgos mayores. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Se detecta una señal no prevista. El equipo redefine objetivos para evitar riesgos mayores. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Se detecta una señal no prevista. El equipo redefine objetivos para evitar riesgos mayores. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. "
+        },
+        {
+            fecha: "Jueves, 24 de octubre de 2426 a las 02:30",
+            titulo: "Cambio de alianza",
+            acontecimiento: "Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto. Uno de los bloques de poder acepta colaborar. Esto altera el equilibrio politico del conflicto."
+        },
+        {
+            fecha: "Sabado, 26 de octubre de 2426 a las 11:20",
+            titulo: "Apertura del archivo sellado",
+            acontecimiento: "Se confirma la autenticidad de los manuscritos y se descubre una referencia directa al nucleo del conflicto."
+        },
+        {
+            fecha: "Domingo, 27 de octubre de 2426 a las 23:05",
+            titulo: "Interferencia en las comunicaciones",
+            acontecimiento: "Una tormenta electromagnetica afecta el enlace principal y obliga a cambiar el protocolo de transmision.",
+            imagen: "../0004_Acontecimientos/images/manuscritos.png"
+        },
+        {
+            fecha: "Miercoles, 30 de octubre de 2426 a las 06:55",
+            titulo: "Reunion de emergencia",
+            acontecimiento: "Los lideres de las facciones implicadas negocian una tregua temporal para continuar la investigacion."
+        },
+        {
+            fecha: "Viernes, 01 de noviembre de 2426 a las 15:40",
+            titulo: "Despliegue final",
+            acontecimiento: "Se ejecuta la fase final de la operacion con apoyo logistico completo y cobertura de seguridad reforzada."
+        },
+        {
+            fecha: "Sabado, 02 de noviembre de 2426 a las 21:25",
+            titulo: "Colapso del corredor secundario",
+            acontecimiento: "El acceso alternativo queda inutilizado y obliga a redirigir la expedicion por una ruta mas extensa."
+        },
+        {
+            fecha: "Domingo, 03 de noviembre de 2426 a las 04:15",
+            titulo: "Recuperacion de artefacto",
+            acontecimiento: "Se localiza una pieza clave para comprender la secuencia historica de los acontecimientos previos."
+        },
+        {
+            fecha: "Lunes, 04 de noviembre de 2426 a las 13:05",
+            titulo: "Cruce de testimonios",
+            acontecimiento: "Los relatos de varios testigos coinciden y permiten confirmar la autoria de la operacion clandestina."
+        },
+        {
+            fecha: "Martes, 05 de noviembre de 2426 a las 18:50",
+            titulo: "Notificacion oficial",
+            acontecimiento: "La autoridad central emite una directiva urgente para formalizar el nuevo marco de actuacion.",
+            imagen: "../0004_Acontecimientos/images/manuscritos.png"
+        },
+        {
+            fecha: "Miercoles, 06 de noviembre de 2426 a las 09:40",
+            titulo: "Resolucion provisional",
+            acontecimiento: "Se cierra la fase critica del caso y se prepara el informe final para las facciones implicadas."
+        }
+    ];
+}
+
+function completarConEjemplos(data) {
+    const base = Array.isArray(data) ? data.slice() : [];
+    const minimos = 14;
+    const ejemplos = datosEjemplo();
+
+    if (base.length >= minimos) {
+        return base;
+    }
+
+    let indice = 0;
+    while (base.length < minimos) {
+        const ejemplo = ejemplos[indice % ejemplos.length];
+        base.push({
+            ...ejemplo,
+            titulo: `${ejemplo.titulo} (ejemplo ${indice + 1})`
+        });
+        indice += 1;
+    }
+
+    return base;
+}
+
+window.addEventListener("wheel", function (evento) {
+    evento.preventDefault();
+
+    if (evento.deltaY > 0) {
+        desplazamientoY -= pasoRueda;
+    } else {
+        desplazamientoY += pasoRueda;
+    }
+
+    aplicarDesplazamiento();
+}, { passive: false });
+
+window.addEventListener("resize", aplicarDesplazamiento);
+
+fetch("transformadorJSON.php")
+    .then((respuesta) => respuesta.json())
+    .then((data) => {
+        const eventosFinales = completarConEjemplos(data);
+        pintarEventos(eventosFinales);
+    })
+    .catch(() => {
+        pintarEventos(completarConEjemplos([]));
+    });
