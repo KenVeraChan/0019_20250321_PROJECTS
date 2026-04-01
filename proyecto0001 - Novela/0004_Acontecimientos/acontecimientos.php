@@ -12,7 +12,8 @@
         <header class="cabecera">
             <h1 style="text-align:center">Cronologia de Acontecimientos en la Novela <br> "COMETIDO 4321"</h1>
             <a class="btn-volver" href="../index.php">Volver al menu principal</a>
-            <a class="btn-registrar" href="../0004_Acontecimientos/registro.php">Registrar nueva fecha</a>
+            <a class="btn-registrar" href="../0004_Acontecimientos/registro.php">Registrar fecha</a>
+            <a class="btn-actualizar" href="../0004_Acontecimientos/actualizar.php">Actualizar fecha</a>
         </header>
         <main class="visor">
             <section class="linea-tiempo" id="lineaTiempo">

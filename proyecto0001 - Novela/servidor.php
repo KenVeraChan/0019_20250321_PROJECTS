@@ -4,7 +4,7 @@ class Database{
     private $host = "db";  //nombre del host de la base de datos, en este caso es "db" porque es el nombre del servicio en docker-compose
     private $username = "root";  //usuario de la base de datos
     private $password = "root";  //contraseña de la base de datos
-    private $dbname = "HISTORIA";  //nombre de la base de datos
+    private $dbname = "cronologia";  //nombre de la base de datos
 
     public function connexion()
     {
