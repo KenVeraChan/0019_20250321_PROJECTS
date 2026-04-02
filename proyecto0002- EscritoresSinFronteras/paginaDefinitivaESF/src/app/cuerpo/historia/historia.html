@@ -1,89 +1,151 @@
 <h2 class="tituloNoticias">Nuestra Historia</h2>
 <h2 class="tituloNoticias">en</h2>
 <h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
-<div class="fondo" #fondoHistoria>
-    <!-- solo se muestra si no está activado el libro peticionado bajo mes y año-->
-    @if(!semaforo)  
-    {
-    <button type="button " class="bloqueAcontecimientos" (click)="cargarHistorial(1)" #botonesPrincipales>HISTORIA COMPLETA</button>
-    <button type="button" class="bloqueAcontecimientos" (click)="cargarHistorial(2)" #botonesPrincipales>HISTORIA POR AÑOS</button>
-    }
-        @if(eleccion===1)
-        {
-            <div id="areaHistoria">
-            <!--SI ES EL PRIMER CASO CARGA TODO EL HISTORIAL EN MESES Y AÑOS-->
-            @for(escenas of objetoHistorias.historias;track escenas;let i=$index)
-            {
-                <!-- From Uiverse.io by jawad_8494 --> 
-                <button class="boton" #botones (click)="accionarBoton($index,escenas.getMes(), escenas.getAnio())">
-                    <span>{{ escenas.getMes() }} - {{ escenas.getAnio()}}</span>
-                    <svg fill="none" viewBox="0 0 24 24" class="arrow">
-                        <path
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        d="M5 12h14M13 6l6 6-6 6"
-                        ></path>
-                    </svg>
-                </button>
-            }
-            </div>
-        }
-        @else if(eleccion===2)
-        {
-            <!--SI ES EL SEGUNDO CASO CARGA TODO EL HISTORIAL EN AÑOS-->
-            @for(escenas of objetoHistoriasFiltrado.historias;track escenas;let i=$index)
-            {
-                <!-- From Uiverse.io by jawad_8494 --> 
-                <button class="boton" #botones>
-                    <span>{{ escenas.getAnio() }}</span>
-                    <svg fill="none" viewBox="0 0 24 24" class="arrow">
-                        <path
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        d="M5 12h14M13 6l6 6-6 6"
-                        ></path>
-                    </svg>
-                </button>
-            }
-        }
-        <button class="boton" #botones>
-            <span (click)="cerrarHistorial()">CERRAR</span>
-            <svg fill="none" viewBox="0 0 24 24" class="arrow">
-                <path
-                stroke-linejoin="round"
-                stroke-linecap="round"
-                stroke-width="2"
-                stroke="currentColor"
-                d="M5 12h14M13 6l6 6-6 6"
-                ></path>
-            </svg>
+<div
+  class="fondo"
+  #fondoHistoria
+  [class.fondoPanelAbierto]="!semaforo && eleccion !== 0"
+  [class.fondoLibroAbierto]="semaforo"
+>
+  @if (semaforo) {
+    <div id="libroHistoria">
+      <h2 class="tituloNoticias">Libro de la historia de Escritores Sin Fronteras</h2>
+      <app-librointeractivo id="libroInteractivo"></app-librointeractivo>
+      <button type="button" class="accionCerrar" (click)="cerrarHistorial()">
+        <span>CERRAR</span>
+        <svg fill="none" viewBox="0 0 24 24" class="arrow" aria-hidden="true">
+          <path
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            stroke-width="2"
+            stroke="currentColor"
+            d="M5 12h14M13 6l6 6-6 6"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  } @else {
+    @if (eleccion === 0) {
+      <div class="historiaMenuPrincipal">
+        <button type="button" class="bloqueAcontecimientos" (click)="cargarHistorial(1)">
+          HISTORIA COMPLETA
         </button>
-        @if(semaforo)
-        {
-        <div id="libroHistoria">
-            <h2 class="tituloNoticias">Libro de la historia de Escritores Sin Fronteras</h2>
-            <!-- Aquí puedes agregar el contenido del libro de la historia con mes y año -->
-            <app-librointeractivo id="libroInteractivo"></app-librointeractivo>
-            <!-- Fin presentacion del libro PNG-->
-            <button class="accionCerrar">
-            <span (click)="cerrarHistorial()">CERRAR</span>
-                <svg fill="none" viewBox="0 0 24 24" class="arrow">
+        <button type="button" class="bloqueAcontecimientos" (click)="cargarHistorial(2)">
+          HISTORIA POR AÑOS
+        </button>
+      </div>
+    }
+
+    @if (eleccion === 1) {
+      <div class="historiaTablaHost" [class.historiaEntrada]="animarPanel">
+        <table class="historiaTabla" role="grid" [attr.aria-label]="'Historial por mes y año'">
+          <tbody>
+            @for (fila of tablaHistoriaCompleta(); track $index; let ri = $index) {
+              <tr>
+                @for (celda of fila; track celda.tid; let ci = $index) {
+                  <td>
+                    <button
+                      type="button"
+                      class="boton historiaBotonAnimado"
+                      [style.--stagger-index]="indiceStagger(ri, ci)"
+                      (click)="accionarBoton(indiceGlobal(ri, ci), celda.item.getMes(), celda.item.getAnio())"
+                    >
+                      <span>{{ celda.item.getMes() }} - {{ celda.item.getAnio() }}</span>
+                      <svg fill="none" viewBox="0 0 24 24" class="arrow" aria-hidden="true">
+                        <path
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          d="M5 12h14M13 6l6 6-6 6"
+                        ></path>
+                      </svg>
+                    </button>
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <td class="historiaTablaPie" [attr.colspan]="columnasActivas">
+                <button
+                  type="button"
+                  class="boton botonCerrarTabla historiaBotonAnimado"
+                  [style.--stagger-index]="conteoCeldasCompleta"
+                  (click)="cerrarHistorial()"
+                >
+                  <span>CERRAR</span>
+                  <svg fill="none" viewBox="0 0 24 24" class="arrow" aria-hidden="true">
                     <path
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    d="M5 12h14M13 6l6 6-6 6"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      d="M5 12h14M13 6l6 6-6 6"
                     ></path>
-                </svg>
-            </button>
-        </div>
-        }
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    } @else if (eleccion === 2) {
+      <div class="historiaTablaHost" [class.historiaEntrada]="animarPanel">
+        <table class="historiaTabla" role="grid" [attr.aria-label]="'Historial por año'">
+          <tbody>
+            @for (fila of tablaHistoriaAnios(); track $index; let ri = $index) {
+              <tr>
+                @for (celda of fila; track celda.tid; let ci = $index) {
+                  <td>
+                    <button
+                      type="button"
+                      class="boton historiaBotonAnimado"
+                      [style.--stagger-index]="indiceStaggerAnios(ri, ci)"
+                      (click)="accionarBotonPorAnio(celda.item.getAnio())"
+                    >
+                      <span>{{ celda.item.getAnio() }}</span>
+                      <svg fill="none" viewBox="0 0 24 24" class="arrow" aria-hidden="true">
+                        <path
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          d="M5 12h14M13 6l6 6-6 6"
+                        ></path>
+                      </svg>
+                    </button>
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <td class="historiaTablaPie" [attr.colspan]="columnasActivas">
+                <button
+                  type="button"
+                  class="boton botonCerrarTabla historiaBotonAnimado"
+                  [style.--stagger-index]="conteoCeldasAnios"
+                  (click)="cerrarHistorial()"
+                >
+                  <span>CERRAR</span>
+                  <svg fill="none" viewBox="0 0 24 24" class="arrow" aria-hidden="true">
+                    <path
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      d="M5 12h14M13 6l6 6-6 6"
+                    ></path>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    }
+  }
 </div>
-<!--
-<div (window:resize)="onResize($event)" style="z-index:100px; background-color:black; font-size:60px; color:white">{{tamanioPantalla}}</div>
--->

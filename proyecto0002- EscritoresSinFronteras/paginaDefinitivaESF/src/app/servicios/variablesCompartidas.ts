@@ -33,7 +33,7 @@ export class VariablesCompartidas {
         new Noticias(    
               "Segundo titular de la noticia",
               "Segundo subtítulo de la noticia",
-              "Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado."
+              "Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado. Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado. Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado. Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado.Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado."
           ),
         new Noticias(    
               "Tercer titular de la noticia",
@@ -69,6 +69,36 @@ export class VariablesCompartidas {
               "Noveno titular de la noticia",
               "Noveno subtítulo de la noticia",
               "Contenido detallado del noveno noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Décimo titular de la noticia",
+              "Décimo subtítulo de la noticia",
+              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Décimo titular de la noticia",
+              "Décimo subtítulo de la noticia",
+              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Décimo titular de la noticia",
+              "Décimo subtítulo de la noticia",
+              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Décimo titular de la noticia",
+              "Décimo subtítulo de la noticia",
+              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Décimo titular de la noticia",
+              "Décimo subtítulo de la noticia",
+              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+          ),
+        new Noticias(
+              "Décimo titular de la noticia",
+              "Décimo subtítulo de la noticia",
+              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
           ),
         new Noticias(
               "Décimo titular de la noticia",
@@ -211,7 +241,7 @@ class Noticias
         return this.noticia;
     } 
 }
-class Historias
+export class Historias
 {
     private id:number=0.0;
     private mes: number=0; //Luego se convertirá en el nombre del mes según numero incluido
