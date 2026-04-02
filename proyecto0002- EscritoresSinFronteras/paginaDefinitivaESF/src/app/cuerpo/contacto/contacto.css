@@ -1,0 +1,266 @@
+/* Contacto: fondo del proyecto + paneles informativos */
+.contactoFondo {
+  width: 100%;
+  min-height: 100%;
+  margin-top: 24px;
+  background-image: url('../../../assets/images/fondoCuerpo.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 18px 0 48px;
+}
+
+.contactoWrap {
+  width: min(1100px, calc(100% - 24px));
+  margin: 0 auto;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contactoHeader {
+  background: rgba(46, 52, 128, 0.55);
+  border-radius: 22px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.contactoTitle {
+  margin: 0;
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+}
+
+.contactoLead {
+  margin: 12px 0 0;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  line-height: 1.5;
+  opacity: 0.96;
+  max-width: 72ch;
+}
+
+.mono {
+  font-family: ui-monospace, monospace;
+  font-size: 0.88em;
+  opacity: 0.95;
+}
+
+.contactoEstado,
+.contactoError {
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.contactoError {
+  border: 1px solid rgba(255, 160, 120, 0.5);
+  color: #ffd4c4;
+}
+
+.contactoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media screen and (min-width: 720px) {
+  .contactoGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .contactoCardWide {
+    grid-column: 1 / -1;
+  }
+}
+
+.contactoCard {
+  background: rgba(46, 52, 128, 0.48);
+  border-radius: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+}
+
+.cardH {
+  margin: 0 0 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.empresaNombre {
+  margin: 0 0 6px;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.empresaLegal {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  opacity: 0.92;
+}
+
+.empresaDesc {
+  margin: 0 0 12px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  opacity: 0.95;
+}
+
+.dlInline {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  font-size: 0.82rem;
+}
+
+.dlInline dt {
+  opacity: 0.85;
+  font-weight: 600;
+}
+
+.dlInline dd {
+  margin: 4px 0 0;
+  line-height: 1.45;
+}
+
+.listaSimple {
+  margin: 0;
+  padding: 0;
+}
+
+.listaItem + .listaItem {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.listaStrong {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.listaP {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  opacity: 0.95;
+}
+
+.listaNota {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  opacity: 0.85;
+}
+
+.enlaceTel,
+.enlaceMail {
+  color: #c8e0ff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.enlaceTel:hover,
+.enlaceMail:hover {
+  color: #fff;
+}
+
+.direcciones {
+  display: grid;
+  gap: 16px;
+}
+
+.dirTitulo {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.dirLinea {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  opacity: 0.95;
+}
+
+.dispIntro,
+.dispPie,
+.dispIdiomas {
+  margin: 0 0 10px;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  opacity: 0.95;
+}
+
+.horarios {
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+.horarioFila {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.84rem;
+}
+
+@media screen and (min-width: 520px) {
+  .horarioFila {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+}
+
+.horarioZona {
+  font-weight: 600;
+  min-width: 0;
+}
+
+.horarioTexto {
+  opacity: 0.92;
+  max-width: 100%;
+}
+
+.contactoFigura {
+  margin: 24px 0 0;
+  padding: 0;
+  background: rgba(46, 52, 128, 0.4);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+
+.contactoImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(420px, 55vh);
+  object-fit: cover;
+}
+
+.contactoCaption {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px 18px;
+}
+
+.captionTitulo {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 700;
+}
+
+.captionPie {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  opacity: 0.92;
+}

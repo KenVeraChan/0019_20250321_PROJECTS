@@ -34,9 +34,9 @@
                 <td>
                     <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(4)" [class.active]="activeIndex===3">{{matrizApartados.menuPrincipal.getMatrizApartados()[3]}}</a>
                         <ul class="subMenu">
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[0]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[0]}}</a></li>
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[1]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[1]}}</a></li>
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[2]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[2]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosBlog(1)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[0]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[0]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosBlog(2)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[1]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[1]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosBlog(3)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[2]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[2]}}</a></li>
                         </ul>
                     </li>                
                 </td>

@@ -5,24 +5,30 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
+const contactoJsonPath = join(browserDistFolder, 'assets/data/contacto.json');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+/** Contenido público de contacto (mismo JSON que en assets tras el build). */
+app.get('/api/contacto', (req, res) => {
+  try {
+    if (!existsSync(contactoJsonPath)) {
+      res.status(404).json({ error: 'contacto.json no encontrado' });
+      return;
+    }
+    const data = readFileSync(contactoJsonPath, 'utf-8');
+    res.type('application/json').send(data);
+    return;
+  } catch {
+    res.status(500).json({ error: 'No se pudo leer la información de contacto' });
+    return;
+  }
+});
 
 /**
  * Serve static files from /browser

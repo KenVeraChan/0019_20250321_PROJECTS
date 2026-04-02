@@ -1,1 +1,185 @@
-<p>blogs works!</p>
+<section class="blogsFondo">
+  <div class="blogsWrap">
+    <header class="blogsHeader">
+      <div class="titleBlock">
+        <h2 class="blogsTitle">Blog literario</h2>
+        <p class="blogsSubtitle">
+          Entradas en verso, prosa o reflexiones.
+        </p>
+        <p class="blogsSubtitle">
+           Lee, comparte y publica con tu correo.
+        </p>
+      </div>
+
+      <div class="actionsBlock">
+        @if (isLoggedIn()) {
+          <div class="userPill" title="Sesión activa">
+            <span class="dot"></span>
+            <span class="userText">{{ userEmail }}</span>
+            <button type="button" class="btn ghost" (click)="logout()">Salir</button>
+          </div>
+          <button type="button" class="btn primary" (click)="openCreate()">Publicar</button>
+        } @else {
+          <form class="loginForm" (submit)="$event.preventDefault(); login()">
+            <input
+              class="input"
+              type="email"
+              inputmode="email"
+              autocomplete="email"
+              placeholder="tu-correo@ejemplo.com"
+              [(ngModel)]="emailInput"
+              name="emailInput"
+            />
+            <button type="submit" class="btn primary">Ingresar</button>
+          </form>
+        }
+      </div>
+    </header>
+
+    @if (errorMsg) {
+      <div class="alert">{{ errorMsg }}</div>
+    }
+
+    <nav class="blogsNav">
+      <button type="button" class="btn tab" [class.active]="view==='list'" (click)="openList()">Entradas</button>
+      <button
+        type="button"
+        class="btn tab"
+        [class.active]="view==='create'"
+        (click)="openCreate()"
+        [disabled]="!isLoggedIn()"
+        title="{{ isLoggedIn() ? 'Crear una entrada' : 'Ingresa con correo para publicar' }}"
+      >
+        Publicar
+      </button>
+      @if (view==='detail') {
+        <button type="button" class="btn tab active" (click)="openList()">Detalle</button>
+      }
+    </nav>
+
+    @if (view==='list') {
+      <div class="filters">
+        <div class="filterGroup">
+          <label class="label">Tipo</label>
+          <select class="select" [(ngModel)]="filterType" name="filterType" (change)="applyFilters()" aria-label="Filtrar por tipo de publicación">
+            <option value="todos">Todos</option>
+            <option value="verso">Verso</option>
+            <option value="prosa">Prosa</option>
+            <option value="reflexion">Reflexión</option>
+          </select>
+        </div>
+        <div class="filterGroup grow">
+          <label class="label">Buscar</label>
+          <input
+            class="input"
+            type="search"
+            placeholder="Título, autor o contenido…"
+            [(ngModel)]="search"
+            name="search"
+            (input)="applyFilters()"
+          />
+        </div>
+      </div>
+
+      <div class="postsGrid">
+        @for (p of filteredPosts; track p.id) {
+          <article class="postCard" (click)="openDetail(p.id)" tabindex="0">
+            <div class="cardTop">
+              <span class="badge">{{ formatTypeLabel(p.type) }}</span>
+              <span class="date">{{ formatDate(p.createdAtIso) }}</span>
+            </div>
+            <h3 class="cardTitle">{{ p.title }}</h3>
+            <p class="cardPreview">{{ previewText(p) }}</p>
+            <div class="cardBottom">
+              <span class="author">Por {{ p.authorEmail }}</span>
+              <span class="readMore">Leer →</span>
+            </div>
+          </article>
+        } @empty {
+          <div class="empty">
+            No hay entradas que coincidan con tu búsqueda.
+          </div>
+        }
+      </div>
+    }
+
+    @if (view==='detail') {
+      @if (selectedPost(); as post) {
+        <article class="detailCard">
+          <div class="detailTop">
+            <button type="button" class="btn ghost" (click)="openList()">← Volver</button>
+            <div class="meta">
+              <span class="badge">{{ formatTypeLabel(post.type) }}</span>
+              <span class="date">{{ formatDate(post.createdAtIso) }}</span>
+              <span class="author">Por {{ post.authorEmail }}</span>
+            </div>
+          </div>
+          <h2 class="detailTitle">{{ post.title }}</h2>
+          <pre class="detailContent">{{ post.content }}</pre>
+        </article>
+      } @else {
+        <div class="empty">
+          Esta entrada ya no existe.
+          <button type="button" class="btn primary" (click)="openList()">Volver al listado</button>
+        </div>
+      }
+    }
+
+    @if (view==='create') {
+      <section class="createCard">
+        <div class="createHeader">
+          <h3 class="createTitle">Nueva publicación</h3>
+          <p class="createHint">Elige el tipo de publicación y comparte tu texto.</p>
+        </div>
+
+        @if (!isLoggedIn()) {
+          <div class="empty">
+            Para publicar necesitas ingresar con tu correo.
+          </div>
+        } @else {
+          <form class="createForm" (submit)="$event.preventDefault(); submitPost()">
+            <div class="row">
+              <div class="field grow">
+                <label class="label">Título</label>
+                <input
+                  class="input"
+                  type="text"
+                  maxlength="90"
+                  placeholder="Título de tu publicación"
+                  aria-label="Título de la publicación"
+                  [(ngModel)]="createTitle"
+                  name="createTitle"
+                />
+              </div>
+              <div class="field">
+                <label class="label">Tipo</label>
+                <select class="select" [(ngModel)]="createType" name="createType" aria-label="Seleccionar tipo de publicación">
+                  <option value="verso">Verso</option>
+                  <option value="prosa">Prosa</option>
+                  <option value="reflexion">Reflexión</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Contenido</label>
+              <textarea
+                class="textarea"
+                rows="10"
+                placeholder="Escribe aquí. En verso puedes usar saltos de línea…"
+                aria-label="Contenido de la publicación"
+                [(ngModel)]="createContent"
+                name="createContent"
+              ></textarea>
+            </div>
+
+            <div class="createActions">
+              <button type="button" class="btn ghost" (click)="openList()">Cancelar</button>
+              <button type="submit" class="btn primary">Publicar</button>
+            </div>
+          </form>
+        }
+      </section>
+    }
+  </div>
+</section>

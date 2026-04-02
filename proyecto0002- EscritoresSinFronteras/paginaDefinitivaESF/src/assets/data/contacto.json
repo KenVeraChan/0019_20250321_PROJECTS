@@ -1,0 +1,74 @@
+{
+  "empresa": {
+    "nombreComercial": "Escritores Sin Fronteras",
+    "nombreLegal": "Escritores Sin Fronteras, S.L. (ejemplo)",
+    "descripcion": "Organización de productividad y creación literaria online, con coordinación entre varios continentes. Impulsamos proyectos editoriales, formación y comunidad con enfoque transfronterizo.",
+    "nif": "B00000000",
+    "registroMercantil": "Inscrita en el Registro Mercantil de [Ciudad], Tomo X, Folio Y, Hoja Z."
+  },
+  "accionistas": [
+    {
+      "nombre": "Órgano de representación",
+      "detalle": "Información sobre composición accionarial y gobierno corporativo disponible bajo solicitud por los canales oficiales indicados en esta página."
+    }
+  ],
+  "telefonos": [
+    {
+      "etiqueta": "Atención general",
+      "numero": "+34 000 000 000",
+      "nota": "Llamadas internacionales según su operadora."
+    },
+    {
+      "etiqueta": "Coordinación proyectos",
+      "numero": "+1 000 000 0000",
+      "nota": "Ventana preferente para consultas desde América."
+    }
+  ],
+  "correos": [
+    {
+      "etiqueta": "Información general",
+      "email": "info@escritoressinfronteras.org"
+    },
+    {
+      "etiqueta": "Protección de datos (RGPD)",
+      "email": "privacidad@escritoressinfronteras.org"
+    }
+  ],
+  "direcciones": [
+    {
+      "etiqueta": "Correspondencia (Europa)",
+      "lineas": [
+        "Calle Ejemplo, 123",
+        "28000 Madrid, España"
+      ]
+    },
+    {
+      "etiqueta": "Coordinación (América)",
+      "lineas": [
+        "Avenida Ejemplo, Suite 100",
+        "Ciudad, Estado — País"
+      ]
+    }
+  ],
+  "disponibilidad": {
+    "intro": "Horarios y franjas orientativos para una organización distribuida en varias zonas horarias. Actualice este bloque en el backend para reflejar cambios de temporada o festivos.",
+    "horarios": [
+      {
+        "zona": "Europa (CET / CEST)",
+        "texto": "Lunes a viernes, 9:00–18:00 (hora local de la sede europea)."
+      },
+      {
+        "zona": "América (referencia ET)",
+        "texto": "Lunes a viernes, ventanas concertadas; cita previa recomendada."
+      }
+    ],
+    "respuesta": "Tiempo orientativo de respuesta a consultas no urgentes: 24–48 horas hábiles.",
+    "idiomas": "Atención preferente en español; consultas en inglés según disponibilidad del equipo."
+  },
+  "imagen": {
+    "src": "assets/images/ESFblue.jpg",
+    "alt": "Escritores Sin Fronteras",
+    "titulo": "Escritores Sin Fronteras — Un viaje en prosa",
+    "pie": "Sustituya la imagen o las rutas en este JSON cuando disponga del material definitivo."
+  }
+}

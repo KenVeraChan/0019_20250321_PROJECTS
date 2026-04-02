@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class VariablesCompartidas {
 
@@ -124,6 +124,7 @@ export class VariablesCompartidas {
       ];
 }
 class Apartados{
+    public subApartadoBlog:string="";  //Para identificar que subapartado del blog se accionó
     public matrizApartados: string[]= ["INICIO","NUESTRA HISTORIA","QUIENES SOMOS","BLOG LITERARIO","NUESTROS SERVICIOS","CONTACTO"];
     public subApartadosBlog: string[]= ["PROSA","VERSO","REFLEXIONES"];
     public enlacesBlogLiterario: string[]= ["PUBLICACIONES EN PROSA","PUBLICACIONES EN VERSO","REFLEXIONES DEL DÍA"];
@@ -148,6 +149,41 @@ class Apartados{
     public getSubApartadosBlog():string[]
     {
       return this.subApartadosBlog;
+    }
+    public setSubApartadosBlog(eleccion: number):void   //Identifica qué subapartado fue accionado
+    {
+      switch(eleccion)
+      {
+        case 1:
+          {
+            this.subApartadoBlog='prosa';
+            break;
+          }
+        case 2:
+          {
+            this.subApartadoBlog='verso';
+            break;
+          }
+        case 3:
+          {
+            this.subApartadoBlog='reflexion';
+            break;
+          }
+        default:
+          {
+            this.subApartadoBlog='';
+            break;
+          }
+      }
+      localStorage.setItem('selectedPostEleccion', this.subApartadoBlog);
+      //Se guarda la selección en localStorage para que 
+      // el componente Blogs pueda acceder a ella y filtrar los posts según la elección del usuario en la cabecera.
+    }
+    public getSubApartadoBlog():string
+    {
+      //Recupera el valor almacenado en localstorage
+      const saveEleccion = localStorage.getItem('selectedPostEleccion');
+      return saveEleccion ? saveEleccion : 'todos';
     }
     public getSubApartadosServicios():string[]
     {
