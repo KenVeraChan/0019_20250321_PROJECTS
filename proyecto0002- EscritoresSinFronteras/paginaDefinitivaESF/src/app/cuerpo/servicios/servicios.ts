@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
 
 /** Contenido promocional de un apartado (extensible añadiendo entradas al array). */
 export type ServicioItem = {
@@ -19,8 +20,18 @@ export type ServicioApartado = {
   templateUrl: './servicios.html',
   styleUrl: './servicios.css',
 })
-export class Servicios {
-  /** Apartados visibles; para añadir más en el futuro, basta con otro objeto en este array. */
+export class Servicios implements OnInit {
+  public eleccionServiciosOfrecidos = '';
+  public expandedId: string | null = null;
+
+  constructor(public variablesCompartidas: VariablesCompartidas) {}
+
+  ngOnInit(): void {  //Al iniciar el componente se debe guardar lo almacenado en el servicio
+    this.eleccionServiciosOfrecidos = this.variablesCompartidas.menuPrincipal.getSubApartadosServicios();
+    this.expandedId = this.eleccionServiciosOfrecidos || null;
+  }
+
+  // Apartados visibles; para añadir más en el futuro, basta con otro objeto en este array. 
   public readonly apartados: ServicioApartado[] = [
     {
       id: 'cursos',
@@ -115,9 +126,9 @@ export class Servicios {
   ];
 
   /** Id del apartado con contenido desplegado; null si ninguno. */
-  public expandedId: string | null = null;
-
   public toggle(id: string): void {
+    //Carga el ID seleccionado o almacenado en el punto de servicios para mostrar 
+    // su contenido, o lo cierra si ya estaba abierto.
     this.expandedId = this.expandedId === id ? null : id;
   }
 

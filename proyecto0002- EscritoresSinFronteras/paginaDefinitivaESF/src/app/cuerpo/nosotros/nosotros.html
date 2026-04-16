@@ -3,8 +3,13 @@
 <h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
 <div id="zonaNosotros">
     <div class="seccionNosotros">
-        <h3>Misión</h3>
-        <img src={{this.equipo.quienesSomos[0].getImagen()}} alt="Imagen de Ken Vera Chan" class="iconoNosotros">
-        <p>Nuestra misión es fomentar la escritura y la creatividad sin barreras, proporcionando una plataforma inclusiva para escritores de todas las edades y orígenes.</p>
+        <h3>{{equipo.quienesSomos[0].getNombre()}} {{equipo.quienesSomos[0].getApellidos()}}</h3>
+        <img src={{equipo.quienesSomos[0].getImagen()}} alt="{{equipo.quienesSomos[0].getNombre()}}" class="iconoNosotros">
+        <p>{{equipo.quienesSomos[0].getBiografia()}}</p>
+    </div>
+    <div class="seccionNosotros">
+        <h3>{{equipo.quienesSomos[1].getNombre()}} {{equipo.quienesSomos[1].getApellidos()}}</h3>
+        <img src={{equipo.quienesSomos[1].getImagen()}} alt="{{equipo.quienesSomos[1].getNombre()}}" class="iconoNosotros">
+        <p>{{equipo.quienesSomos[1].getBiografia()}}</p>
     </div>
 </div>

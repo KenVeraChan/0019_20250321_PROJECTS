@@ -22,7 +22,6 @@ export class VariablesCompartidas {
   
   //VARIABLES COMPARTIDAS ENTRE COMPONENTES
     public menuPrincipal: Apartados=new Apartados();
-
     //AREA NOTICIAS DEL APARTADO "INICIO"
     public noticia:Noticias[]=[
         new Noticias(    
@@ -155,10 +154,11 @@ export class VariablesCompartidas {
 }
 class Apartados{
     public subApartadoBlog:string="";  //Para identificar que subapartado del blog se accionó
+    public subPartadosServicios:string="";  //Para identificar que subapartado de servicios se accionó, se inicializa con 5 espacios vacíos porque hay 5 subapartados, luego se irán rellenando según la elección del usuario.
     public matrizApartados: string[]= ["INICIO","NUESTRA HISTORIA","QUIENES SOMOS","BLOG LITERARIO","NUESTROS SERVICIOS","CONTACTO"];
     public subApartadosBlog: string[]= ["PROSA","VERSO","REFLEXIONES"];
     public enlacesBlogLiterario: string[]= ["PUBLICACIONES EN PROSA","PUBLICACIONES EN VERSO","REFLEXIONES DEL DÍA"];
-    public enlacesServicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS","CONGRESOS INTERNACIONALES"];
+    public enlacesServicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS POR LA MARCA","CONGRESOS INTERNACIONALES PROGRAMADOS"];
     public subApartadosServicios: string[]= ["CURSOS","ENTREVISTAS","EDICIONES","TERTULIAS","CONGRESOS"];
     public constructor()
     {
@@ -205,20 +205,84 @@ class Apartados{
             break;
           }
       }
-      localStorage.setItem('selectedPostEleccion', this.subApartadoBlog);
+          if (typeof window !== 'undefined' && window.localStorage) 
+          {
+            //En resumen: no es un fallo de TypeScript, es que localStorage solo está disponible en el navegador 
+            // y el método se está ejecutando en un entorno donde no lo está.
+            localStorage.setItem('selectedPostEleccion', this.subApartadoBlog);
+          }      //Se guarda la selección en localStorage para que 
       //Se guarda la selección en localStorage para que 
       // el componente Blogs pueda acceder a ella y filtrar los posts según la elección del usuario en la cabecera.
     }
     public getSubApartadoBlog():string
     {
+        if (typeof window === 'undefined' || !window.localStorage) 
+        {  
+          //En resumen: no es un fallo de TypeScript, es que localStorage solo está disponible en el navegador 
+          // y el método se está ejecutando en un entorno donde no lo está.
+            return 'todos'; // Valor predeterminado si no se puede acceder a localStorage
+        }
       //Recupera el valor almacenado en localstorage
       const saveEleccion = localStorage.getItem('selectedPostEleccion');
       return saveEleccion ? saveEleccion : 'todos';
     }
-    public getSubApartadosServicios():string[]
+    public setSubApartadosServicios(eleccion: number):void   //Identifica qué subapartado fue accionado
+    {
+      switch(eleccion)
+      {
+        case 1:
+          {
+            this.subPartadosServicios='cursos';
+            break;
+          }
+        case 2:
+          {
+            this.subPartadosServicios='entrevistas';
+            break;
+          }
+        case 3:
+          {
+            this.subPartadosServicios='ediciones';
+            break;
+          }
+        case 4:
+          {
+            this.subPartadosServicios='tertulias';
+            break;
+          }
+        case 5:
+          {
+            this.subPartadosServicios='congresos';
+            break;
+          }
+        default:
+          {
+            this.subPartadosServicios='';
+            break;
+          }
+      }
+        if (typeof window !== 'undefined' && window.localStorage) 
+          {
+            //En resumen: no es un fallo de TypeScript, es que localStorage solo está disponible en el navegador 
+            // y el método se está ejecutando en un entorno donde no lo está.
+          localStorage.setItem('selectedServicioEleccion', this.subPartadosServicios);
+          }      //Se guarda la selección en localStorage para que 
+      // el componente Servicios pueda acceder a ella y filtrar los servicios según la elección del usuario en la cabecera.
+    }
+    public getSubApartadosServiciosMenu(): string[]
     {
       return this.subApartadosServicios;
     }
+    public getSubApartadosServicios():string
+    {
+        if (typeof window === 'undefined' || !window.localStorage) 
+        {  
+        return 'cursos'; // Valor predeterminado si no se puede acceder a localStorage
+        }
+      //Recupera el valor almacenado en localstorage
+      const saveEleccionServicios = localStorage.getItem('selectedServicioEleccion');
+      return saveEleccionServicios ? saveEleccionServicios : '';
+    }   
 }
 class Noticias
 {
