@@ -12,18 +12,43 @@
     width: 100%;
     display: flex; 
     flex-direction: column;
+    perspective: 800px;
+    transform-style: preserve-3d;
+    transform: rotateX(45deg);
+    --n: 7;        /* número de elementos */
+    --r: 60px;    /* radio del círculo */
 }
-.seccionNosotros:nth-child(n) {
+.seccionNosotros {
+    float: left;
     background-color: rgb(1, 3, 39);
-    margin: 20px;
+    text-align: center;
     padding: 20px;
     border-radius: 10px;    
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     color: white;
-    overflow: hidden;
-    z-index: n+1;
-    transform: translateX(50px);
+    position: absolute;
+    max-width: 300px;
+    min-width: 40px;
+    height: 100px;
+    margin-top: 0px;
+    margin-bottom: 50px;
+    margin-left: calc(var(--i) * 10%);
+    /* Ángulo para cada item */
+    --angle: calc(var(--i) * 360deg / var(--n));
+
+    /* Posición circular */
+    transform:
+        translateZ(var(--angle*var(--n)*var(--r)))
+        translateX(var(--r));
 }
+
+.seccionNosotros:hover{
+    transition: transform 0.5s ease;
+    background-color: rgb(209, 212, 255);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgb(248, 246, 246);
+    color: rgb(1, 3, 39);
+}
+
 .iconoNosotros{
     float:left;
     border-radius: 70%;
@@ -33,4 +58,20 @@
     height: 150px;
     object-fit: cover; /* Recorta sin deformar */
     object-position: center; /* Centra el recorte */
+}
+.areaImagen{
+    display: flex;
+    position:relative;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-left:42%;
+    margin-top: 100px;
+    margin-bottom: 30px;
+    max-width:200px;
+    max-height:600px;
+}
+.areaImagen:hover{
+    transition: transform 2.5s ease;
+    transform: scale(1.1);
 }

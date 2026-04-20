@@ -2,14 +2,10 @@
 <h2 class="tituloNoticias">en</h2>
 <h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
 <div id="zonaNosotros">
-    <div class="seccionNosotros">
-        <h3>{{equipo.quienesSomos[0].getNombre()}} {{equipo.quienesSomos[0].getApellidos()}}</h3>
-        <img src={{equipo.quienesSomos[0].getImagen()}} alt="{{equipo.quienesSomos[0].getNombre()}}" class="iconoNosotros">
-        <p>{{equipo.quienesSomos[0].getBiografia()}}</p>
+    @for(personal of equipo.quienesSomos;track $index){
+    <div class="seccionNosotros" style="--i: {{$index}}">
+        <h3>{{personal.getNombre()}} {{personal.getApellidos()}}</h3>
     </div>
-    <div class="seccionNosotros">
-        <h3>{{equipo.quienesSomos[1].getNombre()}} {{equipo.quienesSomos[1].getApellidos()}}</h3>
-        <img src={{equipo.quienesSomos[1].getImagen()}} alt="{{equipo.quienesSomos[1].getNombre()}}" class="iconoNosotros">
-        <p>{{equipo.quienesSomos[1].getBiografia()}}</p>
-    </div>
+    }
 </div>
+<img src={{equipo.quienesSomos[0].getImagenEquipo()}} alt="Imagen del equipo de Escritores Sin Fronteras" class="areaImagen">       

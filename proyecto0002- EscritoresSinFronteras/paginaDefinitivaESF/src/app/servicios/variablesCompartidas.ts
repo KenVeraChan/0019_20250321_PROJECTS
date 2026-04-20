@@ -153,6 +153,7 @@ export class VariablesCompartidas {
       ];
 }
 class Apartados{
+    public valorSubapartado:number=0;  //Para identificar que subapartado del blog se accionó, se inicializa con 0 porque es el valor que corresponde a "todos" en el caso del blog, y a "cursos" en el caso de servicios, que son los valores predeterminados.
     public subApartadoBlog:string="";  //Para identificar que subapartado del blog se accionó
     public subPartadosServicios:string="";  //Para identificar que subapartado de servicios se accionó, se inicializa con 5 espacios vacíos porque hay 5 subapartados, luego se irán rellenando según la elección del usuario.
     public matrizApartados: string[]= ["INICIO","NUESTRA HISTORIA","QUIENES SOMOS","BLOG LITERARIO","NUESTROS SERVICIOS","CONTACTO"];
@@ -210,6 +211,8 @@ class Apartados{
             //En resumen: no es un fallo de TypeScript, es que localStorage solo está disponible en el navegador 
             // y el método se está ejecutando en un entorno donde no lo está.
             localStorage.setItem('selectedPostEleccion', this.subApartadoBlog);
+              this.valorSubapartado=3;  //Se asigna el valor 3 (Comenzando desde 0 para esta variable) a la variable auxiliar para indicar que se ha seleccionado un subapartado específico del blog, y no "todos", que es el valor predeterminado.
+            localStorage.setItem('punteroCabecera', this.valorSubapartado.toString());  //Y también se usa para el cambio de pagina   
           }      //Se guarda la selección en localStorage para que 
       //Se guarda la selección en localStorage para que 
       // el componente Blogs pueda acceder a ella y filtrar los posts según la elección del usuario en la cabecera.
@@ -266,6 +269,8 @@ class Apartados{
             //En resumen: no es un fallo de TypeScript, es que localStorage solo está disponible en el navegador 
             // y el método se está ejecutando en un entorno donde no lo está.
           localStorage.setItem('selectedServicioEleccion', this.subPartadosServicios);
+              this.valorSubapartado=4;  //Se asigna el valor 4 (Comenzando desde 0 para esta variable) a la variable auxiliar para indicar que se ha seleccionado un subapartado específico del servicios, y no "cursos", que es el valor predeterminado.
+          localStorage.setItem('punteroCabecera', this.valorSubapartado.toString());  //Y también se usa para el cambio de pagina   
           }      //Se guarda la selección en localStorage para que 
       // el componente Servicios pueda acceder a ella y filtrar los servicios según la elección del usuario en la cabecera.
     }
@@ -492,5 +497,10 @@ class QuienesSomos{
     public setImagen(imagen:string):void
     {
       this.imagen=imagen;
+    }
+    public getImagenEquipo(): string
+    {
+      const quienesSomosImagen: string="assets/images/equipoESF/imagenEquipo.png";
+      return quienesSomosImagen;
     }
 }
