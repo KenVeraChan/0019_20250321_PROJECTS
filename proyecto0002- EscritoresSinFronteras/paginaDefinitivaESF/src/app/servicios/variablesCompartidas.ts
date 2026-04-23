@@ -503,4 +503,9 @@ class QuienesSomos{
       const quienesSomosImagen: string="assets/images/equipoESF/imagenEquipo.png";
       return quienesSomosImagen;
     }
+    public getImagenLibro():string
+    {
+      const quienesSomosImagen: string="assets/images/equipoESF/libro.png";
+      return quienesSomosImagen;
+    }
 }

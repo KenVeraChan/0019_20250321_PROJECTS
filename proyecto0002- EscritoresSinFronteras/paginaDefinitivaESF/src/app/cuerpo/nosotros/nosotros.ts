@@ -16,5 +16,14 @@ export class Nosotros {
   public bioQuien= this.equipo.quienesSomos[4].getBiografia();
   public fotoQuien= this.equipo.quienesSomos[0].getImagen();
 
+constructor()
+  {
 
+  }
+public mostrarInformacion(index: number): void {
+  alert(`Nombre: ${this.equipo.quienesSomos[index].getNombre()} ${this.equipo.quienesSomos[index].getApellidos()}\n` +
+        `Nacionalidad: ${this.equipo.quienesSomos[index].getNacionalidad()}\n` +
+        `Rol: ${this.equipo.quienesSomos[index].getProfesion()}\n` +
+        `Biografía: ${this.equipo.quienesSomos[index].getBiografia()}`);
+  }
 }

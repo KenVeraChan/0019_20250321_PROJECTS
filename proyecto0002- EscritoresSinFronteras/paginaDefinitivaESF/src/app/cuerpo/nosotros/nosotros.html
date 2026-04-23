@@ -3,8 +3,9 @@
 <h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
 <div id="zonaNosotros">
     @for(personal of equipo.quienesSomos;track $index){
-    <div class="seccionNosotros" style="--i: {{$index}}">
-        <h3>{{personal.getNombre()}} {{personal.getApellidos()}}</h3>
+    <div class="seccionNosotros" style="--i: {{$index}}" (click)="mostrarInformacion($index)">
+        <img src={{personal.getImagenLibro()}} alt="Imagen del libro Escritores Sin Fronteras" class="areaImagenLibro">       
+        <h3 class="tituloLibro">{{personal.getNombre()}} {{personal.getApellidos()}}</h3>
     </div>
     }
 </div>
