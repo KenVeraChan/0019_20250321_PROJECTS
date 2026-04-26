@@ -34,20 +34,20 @@
                 <td>
                     <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(4)" [class.active]="activeIndex===3">{{matrizApartados.menuPrincipal.getMatrizApartados()[3]}}</a>
                         <ul class="subMenu">
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[0]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[0]}}</a></li>
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[1]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[1]}}</a></li>
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[2]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[2]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosBlog(1)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[0]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[0]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosBlog(2)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[1]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[1]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosBlog(3)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[2]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[2]}}</a></li>
                         </ul>
                     </li>                
                 </td>
                 <td>
                     <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(5)" [class.active]="activeIndex===4">{{matrizApartados.menuPrincipal.getMatrizApartados()[4]}}</a>
                         <ul class="subMenu">
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[0]}}">{{matrizApartados.menuPrincipal.getSubApartadosServicios()[0]}}</a></li>
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[1]}}">{{matrizApartados.menuPrincipal.getSubApartadosServicios()[1]}}</a></li>
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[2]}}">{{matrizApartados.menuPrincipal.getSubApartadosServicios()[2]}}</a></li>
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[3]}}">{{matrizApartados.menuPrincipal.getSubApartadosServicios()[3]}}</a></li>
-                            <li class="subBotonera"><a class="enlaces" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[4]}}">{{matrizApartados.menuPrincipal.getSubApartadosServicios()[4]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosServicios(1)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[0]}}">{{matrizApartados.menuPrincipal.getSubApartadosServiciosMenu()[0]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosServicios(2)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[1]}}">{{matrizApartados.menuPrincipal.getSubApartadosServiciosMenu()[1]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosServicios(3)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[2]}}">{{matrizApartados.menuPrincipal.getSubApartadosServiciosMenu()[2]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosServicios(4)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[3]}}">{{matrizApartados.menuPrincipal.getSubApartadosServiciosMenu()[3]}}</a></li>
+                            <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosServicios(5)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[4]}}">{{matrizApartados.menuPrincipal.getSubApartadosServiciosMenu()[4]}}</a></li>
                         </ul>
                     </li>
                 </td>

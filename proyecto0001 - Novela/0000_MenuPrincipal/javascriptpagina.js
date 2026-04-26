@@ -16,7 +16,6 @@ function cargando()
 function activador(puntero)
 {
     //proceso eventual de cambio de cartel
-        matrizCaja[puntero].addEventListener("mouseenter", function(){
         matrizCaja[puntero].style.transitionDuration = "0.15s";
         matrizCaja[puntero].style.transform = "rotate3d(1,0,0,360deg)";
         matrizCaja[puntero].style.backgroundColor= "rgba(18, 158, 139, 1)";
@@ -77,12 +76,10 @@ function activador(puntero)
                     {   break;    }
             }
             //SE DARA LA VUELTA A LA CARA OCULTA MIENTRAS SE MUESTRA LA CARA PRINCIPAL
-        });
     }
 
 function reactivador(puntero)
 {   
-        matrizCaja[puntero].addEventListener("mouseleave", function(){
             //SE DARA LA VUELTA A LA CARA OCULTA PARA DEJARLA EN OCULTA DE NUEVO
             matrizCaja[puntero].style.transitionDuration = "0.15s";
             matrizCaja[puntero].style.transform = "rotate3d(1,0,0,360deg)";
@@ -138,8 +135,5 @@ function reactivador(puntero)
                 default:
                     {   break;    }
             }
-        });
-        pulsador[puntero].addEventListener("click", function(){  
-    });
 }
 

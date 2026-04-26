@@ -1,0 +1,324 @@
+/* Blog literario: responsive + fondo del proyecto */
+.blogsFondo{
+  width: 100%;
+  min-height: 100%;
+  margin-top: 24px;
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 18px 0 40px;
+}
+
+.blogsWrap{
+  width: min(1100px, calc(100% - 24px));
+  margin: 0 auto;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.blogsHeader{
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: rgba(46, 52, 128, 0.55);
+  border-radius: 22px;
+  padding: 16px;
+  box-shadow: 0 10px 20px rgba(255,255,255,0.18);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.blogsTitle{
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: 0.2px;
+}
+.blogsSubtitle{
+  margin: 6px 0 0;
+  font-size: 13px;
+  opacity: 0.95;
+  max-width: 60ch;
+}
+
+.actionsBlock{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.loginForm{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.userPill{
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+.dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #9cffb8;
+  box-shadow: 0 0 12px rgba(156,255,184,0.8);
+}
+.userText{
+  font-size: 12px;
+  opacity: 0.95;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.alert{
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255, 201, 93, 0.45);
+  color: #ffd989;
+}
+
+.blogsNav{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0 0;
+}
+
+.filters{
+  margin-top: 14px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: end;
+  background: rgba(46, 52, 128, 0.40);
+  border-radius: 18px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+}
+.filterGroup{
+  display: grid;
+  gap: 6px;
+}
+.grow{ flex: 1 1 240px; }
+
+.label{
+  font-size: 12px;
+  opacity: 0.95;
+}
+
+.input, .select, .textarea{
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.28);
+  color: #fff;
+  padding: 10px 12px;
+  outline: none;
+}
+.textarea{
+  resize: vertical;
+  min-height: 180px;
+}
+.input::placeholder, .textarea::placeholder{
+  color: rgba(255,255,255,0.75);
+}
+
+.btn{
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(0,0,0,0.25);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 120ms ease, background 200ms ease, border-color 200ms ease, opacity 200ms ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.btn:hover{ background: rgba(255,255,255,0.10); transform: translateY(-1px); }
+.btn:disabled{ opacity: 0.55; cursor: not-allowed; transform: none; }
+.btn.primary{
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(255,255,255,0.35);
+}
+.btn.ghost{
+  background: transparent;
+}
+.btn.tab{
+  padding: 9px 12px;
+}
+.btn.tab.active{
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.38);
+}
+
+.postsGrid{
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+}
+
+.postCard{
+  grid-column: span 12;
+  background: rgba(46, 51, 128, 0.651);
+  border-radius: 18px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  cursor: pointer;
+  box-shadow: 0 10px 18px rgba(0,0,0,0.25);
+  outline: none;
+}
+.postCard:hover{
+  background: rgba(41, 41, 41, 0.5);
+  border: 1px solid rgba(2, 2, 2, 0.507);
+}
+.cardTop{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.badge{
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.28);
+  border: 1px solid rgba(255,255,255,0.18);
+  font-size: 12px;
+}
+.date{
+  font-size: 12px;
+  opacity: 0.9;
+}
+.cardTitle{
+  margin: 10px 0 6px;
+  font-size: 18px;
+}
+.cardPreview{
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  opacity: 0.95;
+}
+.cardBottom{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.95;
+}
+.readMore{
+  opacity: 0.95;
+}
+
+.detailCard, .createCard{
+  margin-top: 14px;
+  background: rgba(46, 52, 128, 0.50);
+  border-radius: 18px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.25);
+}
+.detailTop{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.meta{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.detailTitle{
+  margin: 12px 0 10px;
+  font-size: 22px;
+}
+.detailContent{
+  margin: 0;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.25);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+  line-height: 1.55;
+}
+
+.createHeader{
+  margin-bottom: 10px;
+}
+.createTitle{
+  margin: 0;
+  font-size: 18px;
+}
+.createHint{
+  margin: 6px 0 0;
+  font-size: 12px;
+  opacity: 0.95;
+}
+.createForm{
+  display: grid;
+  gap: 12px;
+}
+.row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.field{
+  display: grid;
+  gap: 6px;
+  flex: 0 0 220px;
+}
+.createActions{
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.empty{
+  margin-top: 14px;
+  background: rgba(0,0,0,0.25);
+  border: 1px dashed rgba(255,255,255,0.25);
+  border-radius: 18px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+@media screen and (min-width: 576px){
+  .blogsTitle{ font-size: 26px; }
+  .postCard{ grid-column: span 6; }
+}
+
+@media screen and (min-width: 992px){
+  .postCard{ grid-column: span 4; }
+  .blogsHeader{ padding: 18px; }
+}
+
+@media screen and (max-width: 420px){
+  .loginForm{ width: 100%; }
+  .actionsBlock{ width: 100%; justify-content: stretch; }
+  .btn{ width: 100%; }
+  .userPill{ width: 100%; justify-content: space-between; }
+}

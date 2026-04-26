@@ -1,0 +1,245 @@
+/* Servicios: mismo fondo visual que el cuerpo (fondoCuerpo.png) + paneles glass */
+.serviciosFondo {
+  width: 100%;
+  min-height: 100%;
+  margin-top: 24px;
+  background-color: transparent;
+  background-image: url('../../../assets/images/fondoCuerpo.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 18px 0 48px;
+}
+
+.serviciosWrap {
+  width: min(1120px, calc(100% - 24px));
+  margin: 0 auto;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.serviciosHeader {
+  background: rgba(46, 52, 128, 0.55);
+  border-radius: 22px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.serviciosTitle {
+  margin: 0;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  letter-spacing: 0.03em;
+}
+
+.serviciosSubtitle {
+  margin: 10px 0 0;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  opacity: 0.95;
+  max-width: 65ch;
+  line-height: 1.45;
+}
+
+.apartadosGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media screen and (min-width: 576px) {
+  .apartadosGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .apartadosGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .apartadosGrid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+}
+
+.servicioCard {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(46, 52, 128, 0.42);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+  -webkit-transition:
+    transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.28s ease,
+    border-color 0.28s ease,
+    background 0.28s ease;
+  transition:
+    transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.28s ease,
+    border-color 0.28s ease,
+    background 0.28s ease;
+}
+
+.servicioCard:hover,
+.servicioCard:focus-within {
+  -webkit-transform: translateY(-6px) scale(1.02);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow:
+    0 16px 32px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.22),
+    0 0 28px rgba(130, 180, 255, 0.35);
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(60, 68, 150, 0.55);
+}
+
+.servicioCard.open {
+  -webkit-transform: none;
+  transform: none;
+  z-index: 2;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.4),
+    0 0 0 2px rgba(200, 220, 255, 0.25);
+}
+
+@media screen and (min-width: 1200px) {
+  .servicioCard.open {
+    grid-column: 1 / -1;
+  }
+}
+
+.cardFace {
+  width: 100%;
+  margin: 0;
+  padding: 16px 14px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 120px;
+  font: inherit;
+}
+
+.cardFace:focus-visible {
+  outline: 2px solid rgba(200, 220, 255, 0.9);
+  outline-offset: 2px;
+}
+
+.cardAccent {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(120, 200, 255, 0.6), rgba(255, 200, 120, 0.5));
+  opacity: 0.85;
+  -webkit-transform: scaleX(0.35);
+  transform: scaleX(0.35);
+  -webkit-transform-origin: left;
+  transform-origin: left;
+  -webkit-transition: -webkit-transform 0.35s ease;
+  transition: transform 0.35s ease;
+}
+
+.servicioCard:hover .cardAccent,
+.servicioCard:focus-within .cardAccent {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}
+
+.cardTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cardTitle {
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  font-weight: 700;
+}
+
+.cardChevron {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+.cardTeaser {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  opacity: 0.92;
+}
+
+.cardPanel {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  border-top: 1px solid transparent;
+  -webkit-transition:
+    max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease,
+    padding 0.35s ease,
+    border-color 0.35s ease;
+  transition:
+    max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease,
+    padding 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.cardPanel.visible {
+  max-height: 1200px;
+  opacity: 1;
+  border-top-color: rgba(255, 255, 255, 0.18);
+  padding: 0 14px 16px;
+}
+
+.itemList {
+  margin: 0;
+  padding: 12px 0 0;
+}
+
+.itemRow + .itemRow {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.itemTitle {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.itemDesc {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  opacity: 0.94;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .servicioCard,
+  .cardAccent,
+  .cardPanel {
+    -webkit-transition: none;
+    transition: none;
+  }
+
+  .servicioCard:hover,
+  .servicioCard:focus-within {
+    -webkit-transform: none;
+    transform: none;
+  }
+}

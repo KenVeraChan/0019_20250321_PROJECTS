@@ -1,1 +1,50 @@
-<p>servicios works!</p>
+<section class="serviciosFondo" aria-labelledby="serviciosTitulo">
+  <div class="serviciosWrap">
+    <header class="serviciosHeader">
+      <h2 id="serviciosTitulo" class="serviciosTitle">Nuestros Servicios Ofrecidos</h2>
+      <p class="serviciosSubtitle"> Explora cada apartado inferior</p>
+      <p class="serviciosSubtitle"> Al pasar el ratón verás una animación</p>
+      <p class="serviciosSubtitle"> Al pulsar, se despliega el contenido completo</p> 
+    </header>
+
+    <div class="apartadosGrid" role="list">
+      @for (a of apartados; track a.id) {
+        <article class="servicioCard" [class.open]="isOpen(a.id)" role="listitem">
+          <button
+            type="button"
+            class="cardFace"
+            (click)="toggle(a.id)"
+            [attr.aria-expanded]="isOpen(a.id)"
+            [attr.aria-controls]="'panel-' + a.id" 
+            [id]="'btn-' + a.id"
+          >
+            <span class="cardAccent" aria-hidden="true"></span>
+            <span class="cardTitleRow">
+              <span class="cardTitle">{{ a.title }}</span>
+              <span class="cardChevron" aria-hidden="true">{{ isOpen(a.id) ? '▾' : '▸' }}</span>
+            </span>
+            <span class="cardTeaser">{{ a.teaser }}</span>
+          </button>
+
+          <div
+            class="cardPanel"
+            [class.visible]="isOpen(a.id)"
+            [attr.aria-hidden]="!isOpen(a.id)"
+            [id]="'panel-' + a.id"
+            role="region"
+            [attr.aria-labelledby]="'btn-' + a.id"
+          >
+            <div class="itemList" role="list">
+              @for (it of a.items; track it.titulo) {
+                <div class="itemRow" role="listitem">
+                  <h3 class="itemTitle">{{ it.titulo }}</h3>
+                  <p class="itemDesc">{{ it.descripcion }}</p>
+                </div>
+              }
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

@@ -1,5 +1,5 @@
-import { Component, OnInit, QueryList,ViewChild, ViewChildren, Renderer2, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
+import {Component,OnInit,ViewChild,Renderer2,ElementRef,ChangeDetectorRef,HostListener,} from '@angular/core';
+import { Historias, VariablesCompartidas } from '../../servicios/variablesCompartidas';
 
 @Component({
   selector: 'app-historia',
@@ -8,97 +8,179 @@ import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
   styleUrl: './historia.css',
 })
 export class Historia implements OnInit {
-  public tamanioHorizontalPantalla:number=0.0;
-  public punteroAvance:number=0.0;
-  public eleccion:number=0;
-  public semaforo:boolean=false;  //Para controlar la aparición del libro de la historia con mes y año
-  public objetoHistorias= new VariablesCompartidas();
-  public objetoHistoriasFiltrado= new VariablesCompartidas();
+  public tamanioHorizontalPantalla = 0;
+  public eleccion = 0;
+  public semaforo = false;
+  public objetoHistorias = new VariablesCompartidas();
+  public objetoHistoriasFiltrado = new VariablesCompartidas();
 
-  constructor(private renderer: Renderer2,private deteccionCambio: ChangeDetectorRef) {}
-    //Renderer2 permite modificar elementos DOM y ChangeDetectorRef pemirte detectar cambios en variables
-  @ViewChild('fondoHistoria') fondoHistoria!:ElementRef;  
-  @ViewChildren('botones') botones!: QueryList<ElementRef>;   //ELEMENTOS DEL DOM PARA MOVERSE (múltiples)
-  @ViewChildren('botonesPrincipales') botonesPrincipales!:QueryList<ElementRef>;   //BOTONES PRINCIPALES DEL MENU
+  /** Columnas de la tabla según ancho (responsive). */
+  public columnasActivas = 3;
 
-  ngOnInit()
-  {
-    this.tamanioHorizontalPantalla = window.innerWidth;  //Ancho de la pantalla
-    //Para filtrar objetos buscados por años
-    this.objetoHistoriasFiltrado.historias=this.objetoHistoriasFiltrado.historias.filter
-    ((historia, indice, self) =>  indice === self.findIndex(h => h.getAnio() === historia.getAnio()));
+  /** Activa la animación de entrada tipo “expansión” de los botones. */
+  public animarPanel = false;
+
+  constructor(
+    private readonly renderer: Renderer2,
+    private readonly deteccionCambio: ChangeDetectorRef,
+  ) {}
+
+  @ViewChild('fondoHistoria') fondoHistoria!: ElementRef<HTMLElement>;
+
+  get conteoCeldasCompleta(): number {
+    return this.objetoHistorias.historias.length;
   }
 
-  public cargarHistorial(opcion:number):void
-  {
-    if (typeof window !== 'undefined') 
-    {   
-     this.eleccion=opcion; //Se elige la primera opción
-     this.deteccionCambio.detectChanges();
-      const fondos= this.fondoHistoria.nativeElement as HTMLElement;
-      this.botones.forEach((item: ElementRef, index: number) => {
-        const botonesAccionados = item.nativeElement as HTMLElement;
-        this.renderer.setStyle(botonesAccionados, 'display','block');
-        // Añadir delay progresivo: cada botón se mueve después del anterior (100ms * índice)
-        const delay = index * 100; // 0ms, 100ms, 200ms, 300ms, etc.
-        setTimeout(() => {
-          requestAnimationFrame(() => {
-            this.renderer.setStyle(botonesAccionados, 'transform', `translate(10px,${70 +index*70}px)`);
-            this.renderer.setStyle(botonesAccionados, 'transition', 'transform 0.5s ease-in-out');
-          });
-        }, delay);
-        this.punteroAvance=70+(index+1)*80;   //Contabilización de la longitud para estirarse y cubrir todas las fechas
-        //this.renderer.setStyle(botonesPrincipales, 'display','none');   //Se hacen desaparecer
+  get conteoCeldasAnios(): number {
+    return this.objetoHistoriasFiltrado.historias.length;
+  }
 
-      });
-      this.renderer.setStyle(fondos, 'height', this.punteroAvance+'px'); //Se estira la longitud hasta cubrir todas las fechas encontradas  
-      
-      //Botones principales del menu de opciones de la historia
-      this.botonesPrincipales.forEach((item: ElementRef) => {
-            const botonesPrincipales= item.nativeElement as HTMLElement;   //Para hacerlos desaparecer mientras aparecen los otros
-            this.renderer.setStyle(botonesPrincipales,'display','none');
-      });
+  ngOnInit(): void {
+    this.tamanioHorizontalPantalla = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    this.actualizarColumnas();
+    this.objetoHistoriasFiltrado.historias = this.objetoHistoriasFiltrado.historias.filter(
+      (historia, indice, self) => indice === self.findIndex((h) => h.getAnio() === historia.getAnio()),
+    );
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.tamanioHorizontalPantalla = window.innerWidth;
+    this.actualizarColumnas();
+  }
+
+  //Aqui recopla los mensajes en función del tamaño de la pantalla, si es grande mete más cajas sino no
+  private actualizarColumnas(): void {
+    const w = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    let next = 3;
+    if (w < 576) {
+      next = 1;
+    } else if (w < 992) {
+      next = 2;
+    }
+    if (next !== this.columnasActivas) {
+      this.columnasActivas = next;
+      this.deteccionCambio.markForCheck();
     }
   }
-  public cerrarHistorial():void
-  {
-    if (typeof window !== 'undefined') 
-    {     
-      this.botones.forEach((item: ElementRef, index: number) => {
-            const fondos= this.fondoHistoria.nativeElement as HTMLElement;
-            const botonesAccionados = item.nativeElement as HTMLElement;
-            // Añadir delay progresivo: cada botón se mueve después del anterior (100ms * índice)
-            const delay = index * 100; // 0ms, 100ms, 200ms, 300ms, etc.
-            setTimeout(() => {
-              requestAnimationFrame(() => {
-                this.renderer.setStyle(botonesAccionados, 'transform', `translate(-10px,${-70}px)`);
-                this.renderer.setStyle(botonesAccionados, 'transition', 'transform 0.5s ease-in-out');
-              });
-            }, delay);
-          this.renderer.setStyle(botonesAccionados, 'display','none');
-          this.renderer.setStyle(fondos, 'height', '300px');  //Se devuelve a la longitud inicial del FONDO HISTORIA
-      });
-      //Botones principales del menu de opciones de la historia
-      this.botonesPrincipales.forEach((item: ElementRef) => {
-            const botonesPrincipales= item.nativeElement as HTMLElement;   //Para hacerlos desaparecer mientras aparecen los otros
-            this.renderer.setStyle(botonesPrincipales,'display','block');
-      });
-      this.semaforo=false;  //Se desactiva el semáforo para ocultar el libro de la historia con mes y año
+
+  
+  private chunkHistorias(items: Historias[], size: number): Historias[][] {
+    if (size < 1) {
+      return [items];
     }
+    const rows: Historias[][] = [];
+    for (let i = 0; i < items.length; i += size) {
+      rows.push(items.slice(i, i + size));
+    }
+    return rows;
   }
-  public accionarBoton(puntero:number,mes:string,anio:string):void
-  {
-    if (typeof window !== 'undefined') 
-    {  
-    //Lógica para accionar el botón
-    this.cerrarHistorial(); //cierra primero el menú de meses - años ante de proseguir
-    this.semaforo=true;  //Se activa el semáforo para mostrar el libro de la historia con mes y año
-      const fondos= this.fondoHistoria.nativeElement as HTMLElement;
-    this.renderer.setStyle(fondos, 'height', '600px'); //Se estira la longitud hasta cubrir todas las fechas encontradas  
-    //Se gaurda la eleccion generada por el botón
-      this.objetoHistorias.setPunteroSeleccionador(puntero);
-      this.objetoHistorias.historias[puntero].setMesTexto(mes);
-      this.objetoHistorias.historias[puntero].setAnio(anio);
+
+  filasHistoriaCompleta(): Historias[][] {
+    return this.chunkHistorias(this.objetoHistorias.historias, this.columnasActivas);
+  }
+
+  filasHistoriaAnios(): Historias[][] {
+    return this.chunkHistorias(this.objetoHistoriasFiltrado.historias, this.columnasActivas);
+  }
+
+  /** Celdas con id estable para `track` (el compilador no permite usar `ri` en el @for interno). */
+  tablaHistoriaCompleta(): { tid: string; item: Historias }[][] {
+    return this.filasHistoriaCompleta().map((fila, ri) =>
+      fila.map((h, ci) => ({
+        tid: `c-${ri}-${ci}-${h.getAnio()}-${h.getMes()}`,
+        item: h,
+      })),
+    );
+  }
+
+  tablaHistoriaAnios(): { tid: string; item: Historias }[][] {
+    return this.filasHistoriaAnios().map((fila, ri) =>
+      fila.map((h, ci) => ({
+        tid: `a-${ri}-${ci}-${h.getAnio()}`,
+        item: h,
+      })),
+    );
+  }
+
+  indiceGlobal(fila: number, col: number): number {
+    return fila * this.columnasActivas + col;
+  }
+
+  indiceStagger(fila: number, col: number): number {
+    return this.indiceGlobal(fila, col);
+  }
+
+  indiceStaggerAnios(fila: number, col: number): number {
+    return this.indiceGlobal(fila, col);
+  }
+
+  public cargarHistorial(opcion: number): void {
+    if (typeof window === 'undefined') {
+      return;
     }
+    this.animarPanel = false;
+    this.eleccion = opcion;
+    this.deteccionCambio.detectChanges();
+
+    requestAnimationFrame(() => {
+      this.animarPanel = true;
+      this.deteccionCambio.detectChanges();
+    });
+
+    const fondos = this.fondoHistoria.nativeElement;
+    this.actualizarAlturaFondo(fondos);
+  }
+
+  private actualizarAlturaFondo(fondos: HTMLElement): void {
+    if (this.semaforo) {
+      this.renderer.setStyle(fondos, 'height', '600px');
+      return;
+    }
+    if (this.eleccion === 0) {
+      this.renderer.setStyle(fondos, 'height', '300px');
+      return;
+    }
+    const filas =
+      this.eleccion === 1
+        ? this.filasHistoriaCompleta().length + 1
+        : this.filasHistoriaAnios().length + 1;
+    const altura = Math.max(320, 48 + filas * 92);
+    this.renderer.setStyle(fondos, 'height', `${altura}px`);
+  }
+
+  public cerrarHistorial(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    this.animarPanel = false;
+    this.semaforo = false;
+    this.eleccion = 0;
+    const fondos = this.fondoHistoria.nativeElement;
+    this.renderer.setStyle(fondos, 'height', '300px');
+    this.deteccionCambio.detectChanges();
+  }
+
+  public accionarBoton(puntero: number, mes: string, anio: string): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    this.semaforo = true;
+    this.animarPanel = false;
+    const fondos = this.fondoHistoria.nativeElement;
+    this.renderer.setStyle(fondos, 'height', '600px');
+    this.objetoHistorias.setPunteroSeleccionador(puntero);
+    this.objetoHistorias.historias[puntero].setMesTexto(mes);
+    this.objetoHistorias.historias[puntero].setAnio(anio);
+    this.deteccionCambio.detectChanges();
+  }
+
+  public accionarBotonPorAnio(anio: string): void {
+    const idx = this.objetoHistorias.historias.findIndex((h) => h.getAnio() === anio);
+    if (idx < 0) {
+      return;
+    }
+    const mes = this.objetoHistorias.historias[idx].getMes();
+    this.accionarBoton(idx, mes, anio);
   }
 }

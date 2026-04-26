@@ -1,6 +1,8 @@
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing-module';
+import { NgOptimizedImage } from '@angular/common';
 import { App } from './app';
 import { FormsModule } from '@angular/forms';
 import { Cabecera } from './cabecera/cabecera';
@@ -49,10 +51,12 @@ const appRoutes: Routes=[
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes) 
+    NgOptimizedImage,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideHttpClient(withFetch()),
     VariablesCompartidas,
     provideClientHydration(withEventReplay())
   ],

@@ -1,10 +1,71 @@
 <h2 class="tituloNoticias">Nuestro creciente Equipo</h2>
 <h2 class="tituloNoticias">en</h2>
 <h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
-<div id="zonaNosotros">
-    <div class="seccionNosotros">
-        <h3>Misión</h3>
-        <img src={{this.equipo.quienesSomos[0].getImagen()}} alt="Imagen de Ken Vera Chan" class="iconoNosotros">
-        <p>Nuestra misión es fomentar la escritura y la creatividad sin barreras, proporcionando una plataforma inclusiva para escritores de todas las edades y orígenes.</p>
+
+<div id="zonaNosotros" role="list">
+    @for(personal of equipo.quienesSomos; track $index){
+    <div class="seccionNosotros" 
+         style="--i: {{$index}}" 
+         (click)="mostrarInformacion($index)"
+         role="listitem"
+         tabindex="0"
+         (keydown.enter)="mostrarInformacion($index)"
+         (keydown.space)="mostrarInformacion($index)">
+        
+        <img ngSrc={{personal.getImagenLibro()}} 
+             width="300" 
+             height="70" 
+             style="height:auto;" 
+             priority 
+             alt="Portada del libro de {{personal.getNombre()}} {{personal.getApellidos()}}" 
+             class="areaImagenLibro">
+        
+        <h3 class="tituloLibro">{{personal.getNombre()}} {{personal.getApellidos()}}</h3>
+        
+        <div [class.informacionPersonal]="cerrado[$index]" 
+             [class.informacionPersonalCarga]="!cerrado[$index]"
+             [attr.aria-expanded]="!cerrado[$index]"
+             role="region"
+             [attr.aria-label]="'Información biográfica de ' + personal.getNombre() + ' ' + personal.getApellidos()">
+            
+            <table class="tablaInformacion" role="presentation">
+                <tbody>
+                    <tr>
+                        <td class="celda"><strong>Nombre:</strong></td>
+                        <td>{{personal.getNombre()}}</td>
+                    </tr>
+                    <tr>
+                        <td class="celda"><strong>Apellidos:</strong></td>
+                        <td>{{personal.getApellidos()}}</td>
+                    </tr>
+                    <tr>
+                        <td class="celda"><strong>Profesión:</strong></td>
+                        <td>{{personal.getProfesion()}}</td>
+                    </tr>
+                    <tr>
+                        <td class="celda"><strong>Nacionalidad:</strong></td>
+                        <td>{{personal.getNacionalidad()}}</td>
+                    </tr>
+                    <tr>
+                        <td class="celda"><strong>Biografía:</strong></td>
+                        <td>{{personal.getBiografia()}}</td>
+                    </tr>
+                    <tr>
+                        <td class="celda"><strong>Foto:</strong></td>
+                        <td>
+                          <img src={{personal.getImagen()}} 
+                               alt="Foto de perfil de {{personal.getNombre()}} {{personal.getApellidos()}}" 
+                               class="areaImagenPersonal">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+    }
 </div>
+
+<img src={{equipo.quienesSomos[0].getImagenEquipo()}} 
+     alt="Equipo completo de Escritores Sin Fronteras" 
+     class="areaImagen"
+     loading="lazy">

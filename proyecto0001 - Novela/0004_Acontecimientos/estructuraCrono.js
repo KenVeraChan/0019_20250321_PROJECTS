@@ -1,270 +1,165 @@
-$(document).ready(()=> {
-    $.ajax({
-        url: "transformadorJSON.php",   // Recoge el JSON generado por el PHP
-        type: "GET",    // Método de solicitud
-        dataType: "json",  // Tipo de datos esperado
-        success: function(data)  // Función a ejecutar si la solicitud es exitosa
-        {
-            const tablaDatos= creaTablaDinamica(data);
-            $("#container").append(tablaDatos);
-        },
-        error: function(xhr, status, error) {
-            console.log("ERROR → Estado:", xhr.status);
-            console.log("ERROR → Respuesta:", xhr.responseText);
-            console.log("ERROR → Detalle:", error);
-        },
-        complete: function() {
-            // Aquí puedes realizar acciones después de que la solicitud se complete
-            console.log("Solicitud completada");
-        }
-    });
+const lineaTiempo = document.getElementById("lineaTiempo");
+const visor = document.querySelector(".visor");
+const tamHorizPantalla= window.addEventListener("resize", function() {
+    return window.innerWidth.toString();  //devuelve el tamaño de la pantalla para fijar condiciones
 });
 
-function creaTablaDinamica(data)
-{
-    //CREANDO LOS ELEMENTOS DE LA TABLA
-    const tablaDatos= document.createElement("table");
-    tablaDatos.setAttribute("id", "tablaDatos");
-        Object.assign(tablaDatos.style, {
-            width: "100%",
-            borderCollapse: "collapse",
-            margin: "20px auto",
-            marginBottom: "0px",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-            borderRadius: "8px",
-            overflow: "hidden"
-        });
-    
-    const filaCabecera= document.createElement("tr");
-    filaCabecera.setAttribute("id", "filaCabecera");
-        Object.assign(filaCabecera.style, {
-            width: "100%",
-            height: "10px",
-            textAlign: "center",
-        });
+let desplazamientoY = 0;
+const pasoRueda = 85;
 
-    const celdaCabecera= document.createElement("td");
-    celdaCabecera.setAttribute("id", "celdaCabecera");
-    celdaCabecera.setAttribute("colspan","4");
-    celdaCabecera.textContent="CRONOLOGÍA DE LA NOVELA COMETIDO 4321";
-        Object.assign(celdaCabecera.style, {
-            width: "100%",
-            height: "10px",
-            textAlign: "center",
-            backgroundColor: "rgba(247, 148, 0, 0.49)",
-            font: "sans-serif",
-            fontSize: "1.25em",
-            padding: "10px"
-        });
-
-    const filaEncabezado= document.createElement("tr");
-    filaEncabezado.setAttribute("id", "filaEncabezado");
-        Object.assign(filaEncabezado.style, {
-            width: "100%",
-            textAlign: "center",
-        });
-
-    //CELDA DEL ID
-    const celdaEncabezadoId= document.createElement("td");
-    celdaEncabezadoId.setAttribute("class", "encabezado");
-    celdaEncabezadoId.textContent = "ID";
-        Object.assign(celdaEncabezadoId.style, {
-            width: "5%",
-            textAlign: "center",
-            border: "1px solid rgb(255, 255, 255)",
-            backgroundColor: "rgba(233, 124, 0, 0.42)",
-            font: "sans-serif",
-            fontSize: "1em",
-        });
-
-    //CELDA DE LA FECHA
-    const celdaEncabezadoFecha= document.createElement("td");
-    celdaEncabezadoFecha.setAttribute("class", "encabezado");
-    celdaEncabezadoFecha.textContent = "FECHA";
-        Object.assign(celdaEncabezadoFecha.style, {
-            width: "10%",
-            textAlign: "center",
-            border: "1px solid rgb(255, 255, 255)",
-            backgroundColor: "rgba(233, 124, 0, 0.42)",
-            font: "sans-serif",
-            fontSize: "1em",
-        });
-
-    //CELDA DEL TITULO
-    const celdaEncabezadoTitulo= document.createElement("td");
-    celdaEncabezadoTitulo.setAttribute("class", "encabezado");
-    celdaEncabezadoTitulo.textContent = "TÍTULO";
-        Object.assign(celdaEncabezadoTitulo.style, {
-            width: "20%",
-            textAlign: "center",
-            border: "1px solid rgb(255, 255, 255)",
-            backgroundColor: "rgba(233, 124, 0, 0.42)",
-            font: "sans-serif",
-            fontSize: "1em",
-        });
-    //CELDA DEL CONCEPTO
-    const celdaEncabezadoConcepto= document.createElement("td");
-    celdaEncabezadoConcepto.setAttribute("class", "encabezado");
-    celdaEncabezadoConcepto.textContent = "ACONTECIMIENTO";
-        Object.assign(celdaEncabezadoConcepto.style, {
-            width: "100%",
-            textAlign: "center",
-            border: "1px solid rgb(255, 255, 255)",
-            backgroundColor: "rgba(233, 124, 0, 0.42)",
-            font: "sans-serif",
-            fontSize: "1em",
-        });
-    
-        const imagenFondo= document.createElement("img");
-        imagenFondo.setAttribute("id", "imagenFondo");
-        imagenFondo.setAttribute("src", "/0004_Acontecimientos/images/manuscritos.png","alt", "libros antiguos de fondo");
-        imagenFondo.style.width = "100%";
-        imagenFondo.style.height = "auto";
-        imagenFondo.style.position = "fixed";
-        imagenFondo.style.top = "0";
-        imagenFondo.style.left = "0";
-        imagenFondo.style.zIndex = "-1";
-        imagenFondo.style.opacity = "0.75";  
-    
-    //AGREGANDO LA FILA DE ENCABEZADO A LA TABLA
-    //FILA 1
-    tablaDatos.appendChild(filaCabecera);
-    filaCabecera.appendChild(celdaCabecera);
-    //FILA 2
-    tablaDatos.appendChild(filaEncabezado);
-    filaEncabezado.appendChild(celdaEncabezadoId);
-    filaEncabezado.appendChild(celdaEncabezadoFecha);
-    filaEncabezado.appendChild(celdaEncabezadoTitulo);
-    filaEncabezado.appendChild(celdaEncabezadoConcepto);
-
-    //AGREGANDO FILAS Y CELDAS SEGUN ACONTECIMIENTOS
-    for (let i = 0; i < 3; i++) 
-    {
-        //FILA DE UN EVENTO ACONTECIDO
-        const filaEvento = document.createElement("tr");
-        filaEvento.setAttribute("class", "datos");
-        Object.assign(filaEvento.style, {
-                width: "100%",
-                borderCollapse: "collapse",
-                margin: "20px auto",
-                marginBottom: "0px",
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-                borderRadius: "8px",
-                overflow: "hidden"
-            });
-            //NUMERO DE EVENTO ACONTECIDO
-            const celdaDatosId=document.createElement("td");
-            celdaDatosId.setAttribute("class", "datoId");
-                Object.assign(celdaDatosId.style, {
-                    width: "10%",
-                    height: "20px",
-                    margin: "1px",
-                    textAlign: "center",
-                    border: "1px solid rgb(197, 93, 7)",
-                    backgroundColor: "rgba(252, 252, 251, 0.2)",
-                    font: "sans-serif",
-                    fontSize: "1em",
-                });
-            celdaDatosId.textContent = data[i].ID;
-            //FECHA DEL EVENTO ACONTECIDO
-            const celdaDatosFecha=document.createElement("td");
-            celdaDatosFecha.setAttribute("class", "datoFecha");
-                Object.assign(celdaDatosFecha.style, {
-                    width: "20%",
-                    height: "20px",
-                    margin: "1px",
-                    textAlign: "center",
-                    border: "1px solid rgb(197, 93, 7)",
-                    backgroundColor: "rgba(252, 252, 251, 0.2)",
-                    font: "sans-serif",
-                    fontSize: "1em",
-                });
-            celdaDatosFecha.textContent = data[i].fecha;
-            //TITULO DEL EVENTO ACONTECIDO
-            const celdaDatosTitulo=document.createElement("td");
-            celdaDatosTitulo.setAttribute("class", "datoTitulo");
-                Object.assign(celdaDatosTitulo.style, {
-                    width: "20%",
-                    height: "20px",
-                    margin: "1px",
-                    textAlign: "center",
-                    border: "1px solid rgb(197, 93, 7)",
-                    backgroundColor: "rgba(252, 252, 251, 0.2)",
-                    font: "sans-serif",
-                    fontSize: "1em",
-                });
-            celdaDatosTitulo.textContent = data[i].titulo;
-            //DESCRIPCIÓN DEL EVENTO ACONTECIDO
-            const celdaDatosAcontecimiento=document.createElement("td");
-            celdaDatosAcontecimiento.setAttribute("class", "datoAcontecimiento");
-                Object.assign(celdaDatosAcontecimiento.style, {
-                    width: "100%",
-                    height: "30px",
-                    margin: "1px",
-                    textAlign: "center",
-                    border: "1px solid rgb(197, 93, 7)",
-                    backgroundColor: "rgba(252, 252, 251, 0.2)",
-                    font: "sans-serif",
-                    fontSize: "1em",
-                });
-            celdaDatosAcontecimiento.textContent = data[i].acontecimiento;
-            //AREA REDIMENSIONADA DENTRO DE LA DESCRIPCION DEL EVENTO PARA EXPONER LOS DATOS
-            const areaVariable= document.createElement("textarea");
-            areaVariable.setAttribute("class", "areaVariable");
-                Object.assign(areaVariable.style, {
-                    width: "95%",
-                    height: "20px",
-                    margin: "0px",
-                    textAlign: "center",
-                    backgroundColor: "rgba(173, 173, 0, 0.35)",
-                    font: "sans-serif",
-                    fontSize: "1em",
-                    resize: "none",
-                    overflow: "hidden",
-                    zIndex: "1",
-                });
-        //CELDAS DE DATOS
-        tablaDatos.appendChild(filaEvento);
-        filaEvento.appendChild(celdaDatosId);
-        filaEvento.appendChild(celdaDatosFecha);
-        filaEvento.appendChild(celdaDatosTitulo);
-        filaEvento.appendChild(celdaDatosAcontecimiento);
-        celdaDatosAcontecimiento.appendChild(areaVariable);
+function escapeHtml(texto) {
+    if (texto === null || texto === undefined) {
+        return "";
     }
-    //AREA DE ASIGNACION DE EVENTOS: 
-    // 1) PASANDO EL RATÓN POR ENCIMA
-    $("#container").on("mouseenter",".areaVariable", function(event) {
-        $(this).css({
-            "backgroundColor": "rgba(14, 173, 0, 0.78)",
-            "cursor": "pointer"
-        });
-        event.preventDefault();
-    });
-    $("#container").on("mouseleave",".areaVariable", function(event) {
-        $(this).css({
-            "zIndex": "1",
-            "transitionduration": "1.0s",
-            "backgroundColor": "rgba(173, 173, 0, 0.35)",
-            "height": "20px",
-        });
-        event.preventDefault();
-    });
-    // 2) AL HACER CLIC POR ENCIMA DEL AREA VARIABLE
-    $("#container").on("click",".areaVariable",function(event){
-        $(this).css({
-            "zIndex": "2",
-            "transitionduration": "1.0s",
-            "height": "200px"
-        });
-        event.preventDefault();
-    });
 
-
-    //ASIGNANDO DATOS A LAS CELDAS
-    //IMAGEN DE FONDO
-    $("#container").append(imagenFondo);
-
-return tablaDatos;
+    return String(texto)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
 }
+
+function limiteInferior() {
+    const altoContenido = lineaTiempo.scrollHeight;
+    const altoVisor = visor.clientHeight;
+    return Math.min(0, altoVisor - altoContenido - 30);
+}
+
+function aplicarDesplazamiento() {
+    const minimo = limiteInferior();
+
+    if (desplazamientoY > 0) {
+        desplazamientoY = 0;
+    }
+    if (desplazamientoY < minimo) {
+        desplazamientoY = minimo;
+    }
+
+    lineaTiempo.style.transform = `translateY(${desplazamientoY}px)`;
+}
+
+function plantillaEvento(evento, indice) 
+{
+    const ladoIzquierdo = indice % 2 === 0;
+    const claseFila = ladoIzquierdo ? "fila lado-izquierdo" : "fila lado-derecho";
+    const bloque = escapeHtml(evento.bloque || "Bloque sin definir");
+    const titulo = escapeHtml(evento.titulo || "Título sin definir");
+    const fechaLarga = escapeHtml(evento.fecha || "Fecha sin definir");
+    const horas = escapeHtml(evento.horas || "");
+    const minutos = escapeHtml(evento.minutos || "");
+    const acontecimientos = escapeHtml(evento.acontecimiento || "");
+    const personajes = escapeHtml(evento.personajes || "");
+    const imagen = evento.imagen ? `<img class="imagen-evento" src="${escapeHtml(evento.imagen)}" alt="imagen del acontecimiento">` : "";
+
+    return `
+    <article class="${claseFila}" onclick="mostrarTarjeta(${indice})" onmouseover="efectoFecha(${indice})" onmouseout="quitarEfectoFecha(${indice})">
+        <div class="nexo">
+            <span class="fecha-larga">${indice+1}) ${diaSemana(fechaLarga)}, ${diaMes(fechaLarga)} de ${nombreMes(fechaLarga)} de ${anio(fechaLarga)} a las ${horas ? ` ${horas}` : "00:"}${minutos ? `:${minutos} h` : ":00 h"}</span>   
+        </div>
+        <div class="tarjeta">
+            <h3>${bloque}</h3>
+            <h4>${titulo}</h4>
+            <p>${acontecimientos}</p>
+            <p>${personajes}</p>
+            ${imagen}
+        </div>
+    </article>
+    `;
+}
+
+window.mostrarTarjeta = function(elementoFecha) 
+{
+    //Gestion del elemento clase TARJETA
+    const tarjeta = document.querySelectorAll(".tarjeta")[elementoFecha];
+    if (tarjeta.style.display === "block") {
+        tarjeta.style.display = "none";
+    } else {
+        tarjeta.style.display = "block";
+        tarjeta.style.marginTop = "-40px";
+    }  
+
+    //Gestion del elemento clase FILA
+    const fila = document.querySelectorAll(".fila")[elementoFecha]; 
+    if (fila.style.gridTemplateRows === "100px auto auto") {
+        fila.style.gridTemplateRows = "50px auto auto";
+    } else {
+        fila.style.gridTemplateRows = "100px auto auto";
+    }   
+    const ladoIzquierdo = elementoFecha % 2 === 0;
+    if (ladoIzquierdo) {
+        fila.style.gridTemplateRows = "50px auto auto";    
+    } else {
+        fila.style.gridTemplateRows = "50px auto auto";
+    }
+    const ladoDerecho = elementoFecha % 2 !== 0;
+    if (ladoDerecho) {
+        fila.style.gridTemplateRows = "50px auto auto";    
+    } else {
+        fila.style.gridTemplateRows = "50px auto auto";
+    }  
+};
+
+window.efectoFecha = function(elementoFecha)
+{    const fecha = document.querySelectorAll(".fecha-larga")[elementoFecha];
+    fecha.style.background = "#0b1f3a";
+    fecha.style.color = "#ffffff";
+};
+
+window.quitarEfectoFecha = function(elementoFecha)
+{    const fecha = document.querySelectorAll(".fecha-larga")[elementoFecha];
+    fecha.style.background = "rgba(255, 255, 255, 0.96)";
+    fecha.style.color = "#1f2c3d";
+};
+
+//conversor de fecha a dia de la semana, para mostrarlo en la tarjeta del evento
+function diaSemana(fechaStr) {
+  const fecha = new Date(fechaStr);
+  return fecha.toLocaleDateString("es-ES", { weekday: "long" });
+}
+//Conversor para extraer el nombre de un mes a partir de su número, para mostrarlo en la tarjeta del evento
+function nombreMes(fechaStr) {
+  const fecha = new Date(fechaStr); 
+    return fecha.toLocaleDateString("es-ES", { month: "long" });
+}
+//Conversor para extraer el día de una fecha de formato YYYY-MM-DD, para mostrarlo en la tarjeta del evento
+function diaMes(fechaStr) {
+  const fecha = new Date(fechaStr); 
+    return fecha.getDate();
+}
+//Conversor para extraer el año de una fecha de formato YYYY-MM-DD, para mostrarlo en la tarjeta del evento
+function anio(fechaStr) {
+  const fecha = new Date(fechaStr); 
+    return fecha.getFullYear();
+}
+
+function pintarEventos(data) {
+    const eventos = Array.isArray(data) ? data : [];
+    const html = eventos.map((evento, indice) => plantillaEvento(evento, indice)).join("");
+    lineaTiempo.innerHTML = html;
+    aplicarDesplazamiento();
+}
+
+window.addEventListener("wheel", function (evento) {
+    evento.preventDefault();
+
+    if (evento.deltaY > 0) {
+        desplazamientoY -= pasoRueda;
+    } else {
+        desplazamientoY += pasoRueda;
+    }
+
+    aplicarDesplazamiento();
+}, { passive: false });
+
+window.addEventListener("resize", aplicarDesplazamiento);
+
+fetch("transformadorJSON.php")
+    .then((respuesta) => respuesta.json())
+    .then((data) => {
+        pintarEventos(data);
+    })
+    .catch((error) => {
+        alert("Error al cargar los datos. Se mostrarán eventos de ejemplo. El error es: "+error.message);
+        pintarEventos(completarConEjemplos([]));
+    });
