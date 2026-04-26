@@ -156,7 +156,7 @@ class Apartados{
     public valorSubapartado:number=0;  //Para identificar que subapartado del blog se accionó, se inicializa con 0 porque es el valor que corresponde a "todos" en el caso del blog, y a "cursos" en el caso de servicios, que son los valores predeterminados.
     public subApartadoBlog:string="";  //Para identificar que subapartado del blog se accionó
     public subPartadosServicios:string="";  //Para identificar que subapartado de servicios se accionó, se inicializa con 5 espacios vacíos porque hay 5 subapartados, luego se irán rellenando según la elección del usuario.
-    public matrizApartados: string[]= ["INICIO","NUESTRA HISTORIA","QUIENES SOMOS","BLOG LITERARIO","NUESTROS SERVICIOS","CONTACTO"];
+    public matrizApartados: string[]= ["INICIO","NUESTRA HISTORIA","QUIENES SOMOS","BLOG LITERARIO","NUESTROS SERVICIOS","PUBLICACIONES","CONTACTO"];
     public subApartadosBlog: string[]= ["PROSA","VERSO","REFLEXIONES"];
     public enlacesBlogLiterario: string[]= ["PUBLICACIONES EN PROSA","PUBLICACIONES EN VERSO","REFLEXIONES DEL DÍA"];
     public enlacesServicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS POR LA MARCA","CONGRESOS INTERNACIONALES PROGRAMADOS"];

@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
 
-type BlogPostType = 'verso' | 'prosa' | 'reflexion';
+type PublicacionesPostType = 'verso' | 'prosa' | 'reflexion';
 
-type BlogPost = {
+type PublicacionesPost = {
   id: string;
   title: string;
-  type: BlogPostType;
+  type: PublicacionesPostType;
   content: string;
   authorEmail: string;
   createdAtIso: string;
 };
 
 @Component({
-  selector: 'app-blogs',
+  selector: 'app-publicaciones',
   standalone: false,
-  templateUrl: './blogs.html',
-  styleUrl: './blogs.css',
+  templateUrl: './publicaciones.html',
+  styleUrl: './publicaciones.css',
 })
-export class Blogs implements OnInit {
+export class Publicaciones implements OnInit {
   public matrizApartados= new VariablesCompartidas();
   private readonly storageKeyPosts = 'esf_blog_posts_v1';
   private readonly storageKeyUserEmail = 'esf_blog_user_email_v1';
@@ -29,16 +29,16 @@ export class Blogs implements OnInit {
   public view: 'list' | 'detail' | 'create' = 'list';
   public selectedPostId: string | null = null;
 
-  public posts: BlogPost[] = [];
-  public filteredPosts: BlogPost[] = [];
+  public posts: PublicacionesPost[] = [];
+  public filteredPosts: PublicacionesPost[] = [];
 
-  public filterType: 'todos' | BlogPostType = 'todos';
+  public filterType: 'todos' | PublicacionesPostType = 'todos';
   public search = '';
   public filtradoVarCompartida=this.matrizApartados.menuPrincipal.getSubApartadoBlog();  
   //Variable para almacenar la selección del tipo de post desde la cabecera y variables compartidas
 
   public createTitle = '';
-  public createType: BlogPostType = 'reflexion';
+  public createType: PublicacionesPostType = 'reflexion';
   public createContent = '';
 
   public errorMsg = '';
@@ -110,7 +110,7 @@ export class Blogs implements OnInit {
   }
 
   //METODO PARA OBTENER EL POST SELECCIONADO EN LA VISTA DE DETALLE, DEVOLVIENDO NULL SI NO HAY NINGUNO SELECCIONADO O SI NO SE ENCUENTRA
-  public selectedPost(): BlogPost | null {
+  public selectedPost(): PublicacionesPost | null {
     if (!this.selectedPostId) return null;
     return this.posts.find(p => p.id === this.selectedPostId) ?? null;
   }
@@ -158,7 +158,7 @@ export class Blogs implements OnInit {
     }
 
     const nowIso = new Date().toISOString();
-    const post: BlogPost = {
+    const post: PublicacionesPost = {
       id: this.makeId(),
       title,
       type: this.createType,
@@ -175,7 +175,7 @@ export class Blogs implements OnInit {
   }
 
   //METODO PARA EL SELECTOR DE PROSA, VERSO O REFLEXIÓN
-  public formatTypeLabel(t: BlogPostType): string {
+  public formatTypeLabel(t: PublicacionesPostType): string {
     if (t === 'verso') return 'Verso';
     if (t === 'prosa') return 'Prosa';
     return 'Reflexión';
@@ -195,7 +195,7 @@ export class Blogs implements OnInit {
   }
 
   //METODO PARA LIMPIAR TEXTO CON ESPACIOS INLCUIDOS Y REDUCIR LA VISTA PREVIA A "... SI ES MUY LARGO
-  public previewText(post: BlogPost): string {
+  public previewText(post: PublicacionesPost): string {
     const raw = post.content.replace(/\s+/g, ' ').trim();
     return raw.length > 170 ? raw.slice(0, 170) + '…' : raw;
   }
@@ -208,11 +208,11 @@ export class Blogs implements OnInit {
   }
 
   //METODO PARA CARGAR LOS POSTS DESDE EL ALMACENAMIENTO LOCAL
-  private loadPosts(): BlogPost[] {
+  private loadPosts(): PublicacionesPost[] {
     const raw = this.safeGet(this.storageKeyPosts);
     if (!raw) return [];
     try {
-      const parsed = JSON.parse(raw) as BlogPost[];
+      const parsed = JSON.parse(raw) as PublicacionesPost[];
       if (!Array.isArray(parsed)) return [];
       return parsed.filter(
         p =>
@@ -230,12 +230,12 @@ export class Blogs implements OnInit {
   }
 
   //METODO PARA GUARDAR LOS POSTS EN EL ALMACENAMIENTO LOCAL CON TIPO DE DATO DEFINIDO Y CON MANEJO DE ERRORES
-  private savePosts(posts: BlogPost[]): void {
+  private savePosts(posts: PublicacionesPost[]): void {
     this.safeSet(this.storageKeyPosts, JSON.stringify(posts));
   }
 
   //METODO PARA SEMBRAR LOS POSTS INICIALES CUANDO NO HAY NINGUNO GUARDADO, CON CONTENIDO DE EJEMPLO Y FECHAS RELATIVAS
-  private seedPosts(): BlogPost[] {
+  private seedPosts(): PublicacionesPost[] {
     const now = Date.now();
     return [
       {

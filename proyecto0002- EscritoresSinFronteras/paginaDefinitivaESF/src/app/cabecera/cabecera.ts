@@ -103,8 +103,8 @@ export class Cabecera implements OnInit {
     //Sector de botones y qué componente fue activado
     public accesoHabilitado(opcion:number):void
     {
-      // Mapear la opción (1..6) a índices (0..5)
-      const indexMap: Record<number, number> = {1:0, 2:1, 3:2, 4:3, 5:4, 6:5};
+      // Mapear la opción (1..7) a índices (0..6)
+      const indexMap: Record<number, number> = {1:0, 2:1, 3:2, 4:3, 5:4, 6:5, 7:6};
       const idx = indexMap[opcion] ?? 0;  //Se asegura que idx siempre tenga un valor numérico
       this.activeIndex = idx;  //Se actualiza el índice activo
       this.puntero = idx;  //Se actualiza el puntero

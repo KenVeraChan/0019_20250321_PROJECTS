@@ -12,6 +12,7 @@ import { Inicio } from './cuerpo/inicio/inicio';
 import { Historia } from './cuerpo/historia/historia';
 import { Nosotros } from './cuerpo/nosotros/nosotros';
 import { Blogs } from './cuerpo/blogs/blogs';
+import { Publicaciones } from './cuerpo/publicaciones/publicaciones';
 import { Servicios } from './cuerpo/servicios/servicios';
 import { Contacto } from './cuerpo/contacto/contacto';
 import {RouterModule, Routes} from '@angular/router';
@@ -27,6 +28,7 @@ const appRoutes: Routes=[
 {path:'quienesSomos', component: Nosotros},
 {path:'blogLiterario', component: Blogs},
 {path:'nuestrosServicios', component: Servicios},
+{path:'publicaciones', component: Publicaciones},
 {path:'contacto', component: Contacto},
 { path: '**', component: PaginaError }
 ];
@@ -41,6 +43,7 @@ const appRoutes: Routes=[
     Historia,
     Nosotros,
     Blogs,
+    Publicaciones,
     Servicios,
     Contacto,
     Opciones,

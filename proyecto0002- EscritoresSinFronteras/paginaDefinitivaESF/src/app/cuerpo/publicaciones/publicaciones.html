@@ -1,0 +1,84 @@
+<section class="publicacionesFondo">
+  <div class="publicacionesWrap">
+    <header class="publicacionesHeader">
+      <div class="titleBlock">
+        <h2 class="publicacionesTitle">Publicaciones literarias y audiolibros en <strong>Escritores Sin Fronteras</strong></h2>
+        <p class="publicacionesSubtitle">
+          En esta sección ofrecemos una selección de publicaciones literarias creadas por los miembros de Escritores Sin Fronteras, así como audiolibros para disfrutar de la literatura en formato sonoro. Explora nuestras obras y sumérgete en el mundo de la creatividad sin límites.
+        </p>
+      </div>
+    </header>
+
+    @if (errorMsg) {
+      <div class="alert">{{ errorMsg }}</div>
+    }
+
+    @if (view==='list') {
+      <div class="filters">
+        <div class="filterGroup">
+          <label class="label">Tipo</label>
+          <select class="select" [(ngModel)]="filterType" name="filterType" (change)="applyFilters()" aria-label="Filtrar por tipo de publicación">
+            <option value="todos">Todos</option>
+            <option value="verso">Verso</option>
+            <option value="prosa">Prosa</option>
+            <option value="reflexion">Reflexión</option>
+          </select>
+        </div>
+        <div class="filterGroup grow">
+          <label class="label">Buscar</label>
+          <input
+            class="input"
+            type="search"
+            placeholder="Título, autor o contenido audiovisual…"
+            [(ngModel)]="search"
+            name="search"
+            (input)="applyFilters()"
+          />
+        </div>
+      </div>
+
+      <div class="postsGrid">
+        @for (p of filteredPosts; track p.id) {
+          <article class="postCard" (click)="openDetail(p.id)" tabindex="0">
+            <div class="cardTop">
+              <span class="badge">{{ formatTypeLabel(p.type) }}</span>
+              <span class="date">{{ formatDate(p.createdAtIso) }}</span>
+            </div>
+            <h3 class="cardTitle">{{ p.title }}</h3>
+            <p class="cardPreview">{{ previewText(p) }}</p>
+            <div class="cardBottom">
+              <span class="author">Por {{ p.authorEmail }}</span>
+              <span class="readMore">Leer →</span>
+            </div>
+          </article>
+        } @empty {
+          <div class="empty">
+            No hay entradas que coincidan con tu búsqueda.
+          </div>
+        }
+      </div>
+    }
+
+    @if (view==='detail') {
+      @if (selectedPost(); as post) {
+        <article class="detailCard">
+          <div class="detailTop">
+            <button type="button" class="btn ghost" (click)="openList()">← Volver</button>
+            <div class="meta">
+              <span class="badge">{{ formatTypeLabel(post.type) }}</span>
+              <span class="date">{{ formatDate(post.createdAtIso) }}</span>
+              <span class="author">Por {{ post.authorEmail }}</span>
+            </div>
+          </div>
+          <h2 class="detailTitle">{{ post.title }}</h2>
+          <pre class="detailContent">{{ post.content }}</pre>
+        </article>
+      } @else {
+        <div class="empty">
+          Esta entrada ya no existe.
+          <button type="button" class="btn primary" (click)="openList()">Volver al listado</button>
+        </div>
+      }
+    }
+  </div>
+</section>
