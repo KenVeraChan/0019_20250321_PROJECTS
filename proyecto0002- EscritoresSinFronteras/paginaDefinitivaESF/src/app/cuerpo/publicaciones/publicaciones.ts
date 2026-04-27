@@ -1,16 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
-
-type PublicacionesPostType = 'verso' | 'prosa' | 'reflexion';
-
-type PublicacionesPost = {
-  id: string;
-  title: string;
-  type: PublicacionesPostType;
-  content: string;
-  authorEmail: string;
-  createdAtIso: string;
-};
+import { PublicacionesPost, PublicacionesPostType } from '../../servicios/variablesCompartidas';
 
 @Component({
   selector: 'app-publicaciones',
@@ -20,8 +10,8 @@ type PublicacionesPost = {
 })
 export class Publicaciones implements OnInit {
   public matrizApartados= new VariablesCompartidas();
+  public datosJson= new VariablesCompartidas().publicacionesPosteadas.envioPosteados();  //Variable para acceder a los datos JSON de publicaciones desde las variables compartidas
   private readonly storageKeyPosts = 'esf_blog_posts_v1';  //Clave para almacenar los posts en el almacenamiento local del navegador
-  private readonly storageKeyUserEmail = 'esf_blog_user_email_v1';  //Clave para almacenar el correo del usuario en el almacenamiento local del navegador
 
   public userEmail = '';
   public emailInput = '';
@@ -44,17 +34,13 @@ export class Publicaciones implements OnInit {
   public errorMsg = '';
 
   ngOnInit(): void {
-    this.userEmail = this.safeGet(this.storageKeyUserEmail) ?? '';
-    this.emailInput = this.userEmail;
-
     const existing = this.loadPosts();
     if (existing.length === 0) {
-      this.posts = this.seedPosts();
+      this.posts = this.datosJson;
       this.savePosts(this.posts);
     } else {
       this.posts = existing;
     }
-
     this.applyFilters();
   }
 
@@ -126,19 +112,10 @@ export class Publicaciones implements OnInit {
     return raw.length > 170 ? raw.slice(0, 170) + '…' : raw;
   }
 
-  //METODO PARA LIMPIAR LOS CAMPOS DE CREACIÓN DE POST
-  private resetCreateForm(): void {
-    this.createTitle = '';
-    this.createType = 'reflexion';
-    this.createContent = '';
-  }
-
   //METODO PARA CARGAR LOS POSTS DESDE EL ALMACENAMIENTO LOCAL
   private loadPosts(): PublicacionesPost[] {
-    const raw = this.safeGet(this.storageKeyPosts);
-    if (!raw) return [];
     try {
-      const parsed = JSON.parse(raw) as PublicacionesPost[];
+      const parsed = this.datosJson as PublicacionesPost[];
       if (!Array.isArray(parsed)) return [];
       return parsed.filter(
         p =>
@@ -160,83 +137,10 @@ export class Publicaciones implements OnInit {
     this.safeSet(this.storageKeyPosts, JSON.stringify(posts));
   }
 
-  //METODO PARA SEMBRAR LOS POSTS INICIALES CUANDO NO HAY NINGUNO GUARDADO, CON CONTENIDO DE EJEMPLO Y FECHAS RELATIVAS
-  private seedPosts(): PublicacionesPost[] {
-    const now = Date.now();
-    return [
-      {
-        id: this.makeId(),
-        title: 'Frontera de tinta',
-        type: 'verso',
-        content:
-          'Cruzo la página,\\n' +
-          'no por huir del mundo,\\n' +
-          'sino por nombrarlo.\\n\\n' +
-          'Y en cada palabra\\n' +
-          'una casa posible\\n' +
-          'para lo que duele.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 60 * 28).toISOString(),
-      },
-      {
-        id: this.makeId(),
-        title: 'La prosa como refugio',
-        type: 'prosa',
-        content:
-          'Escribir en prosa es permitir que la respiración encuentre su ritmo. ' +
-          'No se trata de adornar, sino de sostener el sentido con claridad. ' +
-          'Cuando la frase avanza, también avanza la posibilidad de comprender.\\n\\n' +
-          'Publica aquí tus relatos, escenas, cartas o memorias: lo importante es la honestidad del tono.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 60 * 10).toISOString(),
-      },
-      {
-        id: this.makeId(),
-        title: 'Una reflexión para hoy',
-        type: 'reflexion',
-        content:
-          'A veces la frontera no está afuera, sino entre lo que pensamos y lo que nos animamos a decir. ' +
-          'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
-      },
-    ];
-  }
-
-  //METODO PARA GENERAR UN ID ÚNICO PARA CADA POST, COMBINANDO UN PREFIJO, UNA PARTE ALEATORIA Y LA FECHA ACTUAL EN MILISEGUNDOS
-  //LA RAZÓN DE CREAR UN ID ASÍ ES PARA ASEGURAR QUE CADA POST TENGA UN IDENTIFICADOR ÚNICO Y DIFERENTE, INCLUSO SI SE PUBLICAN VARIOS EN EL MISMO MOMENTO
-  private makeId(): string {
-    const palabra= 'p_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
-    return palabra;
-  }
-
-  //METODO PARA VALIDAR QUE EL CORREO INGRESADO TIENE UN FORMATO BÁSICO VÁLIDO, CON UNA EXPRESIÓN REGULAR SENCILLA
-  private isValidEmail(email: string): boolean {
-  return /^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/.test(email);
-  }
-
-  //METODO PARA DEVOLVER EL VALOR DE UNA CLAVE EN EL ALMACENAMIENTO LOCAL, CON MANEJO DE ERRORES PARA EVITAR PROBLEMAS EN NAVEGADORES QUE NO LO SOPORTAN O EN MODO PRIVADO
-  private safeGet(key: string): string | null {
-    try {
-      return localStorage.getItem(key);
-    } catch {
-      return null;
-    }
-  }
-
   //METODO PARA GUARDAR UN VALOR EN EL ALMACENAMIENTO LOCAL, CON MANEJO DE ERRORES PARA EVITAR PROBLEMAS EN NAVEGADORES QUE NO LO SOPORTAN O EN MODO PRIVADO
   private safeSet(key: string, val: string): void {
     try {
       localStorage.setItem(key, val);
-    } catch {
-      // ignore
-    }
-  }
-
-  //METODO PARA ELIMINAR UN VALOR DEL ALMACENAMIENTO LOCAL, CON MANEJO DE ERRORES PARA EVITAR PROBLEMAS EN NAVEGADORES QUE NO LO SOPORTAN O EN MODO PRIVADO
-  private safeRemove(key: string): void {
-    try {
-      localStorage.removeItem(key);
     } catch {
       // ignore
     }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SubscribableOrPromise } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,92 +21,91 @@ export class VariablesCompartidas {
     return this.punteroSeleccionador;
   }
 
-  //VARIABLES COMPARTIDAS ENTRE COMPONENTES
-    public menuPrincipal: Apartados=new Apartados();
-    //AREA NOTICIAS DEL APARTADO "INICIO"
-    public noticia:Noticias[]=[
-        new Noticias(
-        "Titular de la noticia",
-        "Subtítulo de la noticia",
-        "Contenido detallado de la noticia que proporciona información relevante sobre el tema tratado."
-        ),
-        new Noticias(
-              "Segundo titular de la noticia",
-              "Segundo subtítulo de la noticia",
-              "Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado. Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado. Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado. Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado.Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado."
+      //VARIABLES COMPARTIDAS ENTRE COMPONENTES
+      public menuPrincipal: Apartados=new Apartados();
+      //AREA NOTICIAS DEL APARTADO "INICIO"
+      public noticia:Noticias[]=[
+          new Noticias(
+          "Titular de la noticia",
+          "Subtítulo de la noticia",
+          "Contenido detallado de la noticia que proporciona información relevante sobre el tema tratado."
           ),
-        new Noticias(
-              "Tercer titular de la noticia",
-              "Tercer subtítulo de la noticia",
-              "Contenido detallado del tercer noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Cuarto titular de la noticia",
-              "Cuarto subtítulo de la noticia",
-              "Contenido detallado del cuarto noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Quinto titular de la noticia",
-              "Quinto subtítulo de la noticia",
-              "Contenido detallado del quinto noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Sexto titular de la noticia",
-              "Sexto subtítulo de la noticia",
-              "Contenido detallado del sexto noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Séptimo titular de la noticia",
-              "Séptimo subtítulo de la noticia",
-              "Contenido detallado del séptimo noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Octavo titular de la noticia",
-              "Octavo subtítulo de la noticia",
-              "Contenido detallado del octavo noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Noveno titular de la noticia",
-              "Noveno subtítulo de la noticia",
-              "Contenido detallado del noveno noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Décimo titular de la noticia",
-              "Décimo subtítulo de la noticia",
-              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Décimo titular de la noticia",
-              "Décimo subtítulo de la noticia",
-              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Décimo titular de la noticia",
-              "Décimo subtítulo de la noticia",
-              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Décimo titular de la noticia",
-              "Décimo subtítulo de la noticia",
-              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Décimo titular de la noticia",
-              "Décimo subtítulo de la noticia",
-              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Décimo titular de la noticia",
-              "Décimo subtítulo de la noticia",
-              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
-          ),
-        new Noticias(
-              "Décimo titular de la noticia",
-              "Décimo subtítulo de la noticia",
-              "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
-          )
-    ];
-
+          new Noticias(
+                "Segundo titular de la noticia",
+                "Segundo subtítulo de la noticia",
+                "Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado. Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado. Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado. Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado.Contenido detallado del segundo noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Tercer titular de la noticia",
+                "Tercer subtítulo de la noticia",
+                "Contenido detallado del tercer noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Cuarto titular de la noticia",
+                "Cuarto subtítulo de la noticia",
+                "Contenido detallado del cuarto noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Quinto titular de la noticia",
+                "Quinto subtítulo de la noticia",
+                "Contenido detallado del quinto noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Sexto titular de la noticia",
+                "Sexto subtítulo de la noticia",
+                "Contenido detallado del sexto noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Séptimo titular de la noticia",
+                "Séptimo subtítulo de la noticia",
+                "Contenido detallado del séptimo noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Octavo titular de la noticia",
+                "Octavo subtítulo de la noticia",
+                "Contenido detallado del octavo noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Noveno titular de la noticia",
+                "Noveno subtítulo de la noticia",
+                "Contenido detallado del noveno noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Décimo titular de la noticia",
+                "Décimo subtítulo de la noticia",
+                "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Décimo titular de la noticia",
+                "Décimo subtítulo de la noticia",
+                "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Décimo titular de la noticia",
+                "Décimo subtítulo de la noticia",
+                "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Décimo titular de la noticia",
+                "Décimo subtítulo de la noticia",
+                "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Décimo titular de la noticia",
+                "Décimo subtítulo de la noticia",
+                "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Décimo titular de la noticia",
+                "Décimo subtítulo de la noticia",
+                "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+            ),
+          new Noticias(
+                "Décimo titular de la noticia",
+                "Décimo subtítulo de la noticia",
+                "Contenido detallado del décimo noticia que proporciona información relevante sobre el tema tratado."
+            )
+      ];
       //AREA HISTORIAS DEL APARTADO "NUESTRA HISTORIA"
       public historias: Historias[]=[
         new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
@@ -151,6 +151,8 @@ export class VariablesCompartidas {
         "Noticia 4: Lanzamiento de la nueva plataforma para compartir relatos cortos.",
         "Noticia 5: Evento virtual con autores reconocidos a nivel internacional."
       ];
+      //AREA DE PUBLICACIONES PARA EL APARTADO DE PUBLICACIONES
+      public publicacionesPosteadas: publicaciones=new publicaciones();
 }
 class Apartados{
     public valorSubapartado:number=0;  //Para identificar que subapartado del blog se accionó, se inicializa con 0 porque es el valor que corresponde a "todos" en el caso del blog, y a "cursos" en el caso de servicios, que son los valores predeterminados.
@@ -310,7 +312,7 @@ class Noticias
         return this.noticia;
     }
 }
-class Historias
+export class Historias
 {
     private id:number=0.0;
     private mes: number=0; //Luego se convertirá en el nombre del mes según numero incluido
@@ -509,6 +511,92 @@ class QuienesSomos{
       return quienesSomosImagen;
     }
 }
-class publicaciones{
+
+export type PublicacionesPostType = 'verso' | 'prosa' | 'reflexion';
+export type PublicacionesPost = {
+  id: string;
+  title: string;
+  type: PublicacionesPostType;
+  content: string;
+  authorEmail: string;
+  createdAtIso: string;
+};
+
+//De la base de datos futura, pero se incluye aquí para tener un modelo de 
+//datos claro y poder trabajar con él en el componente de publicaciones.
+export class publicaciones implements PublicacionesPost {
+  public id: string="";
+  public title: string="";
+  public type: PublicacionesPostType="verso";
+  public content: string="";
+  public authorEmail: string="";
+  public createdAtIso: string="";
   
+  constructor()
+  {
+    //No precisa de instanciar nada
+  }
+
+  public generoPublicacion(eleccion:number):string 
+  {
+    const PublicacionesPostType: string[]=["verso","prosa","reflexion"];
+    if(eleccion==0) return PublicacionesPostType[0];
+    if(eleccion==1) return PublicacionesPostType[1];
+    if(eleccion==2) return PublicacionesPostType[2];
+    return PublicacionesPostType[0];
+  }
+  public envioPosteados(): PublicacionesPost[] {
+    const now = Date.now();
+    return [
+      {
+        id: this.makeId(),
+        title: 'Frontera de tinta',
+        type: this.generoPublicacion(0).toString() as PublicacionesPostType,
+        content: 'Cruzo la página,\\n' +
+          'no por huir del mundo,\\n' +
+          'sino por nombrarlo.\\n\\n' +
+          'Y en cada palabra\\n' +
+          'una casa posible\\n' +
+          'para lo que duele.',
+        authorEmail: 'equipo@esf.org',
+        createdAtIso: new Date(now - 1000 * 60 * 60 * 28).toISOString(),
+      },
+      {
+        id: this.makeId(),
+        title: 'La prosa como refugio',
+        type: this.generoPublicacion(1).toString() as PublicacionesPostType,
+        content:
+          'Escribir en prosa es permitir que la respiración encuentre su ritmo. ' +
+          'No se trata de adornar, sino de sostener el sentido con claridad. ' +
+          'Cuando la frase avanza, también avanza la posibilidad de comprender.\\n\\n' +
+          'Publica aquí tus relatos, escenas, cartas o memorias: lo importante es la honestidad del tono.',
+        authorEmail: 'equipo@esf.org',
+        createdAtIso: new Date(now - 1000 * 60 * 60 * 10).toISOString(),
+      },
+      {
+        id: this.makeId(),
+        title: 'Una reflexión para hoy',
+        type: this.generoPublicacion(2).toString() as PublicacionesPostType,
+        content:
+          'A veces la frontera no está afuera, sino entre lo que pensamos y lo que nos animamos a decir. ' +
+          'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
+        authorEmail: 'equipo@esf.org',
+        createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
+      },
+            {
+        id: this.makeId(),
+        title: 'Una reflexión de AYER',
+        type: this.generoPublicacion(2).toString() as PublicacionesPostType,
+        content:
+          'A veces me acuerdo de ti porque siempre has vivido en mi ' +
+          'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
+        authorEmail: 'esfer4d_corporation@outlook.com',
+        createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
+      },
+    ];
+  }
+  public makeId(): string {
+  const palabra= 'p_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
+  return palabra;
+  }
 }
