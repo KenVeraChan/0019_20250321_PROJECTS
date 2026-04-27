@@ -20,8 +20,8 @@ type PublicacionesPost = {
 })
 export class Publicaciones implements OnInit {
   public matrizApartados= new VariablesCompartidas();
-  private readonly storageKeyPosts = 'esf_blog_posts_v1';
-  private readonly storageKeyUserEmail = 'esf_blog_user_email_v1';
+  private readonly storageKeyPosts = 'esf_blog_posts_v1';  //Clave para almacenar los posts en el almacenamiento local del navegador
+  private readonly storageKeyUserEmail = 'esf_blog_user_email_v1';  //Clave para almacenar el correo del usuario en el almacenamiento local del navegador
 
   public userEmail = '';
   public emailInput = '';
@@ -56,42 +56,6 @@ export class Publicaciones implements OnInit {
     }
 
     this.applyFilters();
-  }
-
-  //METODO PARA VERIFICAR SI EL USUARIO ESTÁ LOGUEADO, COMPROBANDO QUE EL CORREO GUARDADO EN LA PROPIEDAD userEmail ES VÁLIDO CON EL MÉTODO isValidEmail
-  public isLoggedIn(): boolean {
-    return this.isValidEmail(this.userEmail);
-  }
-
-  //MTODO PARA INICIAR SESIÓN, VERIFICANDO QUE EL CORREO INGRESADO ES VÁLIDO Y GUARDÁNDOLO EN EL ALMACENAMIENTO LOCAL, O MOSTRANDO UN MENSAJE DE ERROR SI NO LO ES
-  public login(): void {
-    this.errorMsg = '';
-    const email = (this.emailInput ?? '').trim().toLowerCase();
-    if (!this.isValidEmail(email)) {
-      this.errorMsg = 'Ingresa un correo válido para publicar.';
-      return;
-    }
-    this.userEmail = email;
-    this.safeSet(this.storageKeyUserEmail, email);
-    this.view = 'create';
-  }
-
-  //METODO PARA CERRAR SESIÓN, LIMPIANDO EL CORREO GUARDADO Y CAMBIANDO A LA VISTA DE LISTA SI ESTÁ EN LA VISTA DE CREACIÓN
-  public logout(): void {
-    this.userEmail = '';
-    this.emailInput = '';
-    this.safeRemove(this.storageKeyUserEmail);
-    if (this.view === 'create') this.view = 'list';
-  }
-
-  //METODO PARA ABRIR LA VISTA DE CREACIÓN DE POST, VERIFICANDO PRIMERO SI EL USUARIO ESTÁ LOGUEADO Y MOSTRANDO UN MENSAJE DE ERROR SI NO LO ESTÁ, O CAMBIANDO A LA VISTA DE LISTA SI INTENTA ACCEDER SIN INICIAR SESIÓN
-  public openCreate(): void {
-    this.errorMsg = '';
-    if (!this.isLoggedIn()) {
-      this.view = 'list';
-      return;
-    }
-    this.view = 'create';
   }
 
   //METODO PARA ABRIR LA VISTA DE LISTA DE POSTS, LIMPIANDO CUALQUIER MENSAJE DE ERROR PREVIO, RESETEANDO EL POST SELECCIONADO Y APLICANDO LOS FILTROS ACTUALES
@@ -136,44 +100,6 @@ export class Publicaciones implements OnInit {
       .sort((a, b) => b.createdAtIso.localeCompare(a.createdAtIso));
     this.filtradoVarCompartida="";  //Se reinicia la variable para permitir una eleccion interna
   }
-
-  //METODO PARA VERIFICAR Y PERMITIR PUBLICAR CUANDO SE HA COMPROBADO QUE SI HAY CORREO CORRECTO VERIFICADO
-  public submitPost(): void {
-    this.errorMsg = '';
-    if (!this.isLoggedIn()) {
-      this.errorMsg = 'Debes iniciar sesión con correo para publicar.';
-      return;
-    }
-
-    const title = (this.createTitle ?? '').trim();
-    const content = (this.createContent ?? '').trim();
-
-    if (title.length < 3) {
-      this.errorMsg = 'El título debe tener al menos 3 caracteres.';
-      return;
-    }
-    if (content.length < 10) {
-      this.errorMsg = 'El contenido debe tener al menos 10 caracteres.';
-      return;
-    }
-
-    const nowIso = new Date().toISOString();
-    const post: PublicacionesPost = {
-      id: this.makeId(),
-      title,
-      type: this.createType,
-      content,
-      authorEmail: this.userEmail,
-      createdAtIso: nowIso,
-    };
-
-    this.posts = [post, ...this.posts];
-    this.savePosts(this.posts);
-    this.resetCreateForm();
-    this.applyFilters();
-    this.openDetail(post.id);
-  }
-
   //METODO PARA EL SELECTOR DE PROSA, VERSO O REFLEXIÓN
   public formatTypeLabel(t: PublicacionesPostType): string {
     if (t === 'verso') return 'Verso';

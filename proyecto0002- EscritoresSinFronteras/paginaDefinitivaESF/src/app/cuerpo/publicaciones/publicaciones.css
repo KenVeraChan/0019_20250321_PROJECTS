@@ -42,44 +42,6 @@
   max-width: 60ch;
 }
 
-.actionsBlock{
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-.loginForm{
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.userPill{
-  display: inline-flex;
-  gap: 10px;
-  align-items: center;
-  padding: 8px 10px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255,255,255,0.25);
-}
-.dot{
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #9cffb8;
-  box-shadow: 0 0 12px rgba(156,255,184,0.8);
-}
-.userText{
-  font-size: 12px;
-  opacity: 0.95;
-  max-width: 220px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
 .alert{
   margin-top: 12px;
@@ -88,13 +50,6 @@
   background: rgba(0,0,0,0.35);
   border: 1px solid rgba(255, 201, 93, 0.45);
   color: #ffd989;
-}
-
-.publicacionesNav{
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin: 14px 0 0;
 }
 
 .filters{
@@ -119,7 +74,7 @@
   opacity: 0.95;
 }
 
-.input, .select, .textarea{
+.input, .select{
   width: 100%;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.18);
@@ -128,11 +83,7 @@
   padding: 10px 12px;
   outline: none;
 }
-.textarea{
-  resize: vertical;
-  min-height: 180px;
-}
-.input::placeholder, .textarea::placeholder{
+.input::placeholder{
   color: rgba(255,255,255,0.75);
 }
 
@@ -156,14 +107,6 @@
 .btn.ghost{
   background: transparent;
 }
-.btn.tab{
-  padding: 9px 12px;
-}
-.btn.tab.active{
-  background: rgba(255,255,255,0.14);
-  border-color: rgba(255,255,255,0.38);
-}
-
 .postsGrid{
   margin-top: 14px;
   display: grid;
@@ -225,7 +168,7 @@
   opacity: 0.95;
 }
 
-.detailCard, .createCard{
+.detailCard{
   margin-top: 14px;
   background: rgba(46, 52, 128, 0.50);
   border-radius: 18px;
@@ -262,39 +205,6 @@
   line-height: 1.55;
 }
 
-.createHeader{
-  margin-bottom: 10px;
-}
-.createTitle{
-  margin: 0;
-  font-size: 18px;
-}
-.createHint{
-  margin: 6px 0 0;
-  font-size: 12px;
-  opacity: 0.95;
-}
-.createForm{
-  display: grid;
-  gap: 12px;
-}
-.row{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.field{
-  display: grid;
-  gap: 6px;
-  flex: 0 0 220px;
-}
-.createActions{
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-}
-
 .empty{
   margin-top: 14px;
   background: rgba(0,0,0,0.25);
@@ -317,8 +227,5 @@
 }
 
 @media screen and (max-width: 420px){
-  .loginForm{ width: 100%; }
-  .actionsBlock{ width: 100%; justify-content: stretch; }
   .btn{ width: 100%; }
-  .userPill{ width: 100%; justify-content: space-between; }
 }
