@@ -1,16 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
-
-type BlogPostType = 'verso' | 'prosa' | 'reflexion';
-
-type BlogPost = {
-  id: string;
-  title: string;
-  type: BlogPostType;
-  content: string;
-  authorEmail: string;
-  createdAtIso: string;
-};
+import { BlogPost, BlogPostType } from '../../servicios/variablesCompartidas';
 
 @Component({
   selector: 'app-blogs',
@@ -22,6 +12,7 @@ export class Blogs implements OnInit {
   public matrizApartados= new VariablesCompartidas();
   private readonly storageKeyPosts = 'esf_blog_posts_v1';
   private readonly storageKeyUserEmail = 'esf_blog_user_email_v1';
+  public datosJsonBlog= new VariablesCompartidas().blogsPosteados.envioPosteadoBlog();  //Variable para acceder a los datos JSON de publicaciones desde las variables compartidas
 
   public userEmail = '';
   public emailInput = '';
@@ -49,7 +40,7 @@ export class Blogs implements OnInit {
 
     const existing = this.loadPosts();
     if (existing.length === 0) {
-      this.posts = this.seedPosts();
+      this.posts = this.datosJsonBlog;
       this.savePosts(this.posts);
     } else {
       this.posts = existing;
@@ -209,10 +200,8 @@ export class Blogs implements OnInit {
 
   //METODO PARA CARGAR LOS POSTS DESDE EL ALMACENAMIENTO LOCAL
   private loadPosts(): BlogPost[] {
-    const raw = this.safeGet(this.storageKeyPosts);
-    if (!raw) return [];
     try {
-      const parsed = JSON.parse(raw) as BlogPost[];
+      const parsed = this.datosJsonBlog as BlogPost[];
       if (!Array.isArray(parsed)) return [];
       return parsed.filter(
         p =>
@@ -232,49 +221,6 @@ export class Blogs implements OnInit {
   //METODO PARA GUARDAR LOS POSTS EN EL ALMACENAMIENTO LOCAL CON TIPO DE DATO DEFINIDO Y CON MANEJO DE ERRORES
   private savePosts(posts: BlogPost[]): void {
     this.safeSet(this.storageKeyPosts, JSON.stringify(posts));
-  }
-
-  //METODO PARA SEMBRAR LOS POSTS INICIALES CUANDO NO HAY NINGUNO GUARDADO, CON CONTENIDO DE EJEMPLO Y FECHAS RELATIVAS
-  private seedPosts(): BlogPost[] {
-    const now = Date.now();
-    return [
-      {
-        id: this.makeId(),
-        title: 'Frontera de tinta',
-        type: 'verso',
-        content:
-          'Cruzo la página,\\n' +
-          'no por huir del mundo,\\n' +
-          'sino por nombrarlo.\\n\\n' +
-          'Y en cada palabra\\n' +
-          'una casa posible\\n' +
-          'para lo que duele.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 60 * 28).toISOString(),
-      },
-      {
-        id: this.makeId(),
-        title: 'La prosa como refugio',
-        type: 'prosa',
-        content:
-          'Escribir en prosa es permitir que la respiración encuentre su ritmo. ' +
-          'No se trata de adornar, sino de sostener el sentido con claridad. ' +
-          'Cuando la frase avanza, también avanza la posibilidad de comprender.\\n\\n' +
-          'Publica aquí tus relatos, escenas, cartas o memorias: lo importante es la honestidad del tono.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 60 * 10).toISOString(),
-      },
-      {
-        id: this.makeId(),
-        title: 'Una reflexión para hoy',
-        type: 'reflexion',
-        content:
-          'A veces la frontera no está afuera, sino entre lo que pensamos y lo que nos animamos a decir. ' +
-          'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
-      },
-    ];
   }
 
   //METODO PARA GENERAR UN ID ÚNICO PARA CADA POST, COMBINANDO UN PREFIJO, UNA PARTE ALEATORIA Y LA FECHA ACTUAL EN MILISEGUNDOS

@@ -11,6 +11,8 @@ import { PublicacionesPost, PublicacionesPostType } from '../../servicios/variab
 export class Publicaciones implements OnInit {
   public matrizApartados= new VariablesCompartidas();
   public datosJson= new VariablesCompartidas().publicacionesPosteadas.envioPosteados();  //Variable para acceder a los datos JSON de publicaciones desde las variables compartidas
+  
+  //Pendiente de programar para guardar en la BBDD, actualmente se guarda en el almacenamiento local del navegador para persistencia entre sesiones, pero no es una solución definitiva ni escalable
   private readonly storageKeyPosts = 'esf_blog_posts_v1';  //Clave para almacenar los posts en el almacenamiento local del navegador
 
   public userEmail = '';

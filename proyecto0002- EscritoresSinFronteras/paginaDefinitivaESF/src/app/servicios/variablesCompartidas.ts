@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { SubscribableOrPromise } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -153,7 +152,11 @@ export class VariablesCompartidas {
       ];
       //AREA DE PUBLICACIONES PARA EL APARTADO DE PUBLICACIONES
       public publicacionesPosteadas: publicaciones=new publicaciones();
-}
+
+      //AREA DE BLOG PARA EL APARTADO DE BLOG LITERARIO
+      public blogsPosteados: blogs=new blogs();
+
+    }
 class Apartados{
     public valorSubapartado:number=0;  //Para identificar que subapartado del blog se accionó, se inicializa con 0 porque es el valor que corresponde a "todos" en el caso del blog, y a "cursos" en el caso de servicios, que son los valores predeterminados.
     public subApartadoBlog:string="";  //Para identificar que subapartado del blog se accionó
@@ -512,11 +515,28 @@ class QuienesSomos{
     }
 }
 
+//Tanto el BLOG como las PUBLICACIONES NO comparten el mismo modelo de datos
+
+//el de PUBLICACIONES se llama PublicacionesPost 
 export type PublicacionesPostType = 'verso' | 'prosa' | 'reflexion';
 export type PublicacionesPost = {
   id: string;
   title: string;
   type: PublicacionesPostType;
+  content: string;
+  authorEmail: string;
+  createdAtIso: string;
+};
+
+//el de BLOG se llama BlogPost, aunque ambos tienen la misma estructura, 
+//se han diferenciado para tener una mayor claridad en el código, y para poder 
+//hacer modificaciones futuras en cada uno de ellos sin afectar al otro, aunque 
+//por ahora son SIMILARES.
+export type BlogPostType = 'verso' | 'prosa' | 'reflexion';
+export type BlogPost = {
+  id: string;
+  title: string;
+  type: BlogPostType;
   content: string;
   authorEmail: string;
   createdAtIso: string;
@@ -575,7 +595,7 @@ export class publicaciones implements PublicacionesPost {
       },
       {
         id: this.makeId(),
-        title: 'Una reflexión para hoy',
+        title: 'Una reflexión para MAÑANA',
         type: this.generoPublicacion(2).toString() as PublicacionesPostType,
         content:
           'A veces la frontera no está afuera, sino entre lo que pensamos y lo que nos animamos a decir. ' +
@@ -600,3 +620,80 @@ export class publicaciones implements PublicacionesPost {
   return palabra;
   }
 }
+
+export class blogs implements PublicacionesPost
+  {
+  public id: string="";
+  public title: string="";
+  public type: PublicacionesPostType="verso";
+  public content: string="";
+  public authorEmail: string="";
+  public createdAtIso: string="";
+  
+  constructor()
+  {
+    //No precisa de instanciar nada
+  }
+  public generoBlog(eleccion:number):string 
+  {
+    const PublicacionesPostType: string[]=["verso","prosa","reflexion"];
+    if(eleccion==0) return PublicacionesPostType[0];
+    if(eleccion==1) return PublicacionesPostType[1];
+    if(eleccion==2) return PublicacionesPostType[2];
+    return PublicacionesPostType[0];
+  }
+  public envioPosteadoBlog(): PublicacionesPost[] {
+    const now = Date.now();
+    return [
+      {
+        id: this.makeIdBlog(),
+        title: 'Frontera de tinta',
+        type: this.generoBlog(0).toString() as PublicacionesPostType,
+        content: 'Cruzo la página,\\n' +
+          'no por huir del mundo,\\n' +
+          'sino por nombrarlo.\\n\\n' +
+          'Y en cada palabra\\n' +
+          'una casa posible\\n' +
+          'para lo que duele.',
+        authorEmail: 'equipo@esf.org',
+        createdAtIso: new Date(now - 1000 * 60 * 60 * 28).toISOString(),
+      },
+      {
+        id: this.makeIdBlog(),
+        title: 'La prosa como refugio',
+        type: this.generoBlog(1).toString() as PublicacionesPostType,
+        content:
+          'Escribir en prosa es permitir que la respiración encuentre su ritmo. ' +
+          'No se trata de adornar, sino de sostener el sentido con claridad. ' +
+          'Cuando la frase avanza, también avanza la posibilidad de comprender.\\n\\n' +
+          'Publica aquí tus relatos, escenas, cartas o memorias: lo importante es la honestidad del tono.',
+        authorEmail: 'equipo@esf.org',
+        createdAtIso: new Date(now - 1000 * 60 * 60 * 10).toISOString(),
+      },
+      {
+        id: this.makeIdBlog(),
+        title: 'Una reflexión para hoy',
+        type: this.generoBlog(2).toString() as PublicacionesPostType,
+        content:
+          'A veces la frontera no está afuera, sino entre lo que pensamos y lo que nos animamos a decir. ' +
+          'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
+        authorEmail: 'equipo@esf.org',
+        createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
+      },
+            {
+        id: this.makeIdBlog(),
+        title: 'Una reflexión de AYER',
+        type: this.generoBlog(2).toString() as PublicacionesPostType,
+        content:
+          'A veces me acuerdo de ti porque siempre has vivido en mi ' +
+          'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
+        authorEmail: 'esfer4d_corporation@outlook.com',
+        createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
+      },
+    ];
+  }
+  public makeIdBlog(): string {
+  const palabra= 'p_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
+  return palabra;
+  }
+  }
