@@ -19,6 +19,9 @@
           <label class="label">Tipo</label>
           <select class="select" [(ngModel)]="filterType" name="filterType" (change)="applyFilters()" aria-label="Filtrar por tipo de publicación">
             <option value="todos">Todos</option>
+                @for (tipo of datosNovelas.PublicacionesPostType; track tipo) {
+                  <option [value]="tipo">{{ tipo }}</option>
+                }
             <option value="verso">Verso</option>
             <option value="prosa">Prosa</option>
             <option value="reflexion">Reflexión</option>
@@ -72,6 +75,11 @@
           </div>
           <h2 class="detailTitle">{{ post.title }}</h2>
           <pre class="detailContent">{{ post.content }}</pre>
+          <audio controls>
+            <source src="{{ post.audio }}" type="audio/mpeg">
+            Tu navegador no soporta la etiqueta audio.
+          </audio>
+
         </article>
       } @else {
         <div class="empty">

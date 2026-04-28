@@ -11,7 +11,7 @@ import { PublicacionesPost, PublicacionesPostType } from '../../servicios/variab
 export class Publicaciones implements OnInit {
   public matrizApartados= new VariablesCompartidas();
   public datosJson= new VariablesCompartidas().publicacionesPosteadas.envioPosteados();  //Variable para acceder a los datos JSON de publicaciones desde las variables compartidas
-  
+  public datosNovelas= new VariablesCompartidas().publicacionesPosteadas;
   //Pendiente de programar para guardar en la BBDD, actualmente se guarda en el almacenamiento local del navegador para persistencia entre sesiones, pero no es una solución definitiva ni escalable
   private readonly storageKeyPosts = 'esf_blog_posts_v1';  //Clave para almacenar los posts en el almacenamiento local del navegador
 
@@ -30,7 +30,7 @@ export class Publicaciones implements OnInit {
   //Variable para almacenar la selección del tipo de post desde la cabecera y variables compartidas
 
   public createTitle = '';
-  public createType: PublicacionesPostType = 'reflexion';
+  public createType: PublicacionesPostType = 'novela ciencia ficción';
   public createContent = '';
 
   public errorMsg = '';
@@ -90,9 +90,9 @@ export class Publicaciones implements OnInit {
   }
   //METODO PARA EL SELECTOR DE PROSA, VERSO O REFLEXIÓN
   public formatTypeLabel(t: PublicacionesPostType): string {
-    if (t === 'verso') return 'Verso';
-    if (t === 'prosa') return 'Prosa';
-    return 'Reflexión';
+    const capitalizar = (t: string) =>
+        t?.[0]?.toUpperCase() + t?.slice(1).toLowerCase();
+    return capitalizar(t) || t;
   }
 
   //METODO PARA DEVOLVER LA FECHA EN FORMATO ISO Y EN ESPAÑOL

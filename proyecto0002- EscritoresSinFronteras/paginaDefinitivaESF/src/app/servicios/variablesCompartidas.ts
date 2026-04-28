@@ -518,7 +518,28 @@ class QuienesSomos{
 //Tanto el BLOG como las PUBLICACIONES NO comparten el mismo modelo de datos
 
 //el de PUBLICACIONES se llama PublicacionesPost 
-export type PublicacionesPostType = 'verso' | 'prosa' | 'reflexion';
+export type PublicacionesPostType = 
+'novela histórica' | 
+'novela ciencia ficción' | 
+'novela fantasía' |
+'novela negra y policíaca' |
+'novela romántica' |
+'novela de terror' |
+'novela de humor' |
+'novela de aventuras' |
+'novela de misterio' |
+'novela de realismo mágico' |
+'novela realista' |
+'novela experimental' |
+'novela gráfica' |
+'novela juvenil' |
+'novela infantil' |
+'novela distópica'|
+'novela de época' |
+'novela epistolar'|
+'novela de formación' |
+'novela de autoayuda';
+
 export type PublicacionesPost = {
   id: string;
   title: string;
@@ -526,6 +547,7 @@ export type PublicacionesPost = {
   content: string;
   authorEmail: string;
   createdAtIso: string;
+  audio: string;
 };
 
 //el de BLOG se llama BlogPost, aunque ambos tienen la misma estructura, 
@@ -533,6 +555,7 @@ export type PublicacionesPost = {
 //hacer modificaciones futuras en cada uno de ellos sin afectar al otro, aunque 
 //por ahora son SIMILARES.
 export type BlogPostType = 'verso' | 'prosa' | 'reflexion';
+
 export type BlogPost = {
   id: string;
   title: string;
@@ -547,11 +570,35 @@ export type BlogPost = {
 export class publicaciones implements PublicacionesPost {
   public id: string="";
   public title: string="";
-  public type: PublicacionesPostType="verso";
+  public type: PublicacionesPostType="novela ciencia ficción";
   public content: string="";
   public authorEmail: string="";
   public createdAtIso: string="";
-  
+  public audio: string=""; //Se incluye un campo de audio para las reflexiones, aunque no todas las publicaciones lo tendrán, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones. 
+
+  public PublicacionesPostType: string[]=[
+    'novela histórica',
+    'novela ciencia ficción',
+    'novela fantasía',
+    'novela negra y policíaca',
+    'novela romántica',
+    'novela de terror',
+    'novela de humor',
+    'novela de aventuras',
+    'novela de misterio',
+    'novela de realismo mágico',
+    'novela realista',
+    'novela experimental',
+    'novela gráfica',
+    'novela juvenil',
+    'novela infantil',
+    'novela distópica',
+    'novela de época',
+    'novela epistolar',
+    'novela de formación',
+    'novela de autoayuda'
+    ];
+
   constructor()
   {
     //No precisa de instanciar nada
@@ -559,11 +606,11 @@ export class publicaciones implements PublicacionesPost {
 
   public generoPublicacion(eleccion:number):string 
   {
-    const PublicacionesPostType: string[]=["verso","prosa","reflexion"];
-    if(eleccion==0) return PublicacionesPostType[0];
-    if(eleccion==1) return PublicacionesPostType[1];
-    if(eleccion==2) return PublicacionesPostType[2];
-    return PublicacionesPostType[0];
+    //Rellena el array de tipos de publicaciones, aunque en este caso se 
+    //podría hacer directamente con un array de strings, pero se ha hecho así 
+    //para tener una mayor claridad en el código y para poder hacer modificaciones 
+    //futuras en el tipo de publicaciones sin afectar al resto del código.
+    return this.PublicacionesPostType[eleccion];
   }
   public envioPosteados(): PublicacionesPost[] {
     const now = Date.now();
@@ -580,6 +627,7 @@ export class publicaciones implements PublicacionesPost {
           'para lo que duele.',
         authorEmail: 'equipo@esf.org',
         createdAtIso: new Date(now - 1000 * 60 * 60 * 28).toISOString(),
+        audio: ""
       },
       {
         id: this.makeId(),
@@ -592,6 +640,7 @@ export class publicaciones implements PublicacionesPost {
           'Publica aquí tus relatos, escenas, cartas o memorias: lo importante es la honestidad del tono.',
         authorEmail: 'equipo@esf.org',
         createdAtIso: new Date(now - 1000 * 60 * 60 * 10).toISOString(),
+        audio:""
       },
       {
         id: this.makeId(),
@@ -602,6 +651,7 @@ export class publicaciones implements PublicacionesPost {
           'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
         authorEmail: 'equipo@esf.org',
         createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
+        audio: '../../../assets/audios/Tony Anderson - Bloom.mp3'
       },
             {
         id: this.makeId(),
@@ -612,6 +662,7 @@ export class publicaciones implements PublicacionesPost {
           'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
         authorEmail: 'esfer4d_corporation@outlook.com',
         createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
+        audio: ""
       },
     ];
   }
@@ -621,11 +672,11 @@ export class publicaciones implements PublicacionesPost {
   }
 }
 
-export class blogs implements PublicacionesPost
+export class blogs implements BlogPost
   {
   public id: string="";
   public title: string="";
-  public type: PublicacionesPostType="verso";
+  public type: BlogPostType="verso";
   public content: string="";
   public authorEmail: string="";
   public createdAtIso: string="";
@@ -642,13 +693,13 @@ export class blogs implements PublicacionesPost
     if(eleccion==2) return PublicacionesPostType[2];
     return PublicacionesPostType[0];
   }
-  public envioPosteadoBlog(): PublicacionesPost[] {
+  public envioPosteadoBlog(): BlogPost[] {
     const now = Date.now();
     return [
       {
         id: this.makeIdBlog(),
         title: 'Frontera de tinta',
-        type: this.generoBlog(0).toString() as PublicacionesPostType,
+        type: this.generoBlog(0).toString() as BlogPostType,
         content: 'Cruzo la página,\\n' +
           'no por huir del mundo,\\n' +
           'sino por nombrarlo.\\n\\n' +
@@ -661,7 +712,7 @@ export class blogs implements PublicacionesPost
       {
         id: this.makeIdBlog(),
         title: 'La prosa como refugio',
-        type: this.generoBlog(1).toString() as PublicacionesPostType,
+        type: this.generoBlog(1).toString() as BlogPostType,
         content:
           'Escribir en prosa es permitir que la respiración encuentre su ritmo. ' +
           'No se trata de adornar, sino de sostener el sentido con claridad. ' +
@@ -673,7 +724,7 @@ export class blogs implements PublicacionesPost
       {
         id: this.makeIdBlog(),
         title: 'Una reflexión para hoy',
-        type: this.generoBlog(2).toString() as PublicacionesPostType,
+        type: this.generoBlog(2).toString() as BlogPostType,
         content:
           'A veces la frontera no está afuera, sino entre lo que pensamos y lo que nos animamos a decir. ' +
           'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
@@ -683,7 +734,7 @@ export class blogs implements PublicacionesPost
             {
         id: this.makeIdBlog(),
         title: 'Una reflexión de AYER',
-        type: this.generoBlog(2).toString() as PublicacionesPostType,
+        type: this.generoBlog(2).toString() as BlogPostType,
         content:
           'A veces me acuerdo de ti porque siempre has vivido en mi ' +
           'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
