@@ -1,6 +1,6 @@
 <div class="fondoCabecera"></div>
 <div class="separadorMenu"></div>
-<!-- 
+<!--
   Mostrar menú compacto (hamburguesa) SOLO si es un dispositivo móvil REAL.
   Usamos detección por User-Agent porque:
   - El User-Agent NO cambia con el zoom del navegador
@@ -9,10 +9,10 @@
   - Los ordenadores SIEMPRE mostrarán la barra completa, sin importar el zoom
 -->
   <!-- Así se muestra el menú hamburguesa SOLO en móviles reales con pantallas pequeñas (menor o igual a 1200px)-->
-@if(esDispositivoMovilReal || tamanioPantalla <= 768)   
+@if(esDispositivoMovilReal || tamanioPantalla <= 768)
 {
-    <div class="accionamientos">   
-    <button type="buttom" class="btn btn primary" id="accionado" (click)="opciones.abrirMenuOpciones()"><strong>|||</strong></button>
+    <div class="accionamientos">
+    <button type="button" class="btn btn primary" id="accionado" (click)="opciones.abrirMenuOpciones()"><strong>|||</strong></button>
     </div>
     <app-opciones #opciones></app-opciones>
 }
@@ -22,26 +22,26 @@
     <table class="tablaOpciones">
         <tbody>
             <tr>
-                    <td>
-                    <li class="botonera"><a class="enlaces" href=""  (click)="accesoHabilitado(1)" [class.active]="activeIndex===0">{{matrizApartados.menuPrincipal.getMatrizApartados()[0]}}</a></li>
+                <td>
+                    <div class="botonera"><a class="enlaces" href=""  (click)="accesoHabilitado(1)" [class.active]="activeIndex===0">{{matrizApartados.menuPrincipal.getMatrizApartados()[0]}}</a></div>
                 </td>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(2)" [class.active]="activeIndex===1">{{matrizApartados.menuPrincipal.getMatrizApartados()[1]}}</a></li>
+                    <div class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(2)" [class.active]="activeIndex===1">{{matrizApartados.menuPrincipal.getMatrizApartados()[1]}}</a></div>
                 </td>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(3)" [class.active]="activeIndex===2">{{matrizApartados.menuPrincipal.getMatrizApartados()[2]}}</a></li>
+                    <div class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(3)" [class.active]="activeIndex===2">{{matrizApartados.menuPrincipal.getMatrizApartados()[2]}}</a></div>
                 </td>
                 <td>
-                    <li class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(4)" [class.active]="activeIndex===3">{{matrizApartados.menuPrincipal.getMatrizApartados()[3]}}</a>
+                    <div class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(4)" [class.active]="activeIndex===3">{{matrizApartados.menuPrincipal.getMatrizApartados()[3]}}</a>
                         <ul class="subMenu">
                             <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosBlog(1)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[0]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[0]}}</a></li>
                             <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosBlog(2)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[1]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[1]}}</a></li>
                             <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosBlog(3)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesBlogLiterario()[2]}}">{{matrizApartados.menuPrincipal.getSubApartadosBlog()[2]}}</a></li>
                         </ul>
-                    </li>                
+                    </div>
                 </td>
                 <td>
-                    <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(5)" [class.active]="activeIndex===4">{{matrizApartados.menuPrincipal.getMatrizApartados()[4]}}</a>
+                    <div class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(5)" [class.active]="activeIndex===4">{{matrizApartados.menuPrincipal.getMatrizApartados()[4]}}</a>
                         <ul class="subMenu">
                             <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosServicios(1)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[0]}}">{{matrizApartados.menuPrincipal.getSubApartadosServiciosMenu()[0]}}</a></li>
                             <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosServicios(2)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[1]}}">{{matrizApartados.menuPrincipal.getSubApartadosServiciosMenu()[1]}}</a></li>
@@ -49,13 +49,13 @@
                             <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosServicios(4)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[3]}}">{{matrizApartados.menuPrincipal.getSubApartadosServiciosMenu()[3]}}</a></li>
                             <li class="subBotonera"><a class="enlaces" (click)="matrizApartados.menuPrincipal.setSubApartadosServicios(5)" href="" title="{{matrizApartados.menuPrincipal.getEnlacesServicios()[4]}}">{{matrizApartados.menuPrincipal.getSubApartadosServiciosMenu()[4]}}</a></li>
                         </ul>
-                    </li>
+                    </div>
                 </td>
                 <td>
-                    <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(6)" [class.active]="activeIndex===5">{{matrizApartados.menuPrincipal.getMatrizApartados()[5]}}</a></li>
+                    <div class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(6)" [class.active]="activeIndex===5">{{matrizApartados.menuPrincipal.getMatrizApartados()[5]}}</a></div>
                 </td>
                 <td>
-                    <li class="list-group-item" class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(7)" [class.active]="activeIndex===6">{{matrizApartados.menuPrincipal.getMatrizApartados()[6]}}</a></li>
+                    <div class="botonera"><a class="enlaces" href="" (click)="accesoHabilitado(7)" [class.active]="activeIndex===6">{{matrizApartados.menuPrincipal.getMatrizApartados()[6]}}</a></div>
                 </td>
             </tr>
         </tbody>

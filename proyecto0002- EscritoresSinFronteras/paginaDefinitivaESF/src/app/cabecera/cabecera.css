@@ -21,7 +21,7 @@ Escritorio grande: A partir de 1200px
         filter: brightness(1.5);
         background-position:center;
         background-repeat: no-repeat;
-        background-size: cover; 
+        background-size: cover;
         justify-content: center;
     }
     .separadorMenu{
@@ -90,7 +90,6 @@ Escritorio grande: A partir de 1200px
         }
         .tablaOpciones tbody tr td {
             flex: 0 1 auto;  /* No crecer, permitir encogerse */
-            min-width: fit-content;
         }
         .botonera{
             text-align: center;
@@ -234,7 +233,7 @@ Escritorio grande: A partir de 1200px
         gap: 2px;
     }
     .enlaces{
-        font-size: 9px;
+        font-size: 8px;
     }
     .botonera {
         margin-left: 3px;
@@ -275,7 +274,7 @@ Escritorio grande: A partir de 1200px
         margin-top: 5px;
     }
     .enlaces{
-        font-size: 10px;
+        font-size: 9px;
     }
     .botonera {
         margin-left: 5px;
@@ -313,7 +312,7 @@ Escritorio grande: A partir de 1200px
         margin-top: 5px;
     }
     .enlaces{
-        font-size: 13px;
+        font-size: 12px;
     }
     .botonera {
         margin-left: 10px;
