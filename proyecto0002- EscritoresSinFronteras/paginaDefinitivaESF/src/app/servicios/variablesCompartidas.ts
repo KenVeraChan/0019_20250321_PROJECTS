@@ -547,7 +547,9 @@ export type PublicacionesPost = {
   content: string;
   authorEmail: string;
   createdAtIso: string;
+  fotoLibro: string;
   audio: string;
+  videoCorto: string
 };
 
 //el de BLOG se llama BlogPost, aunque ambos tienen la misma estructura, 
@@ -574,7 +576,9 @@ export class publicaciones implements PublicacionesPost {
   public content: string="";
   public authorEmail: string="";
   public createdAtIso: string="";
+  public fotoLibro: string=""; //Se incluye un campo de foto de libro para las publicaciones, aunque no todas las publicaciones lo tendrán, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones.
   public audio: string=""; //Se incluye un campo de audio para las reflexiones, aunque no todas las publicaciones lo tendrán, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones. 
+  public videoCorto:string=""; //Se incluye un campo de video corto para las publicaciones, aunque no todas las publicaciones lo tendrán, serán BOOKTRAILERS de los libros, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones.
 
   public PublicacionesPostType: string[]=[
     'novela histórica',
@@ -627,7 +631,9 @@ export class publicaciones implements PublicacionesPost {
           'para lo que duele.',
         authorEmail: 'equipo@esf.org',
         createdAtIso: new Date(now - 1000 * 60 * 60 * 28).toISOString(),
-        audio: ""
+        fotoLibro: '../../../assets/images/publicaciones/novelaCienciaFiccion.jpg',
+        audio: "",
+        videoCorto: ""
       },
       {
         id: this.makeId(),
@@ -640,7 +646,9 @@ export class publicaciones implements PublicacionesPost {
           'Publica aquí tus relatos, escenas, cartas o memorias: lo importante es la honestidad del tono.',
         authorEmail: 'equipo@esf.org',
         createdAtIso: new Date(now - 1000 * 60 * 60 * 10).toISOString(),
-        audio:""
+        fotoLibro: '',
+        audio:"",
+        videoCorto: ''
       },
       {
         id: this.makeId(),
@@ -651,7 +659,9 @@ export class publicaciones implements PublicacionesPost {
           'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
         authorEmail: 'equipo@esf.org',
         createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
-        audio: '../../../assets/audios/Tony Anderson - Bloom.mp3'
+        fotoLibro: '../../../assets/fotoLibros/Ken Vera Chan fin.png',
+        audio: '../../../assets/audios/Tony Anderson - Bloom.mp3',
+        videoCorto: '../../../assets/videos/libreria.mp4'
       },
             {
         id: this.makeId(),
@@ -662,7 +672,9 @@ export class publicaciones implements PublicacionesPost {
           'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
         authorEmail: 'esfer4d_corporation@outlook.com',
         createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
-        audio: ""
+        fotoLibro: '',
+        audio: "",
+        videoCorto: ''
       },
     ];
   }

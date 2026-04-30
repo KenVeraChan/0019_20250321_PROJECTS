@@ -75,11 +75,26 @@
           </div>
           <h2 class="detailTitle">{{ post.title }}</h2>
           <pre class="detailContent">{{ post.content }}</pre>
-          <audio controls>
-            <source src="{{ post.audio }}" type="audio/mpeg">
-            Tu navegador no soporta la etiqueta audio.
-          </audio>
-
+          <!--EN LA ZONA DE FOTOS DE LIBROS SE VERIFICA QUE EXISTA Y ESTE EN SU DIRECTORIO CORRESPONDIENTE-->
+          <div class="detailContent">
+            @if(post.fotoLibro!="" && post.fotoLibro.includes('../../../assets/fotoLibros/')) {
+                <img src="{{ post.fotoLibro }}" alt="{{ post.title }}" class="imagenLibroCargado">
+            }
+            <!--EN LA ZONA DE AUDIOS SE VERIFICA QUE EXISTA Y ESTE EN SU DIRECTORIO CORRESPONDIENTE-->
+            @if(post.audio!="" && post.audio.includes('../../../assets/audios/')) {
+                <audio controls controlsList="nodownload" class="audioLibroCargado">
+                  <source src="{{ post.audio }}" type="audio/mpeg">
+                  Tu navegador no soporta la etiqueta audio.
+                </audio>
+            }
+          <!--EN LA ZONA DE VIDEOS SE VERIFICA QUE EXISTA Y ESTE EN SU DIRECTORIO CORRESPONDIENTE-->
+          @if(post.videoCorto!="" && post.videoCorto.includes('../../../assets/videos/')) {
+            <video controls controlsList="nodownload" class="videoLibroCargado">
+              <source src="{{ post.videoCorto }}" type="video/mp4">
+              Tu navegador no soporta la etiqueta video.
+            </video>
+          }
+          </div>
         </article>
       } @else {
         <div class="empty">
