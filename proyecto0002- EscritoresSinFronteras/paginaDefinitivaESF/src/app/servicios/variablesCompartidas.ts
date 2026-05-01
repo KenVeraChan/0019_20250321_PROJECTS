@@ -547,8 +547,11 @@ export type PublicacionesPost = {
   content: string;
   authorEmail: string;
   createdAtIso: string;
+  fotoLibroTitulo: string;
   fotoLibro: string;
+  audioLibroTitulo: string;
   audio: string;
+  videoCortoTitulo: string;
   videoCorto: string
 };
 
@@ -576,6 +579,9 @@ export class publicaciones implements PublicacionesPost {
   public content: string="";
   public authorEmail: string="";
   public createdAtIso: string="";
+  public fotoLibroTitulo: string="";
+  public audioLibroTitulo: string="";
+  public videoCortoTitulo: string="";
   public fotoLibro: string=""; //Se incluye un campo de foto de libro para las publicaciones, aunque no todas las publicaciones lo tendrán, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones.
   public audio: string=""; //Se incluye un campo de audio para las reflexiones, aunque no todas las publicaciones lo tendrán, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones. 
   public videoCorto:string=""; //Se incluye un campo de video corto para las publicaciones, aunque no todas las publicaciones lo tendrán, serán BOOKTRAILERS de los libros, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones.
@@ -631,8 +637,11 @@ export class publicaciones implements PublicacionesPost {
           'para lo que duele.',
         authorEmail: 'equipo@esf.org',
         createdAtIso: new Date(now - 1000 * 60 * 60 * 28).toISOString(),
+        fotoLibroTitulo: "Novela de ciencia ficción - 'El fin de la eternidad' de Isaac Asimov",
         fotoLibro: '../../../assets/images/publicaciones/novelaCienciaFiccion.jpg',
+        audioLibroTitulo: "Audiolibro de ciencia ficción - 'Dune' de Frank Herbert",
         audio: "",
+        videoCortoTitulo: "Booktrailer de ciencia ficción - 'Neuromante' de William Gibson",
         videoCorto: ""
       },
       {
@@ -646,8 +655,11 @@ export class publicaciones implements PublicacionesPost {
           'Publica aquí tus relatos, escenas, cartas o memorias: lo importante es la honestidad del tono.',
         authorEmail: 'equipo@esf.org',
         createdAtIso: new Date(now - 1000 * 60 * 60 * 10).toISOString(),
+        fotoLibroTitulo: '',
         fotoLibro: '',
+        audioLibroTitulo: '',
         audio:"",
+        videoCortoTitulo: '',
         videoCorto: ''
       },
       {
@@ -659,8 +671,11 @@ export class publicaciones implements PublicacionesPost {
           'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
         authorEmail: 'equipo@esf.org',
         createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
+        fotoLibroTitulo: 'Presentación del libro Vitrea Horíz',
         fotoLibro: '../../../assets/fotoLibros/Ken Vera Chan fin.png',
+        audioLibroTitulo: 'Piano y danzas de Vitrea Horiz en las orillas del mar',
         audio: '../../../assets/audios/Tony Anderson - Bloom.mp3',
+        videoCortoTitulo: 'Video Vitrea en el tren a Chalikets',
         videoCorto: '../../../assets/videos/libreria.mp4'
       },
             {
@@ -672,8 +687,11 @@ export class publicaciones implements PublicacionesPost {
           'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
         authorEmail: 'esfer4d_corporation@outlook.com',
         createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
+        fotoLibroTitulo: '',
         fotoLibro: '',
-        audio: "",
+        audioLibroTitulo: '',
+        audio: '',
+        videoCortoTitulo: '',
         videoCorto: ''
       },
     ];

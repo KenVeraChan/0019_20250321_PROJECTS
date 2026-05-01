@@ -20,6 +20,7 @@ import { Opciones } from './cabecera/opciones/opciones';
 import { PaginaError } from './paginaerror/paginaerror'
 import { VariablesCompartidas } from './servicios/variablesCompartidas';
 import { Librointeractivo } from './cuerpo/historia/librointeractivo/librointeractivo';
+import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes=[
 {path:'', component: Inicio},
@@ -55,7 +56,8 @@ const appRoutes: Routes=[
     AppRoutingModule,
     FormsModule,
     NgOptimizedImage,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    HttpClientModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

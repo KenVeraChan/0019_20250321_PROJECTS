@@ -6,12 +6,19 @@
 /out-tsc
 /bazel-out
 
-# Node
+# Node modules: el primero es para el frontend y el segundo para el backend
 /node_modules
+backend/node_modules
 npm-debug.log
 yarn-error.log
 
-# IDEs and editors
+# Variables de entorno de desarrollo y producción
+backend/.env
+.env
+.env.local
+.env.*.local
+
+# IDEs and editors y archivos de configuración
 .idea/
 .project
 .classpath
@@ -19,6 +26,7 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
+.cursor/
 
 # Visual Studio Code
 .vscode/*
@@ -29,7 +37,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+.angular/
 .sass-cache/
 /connect.lock
 /coverage

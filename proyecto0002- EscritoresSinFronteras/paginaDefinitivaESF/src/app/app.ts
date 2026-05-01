@@ -1,4 +1,5 @@
-import { Component, signal,OnInit, ViewChild, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Component,OnInit, ViewChild, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { RutaPrincipal } from '../app/servicios/rutaPrincipal';
 
 @Component({
   selector: 'app-root',
@@ -16,12 +17,21 @@ export class App implements OnInit{
       this.tamanioHorizontalPantalla = event.target.innerWidth;   
       return(this.tamanioHorizontalPantalla);
     }
-  constructor(private renderer: Renderer2) {}
+  
+  //Variable para probar la conexión con el backend
+  saludo: string | null = null;
+  constructor(private renderer: Renderer2, private rutaPrincipal: RutaPrincipal) {}
   ngOnInit(): void 
   {
     if (typeof window !== 'undefined') 
     {
       this.tamanioHorizontalPantalla = window.innerWidth;  //Ancho de la pantalla
+        
+        //Zona de pruebas para la conexión con el backend
+        this.rutaPrincipal.getSaludo().subscribe({
+        next: (res) => this.saludo = res.mensaje,
+        error: (err) => console.error('Error al obtener saludo', err)
+    });
     }
   }
   ngAfterViewInit() 

@@ -243,16 +243,45 @@
   margin: 0 auto;
   display: block;
 }
+
+@media screen and (max-width: 420px){
+  .btn{ width: 100%; }
+  /*TITULOS DE LAS PUBLICACIONES*/
+  .detailTitle
+    {
+    margin: 12px 0 10px;
+    font-size: 15px;
+    }
+  .audioLibroCargado
+    {
+      width: 100%;
+      max-width: 260px;
+    }
+}
+
 @media screen and (min-width: 576px){
   .publicacionesTitle{ font-size: 26px; }
   .postCard{ grid-column: span 6; }
+    /*TITULOS DE LAS PUBLICACIONES*/
+  .detailTitle
+    {
+    margin: 12px 0 10px;
+    font-size: 18px;
+    }
+  .audioLibroCargado
+    {
+      width: 100%;
+      max-width: 400px;
+    }
 }
 
 @media screen and (min-width: 992px){
   .postCard{ grid-column: span 4; }
   .publicacionesHeader{ padding: 18px; }
-}
-
-@media screen and (max-width: 420px){
-  .btn{ width: 100%; }
+    /*TITULOS DE LAS PUBLICACIONES*/
+  .audioLibroCargado
+    {
+      width: 100%;
+      max-width: 500px;
+    }
 }

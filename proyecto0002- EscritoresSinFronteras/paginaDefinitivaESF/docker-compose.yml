@@ -1,0 +1,42 @@
+services:
+  backend:
+    build: ./backend           # Construye la imagen a partir del Dockerfile en el directorio backend
+    container_name: backend    # Nombre del contenedor para el backend
+    restart: always            # Reinicia el contenedor automáticamente si se detiene
+    ports:                     # Mapea el puerto 3000 del contenedor al puerto 3000 del host
+      - "3000:3000"                 
+    environment:
+      DB_HOST: mysql           # Host de la base de datos (nombre del servicio MySQL)
+      DB_USER: root            # Usuario de la base de datos
+      DB_PASS: 1234            # Contraseña de la base de datos     
+      DB_NAME: BBDD_ESF        # Nombre de la base de datos 
+    depends_on:                # Asegura que el servicio MySQL se inicie antes que el backend
+      - mysql                  # MySQL es un servicio del mismo docker-compose, por lo que se puede referenciar por su nombre de servicio
+
+  mysql:
+    image: mysql:8               # Usa la imagen oficial de MySQL versión 8
+    container_name: mysql        # Nombre del contenedor para MySQL
+    restart: always              # Reinicia el contenedor automáticamente si se detiene
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234  # Contraseña para el usuario root de MySQL
+      MYSQL_DATABASE: BBDD_ESF   # Nombre de la base de datos que se creará automáticamente al iniciar el contenedor
+    ports:                       # Mapea el puerto 3306 del contenedor al puerto 3306 del host para permitir conexiones externas a MySQL
+      - "3306:3306"
+    volumes:                     # Monta un volumen para persistir los datos de MySQL, asegurando que los datos no se pierdan al reiniciar el contenedor
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin  # Usa la imagen oficial de phpMyAdmin
+    container_name: phpmyadmin    # Nombre del contenedor para phpMyAdmin
+    restart: always               # Reinicia el contenedor automáticamente si se detiene
+    ports:                        # Mapea el puerto 80 del contenedor al puerto 8080 del host para acceder a phpMyAdmin desde el navegador
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql             # Host de la base de datos que phpMyAdmin debe usar para conectarse (nombre del servicio MySQL)
+      PMA_USER: root              # Usuario de la base de datos para phpMyAdmin  
+      PMA_PASSWORD: 1234          # Contraseña de la base de datos para phpMyAdmin
+    depends_on:
+      - mysql                     # Asegura que el servicio MySQL se inicie antes que phpMyAdmin  
+
+volumes:
+  mysql_data:                     # Define un volumen llamado mysql_data para persistir los datos de MySQL, evitando la pérdida de datos al reiniciar el contenedor.
