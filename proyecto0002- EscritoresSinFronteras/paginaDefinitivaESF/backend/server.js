@@ -15,6 +15,30 @@ app.get("/api/saludo", (req, res) => {
   res.json({ mensaje: "Hola" });
 });
 
+//PARA OBTENER LAS NOTICIAS DESDE LA BASE DE DATOS
+//ENLACES EJECUTADAS DESDE EL BACKEND POR NODE.JS Y EXPRESS PARA OBTENER LAS NOTICIAS DESDE LA BASE DE DATOS
+//APARTADO 0: INICIO DE LA PAGINA WEB
+//APARTADO 1: NUESTRA HISTORIA DE LA PAGINA WEB
+//APARTADO 2: QUIENES SOMOS DE LA PAGINA WEB
+//APARTADO 3: BLOG LITERARIO DE LA PAGINA WEB
+//APARTADO 4: NUESTROS SERVICIOS DE LA PAGINA WEB
+//APARTADO 5: PUBLICACIONES DE LA PAGINA WEB
+//APARTADO 6: CONTACTO DE LA PAGINA WEB
+
+const areaConsultada= ['noticias','historia','equipo','blog','servicios','publicaciones','contacto'];  //Ruta para obtener las noticias desde la base de datos
+
+app.get('/api/' + areaConsultada[0] + '/', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM ' + areaConsultada[0]);   //Ejecuta una consulta SQL para obtener todos las entradas de la tabla 'noticias' en la base de datos
+    res.json(rows);    //Envía la respuesta al cliente en formato JSON con los datos obtenidos de la base de datos
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al obtener los datos deL APARTADO: ' + areaConsultada[0] + ' desde la base de datos' });  
+    //En caso de error, envía una respuesta con un mensaje de error y un código de estado 500    
+  }
+});
+
+
 app.listen(3000,"0.0.0.0", () => {
   console.log("Servidor escuchando en http://localhost:3000");
 });

@@ -3,14 +3,21 @@
 <h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
 <div class="fondo">
     <div class="cajaNoticias">
-        @for(escenas of objetoNoticias.noticia;track escenas;let i=$index)
+        @for(escenas of noticiasInicio;track escenas;let i=$index)
         {
-            <div class="areaNoticias">
-                <ul class="casilleroNoticias">
+            <div class="areaNoticias" [class.expanded]="isExpanded(i)">
+                <div class="noticias-header">
+                    <span class="etiqueta-noticia">Fecha {{escenas.getFecha()}}</span>
+                </div>
+                <ul class="casilleroNoticias" [class.expanded]="isExpanded(i)">
                     <li class="titular">{{ escenas.getTitular() }}</li>
                     <li class="subTitular">{{ escenas.getsubTitular() }}</li>
                     <li class="noticia">{{ escenas.getNoticia()}}</li>
                 </ul>
+                <button class="btn-expandir" (click)="toggleExpanded(i)"
+                        [class.contraer]="isExpanded(i)">
+                    {{ isExpanded(i) ? '− Contraer' : '+ Expandir' }}
+                </button>
             </div>
         }
     </div>

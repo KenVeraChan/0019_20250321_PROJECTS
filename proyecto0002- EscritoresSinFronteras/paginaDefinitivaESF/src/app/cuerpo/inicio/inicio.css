@@ -75,6 +75,8 @@
   -webkit-column-break-inside: avoid;
   display: inline-block;
   vertical-align: top;
+  position: relative;
+  padding-top: 12px;
 }
 
 .areaNoticias:hover {
@@ -84,8 +86,66 @@
 
 .casilleroNoticias {
   list-style: none;
-  padding: 12px 14px;
+  padding: 0px 14px 12px 14px;
   margin: 0;
+  margin-top:20px;    /*ESPACIO PARA LA UBICACION DE LA FECHA*/
+  max-height: 200px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.casilleroNoticias.expanded {
+  max-height: none;
+  overflow: visible;
+}
+
+.noticias-header {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: calc(100% - 28px);
+  height: 0;
+}
+
+.etiqueta-noticia {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+}
+
+.btn-expandir {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 8px;
+  background-color: rgba(70, 130, 210, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(70, 130, 210, 0.5);
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.btn-expandir:hover {
+  background-color: rgba(70, 130, 210, 0.5);
+  color: white;
+  border-color: rgba(70, 130, 210, 0.8);
+}
+
+.btn-expandir.contraer {
+  background-color: rgba(210, 130, 70, 0.3);
+  border-color: rgba(210, 130, 70, 0.5);
+}
+
+.btn-expandir.contraer:hover {
+  background-color: rgba(210, 130, 70, 0.5);
+  border-color: rgba(210, 130, 70, 0.8);
 }
 
 .titular {
