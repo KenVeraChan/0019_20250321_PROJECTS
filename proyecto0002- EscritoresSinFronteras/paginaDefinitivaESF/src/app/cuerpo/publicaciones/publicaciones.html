@@ -76,7 +76,6 @@
           <h2 class="detailTitle">{{ post.title }}</h2>
           <pre class="detailContent">{{ post.content }}</pre>
           <!--EN LA ZONA DE FOTOS DE LIBROS SE VERIFICA QUE EXISTA Y ESTE EN SU DIRECTORIO CORRESPONDIENTE-->
-
             @if(post.fotoLibro!="" && post.fotoLibro.includes('../../../assets/fotoLibros/')) {
               <h2 class="detailTitle">{{ post.fotoLibroTitulo }}</h2>  
               <div class="detailContent">

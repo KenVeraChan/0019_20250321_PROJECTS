@@ -41,7 +41,25 @@ export class VariablesCompartidas {
 
   //VARIABLES COMPARTIDAS ENTRE COMPONENTES
   public menuPrincipal: Apartados=new Apartados();
-  //AREA HISTORIAS DEL APARTADO "NUESTRA HISTORIA"
+
+  //VARIABLES URLS DEL 1 APARTADO: AREA DE INICIO
+  private URLnoticiaImagen:string="assets/images/inicio/imagenesInicio/";  //Esta variable se usa para verificar que la imagen de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra la imagen, y se muestra un mensaje de error en su lugar.
+  private URLnoticiaAudio:string="assets/audios/inicio/audiosInicio/";  //Esta variable se usa para verificar que el audio de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra el audio, y se muestra un mensaje de error en su lugar.
+  private URLnoticiaVideo:string="assets/videos/inicio/videosInicio/";  //Esta variable se usa para verificar que el video de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra el video, y se muestra un mensaje de error en su lugar.
+    public getImagenNoticia(): string
+    {
+      return this.URLnoticiaImagen;
+    }
+    public getAudioNoticia(): string
+    {
+      return this.URLnoticiaAudio;
+    }
+    public getVideoNoticia(): string
+    {
+      return this.URLnoticiaVideo;
+    }
+
+  //AREA HISTORIAS DEL APARTADO "NUESTRA HISTORIA
   public historias: Historias[]=[
     new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
     new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
@@ -67,7 +85,6 @@ export class VariablesCompartidas {
     new Historias(2,1,"2025","Escritores Sin Fronteras, crece en usuarios suscritos tanto de Facebook como de Instagram"),
     new Historias(3,5,"2025","Escritores Sin Fronteras, consigue su registro mercantil en Colombia como corporación online en existencia"),
     new Historias(4,8,"2025","Escritores Sin Fronteras, registra sus primeras ganancias")];
-
   //AREA DE QUIENES SOMOS PARA EL APARTADO DE "QUIENES SOMOS"
   public quienesSomos:QuienesSomos[]=[
     new QuienesSomos("Ken","Vera Chan","Español","Escritor y Fundador","Ken Vera Chan es un escritor apasionado por la literatura contemporánea y la narrativa innovadora. Con una carrera que abarca más de una década, Ken ha publicado varias novelas y colecciones de cuentos que han sido aclamadas por la crítica. Además de su trabajo literario, Ken es el fundador de 'Escritores Sin Fronteras', una plataforma dedicada a apoyar a escritores emergentes de todo el mundo.","assets/images/equipoESF/kenVeraChan.png"),

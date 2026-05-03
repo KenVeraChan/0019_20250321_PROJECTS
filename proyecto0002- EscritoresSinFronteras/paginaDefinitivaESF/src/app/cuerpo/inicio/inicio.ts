@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Conexion } from '../../servicios/variablesCompartidas';
 import { OnInit } from '@angular/core';
 import { Noticias } from '../../servicios/variablesCompartidas';
+import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
 
 @Component({
   selector: 'app-inicio',
@@ -12,6 +13,10 @@ import { Noticias } from '../../servicios/variablesCompartidas';
 export class Inicio implements OnInit {
   //Se recuperara el dato de la BBDD proporcionado por el SERVICIO
 noticiasInicio: any[] = [];
+private nexo= new VariablesCompartidas(); //Declaracion de VariablesCompartidas
+private urlImagen:string= this.nexo.getImagenNoticia();  //Esta variable se usa para verificar que la imagen de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra la imagen, y se muestra un mensaje de error en su lugar.
+private urlAudio:string= this.nexo.getAudioNoticia();  //Esta variable se usa para verificar que el audio de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra el audio, y se muestra un mensaje de error en su lugar.
+private urlVideo:string= this.nexo.getVideoNoticia();  //Esta variable se usa para verificar que el video de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra el video, y se muestra un mensaje de error en su lugar.
 
 constructor(private Conexion: Conexion){}
   ngOnInit() {
@@ -20,10 +25,10 @@ constructor(private Conexion: Conexion){}
         const noticia = new Noticias(
             a.titular,
             a.subTitular,
-            a.fecha,
-            a.imagen,
-            a.audio,
-            a.video,
+            a.fecha ? new Date(a.fecha).toISOString().slice(0, 10)  : '', // Formateo la fecha a 'YYYY-MM-DD' comprueba que la fecha posea la caracteristica de DATE
+            a.imagen? this.urlImagen.concat(a.imagen) : '',
+            a.audio? this.urlAudio.concat(a.audio) : '',
+            a.video? this.urlVideo.concat(a.video) : '',
             a.noticia);
     this.noticiasInicio.push(noticia);
       }
