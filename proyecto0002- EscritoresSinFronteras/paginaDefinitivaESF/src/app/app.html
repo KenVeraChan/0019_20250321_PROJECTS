@@ -7,12 +7,3 @@
 <div class="pie" #pie>
   <app-pie></app-pie>
 </div>
-<h1>Prueba de saludo</h1>
-
-<p *ngIf="saludo; else cargando">
-  Saludo desde el backend: {{ saludo }}
-</p>
-
-<ng-template #cargando>
-  Cargando saludo...
-</ng-template>

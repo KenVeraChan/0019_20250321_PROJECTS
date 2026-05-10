@@ -22,8 +22,11 @@ services:
       MYSQL_DATABASE: BBDD_ESF   # Nombre de la base de datos que se creará automáticamente al iniciar el contenedor
     ports:                       # Mapea el puerto 3306 del contenedor al puerto 3306 del host para permitir conexiones externas a MySQL
       - "3306:3306"
-    volumes:                     # Monta un volumen para persistir los datos de MySQL, asegurando que los datos no se pierdan al reiniciar el contenedor
+    volumes:
+      # Monta un volumen para persistir los datos de MySQL, asegurando que los datos no se pierdan al reiniciar el contenedor
       - mysql_data:/var/lib/mysql
+      # Montamos el init.sql en la carpeta que MySQL ejecuta automáticamente
+      - ./backend/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin  # Usa la imagen oficial de phpMyAdmin
