@@ -26,12 +26,6 @@ export class App implements OnInit{
     if (typeof window !== 'undefined') 
     {
       this.tamanioHorizontalPantalla = window.innerWidth;  //Ancho de la pantalla
-        
-        //Zona de pruebas para la conexión con el backend
-        this.rutaPrincipal.getSaludo().subscribe({
-        next: (res) => this.saludo = res.mensaje,
-        error: (err) => console.error('Error al obtener saludo', err)
-    });
     }
   }
   ngAfterViewInit() 

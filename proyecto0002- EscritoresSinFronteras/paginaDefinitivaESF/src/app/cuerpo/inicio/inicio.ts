@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { Conexion } from '../../servicios/variablesCompartidas';
 import { OnInit } from '@angular/core';
-import { Noticias } from '../../servicios/variablesCompartidas';
-import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
+import { Noticias, VariablesCompartidas } from '../../servicios/variablesCompartidas';
 
 @Component({
   selector: 'app-inicio',

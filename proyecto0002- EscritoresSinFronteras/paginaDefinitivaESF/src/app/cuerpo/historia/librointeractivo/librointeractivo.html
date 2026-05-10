@@ -18,9 +18,10 @@
             [class.decolorado]="pagina.decolorado"
             [class.invisible]="pagina.invisible"
             [style.z-index]="pagina.zIndex"
+            [class.textoInvisible]="pagina.textoInvisible"
             (click)="onPaginaClick($index, $event)"
         >
-            {{ pagina.titulo }}
+            {{ typeof pagina.titulo === 'function' ? pagina.titulo() : pagina.titulo }}
         </div>
         }
     </div>

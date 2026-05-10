@@ -57,6 +57,9 @@
         box-shadow: none;
         color: transparent;
     }
+    .textoInvisible{
+        color:transparent;
+    }
     .abrirLibro{
         position: absolute;
         bottom: 10px;

@@ -27,65 +27,50 @@ export class Conexion{
 }
 export class VariablesCompartidas {
 
-  public punteroSeleccionador:number=0;   //VARIABLE AUXILIAR PARA SELECCIONAR UNA FECHA Y MES DE LA CLASE HISTORIAS
-  
-  //VARIABLES PARA EL APARTADO DE HISTORIAS PUNTUALMENTE
-  public setPunteroSeleccionador(puntero:number):void
-  {
-    this.punteroSeleccionador=puntero;
-  }
-  public getPunteroSeleccionador():number
-  {
-    return this.punteroSeleccionador;
-  }
-
-  //VARIABLES COMPARTIDAS ENTRE COMPONENTES
+  //VARIABLES COMPARTIDAS ENTRE COMPONENTES PARA LA CARGA DEL MENU DE OPCIONES 
   public menuPrincipal: Apartados=new Apartados();
 
-  //VARIABLES URLS DEL 1 APARTADO: AREA DE INICIO
-  private URLnoticiaImagen:string="assets/images/inicio/imagenesInicio/";  //Esta variable se usa para verificar que la imagen de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra la imagen, y se muestra un mensaje de error en su lugar.
-  private URLnoticiaAudio:string="assets/audios/inicio/audiosInicio/";  //Esta variable se usa para verificar que el audio de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra el audio, y se muestra un mensaje de error en su lugar.
-  private URLnoticiaVideo:string="assets/videos/inicio/videosInicio/";  //Esta variable se usa para verificar que el video de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra el video, y se muestra un mensaje de error en su lugar.
-    public getImagenNoticia(): string
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///// VARIABLES URLS DEL 1 APARTADO: AREA DE INICIO /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private URLnoticiaImagen:string="assets/images/inicio/imagenesInicio/";  //Esta variable se usa para verificar que la imagen de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra la imagen, y se muestra un mensaje de error en su lugar.
+    private URLnoticiaAudio:string="assets/audios/inicio/audiosInicio/";  //Esta variable se usa para verificar que el audio de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra el audio, y se muestra un mensaje de error en su lugar.
+    private URLnoticiaVideo:string="assets/videos/inicio/videosInicio/";  //Esta variable se usa para verificar que el video de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra el video, y se muestra un mensaje de error en su lugar.
+      public getImagenNoticia(): string
+      {
+        return this.URLnoticiaImagen;
+      }
+      public getAudioNoticia(): string
+      {
+        return this.URLnoticiaAudio;
+      }
+      public getVideoNoticia(): string
+      {
+        return this.URLnoticiaVideo;
+      }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///// VARIABLES URLS DEL 2 APARTADO: AREA NUESTRA HISTORIA //////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public punteroSeleccionador:number=0;   //VARIABLE AUXILIAR PARA SELECCIONAR UNA FECHA Y MES DE LA CLASE HISTORIAS
+    
+    // VARIABLE Y METODO PARA EL APARTADO: NUESTRA HISTORIA
+    public setPunteroSeleccionador(puntero:number):void
     {
-      return this.URLnoticiaImagen;
+      this.punteroSeleccionador=puntero;
     }
-    public getAudioNoticia(): string
+    // VARIABLE Y METODO PARA EL APARTADO: LIBRO INTERACTIVO DENTRO DEL APARTADO: NUESTRA HISTORIA
+    public getPunteroSeleccionador():number
     {
-      return this.URLnoticiaAudio;
-    }
-    public getVideoNoticia(): string
-    {
-      return this.URLnoticiaVideo;
+      return this.punteroSeleccionador;
     }
 
-  //AREA HISTORIAS DEL APARTADO "NUESTRA HISTORIA
-  public historias: Historias[]=[
-    new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2005","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2009","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2010","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2011","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2012","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2013","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2014","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2015","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2016","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2017","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2018","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2019","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2020","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2021","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2022","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2023","Inicio en un grupo de escritura y lectura online"),
-    new Historias(0,9,"2024","Inicio en un grupo de escritura y lectura online"),
-    new Historias(1,12,"2024","Escritores Sin Fronteras, crea su primer logo corporativo"),
-    new Historias(2,1,"2025","Escritores Sin Fronteras, crece en usuarios suscritos tanto de Facebook como de Instagram"),
-    new Historias(3,5,"2025","Escritores Sin Fronteras, consigue su registro mercantil en Colombia como corporación online en existencia"),
-    new Historias(4,8,"2025","Escritores Sin Fronteras, registra sus primeras ganancias")];
-  //AREA DE QUIENES SOMOS PARA EL APARTADO DE "QUIENES SOMOS"
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///// VARIABLES URLS DEL 3 APARTADO: AREA QUIENES SOMOS /////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   public quienesSomos:QuienesSomos[]=[
     new QuienesSomos("Ken","Vera Chan","Español","Escritor y Fundador","Ken Vera Chan es un escritor apasionado por la literatura contemporánea y la narrativa innovadora. Con una carrera que abarca más de una década, Ken ha publicado varias novelas y colecciones de cuentos que han sido aclamadas por la crítica. Además de su trabajo literario, Ken es el fundador de 'Escritores Sin Fronteras', una plataforma dedicada a apoyar a escritores emergentes de todo el mundo.","assets/images/equipoESF/kenVeraChan.png"),
     new QuienesSomos("Diana","Emilce Zamora","Colombiana","Editora y Co-Fundadora","Diana Emilce Zamora es una editora experimentada con un profundo amor por la literatura hispanoamericana. Ha trabajado en diversas editoriales, ayudando a dar forma a las voces de nuevos escritores. Como co-fundadora de 'Escritores Sin Fronteras', Diana se dedica a crear oportunidades para que los escritores de diferentes culturas puedan compartir sus historias con una audiencia global.","assets/images/equipoESF/dianaEmilceZamora.png"),
