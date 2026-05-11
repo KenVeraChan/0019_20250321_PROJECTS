@@ -45,7 +45,6 @@
         /* Para efectos 3D */ 
         transform-style: preserve-3d;
         backface-visibility:visible; /* evita ver el reverso del elemento */
-        /*FALTA PONER COMANDO PARA HACER DESAPARECER EL TEXTO AL REVERSO*/
     }
     .rotado{
         transform: rotateY(180deg) translateX(15px);
@@ -82,4 +81,58 @@
     .aparece{
     color: black;
     }
+    .textoPergamino {
+    position: absolute;
+    top: 10%;
+    left: 8%;
+    width: 84%;
+    height: 80%;
+    font-family: 'Georgia', serif;
+    color: #2b1a0a;
+    line-height: 1.4;
+    text-align: justify;
+
+    /* Tamaño base para pantallas grandes */
+    font-size: 1.2vw;
+    }
+/* CONTENEDOR GENERAL PARA CENTRAR TODO */
+.contenedor-libro {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+}
+
+/* 📱 Móviles y tablets (<670px) */
+@media (max-width: 670px) {
+
+  /* PERGAMINO CENTRADO */
+  #libroAbierto {
+    position: absolute;
+    margin-top:-100px;
+    width: 40vw;
+    height: 80vw;
+    margin: 5vh auto;
+    background-image: url('../../../../assets/images/historia/pergaminoAbierto.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  /* CONTENEDOR INTERNO QUE CENTRA LAS PÁGINAS */
+  .paginas-wrapper {
+    position: relative;
+    width: 80%;      /* se adapta al pergamino */
+    height: 80%;
+  }
+  .textoPergamino {
+    font-size: 1.8vw;
+    line-height: 1.35;
+  }
+}
+
 /********************************************/

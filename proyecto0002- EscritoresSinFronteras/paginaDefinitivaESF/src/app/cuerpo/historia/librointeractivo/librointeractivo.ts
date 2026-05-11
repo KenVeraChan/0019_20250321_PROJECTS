@@ -117,7 +117,6 @@ export class Librointeractivo implements AfterViewInit, OnInit {
         textoInvisible: false
       });
     }
-    alert(this.paginas.length);
   }
 
   public onPaginaClick(index: number, event: MouseEvent): void 
