@@ -238,8 +238,10 @@
     padding: 10px 14px;
     font-size: 3.5vw;       /* se hace pequeño automáticamente */
   }
-.botonCerrarTabla {
+.accionCerrar {
+  width:auto;
   max-width: 200px;
+  margin-top: 450px;
   font-size: 80%;
 }
   .bloqueAcontecimientos {
@@ -255,6 +257,12 @@
 
   .historiaTabla {
     border-spacing: 8px;
+  }
+  .accionCerrar {
+  width:auto;
+  max-width: 200px;
+  margin-top: 450px;
+  font-size: 90%;
   }
 }
 
@@ -282,7 +290,12 @@
     margin-top: -52px;
     width: 100%;
   }
-
+  .accionCerrar {
+  width:auto;
+  max-width: 200px;
+  margin-top: 450px;
+  font-size: large;
+  }
   @media screen and (min-width: 1201px) and (max-width: 1300px) {
     .separadorMenu {
       margin-left: 27%;
