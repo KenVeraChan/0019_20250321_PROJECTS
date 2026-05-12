@@ -44,21 +44,19 @@
   background-clip: padding-box;
 }
 
-/* Columnas: cada tarjeta crece con el contenido y el flujo equilibra alturas entre columnas */
 .cajaNoticias {
   position: relative;
   width: 100%;
+  max-width: 1200px;
   margin-top: 20px;
   margin-bottom: 8px;
+  margin-left: auto;
+  margin-right: auto;
   padding-left: 58px;
   background-color: transparent;
   overflow: visible;
   padding-right: 4px;
   box-sizing: border-box;
-  /* Una columna por defecto; en pantallas amplias pasan a varias columnas automáticas */
-  column-width: 280px;
-  column-gap: 1.25rem;
-  column-fill: balance;
 }
 
 .areaNoticias {
@@ -70,11 +68,7 @@
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
   width: 100%;
   box-sizing: border-box;
-  break-inside: avoid;
-  page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  display: inline-block;
-  vertical-align: top;
+  display: block;
   position: relative;
   padding-top: 12px;
 }
@@ -181,11 +175,8 @@
   }
 
   .cajaNoticias {
-    column-count: 1;
-    column-width: auto;
     padding-left: 4%;
     padding-right: 4%;
-    box-sizing: border-box;
   }
 
   .areaNoticias {
@@ -200,11 +191,8 @@
   }
 
   .cajaNoticias {
-    column-count: 1;
-    column-width: auto;
     padding-left: 4%;
     padding-right: 4%;
-    box-sizing: border-box;
   }
 
   .areaNoticias {
@@ -219,10 +207,8 @@
   }
 
   .cajaNoticias {
-    column-width: 240px;
     padding-left: 4%;
     padding-right: 4%;
-    box-sizing: border-box;
   }
 
   .areaNoticias {
@@ -233,12 +219,7 @@
 
 @media screen and (min-width: 769px) and (max-width: 992px) {
   .fondo {
-    height: 740px;
-  }
-
-  .cajaNoticias {
-    column-width: 260px;
-    column-gap: 1.35rem;
+    height: max(740px, 55vw);
   }
 
   .areaNoticias {
@@ -249,13 +230,8 @@
 
 @media screen and (min-width: 993px) and (max-width: 1200px) {
   .fondo {
-    height: 800px;
+    height: max(800px, 56vw);
     margin-left: -40px;
-  }
-
-  .cajaNoticias {
-    column-width: 300px;
-    column-gap: 1.5rem;
   }
 
   .areaNoticias {
@@ -267,13 +243,8 @@
 
 @media screen and (min-width: 1201px) and (max-width: 1400px) {
   .fondo {
-    height: 850px;
+    height: max(850px, 58vw);
     margin-left: -40px;
-  }
-
-  .cajaNoticias {
-    column-width: 320px;
-    column-gap: 1.5rem;
   }
 
   .areaNoticias {
@@ -297,13 +268,8 @@
 
 @media screen and (min-width: 1401px) and (max-width: 1900px) {
   .fondo {
-    height: 850px;
+    height: max(850px, 60vw);
     margin-left: -40px;
-  }
-
-  .cajaNoticias {
-    column-width: 340px;
-    column-gap: 1.75rem;
   }
 
   .areaNoticias {
@@ -327,13 +293,8 @@
 
 @media screen and (min-width: 1901px) {
   .fondo {
-    height: 850px;
+    height: max(850px, 62vw);
     margin-left: -40px;
-  }
-
-  .cajaNoticias {
-    column-width: 380px;
-    column-gap: 2rem;
   }
 
   .areaNoticias {

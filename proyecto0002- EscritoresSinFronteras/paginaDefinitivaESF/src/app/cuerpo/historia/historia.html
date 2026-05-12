@@ -10,7 +10,7 @@
   @if (semaforo) {
     <div id="libroHistoria">
       <h2 class="tituloNoticias">Libro de la historia de Escritores Sin Fronteras</h2>
-      <app-librointeractivo id="libroInteractivo"></app-librointeractivo>
+      <app-librointeractivo id="libroInteractivo" [mesFiltro]="mesLibro" [anioFiltro]="anioLibro"></app-librointeractivo>
       <button type="button" class="accionCerrar" (click)="cerrarHistorial()">
         <span>CERRAR</span>
         <svg fill="none" viewBox="0 0 24 24" class="arrow" aria-hidden="true">
