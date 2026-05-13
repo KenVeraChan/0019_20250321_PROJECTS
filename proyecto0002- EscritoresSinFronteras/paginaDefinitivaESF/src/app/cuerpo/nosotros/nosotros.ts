@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
-import { NgOptimizedImage } from '@angular/common';
+import { QuienesSomos, VariablesCompartidas, Conexion, ImagenesExtra } from '../../servicios/variablesCompartidas';
 
 @Component({
   selector: 'app-nosotros',
@@ -10,27 +9,48 @@ import { NgOptimizedImage } from '@angular/common';
 })
 export class Nosotros {
   public equipo= new VariablesCompartidas();
-  public nombreQuien = this.equipo.quienesSomos[0].getNombre();
-  public apellidosQuien= this.equipo.quienesSomos[1].getApellidos();
-  public nacionalidadQuien = this.equipo.quienesSomos[2].getNacionalidad();
-  public rolQuien= this.equipo.quienesSomos[3].getProfesion();
-  public bioQuien= this.equipo.quienesSomos[4].getBiografia();
-  public fotoQuien= this.equipo.quienesSomos[0].getImagen();
+  public imagenesExtra= new ImagenesExtra();
+  // Array que almacena TODAS las IDENTIDADES DE EQUIPO en Escritores Sin Fronteras
+  public objetoEquipo: any[] = [];
+  /** true = panel cerrado (clase informacionPersonal); false = abierto (informacionPersonalCarga) */
   public cerrado: boolean[] = [];
-  public items = ['Uno', 'Dos', 'Tres','Cuatro','Cinco','Seis','Siete']; //Esto es solo un ejemplo para inicializar el array cerrado con la misma cantidad de elementos que el array quienesSomos
-  ngOnInit() {
-    this.cerrado = this.items.map(() => true);
-  }
-constructor()
-  {
+  // Almacena el ancho actual de la ventana del navegador en píxeles
+  public tamanioHorizontalPantalla = 0;
+
+  ngOnInit(): void {
+    // Llama al servicio HTTP para obtener los datos de historias desde el backend (índice 1 = tabla de historias)
+    this.Conexion.getAutores(2).subscribe(data => {
+          this.objetoEquipo = [];
+          data.forEach(a => {
+            const historia = new QuienesSomos(
+                a.id,
+                a.nombre,
+                a.apellidos,
+                a.nacionalidad,
+                a.profesion,
+                a.biografia,
+                a.fotografia);
+        this.objetoEquipo.push(historia);
+        }
+      );
+      // Todos cerrados al terminar de cargar el equipo (coincide con longitud real del array)
+      this.cerrado = this.objetoEquipo.map(() => true);
+    });
+    // Obtiene el ancho inicial de la ventana (o 1200 por defecto si no hay objeto window, ej: SSR)
+    this.tamanioHorizontalPantalla = typeof window !== 'undefined' ? window.innerWidth : 1200;
 
   }
+constructor(private Conexion: Conexion){}
 public mostrarInformacion(index: number): void {
   /*alert(`Nombre: ${this.equipo.quienesSomos[index].getNombre()} ${this.equipo.quienesSomos[index].getApellidos()}\n` +
         `Nacionalidad: ${this.equipo.quienesSomos[index].getNacionalidad()}\n` +
         `Rol: ${this.equipo.quienesSomos[index].getProfesion()}\n` +
         `Biografía: ${this.equipo.quienesSomos[index].getBiografia()}`); */
-    this.cerrado[index] = !this.cerrado[index];
+    const estabaAbierto = this.cerrado[index] === false;
+    this.cerrado = this.objetoEquipo.map(() => true);
+    if (!estabaAbierto) {
+      this.cerrado[index] = false;
+    }
   }
 
 }

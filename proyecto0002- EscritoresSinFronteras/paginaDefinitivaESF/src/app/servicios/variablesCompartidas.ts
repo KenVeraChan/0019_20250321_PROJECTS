@@ -71,15 +71,14 @@ export class VariablesCompartidas {
   ///// VARIABLES URLS DEL 3 APARTADO: AREA QUIENES SOMOS /////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public quienesSomos:QuienesSomos[]=[
-    new QuienesSomos("Ken","Vera Chan","Español","Escritor y Fundador","Ken Vera Chan es un escritor apasionado por la literatura contemporánea y la narrativa innovadora. Con una carrera que abarca más de una década, Ken ha publicado varias novelas y colecciones de cuentos que han sido aclamadas por la crítica. Además de su trabajo literario, Ken es el fundador de 'Escritores Sin Fronteras', una plataforma dedicada a apoyar a escritores emergentes de todo el mundo.","assets/images/equipoESF/kenVeraChan.png"),
-    new QuienesSomos("Diana","Emilce Zamora","Colombiana","Editora y Co-Fundadora","Diana Emilce Zamora es una editora experimentada con un profundo amor por la literatura hispanoamericana. Ha trabajado en diversas editoriales, ayudando a dar forma a las voces de nuevos escritores. Como co-fundadora de 'Escritores Sin Fronteras', Diana se dedica a crear oportunidades para que los escritores de diferentes culturas puedan compartir sus historias con una audiencia global.","assets/images/equipoESF/dianaEmilceZamora.png"),
-    new QuienesSomos("Cassandra","Romanova","Italiana","Community Manager","Cassandra Romanova es una experta en gestión de comunidades en línea y redes sociales. Con una sólida experiencia en marketing digital, Cassandra ha ayudado a numerosas organizaciones a construir y mantener comunidades vibrantes. En 'Escritores Sin Fronteras', Cassandra se encarga de conectar a escritores y lectores, fomentando un espacio inclusivo para el intercambio de ideas y creatividad.","assets/images/equipoESF/cassandraRomanova.png"),
-    new QuienesSomos("Sergio","Alvear","Peruano","Desarrollador Web","Sergio Alvear es un desarrollador web talentoso con una pasión por crear experiencias digitales intuitivas y atractivas. Con experiencia en diversas tecnologías web, Sergio ha contribuido al desarrollo de múltiples plataformas en línea. En 'Escritores Sin Fronteras', Sergio es responsable de mantener y mejorar la infraestructura técnica del sitio, asegurando que los usuarios tengan una experiencia fluida y agradable.","assets/images/equipoESF/sergioAlvear.png"),
-    new QuienesSomos("Maria Isabel","Muñoz","Colombiana","Diseñadora Gráfica","Maria Isabel Muñoz es una diseñadora gráfica creativa con un ojo para el detalle y la estética visual. Ha trabajado en proyectos de diseño para editoriales, campañas publicitarias y plataformas digitales. En 'Escritores Sin Fronteras', Maria Isabel se encarga de la identidad visual de la plataforma, creando diseños que reflejan la misión y los valores de la comunidad de escritores.","assets/images/equipoESF/mariaIsabelMunioz.png"),
-    new QuienesSomos("Daniela","Patrone","Argentina","Coordinadora de Eventos","Daniela Patrone es una profesional en gestión de eventos con una pasión por la literatura y la cultura. Ha organizado numerosos eventos literarios, talleres y conferencias que han reunido a escritores y lectores de diversas partes del mundo. En 'Escritores Sin Fronteras', Daniela coordina eventos que promueven la interacción y el crecimiento de la comunidad literaria.","assets/images/equipoESF/danielaPatrone.png"),
-    new QuienesSomos("Mario Alberto","Gómez","Argentino","Diseño gráfico y multimedia","Mario Alberto Gómez es un diseñador gráfico y multimedia con una amplia experiencia en la creación de contenido visual para plataformas digitales. Ha trabajado en proyectos que van desde el diseño web hasta la producción de videos promocionales. En 'Escritores Sin Fronteras', Mario Alberto aporta su talento para desarrollar materiales visuales que enriquecen la experiencia de los usuarios y promueven la plataforma.","assets/images/equipoESF/marioAlberto.png")
-  ];
+  // NO SE HA UTILIZADO NADA AL RESPECTO//
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///// VARIABLES URLS DEL 4 APARTADO: AREA BLOG LITERARIO ////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
   //AREA DE ESCENAS PARA EL APARTADO DE "SERVICIOS"
   public escenas:string[]=[
     "Noticia 1: Nuevo concurso literario abierto a todos los escritores emergentes.",
@@ -397,21 +396,28 @@ export class Historias
       return this.contenido;
     }
 }
-class QuienesSomos{
+export class QuienesSomos{
   /*RECOGIDO DE LA BBDD ESTRATEGICA*/
+    private id:number=0;
     private nombre:string="";
     private apellidos:string="";
     private nacionalidad:string="";
     private profesion:string="";
     private biografia:string="";
     private imagen:string="";
-    constructor(nombre:string, apellidos:string, nacionalidad:string, profesion:string, biografia:string, imagen:string){
+
+    constructor(id:number, nombre:string, apellidos:string, nacionalidad:string, profesion:string, biografia:string, imagen:string){
+        this.id=id;
         this.nombre=nombre;
         this.apellidos=apellidos;
         this.nacionalidad=nacionalidad;
         this.profesion=profesion;
         this.biografia=biografia;
         this.imagen=imagen;
+    }
+    public getId():number
+    {
+      return this.id;
     }
     public getNombre():string
     {
@@ -437,6 +443,10 @@ class QuienesSomos{
     {
       return this.imagen;
     }
+    public setId(id:number):void
+    {
+      this.id=id;
+    }
     public setNombre(nombre:string):void
     {
       this.nombre=nombre;
@@ -461,18 +471,23 @@ class QuienesSomos{
     {
       this.imagen=imagen;
     }
-    public getImagenEquipo(): string
-    {
-      const quienesSomosImagen: string="assets/images/equipoESF/imagenEquipo.png";
-      return quienesSomosImagen;
-    }
-    public getImagenLibro():string
-    {
-      const quienesSomosImagen: string="assets/images/equipoESF/libro.png";
-      return quienesSomosImagen;
-    }
 }
-
+export class ImagenesExtra
+{
+  private quienesSomosImagen:string="";
+  constructor()
+  {
+    //No se instancia nada, solo se lee de una variable
+  }
+  public getImagenEquipo(): string
+  {
+    return this.quienesSomosImagen="assets/images/equipoESF/imagenEquipo.png";
+  }
+  public getImagenLibro():string
+  {
+    return this.quienesSomosImagen="assets/images/equipoESF/libro.png";
+  }
+}
 //Tanto el BLOG como las PUBLICACIONES NO comparten el mismo modelo de datos
 
 //el de PUBLICACIONES se llama PublicacionesPost 

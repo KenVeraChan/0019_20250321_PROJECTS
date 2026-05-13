@@ -3,7 +3,7 @@
 <h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
 
 <div id="zonaNosotros" role="list">
-    @for(personal of equipo.quienesSomos; track $index){
+    @for(personal of objetoEquipo; track $index){
     <div class="seccionNosotros" 
          style="--i: {{$index}}" 
          (click)="mostrarInformacion($index)"
@@ -12,7 +12,7 @@
          (keydown.enter)="mostrarInformacion($index)"
          (keydown.space)="mostrarInformacion($index)">
         
-        <img ngSrc={{personal.getImagenLibro()}} 
+        <img [ngSrc]="imagenesExtra.getImagenLibro()"
              width="300" 
              height="70" 
              style="height:auto;" 
@@ -53,9 +53,10 @@
                     <tr>
                         <td class="celda"><strong>Foto:</strong></td>
                         <td>
-                          <img src={{personal.getImagen()}} 
-                               alt="Foto de perfil de {{personal.getNombre()}} {{personal.getApellidos()}}" 
-                               class="areaImagenPersonal">
+                          <img [src]="personal.getImagen()"
+                               alt="Foto de perfil de {{personal.getNombre()}} {{personal.getApellidos()}}"
+                               class="areaImagenPersonal"
+                               loading="lazy">
                         </td>
                     </tr>
                 </tbody>
@@ -65,7 +66,7 @@
     }
 </div>
 
-<img src={{equipo.quienesSomos[0].getImagenEquipo()}} 
-     alt="Equipo completo de Escritores Sin Fronteras" 
+<img [src]="imagenesExtra.getImagenEquipo()"
+     alt="Equipo completo de Escritores Sin Fronteras"
      class="areaImagen"
      loading="lazy">

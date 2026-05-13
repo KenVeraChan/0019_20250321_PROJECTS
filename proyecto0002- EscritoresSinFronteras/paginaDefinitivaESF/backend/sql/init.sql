@@ -135,6 +135,33 @@ INSERT INTO historia (mes, anio, contenido) VALUES (1,"2026","Hacia finales del 
 /***********************************************************************************************************************************************************/
 /***********************************************************************************************************************************************************/
 
+/********************************************************************************/
+/**************   TABLA PARA EQUIPO: APARTADO 3 QUIENES SOMOS *******************/
+/********************************************************************************/
+
+CREATE TABLE equipo (     
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(30) NOT NULL,
+    apellidos VARCHAR(50) NOT NULL,
+    profesion VARCHAR(200) NOT NULL,
+    nacionalidad VARCHAR(30) NOT NULL,
+    biografia VARCHAR(4000) NOT NULL,
+    fotografia VARCHAR(500) NOT NULL
+);
+
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Ken","Vera Chan","Ingeniero, profesor, escritor y cofundador de E.S.F.","Española", "Ken Vera Chan es un escritor apasionado por la literatura contemporánea y la narrativa innovadora. Con una carrera que abarca más de una década, Ken ha publicado varias novelas y colecciones de cuentos que han sido aclamadas por la crítica. Además de su trabajo literario, Ken es el fundador de 'Escritores Sin Fronteras', una plataforma dedicada a apoyar a escritores emergentes de todo el mundo.","assets/images/equipoESF/kenVeraChan.png");
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Diana","Emilce Zamora","Psicóloga, escritora y cofundadora de E.S.F.","Colombiana", "Diana Emilce Zamora es una editora experimentada con un profundo amor por la literatura hispanoamericana. Ha trabajado en diversas editoriales, ayudando a dar forma a las voces de nuevos escritores. Como co-fundadora de 'Escritores Sin Fronteras', Diana se dedica a crear oportunidades para que los escritores de diferentes culturas puedan compartir sus historias con una audiencia global.","assets/images/equipoESF/dianaEmilceZamora.png");
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Cassandra","Romanova","Community Manager y cofundadora de E.S.F.", "Italiana", "Cassandra Romanova es una experta en gestión de comunidades en línea y redes sociales. Con una sólida experiencia en marketing digital, Cassandra ha ayudado a numerosas organizaciones a construir y mantener comunidades vibrantes. En 'Escritores Sin Fronteras', Cassandra se encarga de conectar a escritores y lectores, fomentando un espacio inclusivo para el intercambio de ideas y creatividad.","assets/images/equipoESF/cassandraRomanova.png");
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Sergio","Alvear","Desarrollador personal y docente", "Peruano", "Sergio Alvear es un desarrollador web talentoso con una pasión por crear experiencias digitales intuitivas y atractivas. Con experiencia en diversas tecnologías web, Sergio ha contribuido al desarrollo de múltiples plataformas en línea. En 'Escritores Sin Fronteras', Sergio es responsable de mantener y mejorar la infraestructura técnica del sitio, asegurando que los usuarios tengan una experiencia fluida y agradable.","assets/images/equipoESF/sergioAlvear.png");
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("María Isabel","Muñoz","Diseñadora gráfica e interpersoanl","Colombiana", "Maria Isabel Muñoz es una diseñadora gráfica creativa con un ojo para el detalle y la estética visual. Ha trabajado en proyectos de diseño para editoriales, campañas publicitarias y plataformas digitales. En 'Escritores Sin Fronteras', Maria Isabel se encarga de la identidad visual de la plataforma, creando diseños que reflejan la misión y los valores de la comunidad de escritores.","assets/images/equipoESF/mariaIsabelMunioz.png");
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Daniela","Patrone","Coordinadora de eventos y profesora", "Argentina", "Daniela Patrone es una profesional en gestión de eventos con una pasión por la literatura y la cultura. Ha organizado numerosos eventos literarios, talleres y conferencias que han reunido a escritores y lectores de diversas partes del mundo. En 'Escritores Sin Fronteras', Daniela coordina eventos que promueven la interacción y el crecimiento de la comunidad literaria.","assets/images/equipoESF/danielaPatrone.png");
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Mario","Alberto","Diseñador gráfico y multimedia", "Argentina", "Mario Alberto Gómez es un diseñador gráfico y multimedia con una amplia experiencia en la creación de contenido visual para plataformas digitales. Ha trabajado en proyectos que van desde el diseño web hasta la producción de videos promocionales. En 'Escritores Sin Fronteras', Mario Alberto aporta su talento para desarrollar materiales visuales que enriquecen la experiencia de los usuarios y promueven la plataforma.","assets/images/equipoESF/marioAlberto.png");
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Nilton","Gómez","Publicador profesional y creador de contenido", "Peruano","Nilton es creador digital y un coach dedicado a las personas en redes sociales, además de escritor y novelista","assets/images/equipoESF/niltonGomez.png");
+
+/***********************************************************************************************************************************************************/
+/***********************************************************************************************************************************************************/
+
+
 /*******************************************************************************************/
 /******************   PARA TODAS LAS TABLAS DE LA BASE DE DATOS CREADA  ********************/
 /*******************************************************************************************/
