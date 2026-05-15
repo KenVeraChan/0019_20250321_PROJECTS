@@ -24,8 +24,8 @@ export class Nosotros {
           data.forEach(a => {
             const historia = new QuienesSomos(
                 a.id,
-                a.nombre,
-                a.apellidos,
+                a.titulo,
+                a.tipo,
                 a.nacionalidad,
                 a.profesion,
                 a.biografia,
@@ -38,7 +38,6 @@ export class Nosotros {
     });
     // Obtiene el ancho inicial de la ventana (o 1200 por defecto si no hay objeto window, ej: SSR)
     this.tamanioHorizontalPantalla = typeof window !== 'undefined' ? window.innerWidth : 1200;
-
   }
 constructor(private Conexion: Conexion){}
 public mostrarInformacion(index: number): void {

@@ -30,9 +30,9 @@ export class VariablesCompartidas {
   //VARIABLES COMPARTIDAS ENTRE COMPONENTES PARA LA CARGA DEL MENU DE OPCIONES 
   public menuPrincipal: Apartados=new Apartados();
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///// VARIABLES URLS DEL 1 APARTADO: AREA DE INICIO /////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///// VARIABLES URLS DEL 1 APARTADO: AREA DE INICIO //////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private URLnoticiaImagen:string="assets/images/inicio/imagenesInicio/";  //Esta variable se usa para verificar que la imagen de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra la imagen, y se muestra un mensaje de error en su lugar.
     private URLnoticiaAudio:string="assets/audios/inicio/audiosInicio/";  //Esta variable se usa para verificar que el audio de la noticia exista y esté en su directorio correspondiente, si no es así, no se muestra el audio, y se muestra un mensaje de error en su lugar.
@@ -50,9 +50,9 @@ export class VariablesCompartidas {
         return this.URLnoticiaVideo;
       }
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///// VARIABLES URLS DEL 2 APARTADO: AREA NUESTRA HISTORIA //////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///// VARIABLES URLS DEL 2 APARTADO: AREA NUESTRA HISTORIA /////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public punteroSeleccionador:number=0;   //VARIABLE AUXILIAR PARA SELECCIONAR UNA FECHA Y MES DE LA CLASE HISTORIAS
     
@@ -67,31 +67,26 @@ export class VariablesCompartidas {
       return this.punteroSeleccionador;
     }
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///// VARIABLES URLS DEL 3 APARTADO: AREA QUIENES SOMOS /////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///// VARIABLES URLS DEL 3 APARTADO: AREA QUIENES SOMOS ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // NO SE HA UTILIZADO NADA AL RESPECTO//
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ///// VARIABLES URLS DEL 4 APARTADO: AREA BLOG LITERARIO ////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///// VARIABLES URLS DEL 4 APARTADO: AREA BLOG LITERARIO ///////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-  //AREA DE ESCENAS PARA EL APARTADO DE "SERVICIOS"
-  public escenas:string[]=[
-    "Noticia 1: Nuevo concurso literario abierto a todos los escritores emergentes.",
-    "Noticia 2: Entrevista exclusiva con el autor best-seller del año.",
-    "Noticia 3: Talleres de escritura creativa disponibles en línea.",
-    "Noticia 4: Lanzamiento de la nueva plataforma para compartir relatos cortos.",
-    "Noticia 5: Evento virtual con autores reconocidos a nivel internacional."
-  ];
-  //AREA DE PUBLICACIONES PARA EL APARTADO DE PUBLICACIONES
-  public publicacionesPosteadas: publicaciones=new publicaciones();
-
-  //AREA DE BLOG PARA EL APARTADO DE BLOG LITERARIO
-  public blogsPosteados: blogs=new blogs();
+    //AREA DE ESCENAS PARA EL APARTADO DE "SERVICIOS"
+    public escenas:string[]=[
+      "Noticia 1: Nuevo concurso literario abierto a todos los escritores emergentes.",
+      "Noticia 2: Entrevista exclusiva con el autor best-seller del año.",
+      "Noticia 3: Talleres de escritura creativa disponibles en línea.",
+      "Noticia 4: Lanzamiento de la nueva plataforma para compartir relatos cortos.",
+      "Noticia 5: Evento virtual con autores reconocidos a nivel internacional."
+    ];
+    //AREA DE PUBLICACIONES PARA EL APARTADO DE PUBLICACIONES
+    public publicacionesPosteadas: publicaciones=new publicaciones();
 
 }
 class Apartados{
@@ -534,11 +529,11 @@ export type PublicacionesPost = {
 //por ahora son SIMILARES.
 export type BlogPostType = 'verso' | 'prosa' | 'reflexion';
 
-export type BlogPost = {
+export interface BlogPost {
   id: string;
-  title: string;
-  type: BlogPostType;
-  content: string;
+  titulo: string;
+  tipo: BlogPostType;
+  contenido: string;
   authorEmail: string;
   createdAtIso: string;
 };
@@ -677,17 +672,37 @@ export class publicaciones implements PublicacionesPost {
 
 export class blogs implements BlogPost
   {
-  public id: string="";
-  public title: string="";
-  public type: BlogPostType="verso";
-  public content: string="";
-  public authorEmail: string="";
-  public createdAtIso: string="";
-  
-  constructor()
-  {
-    //No precisa de instanciar nada
-  }
+    private _id:string="";
+    private _titulo: string="";
+    private _tipo: BlogPostType="verso";
+    private _eleccionTipo: number=0;   //Se selecciona un numero para luego ponerlo en un metodo y devolver TIPO
+    private _contenido: string="";
+    private _authorEmail: string="";
+    private _createdAtIso: string="";
+
+    constructor(id:string,titulo:string,tipo:BlogPostType,contenido:string,authorEmail:string,createdAtIso:string) {
+      this._id =id;
+      this._titulo = titulo;
+      this._tipo = tipo;
+      this._contenido = contenido;
+      this._authorEmail = authorEmail;
+      this._createdAtIso = createdAtIso;
+    }
+      public setId(valor:string):void{this._id=valor;}
+      public get id():string{return this._id;}
+      public setTitulo(valor:string):void{this._titulo=valor;}
+      public get titulo():string{return this._titulo;}
+      public setTipo(valor:BlogPostType):void{this._tipo=valor}
+      public get tipo():BlogPostType{return this._tipo;}
+      public setEleccionTipo(valor:number):void{this._eleccionTipo=valor}
+      public get eleccionTipo():number{return this._eleccionTipo;}
+      public setContenido(valor:string):void{this._contenido=valor;}
+      public get contenido():string{return this._contenido;}
+      public setAuthorEmail(valor:string):void{this._authorEmail=valor;}
+      public get authorEmail():string{return this._authorEmail;}
+      public setCreatedAtIso(valor:string):void{this._createdAtIso=valor}
+      public get createdAtIso():string{return this._createdAtIso;}
+
   public generoBlog(eleccion:number):string 
   {
     const PublicacionesPostType: string[]=["verso","prosa","reflexion"];
@@ -701,9 +716,9 @@ export class blogs implements BlogPost
     return [
       {
         id: this.makeIdBlog(),
-        title: 'Frontera de tinta',
-        type: this.generoBlog(0).toString() as BlogPostType,
-        content: 'Cruzo la página,\\n' +
+        titulo: 'Frontera de tinta',
+        tipo: this.generoBlog(this.eleccionTipo).toString() as BlogPostType,
+        contenido: 'Cruzo la página,\\n' +
           'no por huir del mundo,\\n' +
           'sino por nombrarlo.\\n\\n' +
           'Y en cada palabra\\n' +
@@ -714,9 +729,9 @@ export class blogs implements BlogPost
       },
       {
         id: this.makeIdBlog(),
-        title: 'La prosa como refugio',
-        type: this.generoBlog(1).toString() as BlogPostType,
-        content:
+        titulo: 'La prosa como refugio',
+        tipo: this.generoBlog(1).toString() as BlogPostType,
+        contenido:
           'Escribir en prosa es permitir que la respiración encuentre su ritmo. ' +
           'No se trata de adornar, sino de sostener el sentido con claridad. ' +
           'Cuando la frase avanza, también avanza la posibilidad de comprender.\\n\\n' +
@@ -726,9 +741,9 @@ export class blogs implements BlogPost
       },
       {
         id: this.makeIdBlog(),
-        title: 'Una reflexión para hoy',
-        type: this.generoBlog(2).toString() as BlogPostType,
-        content:
+        titulo: 'Una reflexión para hoy',
+        tipo: this.generoBlog(2).toString() as BlogPostType,
+        contenido:
           'A veces la frontera no está afuera, sino entre lo que pensamos y lo que nos animamos a decir. ' +
           'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
         authorEmail: 'equipo@esf.org',
@@ -736,9 +751,9 @@ export class blogs implements BlogPost
       },
             {
         id: this.makeIdBlog(),
-        title: 'Una reflexión de AYER',
-        type: this.generoBlog(2).toString() as BlogPostType,
-        content:
+        titulo: 'Una reflexión de AYER',
+        tipo: this.generoBlog(2).toString() as BlogPostType,
+        contenido:
           'A veces me acuerdo de ti porque siempre has vivido en mi ' +
           'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
         authorEmail: 'esfer4d_corporation@outlook.com',

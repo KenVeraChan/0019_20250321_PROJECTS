@@ -25,9 +25,9 @@ constructor(private Conexion: Conexion){}
             a.titular,
             a.subTitular,
             a.fecha ? new Date(a.fecha).toISOString().slice(0, 10)  : '', // Formateo la fecha a 'YYYY-MM-DD' comprueba que la fecha posea la caracteristica de DATE
-            a.imagen? this.urlImagen.concat(a.imagen) : '',
-            a.audio? this.urlAudio.concat(a.audio) : '',
-            a.video? this.urlVideo.concat(a.video) : '',
+            a.imagen? a.imagen:this.urlImagen.concat(a.imagen),
+            a.audio? a.audio:this.urlAudio.concat(a.audio),
+            a.video? a.video:this.urlVideo.concat(a.video),
             a.noticia);
     this.noticiasInicio.push(noticia);
       }

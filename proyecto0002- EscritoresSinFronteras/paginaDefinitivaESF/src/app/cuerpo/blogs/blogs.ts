@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
+import { blogs, VariablesCompartidas, Conexion, ImagenesExtra } from '../../servicios/variablesCompartidas';
 import { BlogPost, BlogPostType } from '../../servicios/variablesCompartidas';
 
 @Component({
@@ -12,7 +12,7 @@ export class Blogs implements OnInit {
   public matrizApartados= new VariablesCompartidas();
   private readonly storageKeyPosts = 'esf_blog_posts_v1';
   private readonly storageKeyUserEmail = 'esf_blog_user_email_v1';
-  public datosJsonBlog= new VariablesCompartidas().blogsPosteados.envioPosteadoBlog();  //Variable para acceder a los datos JSON de publicaciones desde las variables compartidas
+  public datosJsonBlog: any;
 
   public userEmail = '';
   public emailInput = '';
@@ -22,6 +22,7 @@ export class Blogs implements OnInit {
 
   public posts: BlogPost[] = [];
   public filteredPosts: BlogPost[] = [];
+  public blogRecibido: any[]=[];
 
   public filterType: 'todos' | BlogPostType = 'todos';
   public search = '';
@@ -33,8 +34,37 @@ export class Blogs implements OnInit {
   public createContent = '';
 
   public errorMsg = '';
+  // Almacena el ancho actual de la ventana del navegador en píxeles
+  public tamanioHorizontalPantalla = 0;
+
+  constructor(private Conexion: Conexion){}
 
   ngOnInit(): void {
+
+    // Llama al servicio HTTP para obtener los datos de historias desde el backend (índice 1 = tabla de historias)
+    this.Conexion.getAutores(3).subscribe(data => {
+          this.blogRecibido = [];
+          data.forEach(a => {
+            const historia = new blogs(
+                a.id,
+                a.titulo,
+                a.tipo,
+                a.contenido,
+                a.authorEmal,
+                a.createdAtIso);
+        this.blogRecibido.push(historia);
+        }
+      );
+    });
+
+    //IMPORTANTE: Variable para acceder a los datos JSON de publicaciones desde las variables compartidas
+    this.datosJsonBlog= this.blogRecibido;
+
+    // Obtiene el ancho inicial de la ventana (o 1200 por defecto si no hay objeto window, ej: SSR)
+    this.tamanioHorizontalPantalla = typeof window !== 'undefined' ? window.innerWidth : 1200;
+
+    //ALMACENAMIENTO DE DATOS EN EL ALMACENAMIENTO LOCAL
+
     this.userEmail = this.safeGet(this.storageKeyUserEmail) ?? '';
     this.emailInput = this.userEmail;
 
