@@ -20,6 +20,27 @@ export class Conexion{
     return this.http.get<any[]>(this.apiUrlApi[eleccion]);  
     //Esto devuelve un Observable que se suscribe en el componente para obtener los datos de la BBDD, el eleccion se corresponde con el indice del array de URLs, que a su vez se corresponde con el indice del array de apartados, por lo que es una forma de centralizar las URLs y evitar tener que escribirlas en cada componente, además de facilitar su mantenimiento y actualización.
   }
+  /**
+   * Inserta una fila en la tabla blog (POST). Lo invoca blogs.ts → submitPost() tras validar en cliente.
+   * Par de estudio: server.js app.post('/api/blog') y blogs.ts subscribe({ next, error }).
+   */
+  public crearEntradaBlog(entrada: {
+    titulo: string; // → columna titulo
+    tipo: BlogPostType; // → columna tipo (0|1|2 vía tipoBlogToInt en el servidor)
+    contenido: string; // → columna contenido
+    nombre: string; // → columna nombre (solo letras en validación Angular)
+    primerapellido: string; // → columna primerapellido (minúsculas = nombre en JSON y BD)
+    segundoapellido: string; // → columna segundoapellido
+    pais: string; // → columna pais (letras y espacios, p. ej. "Costa Rica")
+    email: string; // → columna email (isEmail en servidor)
+    fecha?: string; // → columna fecha; opcional, el servidor pone hoy si falta
+  }): Observable<Record<string, unknown>> {
+    // HttpClient serializa "entrada" a JSON y envía Content-Type: application/json
+    return this.http.post<Record<string, unknown>>(
+      this.apiUrlApi[3], // 'http://localhost:3000/api/blog' — índice 3 = apartado blog en el menú
+      entrada, // Cuerpo POST; debe coincidir con body('...') en server.js
+    );
+  }
   public getURLAPI(indice:number):string
   {
     return this.apiUrlApi[indice];
@@ -534,6 +555,10 @@ export interface BlogPost {
   titulo: string;
   tipo: BlogPostType;
   contenido: string;
+  nombre: string,
+  primerapellido: string,
+  segundoapellido: string,
+  pais: string,
   authorEmail: string;
   createdAtIso: string;
 };
@@ -669,100 +694,3 @@ export class publicaciones implements PublicacionesPost {
   return palabra;
   }
 }
-
-export class blogs implements BlogPost
-  {
-    private _id:string="";
-    private _titulo: string="";
-    private _tipo: BlogPostType="verso";
-    private _eleccionTipo: number=0;   //Se selecciona un numero para luego ponerlo en un metodo y devolver TIPO
-    private _contenido: string="";
-    private _authorEmail: string="";
-    private _createdAtIso: string="";
-
-    constructor(id:string,titulo:string,tipo:BlogPostType,contenido:string,authorEmail:string,createdAtIso:string) {
-      this._id =id;
-      this._titulo = titulo;
-      this._tipo = tipo;
-      this._contenido = contenido;
-      this._authorEmail = authorEmail;
-      this._createdAtIso = createdAtIso;
-    }
-      public setId(valor:string):void{this._id=valor;}
-      public get id():string{return this._id;}
-      public setTitulo(valor:string):void{this._titulo=valor;}
-      public get titulo():string{return this._titulo;}
-      public setTipo(valor:BlogPostType):void{this._tipo=valor}
-      public get tipo():BlogPostType{return this._tipo;}
-      public setEleccionTipo(valor:number):void{this._eleccionTipo=valor}
-      public get eleccionTipo():number{return this._eleccionTipo;}
-      public setContenido(valor:string):void{this._contenido=valor;}
-      public get contenido():string{return this._contenido;}
-      public setAuthorEmail(valor:string):void{this._authorEmail=valor;}
-      public get authorEmail():string{return this._authorEmail;}
-      public setCreatedAtIso(valor:string):void{this._createdAtIso=valor}
-      public get createdAtIso():string{return this._createdAtIso;}
-
-  public generoBlog(eleccion:number):string 
-  {
-    const PublicacionesPostType: string[]=["verso","prosa","reflexion"];
-    if(eleccion==0) return PublicacionesPostType[0];
-    if(eleccion==1) return PublicacionesPostType[1];
-    if(eleccion==2) return PublicacionesPostType[2];
-    return PublicacionesPostType[0];
-  }
-  public envioPosteadoBlog(): BlogPost[] {
-    const now = Date.now();
-    return [
-      {
-        id: this.makeIdBlog(),
-        titulo: 'Frontera de tinta',
-        tipo: this.generoBlog(this.eleccionTipo).toString() as BlogPostType,
-        contenido: 'Cruzo la página,\\n' +
-          'no por huir del mundo,\\n' +
-          'sino por nombrarlo.\\n\\n' +
-          'Y en cada palabra\\n' +
-          'una casa posible\\n' +
-          'para lo que duele.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 60 * 28).toISOString(),
-      },
-      {
-        id: this.makeIdBlog(),
-        titulo: 'La prosa como refugio',
-        tipo: this.generoBlog(1).toString() as BlogPostType,
-        contenido:
-          'Escribir en prosa es permitir que la respiración encuentre su ritmo. ' +
-          'No se trata de adornar, sino de sostener el sentido con claridad. ' +
-          'Cuando la frase avanza, también avanza la posibilidad de comprender.\\n\\n' +
-          'Publica aquí tus relatos, escenas, cartas o memorias: lo importante es la honestidad del tono.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 60 * 10).toISOString(),
-      },
-      {
-        id: this.makeIdBlog(),
-        titulo: 'Una reflexión para hoy',
-        tipo: this.generoBlog(2).toString() as BlogPostType,
-        contenido:
-          'A veces la frontera no está afuera, sino entre lo que pensamos y lo que nos animamos a decir. ' +
-          'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
-      },
-            {
-        id: this.makeIdBlog(),
-        titulo: 'Una reflexión de AYER',
-        tipo: this.generoBlog(2).toString() as BlogPostType,
-        contenido:
-          'A veces me acuerdo de ti porque siempre has vivido en mi ' +
-          'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
-        authorEmail: 'esfer4d_corporation@outlook.com',
-        createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
-      },
-    ];
-  }
-  public makeIdBlog(): string {
-  const palabra= 'p_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
-  return palabra;
-  }
-  }

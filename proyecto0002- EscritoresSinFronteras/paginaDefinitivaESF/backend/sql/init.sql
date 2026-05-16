@@ -167,12 +167,24 @@ INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotog
 
 CREATE TABLE blog (     
     id INT PRIMARY KEY AUTO_INCREMENT,
-    titulo VARCHAR(30) NOT NULL,
+    titulo VARCHAR(500) NOT NULL,
     tipo INT NOT NULL,
     contenido VARCHAR(2000) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    primerapellido VARCHAR(50) NOT NULL,
+    segundoapellido VARCHAR(50) NOT NULL,
+    pais VARCHAR(50) NOT NULL,
     email VARCHAR(70) NOT NULL,
     fecha DATE NOT NULL
 );
+
+INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapellido, pais, email, fecha) VALUES ("Frontera de tinta",0,"'Cruzo la página, no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.'","Juan","Martínez","Salgado","Cuba","equipo@esf.org","2024-06-10");
+INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapellido, pais, email, fecha) VALUES ("El susurro que dejó la noche",2,"'Cruzo la página, no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.'","Jimeno","Orlando","Treffen","Argentina","equipo@esf.org","2026-05-16");
+INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapellido, pais, email, fecha) VALUES ("Donde el viento aprende mi nombre",2,"'Cruzo la página no por huir del mundo sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.'","Maria","Romero","Nalda","Mexico","equipo@esf.org","2026-02-01");
+INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapellido, pais, email, fecha) VALUES ("Cartografía de un latido cansado",1,"'Cruzo la página, no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.'","Jacinto","Martín","Robles","España","equipo@esf.org","2025-02-11");
+INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapellido, pais, email, fecha) VALUES ("La orilla que nunca regresa",1,"'Cruzo la página, no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.'","Blanca","Pascual","Neruda","República Dominicana","equipo@esf.org","2026-04-03");
+INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapellido, pais, email, fecha) VALUES ("Inventario de silencios rotos",2,"'Cruzo la página, no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.'","Lucas","Ponce","Laredo","Portugal","equipo@esf.org","2025-09-09");
+INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapellido, pais, email, fecha) VALUES ("El eco que se quedó a vivir en mí",0,"'Cruzo la página, no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.'","Carmen","Escila","Norris","Canadá","equipo@esf.org","2026-02-02");
 
 /*******************************************************************************************/
 /******************   PARA TODAS LAS TABLAS DE LA BASE DE DATOS CREADA  ********************/

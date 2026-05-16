@@ -229,7 +229,7 @@
   margin-top: 14px;
   background: rgba(46, 52, 128, 0.50);
   border-radius: 18px;
-  padding: 14px;
+  padding: 18px 20px 20px;
   border: 1px solid rgba(255,255,255,0.14);
   box-shadow: 0 10px 18px rgba(0,0,0,0.25);
 }
@@ -263,36 +263,102 @@
 }
 
 .createHeader{
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 .createTitle{
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 600;
 }
 .createHint{
-  margin: 6px 0 0;
-  font-size: 12px;
-  opacity: 0.95;
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  opacity: 0.92;
+  max-width: 52ch;
 }
+.createSession{
+  margin: 10px 0 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+.createSessionEmail{
+  font-weight: 600;
+  color: #ffd989;
+  word-break: break-all;
+}
+
 .createForm{
   display: grid;
-  gap: 12px;
+  gap: 18px;
 }
+
+.formSection{
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-width: 0;
+}
+.formSectionTitle{
+  display: block;
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #ffd989;
+  border-bottom: 1px solid rgba(255, 201, 93, 0.35);
+}
+
+.authorGrid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.publicationRow{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.field{
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.fieldGrow{
+  flex: 1 1 200px;
+}
+.fieldTipo{
+  flex: 0 0 180px;
+}
+.fieldFull{
+  width: 100%;
+}
+
+.createActions{
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.createActions .btn.primary{
+  min-width: 160px;
+}
+
 .row{
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-}
-.field{
-  display: grid;
-  gap: 6px;
-  flex: 0 0 220px;
-}
-.createActions{
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
 }
 
 .empty{
@@ -309,6 +375,13 @@
 @media screen and (min-width: 576px){
   .blogsTitle{ font-size: 26px; }
   .postCard{ grid-column: span 6; }
+  .authorGrid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .publicationRow{
+    grid-template-columns: 1fr minmax(160px, 200px);
+    align-items: end;
+  }
 }
 
 @media screen and (min-width: 992px){
@@ -321,4 +394,6 @@
   .actionsBlock{ width: 100%; justify-content: stretch; }
   .btn{ width: 100%; }
   .userPill{ width: 100%; justify-content: space-between; }
+  .createActions .btn{ width: 100%; }
+  .createActions .btn.primary{ min-width: unset; }
 }

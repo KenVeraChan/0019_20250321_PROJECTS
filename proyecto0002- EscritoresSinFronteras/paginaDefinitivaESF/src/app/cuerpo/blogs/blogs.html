@@ -85,10 +85,10 @@
         @for (p of filteredPosts; track p.id) {
           <article class="postCard" (click)="openDetail(p.id)" tabindex="0">
             <div class="cardTop">
-              <span class="badge">{{ formatTypeLabel(p.type) }}</span>
+              <span class="badge">{{ formatTypeLabel(p.tipo) }}</span>
               <span class="date">{{ formatDate(p.createdAtIso) }}</span>
             </div>
-            <h3 class="cardTitle">{{ p.title }}</h3>
+            <h3 class="cardTitle">{{ p.titulo }}</h3>
             <p class="cardPreview">{{ previewText(p) }}</p>
             <div class="cardBottom">
               <span class="author">Por {{ p.authorEmail }}</span>
@@ -109,13 +109,13 @@
           <div class="detailTop">
             <button type="button" class="btn ghost" (click)="openList()">← Volver</button>
             <div class="meta">
-              <span class="badge">{{ formatTypeLabel(post.type) }}</span>
+              <span class="badge">{{ formatTypeLabel(post.tipo) }}</span>
               <span class="date">{{ formatDate(post.createdAtIso) }}</span>
               <span class="author">Por {{ post.authorEmail }}</span>
             </div>
           </div>
-          <h2 class="detailTitle">{{ post.title }}</h2>
-          <pre class="detailContent">{{ post.content }}</pre>
+          <h2 class="detailTitle">{{ post.titulo }}</h2>
+          <pre class="detailContent">{{ post.contenido }}</pre>
         </article>
       } @else {
         <div class="empty">
@@ -127,10 +127,15 @@
 
     @if (view==='create') {
       <section class="createCard">
-        <div class="createHeader">
+        <header class="createHeader">
           <h3 class="createTitle">Nueva publicación</h3>
-          <p class="createHint">Elige el tipo de publicación y comparte tu texto.</p>
-        </div>
+          <p class="createHint">Completa tus datos y redacta tu texto. Los campos con * son obligatorios.</p>
+          @if (isLoggedIn()) {
+            <p class="createSession">
+              Sesión: <span class="createSessionEmail">{{ userEmail }}</span>
+            </p>
+          }
+        </header>
 
         @if (!isLoggedIn()) {
           <div class="empty">
@@ -138,45 +143,114 @@
           </div>
         } @else {
           <form class="createForm" (submit)="$event.preventDefault(); submitPost()">
-            <div class="row">
-              <div class="field grow">
-                <label class="label">Título</label>
-                <input
-                  class="input"
-                  type="text"
-                  maxlength="90"
-                  placeholder="Título de tu publicación"
-                  aria-label="Título de la publicación"
-                  [(ngModel)]="createTitle"
-                  name="createTitle"
-                />
-              </div>
-              <div class="field">
-                <label class="label">Tipo</label>
-                <select class="select" [(ngModel)]="createType" name="createType" aria-label="Seleccionar tipo de publicación">
-                  <option value="verso">Verso</option>
-                  <option value="prosa">Prosa</option>
-                  <option value="reflexion">Reflexión</option>
-                </select>
-              </div>
-            </div>
 
-            <div class="field">
-              <label class="label">Contenido</label>
-              <textarea
-                class="textarea"
-                rows="10"
-                placeholder="Escribe aquí. En verso puedes usar saltos de línea…"
-                aria-label="Contenido de la publicación"
-                [(ngModel)]="createContent"
-                name="createContent"
-              ></textarea>
-            </div>
+            <fieldset class="formSection">
+              <legend class="formSectionTitle">Datos del autor</legend>
+              <div class="authorGrid">
+                <div class="field">
+                  <label class="label" for="createNombre">Nombre</label>
+                  <input
+                    id="createNombre"
+                    class="input"
+                    type="text"
+                    maxlength="50"
+                    placeholder="¿Cómo te llamas?"
+                    [(ngModel)]="createNombre"
+                    name="createNombre"
+                    autocomplete="given-name"
+                  />
+                </div>
+                <div class="field">
+                  <label class="label" for="createPrimerApellido">Primer apellido</label>
+                  <input
+                    id="createPrimerApellido"
+                    class="input"
+                    type="text"
+                    maxlength="50"
+                    placeholder="¿Cuál es tu primer apellido?"
+                    [(ngModel)]="createPrimerApellido"
+                    name="createPrimerApellido"
+                    autocomplete="family-name"
+                  />
+                </div>
+                <div class="field">
+                  <label class="label" for="createSegundoApellido">Segundo apellido</label>
+                  <input
+                    id="createSegundoApellido"
+                    class="input"
+                    type="text"
+                    maxlength="50"
+                    placeholder="¿Cuál es tu segundo apellido?"
+                    [(ngModel)]="createSegundoApellido"
+                    name="createSegundoApellido"
+                    autocomplete="family-name"
+                  />
+                </div>
+                <div class="field">
+                  <label class="label" for="createPais">País</label>
+                  <input
+                    id="createPais"
+                    class="input"
+                    type="text"
+                    maxlength="50"
+                    placeholder="¿Desde dónde estás publicando?"
+                    [(ngModel)]="createPais"
+                    name="createPais"
+                    autocomplete="country-name"
+                  />
+                </div>
+              </div>
+            </fieldset>
 
-            <div class="createActions">
+            <fieldset class="formSection">
+              <legend class="formSectionTitle">Tu entrada</legend>
+              <div class="publicationRow">
+                <div class="field fieldGrow">
+                  <label class="label" for="createTitle">Título</label>
+                  <input
+                    id="createTitle"
+                    class="input"
+                    type="text"
+                    maxlength="500"
+                    placeholder="¿En qué título estas pensando?"
+                    [(ngModel)]="createTitle"
+                    name="createTitle"
+                  />
+                </div>
+                <div class="field fieldTipo">
+                  <label class="label" for="createType">Tipo</label>
+                  <select
+                    id="createType"
+                    class="select"
+                    [(ngModel)]="createType"
+                    name="createType"
+                    aria-label="Tipo de publicación"
+                  >
+                    <option value="verso">Verso</option>
+                    <option value="prosa">Prosa</option>
+                    <option value="reflexion">Reflexión</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field fieldFull">
+                <label class="label" for="createContent">Contenido</label>
+                <textarea
+                  id="createContent"
+                  class="textarea"
+                  rows="12"
+                  placeholder="Escribe aquí tu texto. En verso puedes usar saltos de línea."
+                  [(ngModel)]="createContent"
+                  name="createContent"
+                ></textarea>
+              </div>
+            </fieldset>
+
+            <footer class="createActions">
               <button type="button" class="btn ghost" (click)="openList()">Cancelar</button>
-              <button type="submit" class="btn primary">Publicar</button>
-            </div>
+              <button type="submit" class="btn primary" [disabled]="publicando">
+                {{ publicando ? 'Publicando…' : 'Publicar entrada' }}
+              </button>
+            </footer>
           </form>
         }
       </section>

@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { blogs, VariablesCompartidas, Conexion, ImagenesExtra } from '../../servicios/variablesCompartidas';
-import { BlogPost, BlogPostType } from '../../servicios/variablesCompartidas';
+import { HttpErrorResponse } from '@angular/common/http';
+import { VariablesCompartidas, Conexion, BlogPost, BlogPostType } from '../../servicios/variablesCompartidas';
 
+/**
+ * Blog literario: lectura desde MySQL (GET /api/blog), publicación con correo
+ * validado (POST /api/blog). Las entradas viven en memoria (entradasBlog), no en localStorage.
+ */
 @Component({
   selector: 'app-blogs',
   standalone: false,
@@ -9,86 +13,134 @@ import { BlogPost, BlogPostType } from '../../servicios/variablesCompartidas';
   styleUrl: './blogs.css',
 })
 export class Blogs implements OnInit {
-  public matrizApartados= new VariablesCompartidas();
-  private readonly storageKeyPosts = 'esf_blog_posts_v1';
+  // Sesión (solo correo en localStorage) 
   private readonly storageKeyUserEmail = 'esf_blog_user_email_v1';
-  public datosJsonBlog: any;
+  // Integración con menú de cabecera (verso / prosa / reflexión)
+  private readonly menuCompartido = new VariablesCompartidas();
+  // Se consume una sola vez en applyFilters tras entrar en la página
+  private filtroCabeceraPendiente = '';
+  // Datos del blog (fuente: base de datos vía Conexion)
+  private entradasBlog: BlogPost[] = [];
 
   public userEmail = '';
   public emailInput = '';
 
+  public userNombre= '';
+  public nombreInput = '';
+
+  public userPrimerApellido= '';
+  public primerApellidoInput= '';
+
+  public userSegundoApellido= '';
+  public segundoApellidoInput= '';
+
+  public userPais= '';
+  public paisInput= '';
+
   public view: 'list' | 'detail' | 'create' = 'list';
   public selectedPostId: string | null = null;
 
-  public posts: BlogPost[] = [];
+  // Subconjunto de entradasBlog tras filtros de cabecera, tipo y búsqueda
   public filteredPosts: BlogPost[] = [];
-  public blogRecibido: any[]=[];
 
   public filterType: 'todos' | BlogPostType = 'todos';
   public search = '';
-  public filtradoVarCompartida=this.matrizApartados.menuPrincipal.getSubApartadoBlog();  
-  //Variable para almacenar la selección del tipo de post desde la cabecera y variables compartidas
 
   public createTitle = '';
   public createType: BlogPostType = 'reflexion';
   public createContent = '';
+  public createNombre = '';
+  public createPrimerApellido = '';
+  public createSegundoApellido = '';
+  public createPais = '';
 
   public errorMsg = '';
-  // Almacena el ancho actual de la ventana del navegador en píxeles
-  public tamanioHorizontalPantalla = 0;
+  public publicando = false;
 
-  constructor(private Conexion: Conexion){}
+  constructor(private Conexion: Conexion) {}
 
   ngOnInit(): void {
-
-    // Llama al servicio HTTP para obtener los datos de historias desde el backend (índice 1 = tabla de historias)
-    this.Conexion.getAutores(3).subscribe(data => {
-          this.blogRecibido = [];
-          data.forEach(a => {
-            const historia = new blogs(
-                a.id,
-                a.titulo,
-                a.tipo,
-                a.contenido,
-                a.authorEmal,
-                a.createdAtIso);
-        this.blogRecibido.push(historia);
-        }
-      );
-    });
-
-    //IMPORTANTE: Variable para acceder a los datos JSON de publicaciones desde las variables compartidas
-    this.datosJsonBlog= this.blogRecibido;
-
-    // Obtiene el ancho inicial de la ventana (o 1200 por defecto si no hay objeto window, ej: SSR)
-    this.tamanioHorizontalPantalla = typeof window !== 'undefined' ? window.innerWidth : 1200;
-
-    //ALMACENAMIENTO DE DATOS EN EL ALMACENAMIENTO LOCAL
+    // Filtro elegido en la cabecera antes de abrir esta ruta (localStorage)
+    const desdeMenu = this.menuCompartido.menuPrincipal.getSubApartadoBlog();
+    this.filtroCabeceraPendiente =
+      desdeMenu === 'todos' || desdeMenu === '' ? '' : desdeMenu;
 
     this.userEmail = this.safeGet(this.storageKeyUserEmail) ?? '';
     this.emailInput = this.userEmail;
+    this.cargarBlogDesdeApi();
+  }
 
-    const existing = this.loadPosts();
-    if (existing.length === 0) {
-      this.posts = this.datosJsonBlog;
-      this.savePosts(this.posts);
+  /** GET índice 3 → http://localhost:3000/api/blog (misma URL base que el POST al publicar) */
+  private cargarBlogDesdeApi(): void {
+    this.errorMsg = '';
+    this.Conexion.getAutores(3).subscribe({
+      next: data => {
+        this.entradasBlog = (data ?? []).map(fila => this.mapFilaABlogPost(fila));
+        this.applyFilters();
+      },
+      error: () => {
+        this.entradasBlog = [];
+        this.filteredPosts = [];
+        this.errorMsg = 'No se pudieron cargar las entradas del blog.';
+      },
+    });
+  }
+
+  // Adapta la fila SQL (tipo INT 0|1|2, columna email, fecha DATE)
+  // al modelo BlogPost usado en la plantilla.
+  private mapFilaABlogPost(fila: Record<string, unknown>): BlogPost {
+    const fechaRaw = fila['fecha'] ?? fila['createdAtIso'];
+    let createdAtIso = '';
+
+    if (fechaRaw instanceof Date) {
+      createdAtIso = fechaRaw.toISOString()
+    } else if (typeof fechaRaw === 'string') {
+      const soloFecha = fechaRaw.slice(0, 10);
+      createdAtIso = /^\d{4}-\d{2}-\d{2}$/.test(soloFecha)
+        ? new Date(`${soloFecha}T12:00:00`).toISOString()
+        : fechaRaw;
     } else {
-      this.posts = existing;
+      createdAtIso = new Date().toISOString();
     }
 
-    this.applyFilters();
+    const email =
+      (fila['email'] as string) ?? (fila['authorEmail'] as string) ?? '';
+    const tipoRaw = fila['tipo'];
+    let tipo: BlogPostType = 'reflexion';
+    if (tipoRaw === 'verso' || tipoRaw === 'prosa' || tipoRaw === 'reflexion') {
+      tipo = tipoRaw;
+    } else {
+      // 0 = verso, 1 = prosa, 2 = reflexión (init.sql)
+      const n =
+        typeof tipoRaw === 'string' ? parseInt(tipoRaw, 10) : Number(tipoRaw);
+      const mapa: BlogPostType[] = ['verso', 'prosa', 'reflexion'];
+      tipo = mapa[n] ?? 'reflexion';
+    }
+
+    return {
+      id: String(fila['id'] ?? ''),
+      titulo: String(fila['titulo'] ?? ''),
+      tipo,
+      contenido: String(fila['contenido'] ?? ''),
+      // Autor: columnas añadidas a la tabla blog (init.sql); nombres en minúsculas como en MySQL
+      nombre: String(fila['nombre'] ?? ''),
+      primerapellido: String(fila['primerapellido'] ?? ''),
+      segundoapellido: String(fila['segundoapellido'] ?? ''),
+      pais: String(fila['pais'] ?? ''), // Puede contener espacios ("Costa Rica")
+      authorEmail: email,
+      createdAtIso,
+    };
   }
 
-  //METODO PARA VERIFICAR SI EL USUARIO ESTÁ LOGUEADO, COMPROBANDO QUE EL CORREO GUARDADO EN LA PROPIEDAD userEmail ES VÁLIDO CON EL MÉTODO isValidEmail
   public isLoggedIn(): boolean {
-    return this.isValidEmail(this.userEmail);
+    return this.esCorreoValido(this.userEmail);
   }
 
-  //MTODO PARA INICIAR SESIÓN, VERIFICANDO QUE EL CORREO INGRESADO ES VÁLIDO Y GUARDÁNDOLO EN EL ALMACENAMIENTO LOCAL, O MOSTRANDO UN MENSAJE DE ERROR SI NO LO ES
   public login(): void {
     this.errorMsg = '';
-    const email = (this.emailInput ?? '').trim().toLowerCase();
-    if (!this.isValidEmail(email)) {
+    //ALMACENAJE MOMENTANEO DEL: NOMBRE, PRIMER APELLIDO, SEGUNDO APELLIDO, PAIS Y CORREO
+    const email = (this.emailInput ?? '').trim().toLowerCase();  //CORREO
+    if (!this.esCorreoValido(email)) {
       this.errorMsg = 'Ingresa un correo válido para publicar.';
       return;
     }
@@ -97,7 +149,6 @@ export class Blogs implements OnInit {
     this.view = 'create';
   }
 
-  //METODO PARA CERRAR SESIÓN, LIMPIANDO EL CORREO GUARDADO Y CAMBIANDO A LA VISTA DE LISTA SI ESTÁ EN LA VISTA DE CREACIÓN
   public logout(): void {
     this.userEmail = '';
     this.emailInput = '';
@@ -105,7 +156,6 @@ export class Blogs implements OnInit {
     if (this.view === 'create') this.view = 'list';
   }
 
-  //METODO PARA ABRIR LA VISTA DE CREACIÓN DE POST, VERIFICANDO PRIMERO SI EL USUARIO ESTÁ LOGUEADO Y MOSTRANDO UN MENSAJE DE ERROR SI NO LO ESTÁ, O CAMBIANDO A LA VISTA DE LISTA SI INTENTA ACCEDER SIN INICIAR SESIÓN
   public openCreate(): void {
     this.errorMsg = '';
     if (!this.isLoggedIn()) {
@@ -115,7 +165,6 @@ export class Blogs implements OnInit {
     this.view = 'create';
   }
 
-  //METODO PARA ABRIR LA VISTA DE LISTA DE POSTS, LIMPIANDO CUALQUIER MENSAJE DE ERROR PREVIO, RESETEANDO EL POST SELECCIONADO Y APLICANDO LOS FILTROS ACTUALES
   public openList(): void {
     this.errorMsg = '';
     this.view = 'list';
@@ -123,42 +172,55 @@ export class Blogs implements OnInit {
     this.applyFilters();
   }
 
-  //METODO PARA ABRIR LA VISTA DE DETALLE DE UN POST SELECCIONADO, RECIBIENDO EL ID DEL POST Y ASIGNÁNDOLO A LA PROPIEDAD CORRESPONDIENTE, Y LIMPIANDO CUALQUIER MENSAJE DE ERROR PREVIO
   public openDetail(postId: string): void {
     this.errorMsg = '';
     this.view = 'detail';
     this.selectedPostId = postId;
   }
 
-  //METODO PARA OBTENER EL POST SELECCIONADO EN LA VISTA DE DETALLE, DEVOLVIENDO NULL SI NO HAY NINGUNO SELECCIONADO O SI NO SE ENCUENTRA
   public selectedPost(): BlogPost | null {
     if (!this.selectedPostId) return null;
-    return this.posts.find(p => p.id === this.selectedPostId) ?? null;
+    return this.entradasBlog.find(p => p.id === this.selectedPostId) ?? null;
   }
 
-  //METODO PARA APLICAR LOS FILTROS DE BÚSQUEDA Y TIPO DE POST, LIMPIANDO EL TEXTO DE BÚSQUEDA Y ORDENANDO LOS RESULTADOS POR FECHA DE CREACIÓN
+  // Orden de filtros:
+  // (1) submenú cabecera, una vez;
+  // (2) selector de la vista;
+  // (3) texto de búsqueda. Ordenación por fecha descendente.
   public applyFilters(): void {
-    //Introducimos la selección del tipo de: 'verso', 'prosa', 'reflexion' viniendo desde la cabecera y variables compartidas
-    const elegido= this.filtradoVarCompartida;
+    const elegido = this.filtroCabeceraPendiente;
+    this.filtroCabeceraPendiente = '';
+
     const q = (this.search ?? '').trim().toLowerCase();
     const type = this.filterType;
 
-    this.filteredPosts = this.posts
-      .filter(p => (elegido==="" ? true : p.type===elegido))  //Primero se filtra por la selección del tipo de post hecha en la cabecera, si no hay ninguna selección se muestran todos los tipos
-      .filter(p => (type === 'todos' ? true : p.type === type))  //Segundo se filtra por el selector de tipo de post en la propia vista, si se ha seleccionado un tipo específico se filtran solo los posts de ese tipo
+    this.filteredPosts = this.entradasBlog
+      .filter(p => (elegido === '' ? true : p.tipo === elegido))
+      .filter(p => (type === 'todos' ? true : p.tipo === type))
       .filter(p => {
         if (!q) return true;
         return (
-          p.title.toLowerCase().includes(q) ||
-          p.content.toLowerCase().includes(q) ||
-          p.authorEmail.toLowerCase().includes(q)
+          p.titulo.toLowerCase().includes(q) ||
+          p.contenido.toLowerCase().includes(q) ||
+          p.authorEmail.toLowerCase().includes(q) ||
+          p.nombre.toLocaleLowerCase().includes(q) ||
+          p.primerapellido.toLocaleLowerCase().includes(q) ||
+          p.segundoapellido.toLocaleLowerCase().includes(q) ||
+          p.pais.toLocaleLowerCase().includes(q)
         );
       })
       .sort((a, b) => b.createdAtIso.localeCompare(a.createdAtIso));
-    this.filtradoVarCompartida="";  //Se reinicia la variable para permitir una eleccion interna
   }
 
-  //METODO PARA VERIFICAR Y PERMITIR PUBLICAR CUANDO SE HA COMPROBADO QUE SI HAY CORREO CORRECTO VERIFICADO
+  /**
+   * Publicar entrada: flujo completo
+   * 1) Comprobar sesión (correo en userEmail / localStorage)
+   * 2) Leer y recortar campos del formulario (createNombre, createPais, etc.)
+   * 3) Validar en cliente (longitud + validarDatosAutor → esNombreValido, esPaisValido…)
+   * 4) POST Conexion.crearEntradaBlog → server.js POST /api/blog → MySQL
+   * 5) subscribe next: añadir fila a entradasBlog y mostrar detalle
+   * 6) subscribe error: mensajeErrorHttp (400 validación, 500 SQL, 0 sin conexión)
+   */
   public submitPost(): void {
     this.errorMsg = '';
     if (!this.isLoggedIn()) {
@@ -166,106 +228,175 @@ export class Blogs implements OnInit {
       return;
     }
 
-    const title = (this.createTitle ?? '').trim();
-    const content = (this.createContent ?? '').trim();
+    // Campos enlazados con [(ngModel)] en blogs.html (formulario "Nueva publicación")
+    const titulo = (this.createTitle ?? '').trim();
+    const contenido = (this.createContent ?? '').trim();
+    const nombre = (this.createNombre ?? '').trim();
+    const primerapellido = (this.createPrimerApellido ?? '').trim();
+    const segundoapellido = (this.createSegundoApellido ?? '').trim();
+    // Normaliza espacios múltiples: "Costa   Rica" → "Costa Rica" (coherente con regex del país)
+    const pais = (this.createPais ?? '').trim().replace(/\s+/g, ' ');
 
-    if (title.length < 3) {
+    // Validación rápida de título y contenido (el servidor también valida con express-validator)
+    if (titulo.length < 3) {
       this.errorMsg = 'El título debe tener al menos 3 caracteres.';
       return;
     }
-    if (content.length < 10) {
+    if (contenido.length < 10) {
       this.errorMsg = 'El contenido debe tener al menos 10 caracteres.';
       return;
     }
 
-    const nowIso = new Date().toISOString();
-    const post: BlogPost = {
-      id: this.makeId(),
-      title,
-      type: this.createType,
-      content,
-      authorEmail: this.userEmail,
-      createdAtIso: nowIso,
-    };
+    // Validación de autor: nombre/apellidos solo letras; país admite espacios entre palabras
+    const errorDatosAutor = this.validarDatosAutor(
+      nombre,
+      primerapellido,
+      segundoapellido,
+      pais,
+    );
+    if (errorDatosAutor) {
+      this.errorMsg = errorDatosAutor;
+      return; // No se llama al API si falla aquí
+    }
 
-    this.posts = [post, ...this.posts];
-    this.savePosts(this.posts);
-    this.resetCreateForm();
-    this.applyFilters();
-    this.openDetail(post.id);
+    this.publicando = true; // Deshabilita botón "Publicar" en la plantilla
+    // Claves JSON alineadas con columnas MySQL (primerapellido, segundoapellido en minúsculas)
+    this.Conexion.crearEntradaBlog({
+      titulo,
+      tipo: this.createType, // 'verso' | 'prosa' | 'reflexion' → el backend lo pasa a 0|1|2
+      contenido,
+      nombre,
+      primerapellido,
+      segundoapellido,
+      pais,
+      email: this.userEmail, // Correo guardado al hacer login(), no el del campo create*
+    }).subscribe({
+      // Éxito: el servidor devuelve 201 y la fila insertada (SELECT * WHERE id = insertId)
+      next: fila => {
+        const nuevo = this.mapFilaABlogPost(fila); // JSON MySQL → interfaz BlogPost
+        this.entradasBlog = [nuevo, ...this.entradasBlog]; // Lista en memoria sin recargar todo el GET
+        this.publicando = false;
+        // Limpia el formulario para la siguiente publicación
+        this.createTitle = '';
+        this.createType = 'reflexion';
+        this.createContent = '';
+        this.createNombre = '';
+        this.createPrimerApellido = '';
+        this.createSegundoApellido = '';
+        this.createPais = '';
+        this.applyFilters();
+        this.openDetail(nuevo.id);
+      },
+      // HttpClient entra aquí con status 0, 400, 500… (no solo si el servidor está apagado)
+      error: err => {
+        this.publicando = false;
+        this.errorMsg = this.mensajeErrorHttp(err);
+      },
+    });
   }
 
-  //METODO PARA EL SELECTOR DE PROSA, VERSO O REFLEXIÓN
   public formatTypeLabel(t: BlogPostType): string {
     if (t === 'verso') return 'Verso';
     if (t === 'prosa') return 'Prosa';
     return 'Reflexión';
   }
 
-  //METODO PARA DEVOLVER LA FECHA EN FORMATO ISO Y EN ESPAÑOL
   public formatDate(iso: string): string {
     try {
       const d = new Date(iso);
       return new Intl.DateTimeFormat('es-ES', {
         dateStyle: 'medium',
-        timeStyle: 'short',
+        //timeStyle: 'short',   //Se la quita la hora de publicacion
       }).format(d);
     } catch {
       return iso;
     }
   }
 
-  //METODO PARA LIMPIAR TEXTO CON ESPACIOS INLCUIDOS Y REDUCIR LA VISTA PREVIA A "... SI ES MUY LARGO
   public previewText(post: BlogPost): string {
-    const raw = post.content.replace(/\s+/g, ' ').trim();
+    const raw = post.contenido.replace(/\s+/g, ' ').trim();
     return raw.length > 170 ? raw.slice(0, 170) + '…' : raw;
   }
 
-  //METODO PARA LIMPIAR LOS CAMPOS DE CREACIÓN DE POST
-  private resetCreateForm(): void {
-    this.createTitle = '';
-    this.createType = 'reflexion';
-    this.createContent = '';
-  }
-
-  //METODO PARA CARGAR LOS POSTS DESDE EL ALMACENAMIENTO LOCAL
-  private loadPosts(): BlogPost[] {
-    try {
-      const parsed = this.datosJsonBlog as BlogPost[];
-      if (!Array.isArray(parsed)) return [];
-      return parsed.filter(
-        p =>
-          p &&
-          typeof p.id === 'string' &&
-          typeof p.title === 'string' &&
-          typeof p.content === 'string' &&
-          typeof p.type === 'string' &&
-          typeof p.authorEmail === 'string' &&
-          typeof p.createdAtIso === 'string',
-      );
-    } catch {
-      return [];
+  /**
+   * Traduce el error del subscribe al mensaje rojo de la plantilla.
+   * status 0 = servidor apagado o CORS/URL incorrecta.
+   * status 400 = express-validator (errors[]) o mensaje { error: '...' } del INSERT.
+   * status 500 = fallo MySQL (columna inexistente, BD caída, etc.).
+   */
+  private mensajeErrorHttp(err: unknown): string {
+    if (err instanceof HttpErrorResponse) {
+      if (err.status === 0) {
+        return 'No se pudo conectar con el servidor. Comprueba que el backend esté activo (http://localhost:3000).';
+      }
+      const body = err.error as { errors?: { msg?: string; path?: string }[]; error?: string };
+      if (body?.errors?.length) {
+        const detalle = body.errors
+          .map(e => `${e.path ?? 'campo'}: ${e.msg ?? 'inválido'}`)
+          .join('; ');
+        return `Datos no válidos: ${detalle}`;
+      }
+      if (typeof body?.error === 'string') {
+        return body.error;
+      }
+      return `Error del servidor (código ${err.status}). Mira la consola de Node.js.`;
     }
+    return 'No se pudo guardar la entrada.';
   }
 
-  //METODO PARA GUARDAR LOS POSTS EN EL ALMACENAMIENTO LOCAL CON TIPO DE DATO DEFINIDO Y CON MANEJO DE ERRORES
-  private savePosts(posts: BlogPost[]): void {
-    this.safeSet(this.storageKeyPosts, JSON.stringify(posts));
+  /**
+   * Valida nombre, apellidos y país antes del POST.
+   * Devuelve el mensaje de error o null si todo es correcto.
+   */
+  private validarDatosAutor(nombre: string, primerapellido: string, segundoapellido: string, pais: string): string | null 
+  {
+    if (!this.esNombreValido(nombre)) {
+      return 'El nombre debe tener al menos 3 letras (solo letras, incluida la ñ).';
+    }
+    if (!this.esApellidoPrimeroValido(primerapellido)) {
+      return 'El primer apellido debe tener al menos 3 letras (solo letras, incluida la ñ).';
+    }
+    if (!this.esApellidoSegundoValido(segundoapellido)) {
+      return 'El segundo apellido debe tener al menos 3 letras (solo letras, incluida la ñ).';
+    }
+    if (!this.esPaisValido(pais)) {
+      return 'El país debe tener al menos 3 caracteres, solo letras y espacios (p. ej. Costa Rica).';
+    }
+    return null;
   }
 
-  //METODO PARA GENERAR UN ID ÚNICO PARA CADA POST, COMBINANDO UN PREFIJO, UNA PARTE ALEATORIA Y LA FECHA ACTUAL EN MILISEGUNDOS
-  //LA RAZÓN DE CREAR UN ID ASÍ ES PARA ASEGURAR QUE CADA POST TENGA UN IDENTIFICADOR ÚNICO Y DIFERENTE, INCLUSO SI SE PUBLICAN VARIOS EN EL MISMO MOMENTO
-  private makeId(): string {
-    const palabra= 'p_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
-    return palabra;
+  private esCorreoValido(email: string): boolean {
+    return /^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/.test(email);
   }
 
-  //METODO PARA VALIDAR QUE EL CORREO INGRESADO TIENE UN FORMATO BÁSICO VÁLIDO, CON UNA EXPRESIÓN REGULAR SENCILLA
-  private isValidEmail(email: string): boolean {
-  return /^[A-Za-z0-9._-]+@[A-Za-z0-9]+\.[A-Za-z0-9]+$/.test(email);
+  private esNombreValido(nombre: string): boolean {
+    const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/.test(nombre);
+    return !((nombre.length > 0 && nombre.length < 3) || !soloLetras);
   }
 
-  //METODO PARA DEVOLVER EL VALOR DE UNA CLAVE EN EL ALMACENAMIENTO LOCAL, CON MANEJO DE ERRORES PARA EVITAR PROBLEMAS EN NAVEGADORES QUE NO LO SOPORTAN O EN MODO PRIVADO
+  private esApellidoPrimeroValido(primerApellido: string): boolean {
+    const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/.test(primerApellido);
+    return !((primerApellido.length > 0 && primerApellido.length < 3) || !soloLetras);
+  }
+
+  private esApellidoSegundoValido(segundoApellido: string): boolean {
+    const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/.test(segundoApellido);
+    return !((segundoApellido.length > 0 && segundoApellido.length < 3) || !soloLetras);
+  }
+
+  /**
+   * País: letras con tildes/ñ; una o más palabras separadas por un solo espacio.
+   * Ejemplos válidos: "España", "Costa Rica", "Estados Unidos".
+   * Inválido: "ES", "Costa1", "Costa  Rica" (doble espacio; submitPost ya normaliza antes).
+   * Misma idea que body('pais').matches(...) en server.js.
+   */
+  private esPaisValido(pais: string): boolean {
+    const letrasConEspacios =
+      /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$/.test(pais);
+    return pais.length >= 3 && letrasConEspacios;
+  }
+
+  // Acceso a localStorage tolerante a modo privado o SSR
   private safeGet(key: string): string | null {
     try {
       return localStorage.getItem(key);
@@ -274,7 +405,6 @@ export class Blogs implements OnInit {
     }
   }
 
-  //METODO PARA GUARDAR UN VALOR EN EL ALMACENAMIENTO LOCAL, CON MANEJO DE ERRORES PARA EVITAR PROBLEMAS EN NAVEGADORES QUE NO LO SOPORTAN O EN MODO PRIVADO
   private safeSet(key: string, val: string): void {
     try {
       localStorage.setItem(key, val);
@@ -283,7 +413,6 @@ export class Blogs implements OnInit {
     }
   }
 
-  //METODO PARA ELIMINAR UN VALOR DEL ALMACENAMIENTO LOCAL, CON MANEJO DE ERRORES PARA EVITAR PROBLEMAS EN NAVEGADORES QUE NO LO SOPORTAN O EN MODO PRIVADO
   private safeRemove(key: string): void {
     try {
       localStorage.removeItem(key);
