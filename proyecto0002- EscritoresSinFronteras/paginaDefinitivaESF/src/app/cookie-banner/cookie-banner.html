@@ -1,0 +1,84 @@
+@if (visible) {
+  <div
+    class="cookieOverlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cookieTitulo"
+    aria-describedby="cookieDescripcion"
+  >
+    <section class="cookiePanel">
+      <header class="cookieHeader">
+        <h2 id="cookieTitulo" class="cookieTitle">Cookies en Escritores Sin Fronteras</h2>
+        <p id="cookieDescripcion" class="cookieLead">
+          Usamos cookies técnicas imprescindibles para el funcionamiento del sitio y, con tu
+          permiso, cookies de análisis y personalización para mejorar tu experiencia.
+        </p>
+      </header>
+
+      @if (mostrarPreferencias) {
+        <div class="cookiePreferencias" aria-label="Configuración de cookies">
+          <div class="cookieOpcion cookieOpcionFija">
+            <div class="cookieOpcionTexto">
+              <h3 class="cookieOpcionTitulo">Necesarias</h3>
+              <p class="cookieOpcionDesc">
+                Imprescindibles para la navegación, la seguridad y recordar tu elección de cookies.
+              </p>
+            </div>
+            <span class="cookieEstado" aria-label="Siempre activas">Siempre activas</span>
+          </div>
+
+          <label class="cookieOpcion">
+            <span class="cookieOpcionTexto">
+              <span class="cookieOpcionTitulo">Analíticas</span>
+              <span class="cookieOpcionDesc">
+                Nos ayudan a entender cómo se usa la web de forma agregada y anónima.
+              </span>
+            </span>
+            <input
+              type="checkbox"
+              class="cookieCheck"
+              [(ngModel)]="analytics"
+              aria-describedby="cookieDescripcion"
+            />
+          </label>
+
+          <label class="cookieOpcion">
+            <span class="cookieOpcionTexto">
+              <span class="cookieOpcionTitulo">Marketing y preferencias</span>
+              <span class="cookieOpcionDesc">
+                Permiten recordar preferencias y mostrar contenidos más relevantes.
+              </span>
+            </span>
+            <input type="checkbox" class="cookieCheck" [(ngModel)]="marketing" />
+          </label>
+        </div>
+      }
+
+      <div class="cookieAcciones">
+        @if (mostrarPreferencias) {
+          <button type="button" class="cookieBtn cookieBtnGhost" (click)="cerrarPreferencias()">
+            Volver
+          </button>
+          <button type="button" class="cookieBtn cookieBtnPrimary" (click)="guardarSeleccion()">
+            Guardar preferencias
+          </button>
+        } @else {
+          <button type="button" class="cookieBtn cookieBtnGhost" (click)="rechazarNoEsenciales()">
+            Solo necesarias
+          </button>
+          <button type="button" class="cookieBtn cookieBtnGhost" (click)="abrirPreferencias()">
+            Configurar
+          </button>
+          <button type="button" class="cookieBtn cookieBtnPrimary" (click)="aceptarTodas()">
+            Aceptar todas
+          </button>
+        }
+      </div>
+
+      <p class="cookiePie">
+        Puedes cambiar tu decisión en cualquier momento. Más información en la sección
+        <a class="cookieEnlace" href="/contacto">Contacto</a>.
+      </p>
+    </section>
+  </div>
+}

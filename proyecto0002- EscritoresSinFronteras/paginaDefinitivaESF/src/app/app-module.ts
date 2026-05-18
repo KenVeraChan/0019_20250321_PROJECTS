@@ -24,6 +24,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ErroresHttpInterceptor } from './servicios/errores-http.interceptor';
 import { ErroresGlobalHandler } from './servicios/errores-global.handler';
 import { EstadoErroresService } from './servicios/estado-errores.service';
+import { CookieBanner } from './cookie-banner/cookie-banner';
 
 const appRoutes: Routes=[
 {path:'', component: Inicio},
@@ -52,7 +53,8 @@ const appRoutes: Routes=[
     Contacto,
     Opciones,
     PaginaError,
-    Librointeractivo
+    Librointeractivo,
+    CookieBanner
   ],
   imports: [
     BrowserModule,
