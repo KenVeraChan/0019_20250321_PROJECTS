@@ -98,14 +98,6 @@ export class VariablesCompartidas {
   ///// VARIABLES URLS DEL 4 APARTADO: AREA BLOG LITERARIO ///////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //AREA DE ESCENAS PARA EL APARTADO DE "SERVICIOS"
-    public escenas:string[]=[
-      "Noticia 1: Nuevo concurso literario abierto a todos los escritores emergentes.",
-      "Noticia 2: Entrevista exclusiva con el autor best-seller del año.",
-      "Noticia 3: Talleres de escritura creativa disponibles en línea.",
-      "Noticia 4: Lanzamiento de la nueva plataforma para compartir relatos cortos.",
-      "Noticia 5: Evento virtual con autores reconocidos a nivel internacional."
-    ];
     //AREA DE PUBLICACIONES PARA EL APARTADO DE PUBLICACIONES
     public publicacionesPosteadas: publicaciones=new publicaciones();
 
@@ -231,6 +223,21 @@ class Apartados{
           localStorage.setItem('punteroCabecera', this.valorSubapartado.toString());  //Y también se usa para el cambio de pagina
           }      //Se guarda la selección en localStorage para que
       // el componente Servicios pueda acceder a ella y filtrar los servicios según la elección del usuario en la cabecera.
+      this.notificarCambioFiltroServicios();
+    }
+    /** Al pulsar el apartado principal «Nuestros servicios», se muestran todas las tarjetas. */
+    public limpiarFiltroServicios(): void {
+      this.subPartadosServicios = '';
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('selectedServicioEleccion', '');
+      }
+      this.notificarCambioFiltroServicios();
+    }
+
+    private notificarCambioFiltroServicios(): void {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('esf-servicios-filtro'));
+      }
     }
     public getSubApartadosServiciosMenu(): string[]
     {
@@ -240,7 +247,7 @@ class Apartados{
     {
         if (typeof window === 'undefined' || !window.localStorage)
         {
-        return 'cursos'; // Valor predeterminado si no se puede acceder a localStorage
+        return '';
         }
       //Recupera el valor almacenado en localstorage
       const saveEleccionServicios = localStorage.getItem('selectedServicioEleccion');
@@ -506,8 +513,46 @@ export class ImagenesExtra
 }
 //Tanto el BLOG como las PUBLICACIONES NO comparten el mismo modelo de datos
 
+//el de BLOG se llama BlogPost, aunque ambos tienen la misma estructura, 
+//se han diferenciado para tener una mayor claridad en el código, y para poder 
+//hacer modificaciones futuras en cada uno de ellos sin afectar al otro, aunque 
+//por ahora son SIMILARES.
+export type BlogPostType = 'verso' | 'prosa' | 'reflexion';
+
+export interface BlogPost {
+  id: string;
+  titulo: string;
+  tipo: BlogPostType;
+  contenido: string;
+  nombre: string,
+  primerapellido: string,
+  segundoapellido: string,
+  pais: string,
+  authorEmail: string;
+  createdAtIso: string;
+};
+
+//el de SERVICIOS se llama BlogPost, aunque ambos tienen la misma estructura, 
+//se han diferenciado para tener una mayor claridad en el código, y para poder 
+//hacer modificaciones futuras en cada uno de ellos sin afectar al otro, aunque 
+//por ahora son SIMILARES.
+export type ServiciosTypeId = 'cursos' | 'entrevistas' | 'ediciones' | 'tertulias' | 'congresos';
+export type ServiciosTypeTitulo = 'Cursos' | 'Entrevistas' | 'Ediciones' | 'Tertulias' | 'Congresos';
+
+export interface ServiciosOfrecidos {
+  idservicio: ServiciosTypeId;
+  tituloservicio: ServiciosTypeTitulo;
+  descripcionservicio: string;
+  subtitulo:string;
+  subdescripcion:string;
+  imagenservicio:string;
+  audioservicio:string;
+  videoservicio:string;
+};
+
 //el de PUBLICACIONES se llama PublicacionesPost 
 export type PublicacionesPostType = 
+'todos' |
 'novela histórica' | 
 'novela ciencia ficción' | 
 'novela fantasía' |
@@ -543,26 +588,6 @@ export type PublicacionesPost = {
   videoCortoTitulo: string;
   videoCorto: string
 };
-
-//el de BLOG se llama BlogPost, aunque ambos tienen la misma estructura, 
-//se han diferenciado para tener una mayor claridad en el código, y para poder 
-//hacer modificaciones futuras en cada uno de ellos sin afectar al otro, aunque 
-//por ahora son SIMILARES.
-export type BlogPostType = 'verso' | 'prosa' | 'reflexion';
-
-export interface BlogPost {
-  id: string;
-  titulo: string;
-  tipo: BlogPostType;
-  contenido: string;
-  nombre: string,
-  primerapellido: string,
-  segundoapellido: string,
-  pais: string,
-  authorEmail: string;
-  createdAtIso: string;
-};
-
 //De la base de datos futura, pero se incluye aquí para tener un modelo de 
 //datos claro y poder trabajar con él en el componente de publicaciones.
 export class publicaciones implements PublicacionesPost {
@@ -579,7 +604,7 @@ export class publicaciones implements PublicacionesPost {
   public audio: string=""; //Se incluye un campo de audio para las reflexiones, aunque no todas las publicaciones lo tendrán, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones. 
   public videoCorto:string=""; //Se incluye un campo de video corto para las publicaciones, aunque no todas las publicaciones lo tendrán, serán BOOKTRAILERS de los libros, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones.
 
-  public PublicacionesPostType: string[]=[
+  public PublicacionesPostTypeArray: string[]=[
     'novela histórica',
     'novela ciencia ficción',
     'novela fantasía',
@@ -613,84 +638,6 @@ export class publicaciones implements PublicacionesPost {
     //podría hacer directamente con un array de strings, pero se ha hecho así 
     //para tener una mayor claridad en el código y para poder hacer modificaciones 
     //futuras en el tipo de publicaciones sin afectar al resto del código.
-    return this.PublicacionesPostType[eleccion];
-  }
-  public envioPosteados(): PublicacionesPost[] {
-    const now = Date.now();
-    return [
-      {
-        id: this.makeId(),
-        title: 'Frontera de tinta',
-        type: this.generoPublicacion(0).toString() as PublicacionesPostType,
-        content: 'Cruzo la página,\\n' +
-          'no por huir del mundo,\\n' +
-          'sino por nombrarlo.\\n\\n' +
-          'Y en cada palabra\\n' +
-          'una casa posible\\n' +
-          'para lo que duele.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 60 * 28).toISOString(),
-        fotoLibroTitulo: "Novela de ciencia ficción - 'El fin de la eternidad' de Isaac Asimov",
-        fotoLibro: '../../../assets/images/publicaciones/novelaCienciaFiccion.jpg',
-        audioLibroTitulo: "Audiolibro de ciencia ficción - 'Dune' de Frank Herbert",
-        audio: "",
-        videoCortoTitulo: "Booktrailer de ciencia ficción - 'Neuromante' de William Gibson",
-        videoCorto: ""
-      },
-      {
-        id: this.makeId(),
-        title: 'La prosa como refugio',
-        type: this.generoPublicacion(1).toString() as PublicacionesPostType,
-        content:
-          'Escribir en prosa es permitir que la respiración encuentre su ritmo. ' +
-          'No se trata de adornar, sino de sostener el sentido con claridad. ' +
-          'Cuando la frase avanza, también avanza la posibilidad de comprender.\\n\\n' +
-          'Publica aquí tus relatos, escenas, cartas o memorias: lo importante es la honestidad del tono.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 60 * 10).toISOString(),
-        fotoLibroTitulo: '',
-        fotoLibro: '',
-        audioLibroTitulo: '',
-        audio:"",
-        videoCortoTitulo: '',
-        videoCorto: ''
-      },
-      {
-        id: this.makeId(),
-        title: 'Una reflexión para MAÑANA',
-        type: this.generoPublicacion(2).toString() as PublicacionesPostType,
-        content:
-          'A veces la frontera no está afuera, sino entre lo que pensamos y lo que nos animamos a decir. ' +
-          'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
-        authorEmail: 'equipo@esf.org',
-        createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
-        fotoLibroTitulo: 'Presentación del libro Vitrea Horíz',
-        fotoLibro: '../../../assets/fotoLibros/Ken Vera Chan fin.png',
-        audioLibroTitulo: 'Piano y danzas de Vitrea Horiz en las orillas del mar',
-        audio: '../../../assets/audios/Tony Anderson - Bloom.mp3',
-        videoCortoTitulo: 'Video Vitrea en el tren a Chalikets',
-        videoCorto: '../../../assets/videos/libreria.mp4'
-      },
-            {
-        id: this.makeId(),
-        title: 'Una reflexión de AYER',
-        type: this.generoPublicacion(2).toString() as PublicacionesPostType,
-        content:
-          'A veces me acuerdo de ti porque siempre has vivido en mi ' +
-          'Escribir es tender un puente. Léenos, y si quieres, deja tu propia orilla.',
-        authorEmail: 'esfer4d_corporation@outlook.com',
-        createdAtIso: new Date(now - 1000 * 60 * 50).toISOString(),
-        fotoLibroTitulo: '',
-        fotoLibro: '',
-        audioLibroTitulo: '',
-        audio: '',
-        videoCortoTitulo: '',
-        videoCorto: ''
-      },
-    ];
-  }
-  public makeId(): string {
-  const palabra= 'p_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
-  return palabra;
+    return this.PublicacionesPostTypeArray[eleccion];
   }
 }

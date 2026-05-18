@@ -108,6 +108,9 @@ export class Cabecera implements OnInit {
       const idx = indexMap[opcion] ?? 0;  //Se asegura que idx siempre tenga un valor numérico
       this.activeIndex = idx;  //Se actualiza el índice activo
       this.puntero = idx;  //Se actualiza el puntero
+      if (opcion === 5) {
+        this.matrizApartados.menuPrincipal.limpiarFiltroServicios();
+      }
       if (typeof window !== 'undefined') {
         localStorage.setItem('punteroCabecera', this.puntero.toString());  //Y también se usa para el cambio de pagina   
       }

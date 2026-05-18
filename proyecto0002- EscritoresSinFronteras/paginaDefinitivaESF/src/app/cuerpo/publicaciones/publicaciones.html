@@ -17,14 +17,11 @@
       <div class="filters">
         <div class="filterGroup">
           <label class="label">Tipo</label>
-          <select class="select" [(ngModel)]="filterType" name="filterType" (change)="applyFilters()" aria-label="Filtrar por tipo de publicación">
+          <select class="select" [(ngModel)]="filterType" name="filterType" (change)="applyFilters()" aria-label="Filtrar por género de novela">
             <option value="todos">Todos</option>
-                @for (tipo of datosNovelas.PublicacionesPostType; track tipo) {
-                  <option [value]="tipo">{{ tipo }}</option>
-                }
-            <option value="verso">Verso</option>
-            <option value="prosa">Prosa</option>
-            <option value="reflexion">Reflexión</option>
+            @for (tipo of generosNovela; track tipo) {
+              <option [value]="tipo">{{ formatTypeLabel(tipo) }}</option>
+            }
           </select>
         </div>
         <div class="filterGroup grow">
@@ -42,7 +39,7 @@
 
       <div class="postsGrid">
         @for (p of filteredPosts; track p.id) {
-          <article class="postCard" (click)="openDetail(p.id)" tabindex="0">
+          <article class="postCard" (click)="openDetail(p)" tabindex="0">
             <div class="cardTop">
               <span class="badge">{{ formatTypeLabel(p.type) }}</span>
               <span class="date">{{ formatDate(p.createdAtIso) }}</span>
@@ -63,11 +60,11 @@
     }
 
     @if (view==='detail') {
-      @if (selectedPost(); as post) {
+      @if (selectedPost; as post) {
         <article class="detailCard">
           <div class="detailTop">
             <button type="button" class="btn ghost" (click)="openList()">← Volver</button>
-            <div class="meta">
+            <div class="meta detailMeta">
               <span class="badge">{{ formatTypeLabel(post.type) }}</span>
               <span class="date">{{ formatDate(post.createdAtIso) }}</span>
               <span class="author">Por {{ post.authorEmail }}</span>
@@ -76,28 +73,28 @@
           <h2 class="detailTitle">{{ post.title }}</h2>
           <pre class="detailContent">{{ post.content }}</pre>
           <!--EN LA ZONA DE FOTOS DE LIBROS SE VERIFICA QUE EXISTA Y ESTE EN SU DIRECTORIO CORRESPONDIENTE-->
-            @if(post.fotoLibro!="" && post.fotoLibro.includes('../../../assets/fotoLibros/')) {
-              <h2 class="detailTitle">{{ post.fotoLibroTitulo }}</h2>  
+            @if (tieneFoto(post)) {
+              <h2 class="detailTitle">{{ post.fotoLibroTitulo }}</h2>
               <div class="detailContent">
-                <img src="{{ post.fotoLibro }}" alt="{{ post.title }}" class="imagenLibroCargado">
+                <img [src]="post.fotoLibro" [alt]="post.title" class="imagenLibroCargado">
               </div>
             }
             <!--EN LA ZONA DE AUDIOS SE VERIFICA QUE EXISTA Y ESTE EN SU DIRECTORIO CORRESPONDIENTE-->
-            @if(post.audio!="" && post.audio.includes('../../../assets/audios/')) {
-              <h2 class="detailTitle">{{ post.audioLibroTitulo }}</h2>              
+            @if (tieneAudio(post)) {
+              <h2 class="detailTitle">{{ post.audioLibroTitulo }}</h2>
               <div class="detailContent">
                 <audio controls controlsList="nodownload" class="audioLibroCargado">
-                  <source src="{{ post.audio }}" type="audio/mpeg">
+                  <source [src]="post.audio" type="audio/mpeg">
                   Tu navegador no soporta la etiqueta audio.
                 </audio>
               </div>
             }
           <!--EN LA ZONA DE VIDEOS SE VERIFICA QUE EXISTA Y ESTE EN SU DIRECTORIO CORRESPONDIENTE-->
-          @if(post.videoCorto!="" && post.videoCorto.includes('../../../assets/videos/')) {
+          @if (tieneVideo(post)) {
               <h2 class="detailTitle">{{ post.videoCortoTitulo }}</h2>
               <div class="detailContent">  
                 <video controls controlsList="nodownload" class="videoLibroCargado">
-                    <source src="{{ post.videoCorto }}" type="video/mp4">
+                  <source [src]="post.videoCorto" type="video/mp4">
                     Tu navegador no soporta la etiqueta video.
                 </video>
               </div>

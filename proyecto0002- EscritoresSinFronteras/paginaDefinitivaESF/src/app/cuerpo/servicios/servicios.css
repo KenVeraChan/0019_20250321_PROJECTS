@@ -181,6 +181,28 @@
   opacity: 0.92;
 }
 
+.cardCount {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  font-style: italic;
+}
+
+.serviciosError {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(120, 30, 30, 0.55);
+  color: #ffe8e8;
+}
+
+.itemMedia {
+  margin: 6px 0 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  opacity: 0.9;
+  word-break: break-word;
+}
+
 .cardPanel {
   max-height: 0;
   overflow: hidden;
@@ -227,6 +249,12 @@
   font-size: 0.82rem;
   line-height: 1.5;
   opacity: 0.94;
+}
+
+.itemEmpty {
+  padding: 8px 0 4px;
+  font-style: italic;
+  opacity: 0.85;
 }
 
 @media (prefers-reduced-motion: reduce) {

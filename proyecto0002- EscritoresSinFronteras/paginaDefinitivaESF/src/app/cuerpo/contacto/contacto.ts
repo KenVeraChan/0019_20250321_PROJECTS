@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  ContactoPublicoDto,
-  ContactoPublicoService,
-} from '../../servicios/contacto-publico.service';
+import { ContactoPublicoDto, ContactoPublicoService } from '../../servicios/contacto-publico.service';
 
 @Component({
   selector: 'app-contacto',

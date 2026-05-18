@@ -131,7 +131,6 @@ INSERT INTO historia (mes, anio, contenido) VALUES (12,"2025","Hacia finales del
 INSERT INTO historia (mes, anio, contenido) VALUES (1,"2026","Se entablan las primeras consideraciones sobre una primera feria Internacional del libro");
 INSERT INTO historia (mes, anio, contenido) VALUES (1,"2026","Hacia finales del mes se establece el lugar, en Madrid - España, para la primera feria Internacional de Escritores Sin Fronteras"); 
 
-
 /***********************************************************************************************************************************************************/
 /***********************************************************************************************************************************************************/
 
@@ -185,6 +184,113 @@ INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapelli
 INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapellido, pais, email, fecha) VALUES ("La orilla que nunca regresa",1,"'Cruzo la página, no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.'","Blanca","Pascual","Neruda","República Dominicana","equipo@esf.org","2026-04-03");
 INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapellido, pais, email, fecha) VALUES ("Inventario de silencios rotos",2,"'Cruzo la página, no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.'","Lucas","Ponce","Laredo","Portugal","equipo@esf.org","2025-09-09");
 INSERT INTO blog (titulo, tipo, contenido, nombre, primerapellido, segundoapellido, pais, email, fecha) VALUES ("El eco que se quedó a vivir en mí",0,"'Cruzo la página, no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.'","Carmen","Escila","Norris","Canadá","equipo@esf.org","2026-02-02");
+
+/***********************************************************************************************************************************************************/
+/***********************************************************************************************************************************************************/
+
+/*********************************************************************************************/
+/**************   TABLA PARA LOS SERVICIOS: APARTADO 5 NUESTROS SERVICIOS ********************/
+/*********************************************************************************************/
+
+CREATE TABLE servicios (     
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    idservicio VARCHAR(50) NOT NULL,
+    tituloservicio VARCHAR(100) NOT NULL,
+    descripcionservicio VARCHAR(500) NOT NULL,
+    subtitulo VARCHAR(500) NOT NULL,
+    subdescripcion VARCHAR(1000) NOT NULL,
+    imagenservicio VARCHAR(200) NOT NULL,
+    audioservicio VARCHAR(200) NOT NULL,
+    videoservicio VARCHAR(200) NOT NULL
+);
+
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("cursos","Cursos","Formación y talleres para escribir con rigor y creatividad.","Taller de narrativa breve","Sesiones prácticas para cerrar relatos con estructura clara y voz propia. Próxima convocatoria: consulte fechas.","","","");
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("cursos","Cursos","Formación y talleres para escribir con rigor y creatividad.","Curso de poesía contemporánea","Exploración de métrica libre, imágenes y revisiones en grupo. Inscripciones abiertas según calendario anual.","","","");
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("cursos","Cursos","Formación y talleres para escribir con rigor y creatividad.","Escritura creativa para no iniciados","Un punto de partida amable para quienes desean empezar sin miedo al folio en blanco.","","","");
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("entrevistas","Entrevistas","Conversaciones con autores, editores y voces del sector.","Entrevista: oficio y rutina","Charla sobre hábitos de escritura, revisiones y equilibrio con otras responsabilidades.","","","");
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("entrevistas","Entrevistas","Conversaciones con autores, editores y voces del sector.","Entrevista: del manuscrito al lector","Proceso editorial visto desde ambas orillas: autoría y acompañamiento profesional.","","","");
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("ediciones","Ediciones","Lanzamientos, antologías y materiales que impulsamos o recomendamos.","Antología comunitaria","Selección de textos de la comunidad con criterios editoriales transparentes.","","","");
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("ediciones","Ediciones","Lanzamientos, antologías y materiales que impulsamos o recomendamos.","Guía de buenas prácticas","Recursos descargables sobre presentación de originales y derechos básicos.","","","");
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("tertulias","Tertulias","Encuentros informales para debatir lecturas y proyectos en curso.","Tertulia mensual online","Espacio virtual para comentar una obra propuesta y compañar redacciones abiertas.","","","");
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("tertulias","Tertulias","Encuentros informales para debatir lecturas y proyectos en curso.","Círculo presencial (según sede)","Encuentros locales cuando la agenda lo permita; se anuncian con antelación.","","","");
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("congresos","Congresos","Eventos de mayor alcance: ponencias, mesas y networking.","Congreso anual Escritores sin Fronteras","Jornadas con ponentes invitados, talleres intensivos y espacio para networking entre participantes.","","","");
+INSERT INTO servicios (idservicio, tituloservicio, descripcionservicio, subtitulo, subdescripcion,imagenservicio,audioservicio,videoservicio) VALUES ("congresos","Congresos","Eventos de mayor alcance: ponencias, mesas y networking.","Mesa redonda: literatura y fronteras","Reflexión sobre traducción, migración de ideas y lectura transfronteriza.","","","");
+
+/***********************************************************************************************************************************************************/
+/***********************************************************************************************************************************************************/
+
+/*********************************************************************************************/
+/**************   TABLA PARA LAS PUBLICACIONES: APARTADO 6 PUBLICACIONES ********************/
+/*********************************************************************************************/
+
+CREATE TABLE publicaciones (     
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    idpubliGen VARCHAR(50) NOT NULL,
+    titulopubli VARCHAR(50) NOT NULL,
+    tipopubli INT NOT NULL,
+    contenidopubli VARCHAR(500) NOT NULL,
+    autorcorreopubli VARCHAR(500) NOT NULL,
+    fechapubli DATE NOT NULL,
+    titulofotolibropubli VARCHAR(200) NOT NULL,
+    fotolibropubli VARCHAR(200) NOT NULL,
+    tituloaudiolibropubli VARCHAR(200) NOT NULL,
+    audiolibropubli VARCHAR(200) NOT NULL,
+    titulovideopubli VARCHAR(200) NOT NULL,
+    videolibropubli VARCHAR(200) NOT NULL
+);
+
+INSERT INTO publicaciones (idpubliGen,
+                            titulopubli, 
+                            tipopubli, 
+                            contenidopubli, 
+                            autorcorreopubli, 
+                            fechapubli,
+                            titulofotolibropubli,
+                            fotolibropubli,
+                            tituloaudiolibropubli,
+                            audiolibropubli,
+                            titulovideopubli,
+                            videolibropubli) VALUES (
+                                "",
+                                "Frontera de tinta",
+                                0,
+                                "Cruzo la página y no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.",
+                                "equipo@esf.org",
+                                "2026-03-03",
+                                "Novela de ciencia ficción - 'El fin de la eternidad' de Isaac Asimov",
+                                "novelaCienciaFiccion.jpg",
+                                "Audiolibro de ciencia ficción - 'Dune' de Frank Herbert",
+                                "",
+                                "Booktrailer de ciencia ficción - 'Neuromante' de William Gibson",
+                                "");
+
+INSERT INTO publicaciones (idpubliGen,
+                            titulopubli, 
+                            tipopubli, 
+                            contenidopubli, 
+                            autorcorreopubli, 
+                            fechapubli,
+                            titulofotolibropubli,
+                            fotolibropubli,
+                            tituloaudiolibropubli,
+                            audiolibropubli,
+                            titulovideopubli,
+                            videolibropubli) VALUES (
+                                "",
+                                "Una reflexión para MAÑANA",
+                                2,
+                                "Cruzo la página y no por huir del mundo, sino por nombrarlo. Y en cada palabra una casa posible para lo que duele.",
+                                "equipo@esf.org",
+                                "2026-03-03",
+                                "Presentación del libro Vitrea Horíz",
+                                "Ken Vera Chan fin.png",
+                                "Piano y danzas de Vitrea Horiz en las orillas del mar",
+                                "Tony Anderson - Bloom.mp3",
+                                "Video Vitrea en el tren a Chalikets",
+                                "libreria.mp4");
+
+/***********************************************************************************************************************************************************/
+/***********************************************************************************************************************************************************/
 
 /*******************************************************************************************/
 /******************   PARA TODAS LAS TABLAS DE LA BASE DE DATOS CREADA  ********************/

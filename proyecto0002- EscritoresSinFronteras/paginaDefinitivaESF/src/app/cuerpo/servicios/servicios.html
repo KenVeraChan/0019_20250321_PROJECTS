@@ -2,43 +2,63 @@
   <div class="serviciosWrap">
     <header class="serviciosHeader">
       <h2 id="serviciosTitulo" class="serviciosTitle">Nuestros Servicios Ofrecidos</h2>
-      <p class="serviciosSubtitle"> Explora cada apartado inferior</p>
-      <p class="serviciosSubtitle"> Al pasar el ratón verás una animación</p>
-      <p class="serviciosSubtitle"> Al pulsar, se despliega el contenido completo</p> 
+      <p class="serviciosSubtitle">Explora cada apartado inferior</p>
+      <p class="serviciosSubtitle">Al pasar el ratón verás una animación</p>
+      <p class="serviciosSubtitle">Al pulsar, se despliega el contenido completo de esa categoría</p>
     </header>
 
+    @if (errorMsg) {
+      <p class="serviciosError" role="alert">{{ errorMsg }}</p>
+    }
+
     <div class="apartadosGrid" role="list">
-      @for (a of apartados; track a.id) {
-        <article class="servicioCard" [class.open]="isOpen(a.id)" role="listitem">
+      @for (apartado of apartadosAgrupados; track apartado.id) {
+        <article class="servicioCard" [class.open]="isOpen(apartado.id)" role="listitem">
           <button
             type="button"
             class="cardFace"
-            (click)="toggle(a.id)"
-            [attr.aria-expanded]="isOpen(a.id)"
-            [attr.aria-controls]="'panel-' + a.id" 
-            [id]="'btn-' + a.id"
+            (click)="toggle(apartado.id)"
+            [attr.aria-expanded]="isOpen(apartado.id)"
+            [attr.aria-controls]="'panel-' + apartado.id"
+            [id]="'btn-' + apartado.id"
           >
             <span class="cardAccent" aria-hidden="true"></span>
             <span class="cardTitleRow">
-              <span class="cardTitle">{{ a.title }}</span>
-              <span class="cardChevron" aria-hidden="true">{{ isOpen(a.id) ? '▾' : '▸' }}</span>
+              <span class="cardTitle">{{ apartado.titulo }}</span>
+              <span class="cardChevron" aria-hidden="true">{{ isOpen(apartado.id) ? '▾' : '▸' }}</span>
             </span>
-            <span class="cardTeaser">{{ a.teaser }}</span>
+            <span class="cardTeaser">{{ apartado.descripcion }}</span>
+            <span class="cardCount">
+              {{ cantidadEnApartado(apartado) }}
+              {{ cantidadEnApartado(apartado) === 1 ? 'actividad' : 'actividades' }}
+            </span>
           </button>
 
           <div
             class="cardPanel"
-            [class.visible]="isOpen(a.id)"
-            [attr.aria-hidden]="!isOpen(a.id)"
-            [id]="'panel-' + a.id"
+            [class.visible]="isOpen(apartado.id)"
+            [attr.aria-hidden]="!isOpen(apartado.id)"
+            [id]="'panel-' + apartado.id"
             role="region"
-            [attr.aria-labelledby]="'btn-' + a.id"
+            [attr.aria-labelledby]="'btn-' + apartado.id"
           >
             <div class="itemList" role="list">
-              @for (it of a.items; track it.titulo) {
+              @if (apartado.contenidos.length === 0) {
+                <p class="itemDesc itemEmpty">No hay actividades publicadas en esta categoría por el momento.</p>
+              }
+              @for (item of apartado.contenidos; track item.subtitulo + $index) {
                 <div class="itemRow" role="listitem">
-                  <h3 class="itemTitle">{{ it.titulo }}</h3>
-                  <p class="itemDesc">{{ it.descripcion }}</p>
+                  <h3 class="itemTitle">{{ item.subtitulo }}</h3>
+                  <p class="itemDesc">{{ item.subdescripcion }}</p>
+                  @if (item.imagenservicio) {
+                    <p class="itemMedia">{{ item.imagenservicio }}</p>
+                  }
+                  @if (item.audioservicio) {
+                    <p class="itemMedia">{{ item.audioservicio }}</p>
+                  }
+                  @if (item.videoservicio) {
+                    <p class="itemMedia">{{ item.videoservicio }}</p>
+                  }
                 </div>
               }
             </div>
