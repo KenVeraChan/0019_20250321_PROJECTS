@@ -1,5 +1,5 @@
-import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { ErrorHandler, NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch } from '@angular/common/http';
 import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing-module';
 import { NgOptimizedImage } from '@angular/common';
@@ -21,6 +21,9 @@ import { PaginaError } from './paginaerror/paginaerror'
 import { VariablesCompartidas } from './servicios/variablesCompartidas';
 import { Librointeractivo } from './cuerpo/historia/librointeractivo/librointeractivo';
 import { HttpClientModule } from '@angular/common/http';
+import { ErroresHttpInterceptor } from './servicios/errores-http.interceptor';
+import { ErroresGlobalHandler } from './servicios/errores-global.handler';
+import { EstadoErroresService } from './servicios/estado-errores.service';
 
 const appRoutes: Routes=[
 {path:'', component: Inicio},
@@ -62,6 +65,9 @@ const appRoutes: Routes=[
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(withFetch()),
+    EstadoErroresService,
+    { provide: HTTP_INTERCEPTORS, useClass: ErroresHttpInterceptor, multi: true },
+    { provide: ErrorHandler, useClass: ErroresGlobalHandler },
     VariablesCompartidas,
     provideClientHydration(withEventReplay())
   ],

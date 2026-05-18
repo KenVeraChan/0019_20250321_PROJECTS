@@ -8,6 +8,16 @@ import { VariablesCompartidas } from '../servicios/variablesCompartidas';
   styleUrls: ['./cabecera.css'],
 })
 export class Cabecera implements OnInit {
+    private readonly rutasSeccion = [
+      '/inicio',
+      '/nuestraHistoria',
+      '/quienesSomos',
+      '/blogLiterario',
+      '/nuestrosServicios',
+      '/publicaciones',
+      '/contacto',
+    ] as const;
+
     public matrizApartados= new VariablesCompartidas();
     public tamanioPantalla:number=0.0;
     public esDispositivoMovilReal: boolean = false; // Detecta móviles/tablets por User-Agent (no cambia con zoom)
@@ -112,7 +122,8 @@ export class Cabecera implements OnInit {
         this.matrizApartados.menuPrincipal.limpiarFiltroServicios();
       }
       if (typeof window !== 'undefined') {
-        localStorage.setItem('punteroCabecera', this.puntero.toString());  //Y también se usa para el cambio de pagina   
+        localStorage.setItem('punteroCabecera', this.puntero.toString());
+        window.location.assign(this.rutasSeccion[idx]);
       }
     }
   }

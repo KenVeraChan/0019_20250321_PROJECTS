@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
+import { HEADER_CARGA_SECCION } from './estado-errores.service';
 
 /** Datos públicos de contacto: editables sustituyendo `assets/data/contacto.json` o sirviendo el mismo archivo vía `GET /api/contacto`. */
 export type ContactoPublicoDto = {
@@ -35,8 +36,11 @@ export class ContactoPublicoService {
 
   /** JSON en `assets` en desarrollo; en producción con SSR también puede usarse `GET /api/contacto`. */
   getContactoPublico(): Observable<ContactoPublicoDto> {
+    const headersApi = new HttpHeaders().set(HEADER_CARGA_SECCION, '1');
     return this.http.get<ContactoPublicoDto>('assets/data/contacto.json').pipe(
-      catchError(() => this.http.get<ContactoPublicoDto>('/api/contacto')),
+      catchError(() =>
+        this.http.get<ContactoPublicoDto>('/api/contacto', { headers: headersApi }),
+      ),
     );
   }
 }

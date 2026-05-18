@@ -9,6 +9,13 @@ Escritorio grande: A partir de 1200px
     margin: 0;
     padding: 0;
     }
+    .fondoCuerpoSuperior.fondoSinVentanas{
+        padding-top: 4px;
+    }
+    .areaPaginaError{
+        width: 100%;
+        min-height: min(70vh, 720px);
+    }
     .fondoCuerpoSuperior{
         position:relative;
         width: 100%;

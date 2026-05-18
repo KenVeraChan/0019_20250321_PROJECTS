@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { HEADER_CARGA_SECCION } from './estado-errores.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,12 @@ export class Conexion{
 
   constructor(private http: HttpClient){}
   public getAutores(eleccion:number): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrlApi[eleccion]);  
+    let headers = new HttpHeaders();
+    // Inicio (noticias): fallo parcial; el resto de secciones bloquean la vista si falla la carga.
+    if (eleccion !== 0) {
+      headers = headers.set(HEADER_CARGA_SECCION, '1');
+    }
+    return this.http.get<any[]>(this.apiUrlApi[eleccion], { headers });
     //Esto devuelve un Observable que se suscribe en el componente para obtener los datos de la BBDD, el eleccion se corresponde con el indice del array de URLs, que a su vez se corresponde con el indice del array de apartados, por lo que es una forma de centralizar las URLs y evitar tener que escribirlas en cada componente, además de facilitar su mantenimiento y actualización.
   }
   /**
@@ -163,6 +169,7 @@ class Apartados{
             localStorage.setItem('selectedPostEleccion', this.subApartadoBlog);
               this.valorSubapartado=3;  //Se asigna el valor 3 (Comenzando desde 0 para esta variable) a la variable auxiliar para indicar que se ha seleccionado un subapartado específico del blog, y no "todos", que es el valor predeterminado.
             localStorage.setItem('punteroCabecera', this.valorSubapartado.toString());  //Y también se usa para el cambio de pagina
+            window.location.assign('/blogLiterario');
           }      //Se guarda la selección en localStorage para que
       //Se guarda la selección en localStorage para que
       // el componente Blogs pueda acceder a ella y filtrar los posts según la elección del usuario en la cabecera.
@@ -221,6 +228,7 @@ class Apartados{
           localStorage.setItem('selectedServicioEleccion', this.subPartadosServicios);
               this.valorSubapartado=4;  //Se asigna el valor 4 (Comenzando desde 0 para esta variable) a la variable auxiliar para indicar que se ha seleccionado un subapartado específico del servicios, y no "cursos", que es el valor predeterminado.
           localStorage.setItem('punteroCabecera', this.valorSubapartado.toString());  //Y también se usa para el cambio de pagina
+          window.location.assign('/nuestrosServicios');
           }      //Se guarda la selección en localStorage para que
       // el componente Servicios pueda acceder a ella y filtrar los servicios según la elección del usuario en la cabecera.
       this.notificarCambioFiltroServicios();

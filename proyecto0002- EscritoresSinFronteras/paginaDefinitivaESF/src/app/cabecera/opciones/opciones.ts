@@ -8,6 +8,16 @@ import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
   styleUrl: './opciones.css',
 })
 export class Opciones implements OnInit, AfterViewInit {
+    private readonly rutasSeccion = [
+      '/inicio',
+      '/nuestraHistoria',
+      '/quienesSomos',
+      '/blogLiterario',
+      '/nuestrosServicios',
+      '/publicaciones',
+      '/contacto',
+    ] as const;
+
     public matrizApartados= new VariablesCompartidas();
     public tamanioHorizontalPantalla:number=0.0;
     public tamanioHorizontalPantallaSegundo:number=0.0;
@@ -188,6 +198,7 @@ export class Opciones implements OnInit, AfterViewInit {
       }
       if (typeof window !== 'undefined') {
         localStorage.setItem('punteroCabecera', this.puntero.toString());
+        window.location.assign(this.rutasSeccion[idx]);
       }
     }
 }
