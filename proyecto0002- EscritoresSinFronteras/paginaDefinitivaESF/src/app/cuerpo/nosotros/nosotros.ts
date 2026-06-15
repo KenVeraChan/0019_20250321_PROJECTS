@@ -5,7 +5,7 @@ import { QuienesSomos, VariablesCompartidas, Conexion, ImagenesExtra } from '../
   selector: 'app-nosotros',
   standalone: false,
   templateUrl: './nosotros.html',
-  styleUrl: './nosotros.css',
+  styleUrls: ['./nosotros.css'],
 })
 export class Nosotros {
   public equipo= new VariablesCompartidas();
@@ -22,17 +22,16 @@ export class Nosotros {
     this.Conexion.getAutores(2).subscribe(data => {
           this.objetoEquipo = [];
           data.forEach(a => {
-            const historia = new QuienesSomos(
+            const persona = new QuienesSomos(
                 a.id,
-                a.titulo,
-                a.tipo,
+                a.nombre,
+                a.apellidos,
                 a.nacionalidad,
                 a.profesion,
                 a.biografia,
                 a.fotografia);
-        this.objetoEquipo.push(historia);
-        }
-      );
+            this.objetoEquipo.push(persona);
+          });
       // Todos cerrados al terminar de cargar el equipo (coincide con longitud real del array)
       this.cerrado = this.objetoEquipo.map(() => true);
     });
