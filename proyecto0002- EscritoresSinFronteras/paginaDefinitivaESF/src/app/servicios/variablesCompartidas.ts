@@ -117,6 +117,8 @@ class Apartados{
     public enlacesBlogLiterario: string[]= ["PUBLICACIONES EN PROSA","PUBLICACIONES EN VERSO","REFLEXIONES DEL DÍA"];
     public enlacesServicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS POR LA MARCA","CONGRESOS INTERNACIONALES PROGRAMADOS","FERIAS DEL LIBRO E.S.F."];
     public subApartadosServicios: string[]= ["CURSOS","ENTREVISTAS","EDICIONES","TERTULIAS","CONGRESOS","FERIAS"];
+    
+    //Hemos definido las variables que se usarán en el menú de opciones
     public constructor()
     {
       //El constructor no solicita nada porque simplemente es de lectura o escritura de las variables, no se necesita instanciar nada, se accede directamente a las variables públicas.

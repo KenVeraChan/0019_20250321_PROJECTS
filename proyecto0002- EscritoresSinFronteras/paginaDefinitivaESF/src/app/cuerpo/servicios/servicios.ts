@@ -31,7 +31,6 @@ export class Servicios implements OnInit, OnDestroy {
   // Se consume una sola vez en applyFilters tras entrar en la página
   private filtroCabeceraPendiente = '';
   public errorMsg = '';
-
   public search = '';
 
   constructor(public variablesCompartidas: VariablesCompartidas, private Conexion: Conexion) {}
