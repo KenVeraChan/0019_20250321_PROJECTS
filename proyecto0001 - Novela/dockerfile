@@ -19,6 +19,6 @@ COPY docker-entrypoint-init.sh /usr/local/bin/
 # Dar permisos de ejecución al script de inicialización 
 RUN chmod +x /usr/local/bin/docker-entrypoint-init.sh
 # Con el ENTRYPOINT, el script se ejecutará cada vez que se inicie el contenedor, asegurando 
-#que la base de datos se inicialice correctamente antes de que Apache comience a servir la aplicación.
-ENTRYPOINT ["docker-entrypoint-init.sh"]
+# que la base de datos se inicialice correctamente antes de que Apache comience a servir la aplicación.
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint-init.sh"]
 
