@@ -81,13 +81,14 @@ export class Servicios implements OnInit, OnDestroy {
         identificadorServicio === 'entrevistas' ||
         identificadorServicio === 'ediciones' ||
         identificadorServicio === 'tertulias' ||
-        identificadorServicio === 'congresos') {
+        identificadorServicio === 'congresos' ||
+        identificadorServicio === 'ferias') {
             idservicio = identificadorServicio;
     } else {
       // 0 = verso, 1 = prosa, 2 = reflexión (init.sql)
       const n =
         typeof identificadorServicio === 'string' ? parseInt(identificadorServicio, 10) : Number(identificadorServicio);
-      const mapa: ServiciosTypeId[] = ['cursos','entrevistas','ediciones','tertulias','congresos'];
+      const mapa: ServiciosTypeId[] = ['cursos','entrevistas','ediciones','tertulias','congresos','ferias'];
       idservicio = mapa[n] ?? 'cursos';
     }
 
@@ -98,13 +99,14 @@ export class Servicios implements OnInit, OnDestroy {
         titularServicio === 'Entrevistas' ||
         titularServicio === 'Ediciones' ||
         titularServicio === 'Tertulias' ||
-        titularServicio === 'Congresos') {
+        titularServicio === 'Congresos' ||
+        titularServicio === 'Ferias') {
             tituloservicio = titularServicio;
     } else {
       // 0 = verso, 1 = prosa, 2 = reflexión (init.sql)
       const n =
         typeof titularServicio === 'string' ? parseInt(titularServicio, 10) : Number(titularServicio);
-      const mapa: ServiciosTypeTitulo[] = ['Cursos','Entrevistas','Ediciones','Tertulias','Congresos'];
+      const mapa: ServiciosTypeTitulo[] = ['Cursos','Entrevistas','Ediciones','Tertulias','Congresos','Ferias'];
       tituloservicio = mapa[n] ?? 'Cursos';
     }
 

@@ -22,7 +22,7 @@
         
         <h3 class="tituloLibro">{{personal.getNombre()}} {{personal.getApellidos()}}</h3>
         
-        <div [class.informacionPersonal]="cerrado[$index]" 
+        <div [class.informacionPersonal]="cerrado[$index]"
              [class.informacionPersonalCarga]="!cerrado[$index]"
              [attr.aria-expanded]="!cerrado[$index]"
              role="region"

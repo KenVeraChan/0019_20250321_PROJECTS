@@ -43,7 +43,7 @@
     --i: calc((var(--start, 0)) + (n - 1));
 }
 
-.tituloLibro:nth-child(n) {
+.tituloLibro {
     position: absolute;
     opacity: 1;
     z-index: 1;
@@ -53,7 +53,7 @@
     color:#f3ba00;
 }
 
-.tituloLibro:nth-child(n)::after {
+.tituloLibro::after {
     position: absolute;
     opacity: 0;
     z-index: 1;
@@ -64,7 +64,7 @@
     color:#f3ba00;
 }
 
-.tituloLibro:nth-child(n):hover::after {
+.tituloLibro:hover::after {
     position: absolute;
     margin-left:-180px;
     width:300px;
@@ -188,18 +188,18 @@
         max-height: 50px;
     }
 
-    .tituloLibro:nth-child(n) {
+    .tituloLibro {
         padding-top:25px;
         font-size: 12px;
     }
 
-    .tituloLibro:nth-child(n)::after {
+    .tituloLibro::after {
         padding-top:25px;
         font-size: 11px;
         width: 200px !important;
     }
 
-    .tituloLibro:nth-child(n):hover::after {
+    .tituloLibro:hover::after {
         margin-left:-100px;
         width:200px;
         padding-top:25px;
@@ -267,18 +267,18 @@
         max-height: 55px;
     }
 
-    .tituloLibro:nth-child(n) {
+    .tituloLibro {
         padding-top:30px;
         font-size: 13px;
     }
 
-    .tituloLibro:nth-child(n)::after {
+    .tituloLibro::after {
         padding-top:30px;
         font-size: 12px;
         width: 260px !important;
     }
 
-    .tituloLibro:nth-child(n):hover::after {
+    .tituloLibro:hover::after {
         margin-left:-130px;
         width:260px;
         padding-top:30px;
@@ -342,18 +342,18 @@
         max-height: 60px;
     }
 
-    .tituloLibro:nth-child(n) {
+    .tituloLibro {
         padding-top:33px;
         font-size: 15px;
     }
 
-    .tituloLibro:nth-child(n)::after {
+    .tituloLibro::after {
         padding-top:33px;
         font-size: 15px;
         width: 300px !important;
     }
 
-    .tituloLibro:nth-child(n):hover::after {
+    .tituloLibro:hover::after {
         margin-left:-150px;
         width:300px;
         padding-top:33px;

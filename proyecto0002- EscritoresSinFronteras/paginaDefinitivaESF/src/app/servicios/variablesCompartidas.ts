@@ -115,8 +115,8 @@ class Apartados{
     public matrizApartados: string[]= ["INICIO","NUESTRA HISTORIA","QUIENES SOMOS","BLOG LITERARIO","NUESTROS SERVICIOS","PUBLICACIONES","CONTACTO"];
     public subApartadosBlog: string[]= ["PROSA","VERSO","REFLEXIONES"];
     public enlacesBlogLiterario: string[]= ["PUBLICACIONES EN PROSA","PUBLICACIONES EN VERSO","REFLEXIONES DEL DÍA"];
-    public enlacesServicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS POR LA MARCA","CONGRESOS INTERNACIONALES PROGRAMADOS"];
-    public subApartadosServicios: string[]= ["CURSOS","ENTREVISTAS","EDICIONES","TERTULIAS","CONGRESOS"];
+    public enlacesServicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS POR LA MARCA","CONGRESOS INTERNACIONALES PROGRAMADOS","FERIAS DEL LIBRO E.S.F."];
+    public subApartadosServicios: string[]= ["CURSOS","ENTREVISTAS","EDICIONES","TERTULIAS","CONGRESOS","FERIAS"];
     public constructor()
     {
       //El constructor no solicita nada porque simplemente es de lectura o escritura de las variables, no se necesita instanciar nada, se accede directamente a las variables públicas.
@@ -213,6 +213,11 @@ class Apartados{
         case 5:
           {
             this.subPartadosServicios='congresos';
+            break;
+          }
+        case 6:
+          {
+            this.subPartadosServicios='ferias';
             break;
           }
         default:
@@ -544,8 +549,8 @@ export interface BlogPost {
 //se han diferenciado para tener una mayor claridad en el código, y para poder 
 //hacer modificaciones futuras en cada uno de ellos sin afectar al otro, aunque 
 //por ahora son SIMILARES.
-export type ServiciosTypeId = 'cursos' | 'entrevistas' | 'ediciones' | 'tertulias' | 'congresos';
-export type ServiciosTypeTitulo = 'Cursos' | 'Entrevistas' | 'Ediciones' | 'Tertulias' | 'Congresos';
+export type ServiciosTypeId = 'cursos' | 'entrevistas' | 'ediciones' | 'tertulias' | 'congresos' | 'ferias';
+export type ServiciosTypeTitulo = 'Cursos' | 'Entrevistas' | 'Ediciones' | 'Tertulias' | 'Congresos' | 'Ferias';
 
 export interface ServiciosOfrecidos {
   idservicio: ServiciosTypeId;
