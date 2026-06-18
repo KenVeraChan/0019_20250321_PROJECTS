@@ -91,7 +91,7 @@ export class Servicios implements OnInit, OnDestroy {
       idservicio = mapa[n] ?? 'cursos';
     }
 
-    //Control del tipo de TITULO SERVICIO 
+    //Control del tipo de TITULO SERVICIO
     const titularServicio = fila['tituloservicio'];
     let tituloservicio: ServiciosTypeTitulo = 'Cursos';     //Por defecto se asigna cursos luego se procede a la distincion
     if (titularServicio === 'Cursos' ||
@@ -144,8 +144,9 @@ export class Servicios implements OnInit, OnDestroy {
       id === 'entrevistas' ||
       id === 'ediciones' ||
       id === 'tertulias' ||
-      id === 'congresos'
-    );
+      id === 'congresos' ||
+      id === 'ferias'
+    );  //Si se deseara añadir un nuevo apartado, incluirlo aqui tambien
   }
 
   private coincideBusqueda(p: ServiciosOfrecidos, q: string): boolean {

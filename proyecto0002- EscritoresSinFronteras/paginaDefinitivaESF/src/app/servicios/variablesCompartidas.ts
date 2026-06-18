@@ -54,7 +54,7 @@ export class Conexion{
 }
 export class VariablesCompartidas {
 
-  //VARIABLES COMPARTIDAS ENTRE COMPONENTES PARA LA CARGA DEL MENU DE OPCIONES 
+  //VARIABLES COMPARTIDAS ENTRE COMPONENTES PARA LA CARGA DEL MENU DE OPCIONES
   public menuPrincipal: Apartados=new Apartados();
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ export class VariablesCompartidas {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public punteroSeleccionador:number=0;   //VARIABLE AUXILIAR PARA SELECCIONAR UNA FECHA Y MES DE LA CLASE HISTORIAS
-    
+
     // VARIABLE Y METODO PARA EL APARTADO: NUESTRA HISTORIA
     public setPunteroSeleccionador(puntero:number):void
     {
@@ -117,7 +117,7 @@ class Apartados{
     public enlacesBlogLiterario: string[]= ["PUBLICACIONES EN PROSA","PUBLICACIONES EN VERSO","REFLEXIONES DEL DÍA"];
     public enlacesServicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS POR LA MARCA","CONGRESOS INTERNACIONALES PROGRAMADOS","FERIAS DEL LIBRO E.S.F."];
     public subApartadosServicios: string[]= ["CURSOS","ENTREVISTAS","EDICIONES","TERTULIAS","CONGRESOS","FERIAS"];
-    
+
     //Hemos definido las variables que se usarán en el menú de opciones
     public constructor()
     {
@@ -234,6 +234,7 @@ class Apartados{
             // y el método se está ejecutando en un entorno donde no lo está.
           localStorage.setItem('selectedServicioEleccion', this.subPartadosServicios);
               this.valorSubapartado=4;  //Se asigna el valor 4 (Comenzando desde 0 para esta variable) a la variable auxiliar para indicar que se ha seleccionado un subapartado específico del servicios, y no "cursos", que es el valor predeterminado.
+              //el valor 4 es porque el subapartado de servicios es el 4º apartado del menú principal, y se ha decidido usar este valor para indicar que se ha seleccionado un subapartado específico del servicios, y no "cursos", que es el valor predeterminado.
           localStorage.setItem('punteroCabecera', this.valorSubapartado.toString());  //Y también se usa para el cambio de pagina
           window.location.assign('/nuestrosServicios');
           }      //Se guarda la selección en localStorage para que
@@ -528,9 +529,9 @@ export class ImagenesExtra
 }
 //Tanto el BLOG como las PUBLICACIONES NO comparten el mismo modelo de datos
 
-//el de BLOG se llama BlogPost, aunque ambos tienen la misma estructura, 
-//se han diferenciado para tener una mayor claridad en el código, y para poder 
-//hacer modificaciones futuras en cada uno de ellos sin afectar al otro, aunque 
+//el de BLOG se llama BlogPost, aunque ambos tienen la misma estructura,
+//se han diferenciado para tener una mayor claridad en el código, y para poder
+//hacer modificaciones futuras en cada uno de ellos sin afectar al otro, aunque
 //por ahora son SIMILARES.
 export type BlogPostType = 'verso' | 'prosa' | 'reflexion';
 
@@ -547,9 +548,9 @@ export interface BlogPost {
   createdAtIso: string;
 };
 
-//el de SERVICIOS se llama BlogPost, aunque ambos tienen la misma estructura, 
-//se han diferenciado para tener una mayor claridad en el código, y para poder 
-//hacer modificaciones futuras en cada uno de ellos sin afectar al otro, aunque 
+//el de SERVICIOS se llama BlogPost, aunque ambos tienen la misma estructura,
+//se han diferenciado para tener una mayor claridad en el código, y para poder
+//hacer modificaciones futuras en cada uno de ellos sin afectar al otro, aunque
 //por ahora son SIMILARES.
 export type ServiciosTypeId = 'cursos' | 'entrevistas' | 'ediciones' | 'tertulias' | 'congresos' | 'ferias';
 export type ServiciosTypeTitulo = 'Cursos' | 'Entrevistas' | 'Ediciones' | 'Tertulias' | 'Congresos' | 'Ferias';
@@ -565,11 +566,11 @@ export interface ServiciosOfrecidos {
   videoservicio:string;
 };
 
-//el de PUBLICACIONES se llama PublicacionesPost 
-export type PublicacionesPostType = 
+//el de PUBLICACIONES se llama PublicacionesPost
+export type PublicacionesPostType =
 'todos' |
-'novela histórica' | 
-'novela ciencia ficción' | 
+'novela histórica' |
+'novela ciencia ficción' |
 'novela fantasía' |
 'novela negra y policíaca' |
 'novela romántica' |
@@ -603,7 +604,7 @@ export type PublicacionesPost = {
   videoCortoTitulo: string;
   videoCorto: string
 };
-//De la base de datos futura, pero se incluye aquí para tener un modelo de 
+//De la base de datos futura, pero se incluye aquí para tener un modelo de
 //datos claro y poder trabajar con él en el componente de publicaciones.
 export class publicaciones implements PublicacionesPost {
   public id: string="";
@@ -616,7 +617,7 @@ export class publicaciones implements PublicacionesPost {
   public audioLibroTitulo: string="";
   public videoCortoTitulo: string="";
   public fotoLibro: string=""; //Se incluye un campo de foto de libro para las publicaciones, aunque no todas las publicaciones lo tendrán, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones.
-  public audio: string=""; //Se incluye un campo de audio para las reflexiones, aunque no todas las publicaciones lo tendrán, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones. 
+  public audio: string=""; //Se incluye un campo de audio para las reflexiones, aunque no todas las publicaciones lo tendrán, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones.
   public videoCorto:string=""; //Se incluye un campo de video corto para las publicaciones, aunque no todas las publicaciones lo tendrán, serán BOOKTRAILERS de los libros, se deja la posibilidad abierta para futuras modificaciones en el tipo de publicaciones.
 
   public PublicacionesPostTypeArray: string[]=[
@@ -647,11 +648,11 @@ export class publicaciones implements PublicacionesPost {
     //No precisa de instanciar nada
   }
 
-  public generoPublicacion(eleccion:number):string 
+  public generoPublicacion(eleccion:number):string
   {
-    //Rellena el array de tipos de publicaciones, aunque en este caso se 
-    //podría hacer directamente con un array de strings, pero se ha hecho así 
-    //para tener una mayor claridad en el código y para poder hacer modificaciones 
+    //Rellena el array de tipos de publicaciones, aunque en este caso se
+    //podría hacer directamente con un array de strings, pero se ha hecho así
+    //para tener una mayor claridad en el código y para poder hacer modificaciones
     //futuras en el tipo de publicaciones sin afectar al resto del código.
     return this.PublicacionesPostTypeArray[eleccion];
   }

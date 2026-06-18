@@ -24,10 +24,10 @@ export class Cabecera implements OnInit {
     public puntero: number=0;
     public activeIndex: number = 0;
     public semaforo:boolean=false;
-    
+
     ngOnInit()    //Al iniciarse el componente
     {
-      if (typeof window !== 'undefined') 
+      if (typeof window !== 'undefined')
         {
           this.tamanioPantalla = window.innerWidth;
           // Detectar si es un dispositivo móvil o tablet REAL usando múltiples heurísticas
@@ -118,7 +118,7 @@ export class Cabecera implements OnInit {
       const idx = indexMap[opcion] ?? 0;  //Se asegura que idx siempre tenga un valor numérico
       this.activeIndex = idx;  //Se actualiza el índice activo
       this.puntero = idx;  //Se actualiza el puntero
-      if (opcion === 5) {
+      if (opcion === 5) { //cuando vale 5 es porque se ha pulsado el botón de servicios y hay que limpiar el filtro de servicios
         this.matrizApartados.menuPrincipal.limpiarFiltroServicios();
       }
       if (typeof window !== 'undefined') {
