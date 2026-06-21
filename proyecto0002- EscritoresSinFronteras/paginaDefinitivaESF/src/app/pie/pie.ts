@@ -8,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class Pie {
 
+private enlaceGitHub: string = 'https://github.com/KenVeraChan';
+  public abrirGitHub(): void 
+  {
+    window.open(this.enlaceGitHub, '_blank');
+  }
+
 }
