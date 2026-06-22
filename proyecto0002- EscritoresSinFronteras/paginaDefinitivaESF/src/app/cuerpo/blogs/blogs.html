@@ -89,7 +89,7 @@
               <span class="date">{{ formatDate(p.createdAtIso) }}</span>
             </div>
             <h3 class="cardTitle">{{ p.titulo }}</h3>
-            <p class="cardPreview">{{ previewText(p) }}</p>
+            <!-- <p class="cardPreview">{{ previewText(p) }}</p>  -->
             <div class="cardBottom">
               <span class="author">Por {{ p.nombre+' '+p.primerapellido+ ' '+p.segundoapellido }}</span>
               <span class="readMore">Leer →</span>
@@ -111,10 +111,9 @@
             <div class="meta">
               <span class="badge">{{ formatTypeLabel(post.tipo) }}</span>
               <span class="date">{{ formatDate(post.createdAtIso) }}</span>
-              <span class="author">Por {{ post.authorEmail }}</span>
             </div>
           </div>
-          <h2 class="detailTitle">{{ post.titulo }}</h2>
+          <h2 class="detailTitle">{{ post.titulo }} - {{ post.nombre+' '+post.primerapellido+ ' '+post.segundoapellido }}</h2>
           <pre class="detailContent">{{ post.contenido }}</pre>
         </article>
       } @else {
