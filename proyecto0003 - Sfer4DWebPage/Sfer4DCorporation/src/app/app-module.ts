@@ -3,16 +3,18 @@ import { BrowserModule, provideClientHydration, withEventReplay } from '@angular
 
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
-import { Cookie } from './cookie/cookie';
-import { Inicio } from './inicio/inicio';
-import { Historia } from './historia/historia';
-import { Productos } from './productos/productos';
-import { Servicios } from './servicios/servicios';
-import { Proyectos } from './proyectos/proyectos';
-import { Cliente } from './cliente/cliente';
-import { S4DEControlVentasInterfaz } from './s4-de-control-ventas-interfaz/s4-de-control-ventas-interfaz';
-import { S4dControlVentasInterfaz } from './s4d-control-ventas-interfaz/s4d-control-ventas-interfaz';
-
+import { Cookie } from './cuerpo/cookie/cookie';
+import { Inicio } from './cuerpo/inicio/inicio';
+import { Historia } from './cuerpo/historia/historia';
+import { Productos } from './cuerpo/productos/productos';
+import { Servicios } from './cuerpo/servicios/servicios';
+import { Proyectos } from './cuerpo/proyectos/proyectos';
+import { Cliente } from './cuerpo/cliente/cliente';
+import { VentasInterfaz } from './cuerpo/ventasInterfaz/ventasInterfaz';
+import { Cuerpo } from './cuerpo/cuerpo';
+import { Cabecera } from './cabecera/cabecera';
+import { Pie } from './pie/pie';
+import { Error } from './cuerpo/error/error';
 @NgModule({
   declarations: [
     App,
@@ -23,8 +25,11 @@ import { S4dControlVentasInterfaz } from './s4d-control-ventas-interfaz/s4d-cont
     Servicios,
     Proyectos,
     Cliente,
-    S4DEControlVentasInterfaz,
-    S4dControlVentasInterfaz,
+    VentasInterfaz,
+    Cabecera,
+    Cuerpo,
+    Pie,
+    Error
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [provideBrowserGlobalErrorListeners(), provideClientHydration(withEventReplay())],

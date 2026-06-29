@@ -25,23 +25,25 @@ app.get("/api/saludo", (req, res) => {
 
 //PARA OBTENER LAS NOTICIAS DESDE LA BASE DE DATOS
 //ENLACES EJECUTADAS DESDE EL BACKEND POR NODE.JS Y EXPRESS PARA OBTENER LAS NOTICIAS DESDE LA BASE DE DATOS
-//APARTADO 0: INICIO DE LA PAGINA WEB
-//APARTADO 1: NUESTRA HISTORIA DE LA PAGINA WEB
-//APARTADO 2: QUIENES SOMOS DE LA PAGINA WEB
-//APARTADO 3: BLOG LITERARIO DE LA PAGINA WEB
-//APARTADO 4: NUESTROS SERVICIOS DE LA PAGINA WEB
-//APARTADO 5: PUBLICACIONES DE LA PAGINA WEB
-//APARTADO 6: CONTACTO DE LA PAGINA WEB
+//APARTADO 0: PAGINA PRINCIPAL
+//APARTADO 1: PAGINA HISTORIA
+//APARTADO 2: PAGINA PRODUCTOS
+//APARTADO 3: PAGINA SERVICIOS
+//APARTADO 4: PAGINA PROYECTOS
+//APARTADO 5: PAGINA DEL CLIENTE
+//APARTADO 6: PAGINA DE RR.HH.
+//APARTADO 7: PAGINA DE JEFES
 
 const areaConsultada= {
-  noticias: 'noticias',
+  inicio: 'inicio',
   historia: 'historia',
-  equipo: 'equipo',
-  blog: 'blog',
+  productos: 'productos',
   servicios: 'servicios',
-  publicaciones: 'publicaciones',
-  contacto: 'contacto'
-};  //Ruta para obtener las noticias desde la base de datos
+  proyectos: 'proyectos',
+  clientes: 'clientes',
+  empresaRRHH: 'empresaRRHH',      //Zona compartida de la empresa para RR.HH. y Jefes, ya que ambos apartados comparten la misma tabla en la base de datos
+  empresaJefes: 'empresaJefes'
+};
 
 app.get('/api/:area',[
   query('limit').optional().isInt({ min: 1, max: 50 }),  //Valida que el parámetro 'limit' sea un número entero opcional entre 1 y 50
@@ -50,7 +52,7 @@ app.get('/api/:area',[
   const errors = validationResult(req);                  //Verifica si hay errores de validación en los parámetros de la consulta y, si los hay, devuelve una respuesta con un código de estado 400 y un mensaje de error detallado
   const area= req.params.area;                           //Obtiene el valor del parámetro 'area' de la ruta
   const tabla =areaConsultada[area];                     //Busca el nombre de la tabla correspondiente al área consultada utilizando el objeto 'areaConsultada'. Si el área no es válida, 'tabla' será undefined, lo que también se considera un error de validación
-  if (!errors.isEmpty() || !tabla) {        //Si hay errores de validación o el área no es válida, devuelve una respuesta con un código de estado 400 y un mensaje de error detallado
+  if (!errors.isEmpty() || !tabla) {                     //Si hay errores de validación o el área no es válida, devuelve una respuesta con un código de estado 400 y un mensaje de error detallado
     return res.status(400).json({ errors: errors.array() });
   }
   try {

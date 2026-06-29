@@ -21,16 +21,16 @@ SET time_zone = "+00:00";
 -- Se creara aqui la base de datos y se usara para la generación de las tablas
 CREATE DATABASE IF NOT EXISTS `bbdd003_clientes` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `bbdd003_clientes`;
--- --------------------------------------------------------
---
--- Base de datos: `bbdd003_clientes`
---
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `clientescarrito`
---
+-- ------------------------------------------------------------
+-- Base de datos: `bbdd003_clientes` con las tablas siguientes
+-- ------------------------------------------------------------
+-- Tabla `clientescarrito`
+-- Tabla `clientespedidos`
+-- Tabla `datosbancarios`
+-- Tabla `historias`
+-- Tabla `imagenesinterfazweb`
+-- Tabla `loginclientes`
+-- ------------------------------------------------------------
 
 CREATE TABLE `clientescarrito` (
   `ID` int(3) DEFAULT NULL,
@@ -41,9 +41,7 @@ CREATE TABLE `clientescarrito` (
   `COSTE_TOTAL` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
+-- -------------------------------------------------------
 -- Estructura de tabla para la tabla `clientespedidos`
 --
 
