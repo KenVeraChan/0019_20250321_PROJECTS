@@ -18,11 +18,6 @@ app.get("/api/saludo", (req, res) => {
   res.json({ mensaje: "Hola" });
 });
 
-
-//ESTUDIAR Y ANALIZAR QUÉ CAMBIAR PARA ADAPTARLO A ESTE MISMO PROYECTO
-
-
-
 //PARA OBTENER LAS NOTICIAS DESDE LA BASE DE DATOS
 //ENLACES EJECUTADAS DESDE EL BACKEND POR NODE.JS Y EXPRESS PARA OBTENER LAS NOTICIAS DESDE LA BASE DE DATOS
 //APARTADO 0: PAGINA PRINCIPAL
@@ -34,11 +29,22 @@ app.get("/api/saludo", (req, res) => {
 //APARTADO 6: PAGINA DE RR.HH.
 //APARTADO 7: PAGINA DE JEFES
 
-const areaConsultada = {
-  inicio: { db: 'bbdd001_jefes_rrhh', table: 'diagrama_gannt' },
-  historia: { db: 'bbdd001_jefes_rrhh', table: 'gestionpeticiones' },
-  empleados: { db: 'bbdd002_empleados', table: 'empleados_empresa' },
-  clientes: { db: 'bbdd003_clientes', table: 'clientespedidos' },
+const areaConsultada = {                                                         /* ANALIZAR SI SE PUEDEN AÑADIR EN LA CONSULTA DE MÁS ABAJO LAS ESPECIFICACIONES DE LA CONSULTA */
+  inicio: { db: 'bbdd003_clientes', table: 'imagenesinterfazweb' },              /* CONSULTA: select ID,NOMBRE,DETALLES from imagenesinterfazweb where DESTINO='SLIDER' or DESTINO='NOVEDADES'; */
+  historia: { db: 'bbdd003_clientes', table: 'historias' },                      /* CONSULTA: select * from historias; */
+  productos: { db: 'bbdd003_clientes', table: 'imagenesinterfazweb' },           /* CONSULTA: select ID,NOMBRE,DESTINO,SECTOR,DETALLES from imagenesinterfazweb where DESTINO='PRODUCTOS'; */
+  servicios: { db: 'bbdd003_clientes', table: 'imagenesinterfazweb' },           /* CONSULTA: select ID,NOMBRE,DESTINO,SECTOR,DETALLES from imagenesinterfazweb where DESTINO='SERVICIOS'; */
+  proyectos: { db: 'bbdd003_clientes', table: 'imagenesinterfazweb' },           /* CONSULTA: select ID,NOMBRE,DESTINO,SECTOR,DETALLES from imagenesinterfazweb where DESTINO='PROYECTOS'; */
+  loginclientes: { db: 'bbdd003_clientes', table: 'loginclientes' },             /* CONSULTA: select * from loginclientes; */
+  loginjefes: { db: 'bbdd001_jefes_rrhh', table: 'login' },                      /* CONSULTA: select * from login WHERE ROL='JEFE'; */
+  loginrrhh: { db: 'bbdd001_jefes_rrhh', table: 'login' },                       /* CONSULTA: select * from login WHERE ROL='RRHH'; */
+  gestionpeticiones: { db: 'bbdd001_jefes_rrhh', table: 'gestionpeticiones' },   /* CONSULTA: select * from gestionpeticiones; */
+  gestiongannt: { db: 'bbdd001_jefes_rrhh', table: 'diagrama_gannt' },           /* CONSULTA: select * from diagrama_gannt; */
+  empleados: { db: 'bbdd002_empleados', table: 'empleados_empresa' },            /* CONSULTA: select * from empleados_empresa; */
+  candidaturas: { db: 'bbdd002_empleados', table: 'contactos_empresa' },         /* CONSULTA: select * from contactos_empresa; */
+  carritocompra: { db: 'bbdd003_clientes', table: 'clientescarrito' },           /* CONSULTA: select * from clientescarrito; */
+  pedidoscompra: { db: 'bbdd003_clientes', table: 'clientespedidos' },           /* CONSULTA: select * from clientespedidos; */
+  datosbancarios: { db: 'bbdd003_clientes', table: 'datosbancarios' },           /* CONSULTA: select * from datosbancarios; */
   // ajusta según tu lógica real
 };
 
@@ -59,7 +65,7 @@ app.get('/api/:area',[
     const page  = parseInt(req.query.page, 10) || 1;    //Obtiene el valor del parámetro 'page' de la consulta, lo convierte a un número entero y, si no se proporciona o no es válido, establece un valor predeterminado de 1
     const offset = (page - 1) * limit;                  //Calcula el desplazamiento (offset) para la consulta SQL en función de la página y el límite, lo que permite paginar los resultados de la consulta
     const [rows] = await db.query(
-  `SELECT * FROM \`${entry.db}\`.\`${entry.table}\` LIMIT ? OFFSET ?`, [limit, offset]);   //Ejecuta una consulta SQL para obtener todos las entradas de la tabla 'noticias' en la base de datos
+      `SELECT * FROM \`${entry.db}\`.\`${entry.table}\` LIMIT ? OFFSET ?`, [limit, offset]);   //Ejecuta una consulta SQL para obtener todos las entradas de la tabla 'noticias' en la base de datos
     res.json(rows);    //Envía la respuesta al cliente en formato JSON con los datos obtenidos de la base de datos
   } catch (err) {
     console.error(err);
@@ -176,6 +182,19 @@ app.post('/api/blog', [
   }
 });
 
+/* Para comprobaciones mediante URLS en el navegador de lo que recibamos del servidor*/
+/* http://127.0.0.1:3000/api/inicio?limit=10&page=1 es un ejemplo de cómo cargar datos */
+
 app.listen(3000,"0.0.0.0", () => {
   console.log("Servidor escuchando en http://localhost:3000");
+});
+
+/* Para que la escucha del servidor acepte también direcciones IPv6 */
+app.listen(3000, '::', () => {
+  console.log('Servidor escuchando en http://localhost:3000');
+});
+
+/* Para que la escucha del servidor acepte también direcciones IPv4 */
+app.listen(3000, () => {
+  console.log('Servidor escuchando en http://localhost:3000');
 });
