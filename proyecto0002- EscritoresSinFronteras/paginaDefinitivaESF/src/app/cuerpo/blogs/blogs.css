@@ -37,7 +37,7 @@
 }
 .blogsSubtitle{
   margin: 6px 0 0;
-  font-size: 13px;
+  font-size: 18px;
   opacity: 0.95;
   max-width: 60ch;
 }
@@ -115,7 +115,7 @@
 .grow{ flex: 1 1 240px; }
 
 .label{
-  font-size: 12px;
+  font-size: 15px;
   opacity: 0.95;
 }
 
@@ -181,8 +181,8 @@
   box-shadow: 0 10px 18px rgba(0,0,0,0.25);
   outline: none;
 }
-.postCard:hover{
-  background: rgba(41, 41, 41, 0.5);
+.postCard:hover{   /*DEBE AFECTARLE A OTRO ELEMENTO DEL MISMO ARTICLE*/
+  background: rgba(211, 213, 250, 1);
   border: 1px solid rgba(2, 2, 2, 0.507);
 }
 .cardTop{
@@ -198,6 +198,13 @@
   background: rgba(0,0,0,0.28);
   border: 1px solid rgba(255,255,255,0.18);
   font-size: 12px;
+}
+.postCard:hover .badge, 
+.postCard:hover .date, 
+.postCard:hover .cardTitle, 
+.postCard:hover .author, 
+.postCard:hover .readMore{   /*Aunque sea un elemento hermano le afecta*/
+  color:black;
 }
 .date{
   font-size: 12px;
@@ -255,10 +262,12 @@
   padding: 12px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(0,0,0,0.25);
+  background: rgba(255, 255, 255, 0.75);
+  color:black;
   white-space: pre-wrap;
   word-break: break-word;
-  font-family: inherit;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: large;
   line-height: 1.55;
 }
 

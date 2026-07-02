@@ -36,6 +36,18 @@
                         0 0 8px #494b0b, 
                         0 0 0.5px #494b0b;
         }
+        #github:hover,#facebook:hover,#youtube:hover,#linkedin:hover,#whatsapp:hover,#instagram:hover
+        {
+            color: #ffffff;
+            text-shadow: 0 0 1px #494b0b, 
+                        0 0 5px #494b0b,
+                        0 0 10px #494b0b, 
+                        0 0 15px #494b0b, 
+                        0 0 1px #494b0b, 
+                        0 0 5px #494b0b,
+                        0 0 10px #494b0b, 
+                        0 0 15px #494b0b;
+        }
         #github
         {
             animation-delay: 0.5s;

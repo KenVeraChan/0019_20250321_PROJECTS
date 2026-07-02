@@ -145,7 +145,7 @@ export class Blogs implements OnInit {
       return;
     }
     this.userEmail = email;
-    this.safeSet(this.storageKeyUserEmail, email);
+    this.safeSet(this.storageKeyUserEmail, email);  //Guarda el correo introducido en localStorage para mantener la sesión
     this.view = 'create';
   }
 
@@ -269,7 +269,7 @@ export class Blogs implements OnInit {
       primerapellido,
       segundoapellido,
       pais,
-      email: this.userEmail, // Correo guardado al hacer login(), no el del campo create*
+      email: this.userEmail, // Correo guardado al hacer login(), no el del campo create
     }).subscribe({
       // Éxito: el servidor devuelve 201 y la fila insertada (SELECT * WHERE id = insertId)
       next: fila => {

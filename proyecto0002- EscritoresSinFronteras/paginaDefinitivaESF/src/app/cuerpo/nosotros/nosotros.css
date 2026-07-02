@@ -116,6 +116,13 @@
     width:300px;
     height:auto;
 }
+.areaImagenLibro:hover{
+    transition: transform 2.5s ease;
+    box-shadow:
+        0 0 8px rgba(255, 255, 255, 0.8),
+        0 0 25px rgba(200, 200, 200, 0.6),
+        0 0 35px rgba(180, 180, 180, 0.4);
+}
 
 .informacionPersonal{
     position: relative;
@@ -129,9 +136,8 @@
 .informacionPersonalCarga{
     position: relative;
     margin-top:60px;
-    background-color: rgba(0, 7, 75, 0.8);
-    border-radius: 15px;
-    color:#ffffff;
+    background-color: rgba(255, 255, 255, 0.8);
+    color:#000000;
     overflow:visible;
 }
 
@@ -144,8 +150,10 @@
 
 .tablaInformacion:hover{
     transition: transform 2.5s ease;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow:
+        0 0 8px rgba(255, 255, 255, 0.8),
+        0 0 25px rgba(200, 200, 200, 0.6),
+        0 0 35px rgba(180, 180, 180, 0.4);
 }
 
 .celda{
