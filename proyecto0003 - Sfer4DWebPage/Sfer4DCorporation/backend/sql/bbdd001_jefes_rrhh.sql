@@ -16,16 +16,16 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
-
------------------------------------------------------------
--- Base de datos: `bbdd001_jefes_rrhh`
+ 
+-- -----------------------------------------------------------
+-- Base de datos: bbdd001_jefes_rrhh
 -- Se creara aqui la base de datos y se usara para la generación de las tablas
 CREATE DATABASE IF NOT EXISTS `bbdd001_jefes_rrhh` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `bbdd001_jefes_rrhh`;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `diagrama_gannt`
+-- Estructura de tabla para la tabla: diagrama_gannt
 --
 
 CREATE TABLE `diagrama_gannt` (
@@ -37,7 +37,7 @@ CREATE TABLE `diagrama_gannt` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `diagrama_gannt`
+-- Volcado de datos para la tabla: diagrama_gannt
 --
 
 INSERT INTO `diagrama_gannt` (`ID`, `PROYECTO`, `DURACION`, `INICIO`, `COSTE`) VALUES
@@ -52,7 +52,7 @@ INSERT INTO `diagrama_gannt` (`ID`, `PROYECTO`, `DURACION`, `INICIO`, `COSTE`) V
 
 -- --------------------------------------------------------
 
--- Estructura de tabla para la tabla `gestionpeticiones`
+-- Estructura de tabla para la tabla: gestionpeticiones
 
 CREATE TABLE `gestionpeticiones` (
   `ID` int(4) NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `gestionpeticiones` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `gestionpeticiones`
+-- Volcado de datos para la tabla: gestionpeticiones
 --
 
 INSERT INTO `gestionpeticiones` (`ID`, `TAREA`, `DEPARTAMENTO`, `TECNICOS`, `COSTES`, `FECHA`, `RESOLUCION`) VALUES
@@ -115,7 +115,7 @@ INSERT INTO `gestionpeticiones` (`ID`, `TAREA`, `DEPARTAMENTO`, `TECNICOS`, `COS
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `login`
+-- Estructura de tabla para la tabla: login
 --
 
 CREATE TABLE `login` (
@@ -127,7 +127,7 @@ CREATE TABLE `login` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `login`
+-- Volcado de datos para la tabla: login
 --
 
 INSERT INTO `login` (`ID`, `USUARIO`, `CONTRASENIA`, `ROL`, `DEPARTAMENTO`) VALUES
@@ -144,19 +144,19 @@ INSERT INTO `login` (`ID`, `USUARIO`, `CONTRASENIA`, `ROL`, `DEPARTAMENTO`) VALU
 --
 
 --
--- Indices de la tabla `diagrama_gannt`
+-- Indices de la tabla: diagrama_gannt
 --
 ALTER TABLE `diagrama_gannt`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indices de la tabla `gestionpeticiones`
+-- Indices de la tabla: gestionpeticiones
 --
 ALTER TABLE `gestionpeticiones`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indices de la tabla `login`
+-- Indices de la tabla: login
 --
 ALTER TABLE `login`
   ADD PRIMARY KEY (`ID`);
@@ -166,19 +166,19 @@ ALTER TABLE `login`
 --
 
 --
--- AUTO_INCREMENT de la tabla `diagrama_gannt`
+-- AUTO_INCREMENT de la tabla: diagrama_gannt
 --
 ALTER TABLE `diagrama_gannt`
   MODIFY `ID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT de la tabla `gestionpeticiones`
+-- AUTO_INCREMENT de la tabla: gestionpeticiones
 --
 ALTER TABLE `gestionpeticiones`
   MODIFY `ID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
--- AUTO_INCREMENT de la tabla `login`
+-- AUTO_INCREMENT de la tabla: login
 --
 ALTER TABLE `login`
   MODIFY `ID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;

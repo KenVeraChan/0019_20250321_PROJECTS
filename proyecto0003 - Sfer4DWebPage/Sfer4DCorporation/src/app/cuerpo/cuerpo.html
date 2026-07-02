@@ -1,1 +1,47 @@
-<p>s4d-control-ventas-interfaz works!</p>
+@switch(seleccion)
+{
+    @case (0) {
+        <div class="inicio" #inicio>
+            <app-inicio></app-inicio>
+        </div>
+    }
+
+    @case (1) {
+        <div class="historia" #historia>
+            <app-historia></app-historia>
+        </div>
+    }
+
+    @case (2) {
+        <div class="productos" #productos>
+            <app-productos></app-productos>
+        </div>
+    }
+
+    @case (3) {
+        <div class="servicios" #servicios>
+            <app-servicios></app-servicios>
+        </div>
+    }
+
+    @case (4) {
+        <div class="proyectos" #proyectos>
+            <app-proyectos></app-proyectos>
+        </div>
+    }
+
+    @case (5) {
+        <div class="cliente" #cliente>
+            <app-cliente></app-cliente>
+        </div>
+    }
+
+    @case (6) {
+        <div class="contacto" #contacto>
+            <app-contacto></app-contacto>
+        </div>
+    }
+
+    @default {
+    }
+}

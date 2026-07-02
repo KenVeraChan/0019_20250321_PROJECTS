@@ -16,7 +16,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
------------------------------------------------------------
+-- -----------------------------------------------------------
 -- Base de datos: `bbdd003_clientes`
 -- Se creara aqui la base de datos y se usara para la generación de las tablas
 CREATE DATABASE IF NOT EXISTS `bbdd003_clientes` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;

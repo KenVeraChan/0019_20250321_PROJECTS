@@ -1,0 +1,49 @@
+services:
+  backend:
+    build: ./backend                  # Construye la imagen a partir del Dockerfile en el directorio backend
+    container_name: backend           # Nombre del contenedor para el backend
+    restart: unless-stopped           # Reinicia el contenedor automáticamente si se detiene
+    ports:                            # Mapea el puerto 3000 del contenedor al puerto 3000 del host
+      - "3000:3000"
+    environment:
+      DB_HOST: mysql                  # Host de la base de datos (nombre del servicio MySQL)
+      DB_USER: root                   # Usuario de la base de datos
+      DB_PASS: 1234                   # Contraseña de la base de datos
+      DB_NAME: bbdd001_jefes_rrhh     # Nombre de la base de datos
+    depends_on:                       # Asegura que el servicio MySQL se inicie antes que el backend
+      mysql:                          # MySQL es un servicio del mismo docker-compose, por lo que se puede referenciar por su nombre de servicio
+        condition: service_healthy    # Espera a que MySQL esté LISTO y no da errores de que el backend se adelante a la carga
+
+  mysql:
+    image: mysql:8               # Usa la imagen oficial de MySQL versión 8
+    container_name: mysqlS4D     # Nombre del contenedor para MySQLESF
+    restart: unless-stopped      # Reinicia el contenedor automáticamente si se detiene
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234  # Contraseña para el usuario root de MySQL
+      MYSQL_DATABASE: bbdd001_jefes_rrhh  # Nombre de la base de datos que se creará automáticamente al iniciar el contenedor
+    ports:                       # Mapea el puerto interno 3306 del contenedor al puerto 3307 del host para permitir conexiones externas a MySQL
+      - "3307:3306"
+    volumes:
+      - ./backend/sql:/docker-entrypoint-initdb.d  # Monta el directorio sql del proyecto en el contenedor para inicializar la base de datos con scripts SQL (son tres fichero SQL ordenados alfabéticamente y se ejecutarán en orden alfabético)
+      - mysql_data:/var/lib/mysql         # Monta un volumen persistente para almacenar los datos de MySQL y evitar la pérdida de datos al reiniciar el contenedor  
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -uroot -p1234 -e 'SELECT 1'"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin  # Usa la imagen oficial de phpMyAdmin
+    container_name: phpmyadminS4D # Nombre del contenedor para phpMyAdmin
+    restart: unless-stopped       # Reinicia el contenedor automáticamente si se detiene
+    ports:                        # Mapea el puerto 80 del contenedor al puerto 8080 del host para acceder a phpMyAdmin desde el navegador
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql             # Host de la base de datos que phpMyAdmin debe usar para conectarse (nombre del servicio MySQL)
+      PMA_USER: root              # Usuario de la base de datos para phpMyAdmin
+      PMA_PASSWORD: 1234          # Contraseña de la base de datos para phpMyAdmin
+    depends_on:
+      - mysql                     # Asegura que el servicio MySQL se inicie antes que phpMyAdmin
+
+volumes:
+  mysql_data:                     # Define un volumen llamado mysql_data para persistir los datos de MySQL, evitando la pérdida de datos al reiniciar el contenedor.

@@ -1,0 +1,360 @@
+:host {
+  --cab-fondo-1: #05060f;
+  --cab-fondo-2: #0d1330;
+  --cab-oro: #f4c74b;
+  --cab-oro-claro: #ffe392;
+  --cab-azul: #7f9fe0;
+  --cab-texto: #e9edfb;
+  --cab-borde: rgba(244, 199, 75, 0.28);
+  display: block;
+  width: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ====== ESTRUCTURA GENERAL ====== */
+.cab {
+  width: 100%;
+  background: linear-gradient(160deg, var(--cab-fondo-2) 0%, var(--cab-fondo-1) 100%);
+  color: var(--cab-texto);
+  font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+
+.cab__barra {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: clamp(0.5rem, 2vw, 1.25rem) clamp(0.5rem, 3vw, 2rem);
+}
+
+/* ====== MARCA (LOGO + NOMBRE + LEMA) ====== */
+.cab__marca {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cab__logo {
+  width: clamp(48px, 12vw, 104px);
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(127, 159, 224, 0.5));
+}
+
+.cab__titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.4em;
+  line-height: 1;
+}
+
+.cab__titulo-nombre {
+  font-size: clamp(1.35rem, 5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--cab-oro);
+  text-shadow: 0 0 12px rgba(244, 199, 75, 0.4);
+}
+
+.cab__titulo-tipo {
+  font-size: clamp(0.7rem, 2.2vw, 1.1rem);
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--cab-azul);
+}
+
+.cab__lema {
+  font-size: clamp(0.62rem, 2vw, 1rem);
+  font-style: italic;
+  letter-spacing: 0.05em;
+  color: var(--cab-oro-claro);
+  opacity: 0.9;
+}
+
+/* ====== BOTÓN HAMBURGUESA (móvil / smartwatch) ====== */
+.cab__hamburguesa {
+  grid-column: 1;
+  justify-self: start;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--cab-borde);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.cab__hamburguesa-linea {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: var(--cab-oro);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.cab__hamburguesa.esta-activo .cab__hamburguesa-linea:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.cab__hamburguesa.esta-activo .cab__hamburguesa-linea:nth-child(2) {
+  opacity: 0;
+}
+.cab__hamburguesa.esta-activo .cab__hamburguesa-linea:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ====== ACCESO PRIVADO (CANDADO) ====== */
+.cab__acceso {
+  grid-column: 3;
+  justify-self: end;
+  position: relative;
+}
+
+.cab__candado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--cab-borde);
+  border-radius: 999px;
+  color: var(--cab-texto);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.cab__candado:hover,
+.cab__candado:focus-visible,
+.cab__candado.esta-activo {
+  background: rgba(244, 199, 75, 0.14);
+  border-color: var(--cab-oro);
+}
+
+.cab__candado-icono {
+  width: 28px;
+  height: 28px;
+}
+
+.cab__candado-texto {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.cab__acceso-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 168px;
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
+  background: var(--cab-fondo-2);
+  border: 1px solid var(--cab-borde);
+  border-radius: 12px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 30;
+}
+
+.cab__acceso-menu.esta-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.cab__acceso-enlace {
+  display: block;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  color: var(--cab-texto);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.cab__acceso-enlace:hover,
+.cab__acceso-enlace:focus-visible {
+  background: rgba(244, 199, 75, 0.16);
+  color: var(--cab-oro-claro);
+}
+
+/* ====== CINTA DE NAVEGACIÓN ====== */
+.cab__nav {
+  border-top: 1px solid var(--cab-borde);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.cab__menu {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0.4rem clamp(0.5rem, 3vw, 2rem);
+  list-style: none;
+}
+
+.cab__enlace {
+  display: block;
+  padding: 0.7rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--cab-texto);
+  font-weight: 700;
+  font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+  letter-spacing: 0.08em;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.cab__enlace:hover,
+.cab__enlace:focus-visible {
+  color: var(--cab-oro-claro);
+  background: rgba(244, 199, 75, 0.1);
+  border-color: var(--cab-borde);
+}
+
+.cab__enlace.esta-activo {
+  color: var(--cab-fondo-1);
+  background: linear-gradient(180deg, var(--cab-oro-claro), var(--cab-oro));
+  border-color: var(--cab-oro);
+  box-shadow: 0 0 14px rgba(244, 199, 75, 0.35);
+}
+
+/* Colapso del menú en pantallas pequeñas */
+.cab__nav {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+.cab__nav.esta-abierto {
+  max-height: 640px;
+}
+
+/* ====== ACCESIBILIDAD: FOCO VISIBLE ====== */
+.cab__marca:focus-visible,
+.cab__candado:focus-visible,
+.cab__hamburguesa:focus-visible,
+.cab__enlace:focus-visible,
+.cab__acceso-enlace:focus-visible {
+  outline: 2px solid var(--cab-oro-claro);
+  outline-offset: 2px;
+}
+
+/* =====================================================================
+   BREAKPOINTS RESPONSIVE
+   ===================================================================== */
+
+/* --- SMARTWATCH y pantallas muy estrechas (<= 260px) --- */
+@media (max-width: 260px) {
+  .cab__lema {
+    display: none;
+  }
+  .cab__candado-texto {
+    display: none;
+  }
+  .cab__hamburguesa {
+    width: 38px;
+    height: 38px;
+    padding: 8px;
+  }
+}
+
+/* --- Móviles pequeños --- */
+@media (max-width: 400px) {
+  .cab__candado-texto {
+    display: none;
+  }
+}
+
+/* --- TABLET y superior: cinta horizontal, sin hamburguesa --- */
+@media (min-width: 768px) {
+  .cab__hamburguesa {
+    display: none;
+  }
+
+  .cab__nav {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .cab__menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .cab__item {
+    flex: 0 1 auto;
+  }
+
+  .cab__enlace {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .cab__candado-texto {
+    display: inline;
+  }
+}
+
+/* --- ESCRITORIO --- */
+@media (min-width: 1024px) {
+  .cab__menu {
+    gap: 0.85rem;
+  }
+  .cab__enlace {
+    padding: 0.85rem 1.75rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* --- PANTALLAS GRANDES --- */
+@media (min-width: 1600px) {
+  .cab__enlace {
+    font-size: 1.05rem;
+    padding: 0.95rem 2.25rem;
+  }
+  .cab__logo {
+    width: 120px;
+  }
+}
+
+/* --- Respeta usuarios que prefieren menos movimiento --- */
+@media (prefers-reduced-motion: reduce) {
+  .cab__nav,
+  .cab__acceso-menu,
+  .cab__hamburguesa-linea,
+  .cab__enlace,
+  .cab__candado {
+    transition: none;
+  }
+}

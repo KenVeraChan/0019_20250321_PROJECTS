@@ -1,1 +1,117 @@
-<p>s4d-control-ventas-interfaz works!</p>
+<header class="cab" role="banner">
+  <div class="cab__barra">
+    <!-- Botón hamburguesa: solo visible en móvil / smartwatch -->
+    <button
+      type="button"
+      class="cab__hamburguesa"
+      [class.esta-activo]="menuAbierto"
+      [attr.aria-expanded]="menuAbierto"
+      aria-controls="cab-menu-principal"
+      aria-label="Abrir o cerrar el menú de navegación"
+      (click)="alternarMenu()"
+    >
+      <span class="cab__hamburguesa-linea"></span>
+      <span class="cab__hamburguesa-linea"></span>
+      <span class="cab__hamburguesa-linea"></span>
+    </button>
+
+    <!-- Marca centrada: logotipo + nombre + lema -->
+    <a class="cab__marca" routerLink="/inicio" aria-label="Sfer4D Corporation. Ir a la página de inicio">
+      <img
+        class="cab__logo"
+        ngSrc="assets/001_paginaPrincipal/images/ESFERA.png"
+        width="302"
+        height="303"
+        priority
+        alt="Logotipo de Sfer4D Corporation"
+      />
+      <span class="cab__titulo">
+        <span class="cab__titulo-nombre">Sfer4D</span>
+        <span class="cab__titulo-tipo">Corporation</span>
+      </span>
+      <span class="cab__lema">Building digital universes</span>
+    </a>
+
+    <div class="cab__acceso">
+      <!-- Acceso publico (login) en la zona superior derecha -->
+      <button
+        type="button"
+        class="cab__candado"
+        title="Acceso publico"
+        (click)="sacarMensaje()"
+      >
+        <img
+          class="cab__candado-icono"
+          ngSrc="assets/009_imagenesComunes/COMPRAS.png"
+          width="128"
+          height="128"
+          alt=""
+          aria-hidden="true"
+        />
+        <span class="cab__candado-texto"></span>
+      </button>
+      <!-- Acceso privado (candado) en la zona superior derecha -->
+      <button
+        type="button"
+        class="cab__candado"
+        title="Acceso privado"
+        [class.esta-activo]="accesoAbierto"
+        [attr.aria-expanded]="accesoAbierto"
+        aria-haspopup="true"
+        aria-controls="cab-menu-acceso"
+        aria-label="Acceso privado a Recursos Humanos y Jefes"
+        (click)="alternarAcceso()"
+      >
+        <img
+          class="cab__candado-icono"
+          ngSrc="assets/009_imagenesComunes/CANDADO.png"
+          width="128"
+          height="128"
+          alt=""
+          aria-hidden="true"
+        />
+        <span class="cab__candado-texto"></span>
+      </button>
+      <ul
+        id="cab-menu-acceso"
+        class="cab__acceso-menu"
+        [class.esta-visible]="accesoAbierto"
+        role="menu"
+        aria-label="Zonas privadas"
+      >
+        @for (acceso of accesosPrivados; track acceso.ruta) {
+          <li class="cab__acceso-item" role="none">
+            <a
+              class="cab__acceso-enlace"
+              role="menuitem"
+              [routerLink]="acceso.ruta"
+              [title]="acceso.descripcion"
+              (click)="cerrarAcceso()"
+            >{{ acceso.etiqueta }}</a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+
+  <!-- Cinta de navegación principal con botones dinámicos -->
+  <nav
+    class="cab__nav"
+    [class.esta-abierto]="menuAbierto"
+    aria-label="Navegación principal"
+  >
+    <ul id="cab-menu-principal" class="cab__menu">
+      @for (enlace of enlaces; track enlace.ruta; let i = $index) {
+        <li class="cab__item">
+          <a
+            class="cab__enlace"
+            [routerLink]="enlace.ruta"
+            routerLinkActive="esta-activo"
+            [title]="enlace.descripcion"
+            (click)="cerrarMenu(i)"
+          >{{ enlace.etiqueta }}</a>
+        </li>
+      }
+    </ul>
+  </nav>
+</header>

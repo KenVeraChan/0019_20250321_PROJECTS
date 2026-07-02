@@ -19,24 +19,24 @@ import { Routes } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common';
-import { HttpClientModule, provideHttpClient, withFetch, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withFetch, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { EstadoErroresService } from './services/estado-errores.service';
 import { ErroresHttpInterceptor } from '../app/services/errores-http.interceptor';
-import { variablesCompartidas } from '../app/services/variablesCompartidas';
+import { VariablesCompartidas } from '../app/services/variablesCompartidas';
 import { ErrorHandler } from '@angular/core';
 import { ErroresGlobalHandler } from '../app/services/errores-global.handler';
+import { Contacto } from './cuerpo/contacto/contacto';
 
-
-const appRoutes: Routes=
-[
-{path:'', redirectTo: 'inicio', pathMatch: 'full'},
-{path:'inicio', component: Inicio},
-{path:'historia', component: Historia},
-{path:'productos', component: Productos},
-{path:'servicios', component: Servicios},
-{path:'proyectos', component: Proyectos},
-{path:'cliente', component: Cliente},
-{path: '**', component: Error}
+const appRoutes: Routes = [
+  { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+  { path: 'inicio', component: Inicio },
+  { path: 'historia', component: Historia },
+  { path: 'productos', component: Productos },
+  { path: 'servicios', component: Servicios },
+  { path: 'proyectos', component: Proyectos },
+  { path: 'cliente', component: Cliente },
+  { path: 'contacto', component: Contacto},
+  { path: '**', component: Error },
 ];
 
 @NgModule({
@@ -49,11 +49,13 @@ const appRoutes: Routes=
     Servicios,
     Proyectos,
     Cliente,
+    Contacto,
     VentasInterfaz,
     Cabecera,
     Cuerpo,
     Pie,
-    Error
+    Error,
+    
   ],
   imports: [
     BrowserModule,
@@ -61,16 +63,16 @@ const appRoutes: Routes=
     FormsModule,
     NgOptimizedImage,
     RouterModule.forRoot(appRoutes),
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(withFetch()),
     EstadoErroresService,
-      { provide: HTTP_INTERCEPTORS, useClass: ErroresHttpInterceptor, multi: true },
-      { provide: ErrorHandler, useClass: ErroresGlobalHandler },
-    variablesCompartidas,
-    provideClientHydration(withEventReplay())
+    { provide: HTTP_INTERCEPTORS, useClass: ErroresHttpInterceptor, multi: true },
+    { provide: ErrorHandler, useClass: ErroresGlobalHandler },
+    VariablesCompartidas,
+    provideClientHydration(withEventReplay()),
   ],
   bootstrap: [App],
 })
