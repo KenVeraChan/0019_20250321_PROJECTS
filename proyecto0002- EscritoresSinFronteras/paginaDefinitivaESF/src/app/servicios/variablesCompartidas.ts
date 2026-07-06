@@ -2,19 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HEADER_CARGA_SECCION } from './estado-errores.service';
+import { environment } from '../../environments/environments';  //Importa las variables del entorno del proyecto
 
 @Injectable({
   providedIn: 'root'
 })
 export class Conexion{
   private apiUrlApi:string[] = [
-  'http://localhost:3000/api/noticias',
-  'http://localhost:3000/api/historia',
-  'http://localhost:3000/api/equipo',
-  'http://localhost:3000/api/blog',
-  'http://localhost:3000/api/servicios',
-  'http://localhost:3000/api/publicaciones',
-  'http://localhost:3000/api/contacto'];  //CAMBIAR URL en produccion
+  `${environment.apiUrl}/noticias`,
+  `${environment.apiUrl}/historia`,
+  `${environment.apiUrl}/equipo`,
+  `${environment.apiUrl}/blog`,
+  `${environment.apiUrl}/servicios`,
+  `${environment.apiUrl}/publicaciones`,
+  `${environment.apiUrl}/contacto`];  //CAMBIAR URL en produccion
 
   constructor(private http: HttpClient){}
   public getAutores(eleccion:number): Observable<any[]> {

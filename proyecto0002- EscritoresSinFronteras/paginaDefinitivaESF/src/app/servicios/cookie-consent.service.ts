@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../environments/environments';  //Importa las variables del entorno del proyecto
 
 export interface CookieConsentPreferences {
   /** Cookies técnicas imprescindibles (siempre activas). */
@@ -10,8 +11,9 @@ export interface CookieConsentPreferences {
   version: number;
 }
 
-const STORAGE_KEY = 'esf_cookie_consent_v1';
-const CONSENT_VERSION = 1;
+const STORAGE_KEY = 'esf_cookie_consent_v1';  //Clave usada en localStorage para guardar las preferencias del usuario
+const CONSENT_VERSION = 1;  //Version actual de las preferencias de consentimiento, para invalidar las antiguas si se cambia la estructura de datos
+const COOKIE_EXPIRY_DAYS = environment.cookieExpirtyDays || 365;  //Número de días que expira la cookie de sesión, para que no caduque al cerrar el navegador
 
 @Injectable({ providedIn: 'root' })
 export class CookieConsentService {
@@ -30,12 +32,12 @@ export class CookieConsentService {
       return;
     }
 
-    const guardado = this.leerAlmacenado();
+    const guardado = this.leerAlmacenado();  //Intenta leer las preferencias guardadas en localStorage
     if (guardado) {
-      this.preferenciasSubject.next(guardado);
-      this.mostrarBannerSubject.next(false);
+      this.preferenciasSubject.next(guardado);  //Si hay datos guardados, actualiza el estado de preferencias
+      this.mostrarBannerSubject.next(false);  //No mostrar el banner si ya hay preferencias guardadas
     } else {
-      this.mostrarBannerSubject.next(true);
+      this.mostrarBannerSubject.next(true);  //Si no hay datos guardados, mostrar el banner para que el usuario elija sus preferencias
     }
   }
 
@@ -114,6 +116,15 @@ export class CookieConsentService {
       if (parsed.version !== CONSENT_VERSION) {
         return null;
       }
+      // Validar que la cookie no haya expirado (si se implementa expiración basada en timestamp)
+      if (parsed.timestamp) {
+        const timestamp = new Date(parsed.timestamp);
+        const now = new Date();
+        const diffDays = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60 * 60 * 24));
+        if (diffDays >= COOKIE_EXPIRY_DAYS) {
+          return null;
+        }
+      }
       return {
         necessary: true,
         analytics: !!parsed.analytics,
@@ -139,3 +150,11 @@ export class CookieConsentService {
   analyticsDraft = false;
   marketingDraft = false;
 }
+
+// INFORMACION SOBRE LA COOKIE DE ESTE PROYECTO
+// NOMBRE: esf_cookie_consent_v1
+// CONTENIDO: JSON con las preferencias del usuario (analytics y marketing) y la fecha de aceptación
+// EXPIRACION: 365 días (según environment.cookieExpirtyDays) para que no caduque al cerrar el navegador
+// USO: Se usa para recordar las preferencias del usuario sobre cookies de analíticas y marketing, y para determinar si mostrar el banner de consentimiento
+// UBICACIÓN: Se guarda en localStorage del navegador, no se envía al servidor. ZONA: inspeccionar → Application → Local Storage → http://localhost:4200
+// EVENTO: Se lanza un evento 'esf:cookie-consent' en window cuando el usuario guarda sus preferencias, con detalle de las preferencias guardadas
