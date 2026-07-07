@@ -55,7 +55,6 @@ const appRoutes: Routes = [
     Cuerpo,
     Pie,
     Error,
-    
   ],
   imports: [
     BrowserModule,

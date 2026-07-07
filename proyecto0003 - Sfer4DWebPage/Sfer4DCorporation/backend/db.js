@@ -64,3 +64,15 @@ async function connectWithRetry() {
 }
 
 export const db = await connectWithRetry();
+
+/* LUEGO BORRAR ESTE COMENTARIO PARA SACAR LA PAGINA WEB A INTERNET PUBLICO 
+
+fichiero .env para docker-compose.yml
+
+DB_HOST=mysql
+DB_USER=root
+DB_PASS=1234
+PORT=3000
+DB_NAME=bbdd001_jefes_rrhh
+
+*/

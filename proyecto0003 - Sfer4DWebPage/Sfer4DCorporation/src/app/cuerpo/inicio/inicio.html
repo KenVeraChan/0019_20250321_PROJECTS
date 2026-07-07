@@ -1,4 +1,16 @@
-<div>
+<img src="assets/010_imagenesfondos/EDIFICIOS.png" alt="Imagen de fondo" class="fondoInicio">
+<div class="tableroInicio">
     <h1>Bienvenido a nuestra página web</h1>
     <p>Este es el contenido principal de la página de inicio.</p>
+
+    <div *ngIf="noticiasInicio.length > 0; else vacio">
+        <div *ngFor="let noticia of noticiasInicio; let i = index">
+            <h3>{{ i + 1 }}. {{ noticia.getNombre() }}</h3>
+            <p>{{ noticia.getDetalles() }}</p>
+        </div>
+    </div>
+
+    <ng-template #vacio>
+        <p>No hay noticias cargadas aún.</p>
+    </ng-template>
 </div>

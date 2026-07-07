@@ -11,7 +11,7 @@ export interface CookieConsentPreferences {
   version: number; // Versión del esquema de consentimiento guardado.
 }
 
-const STORAGE_KEY = 'esf_cookie_consent_v1'; // Clave usada en localStorage para guardar el consentimiento.
+const STORAGE_KEY = 'S4D_cookie_consent_v1'; // Clave usada en localStorage para guardar el consentimiento.
 const COOKIE_EXPIRY_DAYS = environment.cookieExpirtyDays; // Número de días que se considera válido el consentimiento antes de requerir una nueva aceptación.
 const CONSENT_VERSION = 1; // Versión actual del formato de consentimiento.
 
@@ -150,3 +150,11 @@ export class CookieConsentService {
   analyticsDraft = false; // Valor temporal de la opción de cookies analíticas en el formulario.
   marketingDraft = false; // Valor temporal de la opción de cookies de marketing en el formulario.
 }
+
+// INFORMACION SOBRE LA COOKIE DE ESTE PROYECTO
+// NOMBRE: S4D_cookie_consent_v1
+// CONTENIDO: JSON con las preferencias del usuario (analytics y marketing) y la fecha de aceptación
+// EXPIRACION: 365 días (según environment.cookieExpirtyDays) para que no caduque al cerrar el navegador
+// USO: Se usa para recordar las preferencias del usuario sobre cookies de analíticas y marketing, y para determinar si mostrar el banner de consentimiento
+// UBICACIÓN: Se guarda en localStorage del navegador, no se envía al servidor. ZONA: inspeccionar → Application → Local Storage → http://localhost:4200
+// EVENTO: Se lanza un evento 'esf:cookie-consent' en window cuando el usuario guarda sus preferencias, con detalle de las preferencias guardadas
