@@ -11,6 +11,8 @@ import { OnInit } from '@angular/core';
 
 export class Inicio implements OnInit {
   noticiasInicio: inicio[] = [];
+  valorNumerico:number=0;   //Puntero de recorrido del vector de objetos
+  enlaces:string= new VariablesCompartidas().enlaceSlider();
 
   constructor(private Conexion: Conexion) {}
 
@@ -43,6 +45,18 @@ export class Inicio implements OnInit {
       }
     }
 
+  public siguiente():void
+  {
+    this.valorNumerico = (this.valorNumerico + 1) % this.noticiasInicio.length;
+  }
+  public anterior():void
+  {
+    this.valorNumerico = this.valorNumerico === 0 ? this.noticiasInicio.length - 1 : this.valorNumerico - 1;
+  }
+  public falloCarga():string
+  {
+    return "NO EXISTE INFORMACIÓN ALGUNA CARGADA";
+  }
   isExpanded(index: number): boolean {
     return this.expandedNews.has(index);
   }

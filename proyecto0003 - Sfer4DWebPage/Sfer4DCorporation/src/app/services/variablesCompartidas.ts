@@ -68,6 +68,10 @@ export class VariablesCompartidas {
   public getEleccion(): number {
     return this.eleccion$.getValue();
   }
+  public enlaceSlider():string
+  {
+    return "assets/001_paginaPrincipal/sliderImages/";
+  }
 }
 // CREAR CLASES PARA CADA UNO DE LAS CONSULTAS A LA BBDD, PARA QUE PUEDAN SER UTILIZADAS EN CUALQUIER COMPONENTE DE LA APLICACION, EVITANDO ASI TENER QUE DECLARARLAS EN CADA COMPONENTE, Y FACILITANDO SU MANTENIMIENTO Y ACTUALIZACION.
 //  inicio

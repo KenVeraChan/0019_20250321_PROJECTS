@@ -3,6 +3,21 @@
     <h1>Bienvenido a nuestra página web</h1>
     <p>Este es el contenido principal de la página de inicio.</p>
 
+
+@if(noticiasInicio.length>0)
+{
+    <button (click)="anterior()">ANTERIOR</button>
+        <img src={{enlaces}}{{noticiasInicio[valorNumerico].getNombre()}}>
+    <button (click)="siguiente()">SIGUIENTE</button>
+}
+@else
+ {
+    <div>{{falloCarga()}}</div>
+ }
+
+
+
+
     <div *ngIf="noticiasInicio.length > 0; else vacio">
         <div *ngFor="let noticia of noticiasInicio; let i = index">
             <h3>{{ i + 1 }}. {{ noticia.getNombre() }}</h3>
