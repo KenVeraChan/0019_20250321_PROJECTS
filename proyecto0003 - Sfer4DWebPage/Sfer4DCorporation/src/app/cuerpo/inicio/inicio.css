@@ -4,3 +4,12 @@
     background-color: #d3cffa;
     margin-top: 0px;
 }
+.fondoInicio{
+   position:relative;
+   max-width: 100vw;  /*Se establece el mismo ancho que el designado por el ancho del tableroInicio*/ 
+   background-repeat:repeat;
+}
+.imagenesSliders{
+    position:relative;
+    max-width:100vw;  /*Se han establecido el nivel de ancho el del cuerpo e imagen*/
+}

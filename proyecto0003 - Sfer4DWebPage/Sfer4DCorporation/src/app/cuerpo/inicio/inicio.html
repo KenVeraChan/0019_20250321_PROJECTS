@@ -1,5 +1,6 @@
-<img src="assets/010_imagenesfondos/EDIFICIOS.png" alt="Imagen de fondo" class="fondoInicio">
 <div class="tableroInicio">
+    <img src="assets/010_imagenesfondos/EDIFICIOS.png" alt="Imagen de fondo" class="fondoInicio">
+
     <h1>Bienvenido a nuestra página web</h1>
     <p>Este es el contenido principal de la página de inicio.</p>
 
@@ -7,7 +8,7 @@
 @if(noticiasInicio.length>0)
 {
     <button (click)="anterior()">ANTERIOR</button>
-        <img src={{enlaces}}{{noticiasInicio[valorNumerico].getNombre()}}>
+        <img src={{enlaces}}{{noticiasInicio[valorNumerico].getNombre()}} class="imagenesSliders">
     <button (click)="siguiente()">SIGUIENTE</button>
 }
 @else
