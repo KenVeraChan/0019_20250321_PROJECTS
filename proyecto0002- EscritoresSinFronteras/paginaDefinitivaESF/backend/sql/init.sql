@@ -148,14 +148,61 @@ CREATE TABLE equipo (
     fotografia VARCHAR(500) NOT NULL
 );
 
-INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Ken","Vera Chan","Ingeniero, profesor, escritor y cofundador de E.S.F.","Española", "Ken Vera Chan es un escritor apasionado por la literatura contemporánea y la narrativa innovadora. Con una carrera que abarca más de una década, Ken ha publicado varias novelas y colecciones de cuentos que han sido aclamadas por la crítica. Además de su trabajo literario, Ken es el fundador de 'Escritores Sin Fronteras', una plataforma dedicada a apoyar a escritores emergentes de todo el mundo.","assets/images/equipoESF/kenVeraChan.png");
-INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Diana","Emilce Zamora","Psicóloga, escritora y cofundadora de E.S.F.","Colombiana", "Diana Emilce Zamora es una editora experimentada con un profundo amor por la literatura hispanoamericana. Ha trabajado en diversas editoriales, ayudando a dar forma a las voces de nuevos escritores. Como co-fundadora de 'Escritores Sin Fronteras', Diana se dedica a crear oportunidades para que los escritores de diferentes culturas puedan compartir sus historias con una audiencia global.","assets/images/equipoESF/dianaEmilceZamora.png");
-INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Cassandra","Romanova","Community Manager y cofundadora de E.S.F.", "Italiana", "Cassandra Romanova es una experta en gestión de comunidades en línea y redes sociales. Con una sólida experiencia en marketing digital, Cassandra ha ayudado a numerosas organizaciones a construir y mantener comunidades vibrantes. En 'Escritores Sin Fronteras', Cassandra se encarga de conectar a escritores y lectores, fomentando un espacio inclusivo para el intercambio de ideas y creatividad.","assets/images/equipoESF/cassandraRomanova.png");
-INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Sergio","Alvear","Desarrollador personal y docente", "Peruano", "Sergio Alvear es un desarrollador web talentoso con una pasión por crear experiencias digitales intuitivas y atractivas. Con experiencia en diversas tecnologías web, Sergio ha contribuido al desarrollo de múltiples plataformas en línea. En 'Escritores Sin Fronteras', Sergio es responsable de mantener y mejorar la infraestructura técnica del sitio, asegurando que los usuarios tengan una experiencia fluida y agradable.","assets/images/equipoESF/sergioAlvear.png");
-INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("María Isabel","Muñoz","Diseñadora gráfica e interpersoanl","Colombiana", "Maria Isabel Muñoz es una diseñadora gráfica creativa con un ojo para el detalle y la estética visual. Ha trabajado en proyectos de diseño para editoriales, campañas publicitarias y plataformas digitales. En 'Escritores Sin Fronteras', Maria Isabel se encarga de la identidad visual de la plataforma, creando diseños que reflejan la misión y los valores de la comunidad de escritores.","assets/images/equipoESF/mariaIsabelMunioz.png");
-INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Daniela","Patrone","Coordinadora de eventos y profesora", "Argentina", "Daniela Patrone es una profesional en gestión de eventos con una pasión por la literatura y la cultura. Ha organizado numerosos eventos literarios, talleres y conferencias que han reunido a escritores y lectores de diversas partes del mundo. En 'Escritores Sin Fronteras', Daniela coordina eventos que promueven la interacción y el crecimiento de la comunidad literaria.","assets/images/equipoESF/danielaPatrone.png");
-INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Mario","Alberto","Diseñador gráfico y multimedia", "Argentina", "Mario Alberto Gómez es un diseñador gráfico y multimedia con una amplia experiencia en la creación de contenido visual para plataformas digitales. Ha trabajado en proyectos que van desde el diseño web hasta la producción de videos promocionales. En 'Escritores Sin Fronteras', Mario Alberto aporta su talento para desarrollar materiales visuales que enriquecen la experiencia de los usuarios y promueven la plataforma.","assets/images/equipoESF/marioAlberto.png");
-INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) VALUES ("Nilton","Gómez","Publicador profesional y creador de contenido", "Peruano","Nilton es creador digital y un coach dedicado a las personas en redes sociales, además de escritor y novelista","assets/images/equipoESF/niltonGomez.png");
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) 
+    VALUES ("Ken",
+            "Vera Chan",
+            "Ingeniero de Software, profesor, escritor y cofundador de E.S.F.",
+            "España", 
+            "Comencé mi existencia un sábado 15 de junio de 1991, sobre las 10:00 de la mañana en Valladolid, una provincia de la comunidad de Castilla y León en España. Crecí en una familia en donde se ha forjado siempre la personalidad del esfuerzo por lograr lo soñado, la persistencia pese a las dificultades de esta corta vida y sobretodo el amor por lo que se va haciendo día a día. Debido a las sabias casualidades de la vida, inicié mi rumbo de vida, en paralelo a la del estudiante, en el universo de la escritura. Un sueño me condujo a escribir una biografía, una que aún sigue sin terminar, pero repleta de sentimientos y emociones que una persona puede experimentar a lo largo de una estructurada vida. A lo largo de los años, escribir se convirtió en un hobbie, 'Una doble vida' que hacía que mis días tuvieran más de 24 horas. Espero poder terminar algún idóneo día, la tan expresiva novela biográfica que sigue creciendo como mi vida misma, pues mi profesión de programador y profesor intentan monopolizar mis horas libres, como suele suceder con los momentos destinados al deber y a la realización personal de uno mismo. Y actualmente, formo parte de una corporación como cofundador con un grupo de personas en la distancia, dignas de haberlas podido conocer en persona, en donde hablamos con nuevos escritores, veteranos y aspirantes a serlo algún día. El mundo de la escritura ha significado el encuentro con facetas nuevas y el conocer a personas con mentalidades abiertas y pensamientos afines.",
+            "assets/images/equipoESF/kenVeraChan.png");
+
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) 
+    VALUES ("Diana",
+            "Emilce Zamora",
+            "Psicóloga, escritora y cofundadora de E.S.F.",
+            "Colombia", 
+            "Diana Zamora (Caldas, Colombia, 1975) es licenciada en Educación y Pedagogía. Estudió Psicología y se especializó en el área infantil, graduada de la Universidad Católica de Colombia, tiene veinte años de experiencia como maestra y psicóloga en escuelas de educación básica primaria y secundaria. Desarrolló talleres y proyectos en el área de discapacidad y atención del niño, joven y adolescente con necesidades especiales. Estudió Teología y cursó el ministerio pastoral con la Universidad de Dallas, Texas. Además de diferentes diplomados en las áreas de neurolingüística, manejo de las tecnologías TICS, problemas de aprendizaje, educación ambiental y atención psicosocial al migrante en comunidades multicolores con la Universidad Intercontinental de la Ciudad de México. Actualmente estudia y es miembro de la Academia Guipil: “Escribe y Publica tu pasión” donde ha participado en escritos de los libros Testimonios de fe y Devocional soy mujer Valiosa. Es servidora del Movimiento Católico Conquistando las Naciones para Cristo, en Atlanta, Georgia donde reside con su esposo e hijos.",
+            "assets/images/equipoESF/dianaEmilceZamora.png");
+
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) 
+    VALUES ("Sergio",
+            "Alvear Pérez",
+            "Profesor de refuerzo a niños y jóvenes", 
+            "Peruano", 
+            "Nació el 15 de junio de 1972 en Villa Rosa, Atlántico, (Colombia). Desde joven desarrolló una profunda pasión por la poesía y la literatura infantil, vocación que ha cultivado junto a su labor educativa. Realizó estudios en Administración Documental e Informática y se ha dedicado a impartir clases de refuerzo a niños y jóvenes. Es autor de obras como Resplandor del alba, Susurros de mi pluma, Lecciones encantadas y ¿Por qué no has podido mantener tu felicidad?, además de la obra de misterio Almas perdidas, escrita en coautoría. En 2025 recibió el Premio Hispanoamericano de Literatura Simón Bolívar y cuenta con un diplomado internacional en cultura y paz. También colabora como articulista en medios digitales y radiales de Colombia y México. Actualmente reside en Lima, Perú, desde donde continúa promoviendo la literatura y la reflexión humana.",
+            "assets/images/equipoESF/sergioAlvear.png");
+
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) 
+    VALUES ("María Isabel",
+            "Muñoz Suaza",
+            "Estudió contabilidad básica y emprendimiento. Posteriormente se dedicó a la escritura y a la literatura, participando en talleres y antologías literarias.",
+            "Colombia", 
+            "Nació el 13 de febrero de 1975 en Anserma, Caldas, en un entorno campesino que marcó profundamente su sensibilidad y visión del mundo. Debido a la violencia en Colombia, se desplazó a Pereira, donde inició una nueva vida. Estudió contabilidad básica y emprendimiento, y culminó su bachillerato en 2023 en el colegio Manuela Beltrán. Desde 2022 forma parte del taller literario Caza de Palabras, donde comenzó su camino como escritora. Participó en la antología Crisálidas de la Memoria con su obra ¡Libertad! y pertenece a la Academia Colombiana de Historia, Literatura y Arte con el grupo Quijotes Creadores, destacándose con el escrito Crepúsculo. Ha participado en espacios literarios nacionales e internacionales, consolidándose como una voz sensible y comprometida con la narrativa y la poesía.",
+            "assets/images/equipoESF/mariaIsabelMunioz.png");
+
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) 
+    VALUES ("Daniela",
+            "Patrone",
+            "Coordinadora de eventos y profesora", 
+            "Argentina", 
+            "Daniela Patrone es una profesional en gestión de eventos con una pasión por la literatura y la cultura. Ha organizado numerosos eventos literarios, talleres y conferencias que han reunido a escritores y lectores de diversas partes del mundo. En 'Escritores Sin Fronteras', Daniela coordina eventos que promueven la interacción y el crecimiento de la comunidad literaria.",
+            "assets/images/equipoESF/danielaPatrone.png");
+
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) 
+    VALUES ("Luisa Camila",
+            "Espinal Guevara",
+            "Psicóloga. Psicología clínica y conductual (Autónoma)",
+            "Colombia",
+            "Capacitación psicología positiva y comunicadora en redes sociales. Fue encargada de empresa de paquetería y correos e instructora de desarrollo, en la empresa 'Regional cafetero'. Se ha dedicado al sector de la contratación, administración y gestión de RR.HH.",
+            "assets/images/equipoESF/camilaGuevara.png");
+
+INSERT INTO equipo (nombre, apellidos, profesion, nacionalidad, biografia, fotografia) 
+    VALUES ("Cassandra",
+            "Romanova",
+            "Community Manager y cofundadora de E.S.F.", 
+            "Italia", 
+            "Cassandra Romanova es una experta en gestión de comunidades en línea y redes sociales. Con una sólida experiencia en marketing digital, Cassandra ha ayudado a numerosas organizaciones a construir y mantener comunidades vibrantes. En 'Escritores Sin Fronteras', Cassandra se encarga de conectar a escritores y lectores, fomentando un espacio inclusivo para el intercambio de ideas y creatividad.",
+            "assets/images/equipoESF/cassandraRomanova.png");
 
 /***********************************************************************************************************************************************************/
 /***********************************************************************************************************************************************************/
