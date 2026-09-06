@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class CRUDcodConsultas {
 
-	private HashMap<Integer,ObjetoVenta> stock;
+	private HashMap<Integer,ObjetoVenta> stock= new HashMap<>();    //Siempre se debera declarar para evitar errores de NULL
 	private int puntero=1;   //Clave que aumentara en el input del HashMap
 
 	public CRUDcodConsultas()

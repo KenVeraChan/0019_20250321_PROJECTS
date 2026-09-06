@@ -214,6 +214,12 @@ class PanelInsertar extends JPanel implements ActionListener
         	//Procedemos a mover la ventana hacia la izquierda para mostrar otro panel: el de STOCK disponible
         	MarcoInsertarStock panelStock= new MarcoInsertarStock(true,this.cargar);
 			this.cargar.setEnabled(false);    //Se deshabilita el botón para evitar crear más instancias del segundo JFrame
+			CRUDcodConsultas nuevo= new CRUDcodConsultas();
+			
+			nuevo.getMapaDatosStock().forEach((clave, valor) -> {
+			    System.out.println(clave + " : " + valor);
+			});
+
         }
     }
 }
@@ -223,11 +229,11 @@ class PanelInsertar extends JPanel implements ActionListener
 class MarcoInsertarStock extends JFrame
 {
 	private Point PanelAlmacenajeSalida;
-    private JButton botonPrincipal;
+    private JButton botonPrincipal,cerrar;
     
 	public MarcoInsertarStock(Boolean semaforo,JButton cargar)
 	{
-		setBounds(250,100,480,530);
+		setBounds(730,100,480,530);
 		setTitle("PANEL DE STOCK");
 		setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
 		setResizable(false);
@@ -237,13 +243,14 @@ class MarcoInsertarStock extends JFrame
 		//PanelInsertarStock lamina1= new PanelInsertarStock("ficherosUtilizados/paisaje.jpg",30,this);
 			//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
 		//add(lamina1);
-        JButton cerrar = new JButton("Cerrar");
+        cerrar = new JButton("VOLVER");  this.cerrar.setBounds(30,440,100,25);
+
         cerrar.addActionListener(e ->{
 				this.botonPrincipal.setEnabled(true);
 				this.dispose();
 			});
-		add(cerrar);
-		setSize(300,200);
+		add(this.cerrar);
+		setSize(480,530);
 		setVisible(semaforo);
 		DeslizarFrameStock(this,450, 100);
 	}
@@ -268,6 +275,7 @@ class MarcoInsertarStock extends JFrame
 }
 class PanelInsertarStock extends JPanel implements ActionListener
 {
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
