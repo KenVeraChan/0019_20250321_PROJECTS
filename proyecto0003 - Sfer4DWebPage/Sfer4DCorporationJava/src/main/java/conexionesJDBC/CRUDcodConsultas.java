@@ -34,8 +34,6 @@ public class CRUDcodConsultas {
 			{
 				//Devuelve los codigos de los articulos
 				//Como los productos están agrupados por ID (clave) para apuntar a un objeto (VALOR) se usara HASHMAP
-				
-				System.out.println(myrs.getString(1)+" "+myrs.getString(3));
 				stock.put(this.puntero, new ObjetoVenta(     //Guardando en el HASHMAP
 							myrs.getString(2),    //OBTIENE EL NOMBRE
 							myrs.getString(5),    //OBTIENE EL DESTINO
@@ -67,9 +65,16 @@ class ObjetoVenta
 	private double coste;      //Coste unitario decimal
 	private String detalles;   //Breve descripcion del articulo de venta
 	
+	private static int numProductos=0;   //Contabiliza el numero de PRODUCTOS que se registran
+	private static int numServicios=0;   //Contabiliza el numero de SERVICIOS que se registran
+	private static int numProyectos=0;   //Contabiliza el numero de PROYECTOS que se registran
+	
 	public ObjetoVenta(String nombre,String destino,String sector,int cantidad,double coste,String detalles)
 	{
 		this.nombre=nombre;
+			if("PRODUCTOS".equals(destino.trim())){numProductos++;}
+			if("SERVICIOS".equals(destino.trim())){numServicios++;}
+			if("PROYECTOS".equals(destino.trim())){numProyectos++;}
 		this.destino=destino;
 		this.sector=sector;
 		this.cantidad=cantidad;
@@ -112,5 +117,23 @@ class ObjetoVenta
 	}
 	public void setDetalles(String detalles) {
 		this.detalles = detalles;
+	}
+	public static int getNumProductos()
+	{
+		return numProductos;
+	}
+	public static int getNumServicios()
+	{
+		return numServicios;
+	}
+	public static int getNumProyectos()
+	{
+		return numProyectos;
+	}
+	public static int mayorDeTresRegistros(int productos, int servicios, int proyectos) {
+	    int mayor = productos;   //Declarando un pivote
+	    if (servicios > mayor) mayor = servicios;
+	    if (proyectos > mayor) mayor = proyectos;
+	    return mayor;
 	}
 }

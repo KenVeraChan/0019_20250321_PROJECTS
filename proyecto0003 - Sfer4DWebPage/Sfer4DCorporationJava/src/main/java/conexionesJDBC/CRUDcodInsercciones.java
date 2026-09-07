@@ -1,6 +1,8 @@
 package conexionesJDBC;
 
 import java.awt.AlphaComposite;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -17,6 +19,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -27,7 +30,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 import org.jdesktop.swingx.JXDatePicker;
@@ -212,16 +217,11 @@ class PanelInsertar extends JPanel implements ActionListener
             System.exit(0);
         }
         if (src == cargar) {
-
-        	//Procedemos a mover la ventana hacia la izquierda para mostrar otro panel: el de STOCK disponible
-        	MarcoInsertarStock panelStock= new MarcoInsertarStock(true,this.cargar);
 			this.cargar.setEnabled(false);    //Se deshabilita el botón para evitar crear más instancias del segundo JFrame
 			CRUDcodConsultas nuevo= new CRUDcodConsultas();
-			
-			nuevo.getMapaDatosStock().forEach((clave, valor) -> {
-			    System.out.println(clave + " : " + valor.getNombre());
-			});
-
+			//ENVIA EL MAPA DE DATOS
+        	//Procedemos a mover la ventana hacia la izquierda para mostrar otro panel: el de STOCK disponible
+        	MarcoInsertarStock panelStock= new MarcoInsertarStock(true,this.cargar,nuevo.getMapaDatosStock());
         }
     }
 }
@@ -230,60 +230,67 @@ class PanelInsertar extends JPanel implements ActionListener
 
 class MarcoInsertarStock extends JFrame
 {
-	private Point PanelAlmacenajeSalida;
-    private JButton botonPrincipal,cerrar;
-    
-	public MarcoInsertarStock(Boolean semaforo,JButton cargar)
-	{
-		setBounds(730,100,480,530);
-		setTitle("PANEL DE STOCK");
-		setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);  //Inhabilita el cerrado con el botón de "X"
-		setLayout(null);
+    private Point PanelAlmacenajeSalida;
+    private JButton botonPrincipal, cerrar;
+    private int dimensionVerticalScroll=0,numProductos=0,numServicios=0,numProyectos=0;
 
-        this.botonPrincipal = cargar; 
-		PanelInsertarStock almacen= new PanelInsertarStock("ficherosUtilizados/paisaje.jpg",30);
-		add(almacen);
-			//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
-		//add(lamina1);
-        cerrar = new JButton("VOLVER");  this.cerrar.setBounds(30,440,100,25);
+    public MarcoInsertarStock(Boolean semaforo, JButton cargar, HashMap<Integer, ObjetoVenta> mapeo)
+    {
+        //1) Si el panel previo crece dinámicamente, ajustamos las dimensiones verticales del SCROLL
+    	this.numProductos=ObjetoVenta.getNumProductos();
+    	this.numServicios=ObjetoVenta.getNumServicios();
+    	this.numProyectos=ObjetoVenta.getNumProyectos();
+        this.dimensionVerticalScroll=ObjetoVenta.mayorDeTresRegistros(this.numProductos, this.numServicios, this.numProyectos);
+        
+        //2) Definimos las dimensiones del JFrame
+        setBounds(300,100,680,530);
+        setTitle("PANEL DE STOCK");
+        setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setLayout(null);
 
-        cerrar.addActionListener(e ->{
-				this.botonPrincipal.setEnabled(true);
-				this.dispose();
-			});
-		add(this.cerrar);
-		setSize(480,530);
-		setVisible(semaforo);
-		DeslizarFrameStock(this,450, 100);
-		setVisible(true);
-	}
+        this.botonPrincipal = cargar;
 
-	public void DeslizarFrameStock(JFrame panelMoviendose,int x, int y) {
-        panelMoviendose.setLocation(x, y); // posición inicial
-        // Animación: mover 300 píxeles hacia la izquierda
-        int distancia = 700;
-        int velocidad = 10;   // píxeles por paso
-        int delay = 5;       // milisegundos entre pasos
+        //3) El panel original
+        PanelInsertarStock almacen = new PanelInsertarStock("ficherosUtilizados/almacen.jpg", 30, mapeo);
 
-        Timer timer = new Timer(delay, e -> {
-            Point p = panelMoviendose.getLocation();
-            if (p.x < distancia) {
-            	panelMoviendose.setLocation(p.x + velocidad, p.y);
-            } else {
-                ((Timer)e.getSource()).stop();
-            }
+        //4) IMPORTANTE: tamaño mayor para que aparezca scroll
+        almacen.setPreferredSize(new Dimension(680,60+75*this.dimensionVerticalScroll)); 
+
+        //5) ScrollPane que contiene tu panel
+        JScrollPane scroll = new JScrollPane(almacen);
+        scroll.setBounds(0, 0, 680, 530);
+
+        //6) Opcional: siempre mostrar scroll vertical
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        add(scroll);
+
+        //7) Botón VOLVER (debe estar dentro del panel si quieres que se desplace)
+        cerrar = new JButton("VOLVER");
+        cerrar.setBounds(30,74*this.dimensionVerticalScroll, 100, 25);
+        cerrar.addActionListener(e -> {
+            this.botonPrincipal.setEnabled(true);
+            this.dispose();
         });
-        timer.start();
+
+        //8) Si quieres que el botón se mueva con el scroll:
+        almacen.add(cerrar);
+
+        //9) Si quieres que el botón NO se mueva con el scroll:
+        setVisible(semaforo);
     }
 }
+
 class PanelInsertarStock extends JPanel implements ActionListener
 {
     private BufferedImage imagen;
     private float alfaImagen = 1.0f; // opaco por defecto
+    private int punteroProdu=0, punteroServ=0, punteroProy=0;   //Puntero de relleno
+    private JLabel productos,servicios,proyectos;
     
-	public PanelInsertarStock(String ruta,int transparencia)
+	public PanelInsertarStock(String ruta,int transparencia,HashMap<Integer, ObjetoVenta> mapaStock)
 	{
 	    /////// TRATAMIENTO DE FONDO LAMINA /////////////////////
         try {
@@ -307,8 +314,47 @@ class PanelInsertarStock extends JPanel implements ActionListener
         } catch (Exception e) {
             e.printStackTrace();
         }	
-	// ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
+	//1) ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
 		setLayout(null);  //Para que respeten el setBounds
+		
+	//2) DECLARACION DE BOTONES PARA PODER MOSTRAR AL USUARIO LAS POSIBLES ELECCIONES EXISTENTES
+		this.productos=new JLabel("PRODUCTOS");    this.productos.setBounds(30, 10, 180,20);   this.productos.setHorizontalAlignment(SwingConstants.CENTER);   add(this.productos);   
+		this.servicios=new JLabel("SERVICIOS");    this.servicios.setBounds(230, 10, 180,20);  this.servicios.setHorizontalAlignment(SwingConstants.CENTER);   add(this.servicios);
+		this.proyectos=new JLabel("PROYECTOS");    this.proyectos.setBounds(430, 10, 180,20);  this.proyectos.setHorizontalAlignment(SwingConstants.CENTER);   add(this.proyectos);
+		
+		mapaStock.forEach((clave,valor)->
+		{
+			if("PRODUCTOS".equals(valor.getDestino().trim()) || "SERVICIOS".equals(valor.getDestino().trim()) || "PROYECTOS".equals(valor.getDestino().trim()))
+			{	//SOLO SE MOSTRARAN LOS PRODUCTOS, SERVICIOS O PROYECTOS el resto es de la interfaz Angular de la pagina web				
+				JButton botones= new JButton("<html>"+(this.punteroProdu+1)+") "+valor.getNombre().substring(0, valor.getNombre().length() - 4)+"<br>"+valor.getSector()+"</html>");
+				botones.setBounds(30,30+40*this.punteroProdu,180,30);  
+				botones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+				botones.setHorizontalAlignment(SwingConstants.LEFT);     //alineacion fuente
+				add(botones);
+				botones.addActionListener(this);
+				this.punteroProdu++;
+			}
+			if("SERVICIOS".equals(valor.getDestino().trim()))
+			{	//SOLO SE MOSTRARAN LOS PRODUCTOS, SERVICIOS O PROYECTOS el resto es de la interfaz Angular de la pagina web				
+				JButton botones= new JButton("<html>"+(this.punteroServ+1)+") "+valor.getNombre().substring(0, valor.getNombre().length() - 4)+"<br>"+valor.getSector()+"</html>");
+				botones.setBounds(230,30+40*this.punteroServ,180,30);
+				botones.setFont(new Font("Arial", Font.PLAIN, 10));
+				botones.setHorizontalAlignment(SwingConstants.LEFT);
+				add(botones);
+				botones.addActionListener(this);
+				this.punteroServ++;
+			}
+			if("PROYECTOS".equals(valor.getDestino().trim()))
+			{	//SOLO SE MOSTRARAN LOS PRODUCTOS, SERVICIOS O PROYECTOS el resto es de la interfaz Angular de la pagina web				
+				JButton botones= new JButton("<html>"+(this.punteroProy+1)+") "+valor.getNombre().substring(0, valor.getNombre().length() - 4)+"<br>"+valor.getSector()+"</html>");
+				botones.setBounds(430,30+40*this.punteroProy,180,30);
+				botones.setFont(new Font("Arial", Font.PLAIN, 10));
+				botones.setHorizontalAlignment(SwingConstants.LEFT);
+				add(botones);
+				botones.addActionListener(this);
+				this.punteroProy++;
+			}
+		});
 	}
     @Override
     protected void paintComponent(Graphics g) {
@@ -323,7 +369,8 @@ class PanelInsertarStock extends JPanel implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		Object o=e;
+		System.out.println(e.getSource().toString());
 	}
 	
 }
