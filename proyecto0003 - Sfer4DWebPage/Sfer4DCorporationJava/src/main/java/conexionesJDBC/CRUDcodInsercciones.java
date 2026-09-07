@@ -7,8 +7,10 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -54,7 +56,7 @@ class MarcoInsertar extends JFrame
 class PanelInsertar extends JPanel implements ActionListener
 {
 	private MarcoInsertar ventanaBase;
-    private Image imagen;
+    private BufferedImage imagen;
     private float alfaImagen = 1.0f; // opaco por defecto
  
 	//1) JLABELS DE LAS ENTRADAS DE DATOS
@@ -90,13 +92,13 @@ class PanelInsertar extends JPanel implements ActionListener
         try {
             if (ruta.startsWith("http")) {
                 // URL remota
-                URL url = new URL(ruta);
-                this.imagen = ImageIO.read(url);
+            	Path path = Path.of(ruta);
+            	this.imagen = ImageIO.read(path.toFile());
             }
             else if (ruta.startsWith("file:/")) {
                 // URL local absoluta
-                URL url = new URL(ruta);
-                this.imagen = ImageIO.read(url);
+            	Path path = Path.of(ruta);
+            	this.imagen = ImageIO.read(path.toFile());
             }
             else {
                // Ruta local normal (MI CASO)
@@ -217,7 +219,7 @@ class PanelInsertar extends JPanel implements ActionListener
 			CRUDcodConsultas nuevo= new CRUDcodConsultas();
 			
 			nuevo.getMapaDatosStock().forEach((clave, valor) -> {
-			    System.out.println(clave + " : " + valor);
+			    System.out.println(clave + " : " + valor.getNombre());
 			});
 
         }
@@ -238,9 +240,11 @@ class MarcoInsertarStock extends JFrame
 		setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);  //Inhabilita el cerrado con el botón de "X"
+		setLayout(null);
 
         this.botonPrincipal = cargar; 
-		//PanelInsertarStock lamina1= new PanelInsertarStock("ficherosUtilizados/paisaje.jpg",30,this);
+		PanelInsertarStock almacen= new PanelInsertarStock("ficherosUtilizados/paisaje.jpg",30);
+		add(almacen);
 			//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
 		//add(lamina1);
         cerrar = new JButton("VOLVER");  this.cerrar.setBounds(30,440,100,25);
@@ -253,6 +257,7 @@ class MarcoInsertarStock extends JFrame
 		setSize(480,530);
 		setVisible(semaforo);
 		DeslizarFrameStock(this,450, 100);
+		setVisible(true);
 	}
 
 	public void DeslizarFrameStock(JFrame panelMoviendose,int x, int y) {
@@ -275,8 +280,46 @@ class MarcoInsertarStock extends JFrame
 }
 class PanelInsertarStock extends JPanel implements ActionListener
 {
-	
-
+    private BufferedImage imagen;
+    private float alfaImagen = 1.0f; // opaco por defecto
+    
+	public PanelInsertarStock(String ruta,int transparencia)
+	{
+	    /////// TRATAMIENTO DE FONDO LAMINA /////////////////////
+        try {
+            if (ruta.startsWith("http")) {
+                // URL remota
+            	Path path = Path.of(ruta);
+            	this.imagen = ImageIO.read(path.toFile());
+            }
+            else if (ruta.startsWith("file:/")) {
+                // URL local absoluta
+            	Path path = Path.of(ruta);
+            	this.imagen = ImageIO.read(path.toFile());
+            }
+            else {
+               // Ruta local normal (MI CASO)
+                File archivo = new File(ruta);
+                this.imagen = ImageIO.read(archivo);
+            }
+            // transparencia de 0 a 100 → alpha de 0.0 a 1.0
+            this.alfaImagen = Math.max(0, Math.min(100, transparencia)) / 100f;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }	
+	// ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
+		setLayout(null);  //Para que respeten el setBounds
+	}
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (this.imagen != null) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.alfaImagen));
+            g2.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+            g2.dispose();
+        }
+    }
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
