@@ -257,7 +257,7 @@ class MarcoInsertarStock extends JFrame
         PanelInsertarStock almacen = new PanelInsertarStock("ficherosUtilizados/almacen.jpg", 30, mapeo);
 
         //4) IMPORTANTE: tamaño mayor para que aparezca scroll
-        almacen.setPreferredSize(new Dimension(680,60+108*this.dimensionVerticalScroll)); 
+        almacen.setPreferredSize(new Dimension(680,60+65*this.dimensionVerticalScroll)); 
 
         //5) ScrollPane que contiene tu panel
         JScrollPane scroll = new JScrollPane(almacen);
@@ -270,7 +270,7 @@ class MarcoInsertarStock extends JFrame
 
         //7) Botón VOLVER (debe estar dentro del panel si quieres que se desplace)
         cerrar = new JButton("VOLVER");
-        cerrar.setBounds(30,107*this.dimensionVerticalScroll, 100, 25);
+        cerrar.setBounds(30,60+63*this.dimensionVerticalScroll, 100, 25);
         cerrar.addActionListener(e -> {
             this.botonPrincipal.setEnabled(true);
             this.dispose();
@@ -278,10 +278,10 @@ class MarcoInsertarStock extends JFrame
         
         //8) Boton de MOSTRAR EL PANEL COMPLETO DE VENTAS para el usuario
         mostrarPanel= new JButton("MOSTRAR RECOPILADO VENTAS");
-        mostrarPanel.setBounds(150,107*this.dimensionVerticalScroll, 220, 25);
+        mostrarPanel.setBounds(150,60+63*this.dimensionVerticalScroll, 220, 25);
         mostrarPanel.addActionListener(e -> {
             //DEBE MOSTREAR POR PANTALLA UN CUADRO CON LAS VENTAS SELECCIONADAS Y EL TOTAL
-        	System.out.println("CARGANDO PANEL DE VENTAS ELEGIDAS");
+        		CarritoCompra.getMapaCarro();
         });
         //9) Si quieres que el botón se mueva con el scroll:
         almacen.add(cerrar);
@@ -340,7 +340,7 @@ class PanelInsertarStock extends JPanel implements ActionListener
 		
 		mapaStock.forEach((clave,valor)->
 		{
-			if("PRODUCTOS".equals(valor.getDestino().trim()) || "SERVICIOS".equals(valor.getDestino().trim()) || "PROYECTOS".equals(valor.getDestino().trim()))
+			if("PRODUCTOS".equals(valor.getDestino().trim()))
 			{	//SOLO SE MOSTRARAN LOS PRODUCTOS, SERVICIOS O PROYECTOS el resto es de la interfaz Angular de la pagina web				
 				
 				//SE AÑADIRA EL JBUTTON
@@ -371,12 +371,7 @@ class PanelInsertarStock extends JPanel implements ActionListener
 					elecciones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
 					add(elecciones);
 					elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener				
-					elecciones.addActionListener(e -> {
-					    System.out.println("El selector: "+mapaStock.get(Integer.parseInt(elecciones.getActionCommand().substring(8))).getNombre()+", eligió:"+elecciones.getSelectedItem()+" unidades");
-					});
-
-
-					
+					elecciones.addActionListener(e->{CarritoCompra.getMapaCompras(mapaStock,elecciones);});
 				this.punteroProdu++;
 			}
 			if("SERVICIOS".equals(valor.getDestino().trim()))
@@ -409,6 +404,9 @@ class PanelInsertarStock extends JPanel implements ActionListener
 					titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
 					elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
 					add(elecciones);
+					
+					elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener				
+					elecciones.addActionListener(e->{CarritoCompra.getMapaCompras(mapaStock,elecciones);});
 				this.punteroServ++;
 			}
 			if("PROYECTOS".equals(valor.getDestino().trim()))
@@ -440,6 +438,9 @@ class PanelInsertarStock extends JPanel implements ActionListener
 					elecciones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
 					elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
 					add(elecciones);
+					
+					elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener				
+					elecciones.addActionListener(e->{CarritoCompra.getMapaCompras(mapaStock,elecciones);});
 				this.punteroProy++;
 			}
 		});

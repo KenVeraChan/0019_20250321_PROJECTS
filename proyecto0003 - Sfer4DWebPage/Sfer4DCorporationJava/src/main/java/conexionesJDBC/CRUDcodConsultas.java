@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
 public class CRUDcodConsultas {
 
 	private HashMap<Integer,ObjetoVenta> stock= new HashMap<>();    //Siempre se debera declarar para evitar errores de NULL
@@ -34,14 +37,14 @@ public class CRUDcodConsultas {
 			{
 				//Devuelve los codigos de los articulos
 				//Como los productos están agrupados por ID (clave) para apuntar a un objeto (VALOR) se usara HASHMAP
-				stock.put(this.puntero, new ObjetoVenta(     //Guardando en el HASHMAP
-							myrs.getInt(1),    //OBTIENE EL ID (SOLO LECTURA NO SE MODIFICARA SU VALOR NUNCA)
-							myrs.getString(2),    //OBTIENE EL NOMBRE
-							myrs.getString(5),    //OBTIENE EL DESTINO
-							myrs.getString(6),    //OBTIENE EL SECTOR
-							myrs.getInt(7),       //OBTIENE EL STOCK
-							myrs.getDouble(8),    //OBTIENE EL COSTE
-							myrs.getString(9))    //OBTIENE LOS DETALLES
+				stock.put(myrs.getInt("ID"), new ObjetoVenta(     //Guardando en el HASHMAP: OJO no por int columna sino por cabecera de la columna
+							myrs.getInt("ID"),    		 //OBTIENE EL ID (SOLO LECTURA NO SE MODIFICARA SU VALOR NUNCA)
+							myrs.getString("NOMBRE"),    //OBTIENE EL NOMBRE
+							myrs.getString("DESTINO"),   //OBTIENE EL DESTINO
+							myrs.getString("SECTOR"),    //OBTIENE EL SECTOR
+							myrs.getInt("STOCK"),        //OBTIENE EL STOCK
+							myrs.getDouble("COSTE"),     //OBTIENE EL COSTE
+							myrs.getString("DETALLES"))  //OBTIENE LOS DETALLES
 						);
 				this.puntero++;
 			}
@@ -147,5 +150,86 @@ class ObjetoVenta
 		numProductos=0;   //Contabiliza el numero de PRODUCTOS que se registran
 		numServicios=0;   //Contabiliza el numero de SERVICIOS que se registran
 		numProyectos=0;   //Contabiliza el numero de PROYECTOS que se registran
+	}
+}
+
+class CarritoCompra
+{
+	private String nombreVenta;
+	private String destinoVenta;
+	private String sectorVenta;
+	private int cantidadVenta;
+	private double costeVenta;
+	private double totalVenta;
+	private static HashMap<Integer,CarritoCompra> compras=new HashMap<>();
+	
+	public CarritoCompra(String nombreVenta, String destinoVenta,String sectorVenta,int cantidadVenta,double costeVenta)
+	{
+		this.nombreVenta=nombreVenta;
+		this.destinoVenta=destinoVenta;
+		this.sectorVenta=sectorVenta;
+		this.cantidadVenta=cantidadVenta;
+		this.costeVenta=costeVenta;
+		this.totalVenta=totalVenta;
+	}
+	public static void getMapaCompras(HashMap<Integer,ObjetoVenta> mapaStock,JComboBox<Integer> elecciones)
+	{		
+		//RECOPILADO DE DATOS:
+			String nombreVenta=mapaStock.get(Integer
+									 .parseInt(elecciones
+									 .getActionCommand()
+									 .substring(8)))
+									 .getNombre()
+									 	.substring(0,
+									 			mapaStock.get(Integer
+									 					 .parseInt(elecciones
+									    				 .getActionCommand()
+									    				 .substring(8)))
+					 				    				 .getNombre()
+									 					 .length()-4);
+			String destinoVenta=mapaStock.get(Integer.parseInt(elecciones.getActionCommand().substring(8))).getDestino();
+			String sectorVenta=mapaStock.get(Integer.parseInt(elecciones.getActionCommand().substring(8))).getSector();
+			int cantidadVenta=elecciones.getSelectedIndex();
+			double costeVenta=mapaStock.get(Integer.parseInt(elecciones.getActionCommand().substring(8))).getCoste();
+			
+		//CONSTRUYENDO EL OBJETO QUE SE USARA
+			CarritoCompra elementoElegido=new CarritoCompra(nombreVenta,destinoVenta,sectorVenta,cantidadVenta,costeVenta);
+		
+		//SE GUARDA EL OBJETO Y LA CLAVE DENTRO DE UN PUT PARA QUE NO SE REPITAN LAS CLAVES Y SE SOBREESCRIBA
+			compras.put(Integer.parseInt(elecciones.getActionCommand().substring(8)),elementoElegido);
+	}
+	public static void getMapaCarro()
+	{
+		//SE CALCULA EL COSTE TOTAL DE TODA LA SUPUESTA COMPRA DE TODOS LOS ARTICULOS
+		final double[] costeTotal = {0.0};   //Funciona porque el array es final, pero su contenido no.
+		compras.forEach((clave, valor) -> {
+		    costeTotal[0] += valor.cantidadVenta * valor.costeVenta;
+		});
+	
+		//SE IMPRIME EL CONJUNTO COMPLETO EN UNA TABLA DENTRO DEL JOPTIONPANE ON MODO HTML
+		StringBuilder html = new StringBuilder();
+
+		html.append("<html><div align='center'>");
+		html.append("<table border='1' cellpadding='4' cellspacing='0'>");
+		html.append("<tr><th>VENTA</th><th>DESTINO</th><th>SECTOR</th><th>CANTIDAD</th><th>COSTE</th><th>TOTAL</th></tr>");
+
+		compras.forEach((clave, valor) -> {
+		    html.append("<tr>");
+		    html.append("<td>").append(valor.nombreVenta).append("</td>");
+		    html.append("<td>").append(valor.destinoVenta).append("</td>");
+		    html.append("<td>").append(valor.sectorVenta).append("</td>");
+		    html.append("<td>").append(valor.cantidadVenta).append("</td>");
+		    html.append("<td>").append(String.format("%.2f",valor.costeVenta)+"€").append("</td>");
+		    html.append("<td>").append(String.format("%.2f",valor.cantidadVenta*valor.costeVenta)+"€").append("</td>");
+		    html.append("</tr>");
+		});
+	    html.append("<tr>");
+	    html.append("<td colspan=2>").append("COSTE TOTAL: ").append("</td>");
+	    html.append("<td colspan=4>").append(String.format("%.3f",costeTotal[0])+"€").append("</td>");
+	    html.append("</tr>");
+		html.append("</table>");
+		html.append("</html>");
+
+		JOptionPane.showMessageDialog(null, html.toString(), "Carrito de compra", JOptionPane.INFORMATION_MESSAGE);
 	}
 }
