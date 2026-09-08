@@ -1,6 +1,7 @@
 package conexionesJDBC;
 
 import java.awt.AlphaComposite;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -248,7 +249,7 @@ class MarcoInsertarStock extends JFrame
         setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());
         setResizable(false);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setLayout(null);
+        getContentPane().setLayout(new BorderLayout());
 
         this.botonPrincipal = cargar;
 
@@ -256,30 +257,32 @@ class MarcoInsertarStock extends JFrame
         PanelInsertarStock almacen = new PanelInsertarStock("ficherosUtilizados/almacen.jpg", 30, mapeo);
 
         //4) IMPORTANTE: tamaño mayor para que aparezca scroll
-        almacen.setPreferredSize(new Dimension(680,60+75*this.dimensionVerticalScroll)); 
+        almacen.setPreferredSize(new Dimension(680,60+73*this.dimensionVerticalScroll)); 
 
         //5) ScrollPane que contiene tu panel
         JScrollPane scroll = new JScrollPane(almacen);
-        scroll.setBounds(0, 0, 680, 530);
+        scroll.setBounds(0, 0, 680, 500);
 
         //6) Opcional: siempre mostrar scroll vertical
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        add(scroll, BorderLayout.CENTER);
 
-        add(scroll);
 
         //7) Botón VOLVER (debe estar dentro del panel si quieres que se desplace)
         cerrar = new JButton("VOLVER");
-        cerrar.setBounds(30,74*this.dimensionVerticalScroll, 100, 25);
+        cerrar.setBounds(30,72*this.dimensionVerticalScroll, 100, 25);
         cerrar.addActionListener(e -> {
             this.botonPrincipal.setEnabled(true);
             this.dispose();
         });
-
         //8) Si quieres que el botón se mueva con el scroll:
         almacen.add(cerrar);
 
         //9) Si quieres que el botón NO se mueva con el scroll:
         setVisible(semaforo);
+        
+        //10) Reiniciar las variables estaticas del objeto: ObjetoVenta
+        ObjetoVenta.reiniciarVariablesEstaticas();  //Sino se acumula la contabilidad de la verticalidad
     }
 }
 
@@ -289,9 +292,13 @@ class PanelInsertarStock extends JPanel implements ActionListener
     private float alfaImagen = 1.0f; // opaco por defecto
     private int punteroProdu=0, punteroServ=0, punteroProy=0;   //Puntero de relleno
     private JLabel productos,servicios,proyectos;
+    private HashMap<Integer,ObjetoVenta> mapaStockDatos;
     
 	public PanelInsertarStock(String ruta,int transparencia,HashMap<Integer, ObjetoVenta> mapaStock)
 	{
+		//1) SE GUARDA EL MAPA DE DATOS HASHMAP<CLAVE,VALOR>
+		  this.mapaStockDatos=mapaStock;
+		
 	    /////// TRATAMIENTO DE FONDO LAMINA /////////////////////
         try {
             if (ruta.startsWith("http")) {
@@ -314,10 +321,10 @@ class PanelInsertarStock extends JPanel implements ActionListener
         } catch (Exception e) {
             e.printStackTrace();
         }	
-	//1) ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
+	//2) ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
 		setLayout(null);  //Para que respeten el setBounds
 		
-	//2) DECLARACION DE BOTONES PARA PODER MOSTRAR AL USUARIO LAS POSIBLES ELECCIONES EXISTENTES
+	//3) DECLARACION DE BOTONES PARA PODER MOSTRAR AL USUARIO LAS POSIBLES ELECCIONES EXISTENTES
 		this.productos=new JLabel("PRODUCTOS");    this.productos.setBounds(30, 10, 180,20);   this.productos.setHorizontalAlignment(SwingConstants.CENTER);   add(this.productos);   
 		this.servicios=new JLabel("SERVICIOS");    this.servicios.setBounds(230, 10, 180,20);  this.servicios.setHorizontalAlignment(SwingConstants.CENTER);   add(this.servicios);
 		this.proyectos=new JLabel("PROYECTOS");    this.proyectos.setBounds(430, 10, 180,20);  this.proyectos.setHorizontalAlignment(SwingConstants.CENTER);   add(this.proyectos);
@@ -331,6 +338,7 @@ class PanelInsertarStock extends JPanel implements ActionListener
 				botones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
 				botones.setHorizontalAlignment(SwingConstants.LEFT);     //alineacion fuente
 				add(botones);
+				botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
 				botones.addActionListener(this);
 				this.punteroProdu++;
 			}
@@ -341,6 +349,7 @@ class PanelInsertarStock extends JPanel implements ActionListener
 				botones.setFont(new Font("Arial", Font.PLAIN, 10));
 				botones.setHorizontalAlignment(SwingConstants.LEFT);
 				add(botones);
+				botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
 				botones.addActionListener(this);
 				this.punteroServ++;
 			}
@@ -351,6 +360,7 @@ class PanelInsertarStock extends JPanel implements ActionListener
 				botones.setFont(new Font("Arial", Font.PLAIN, 10));
 				botones.setHorizontalAlignment(SwingConstants.LEFT);
 				add(botones);
+				botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
 				botones.addActionListener(this);
 				this.punteroProy++;
 			}
@@ -369,8 +379,50 @@ class PanelInsertarStock extends JPanel implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		Object o=e;
-		System.out.println(e.getSource().toString());
-	}
+	    String cmd = e.getActionCommand();
+	    String mensaje="";
+	    String detallesVenta="";
+
+	    if (cmd.startsWith("ACCIONADO")) 
+	    {
+	        int indice = Integer.parseInt(cmd.substring(9));
+	        detallesVenta=this.mapaStockDatos.get(indice).getDetalles();
 	
+	        mensaje="<html>"+
+	        		"El producto: "+
+	        		"<b>"+this.mapaStockDatos.get(indice).getNombre().substring(0, this.mapaStockDatos.get(indice).getNombre().length()-4)+"</b><br>"+
+	        		"Pertenenciente al tipo de venta: "+
+	        		"<b>"+this.mapaStockDatos.get(indice).getDestino()+"</b><br>"+
+	        		"Perteneciente al subgrupo de ventas: "+
+	        		"<b>"+this.mapaStockDatos.get(indice).getSector()+"</b><br>"+
+	        		"Tiene un STOCK de: "+
+	        		"<b>"+this.mapaStockDatos.get(indice).getCantidad()+" Unidades</b><br>"+
+	        		"Tiene un precio de: "+
+	        		"<b>"+this.mapaStockDatos.get(indice).getCoste()+" €</b><br>"+
+	        		"Cuyos detalles de la venta son: </b><br>"+
+	        		"<b>"+this.fragmentarTexto(detallesVenta, 75)+"</b>"+
+	        		"</html>"; //Se fragmenta el texto en unidades menores para poder visualizar el contenido de los detalles con mayor ergonomia visual
+	        JOptionPane.showMessageDialog(
+	        	    null,
+	        	    mensaje,
+	        	    "Información de la venta seleccionada del tipo: "+this.mapaStockDatos.get(indice).getDestino(),
+	        	    JOptionPane.INFORMATION_MESSAGE
+	        	);
+	    }
+	}
+	public String fragmentarTexto(String texto, int maxLongitud) {
+	    StringBuilder resultado = new StringBuilder();
+	    String[] palabras = texto.split(" ");
+	    int lineaActual = 0;
+
+	    for (String palabra : palabras) {
+	        if (lineaActual + palabra.length() + 1 > maxLongitud) {
+	            resultado.append("\n");
+	            lineaActual = 0;
+	        }
+	        resultado.append(palabra).append(" ");
+	        lineaActual += palabra.length() + 1;
+	    }
+	    return resultado.toString();
+	}
 }

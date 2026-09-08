@@ -35,6 +35,7 @@ public class CRUDcodConsultas {
 				//Devuelve los codigos de los articulos
 				//Como los productos están agrupados por ID (clave) para apuntar a un objeto (VALOR) se usara HASHMAP
 				stock.put(this.puntero, new ObjetoVenta(     //Guardando en el HASHMAP
+							myrs.getInt(1),    //OBTIENE EL ID (SOLO LECTURA NO SE MODIFICARA SU VALOR NUNCA)
 							myrs.getString(2),    //OBTIENE EL NOMBRE
 							myrs.getString(5),    //OBTIENE EL DESTINO
 							myrs.getString(6),    //OBTIENE EL SECTOR
@@ -58,6 +59,7 @@ public class CRUDcodConsultas {
 
 class ObjetoVenta
 {
+	private int ID;			   //OBTIENE EL ID (SOLO LECTURA NO SE MODIFICARA SU VALOR NUNCA)
 	private String nombre;     //Nombre del producto-servicio-proyecto
 	private String destino;    //Clasificacion: PRODUCTO, SERVICIO, PROYECTO
 	private String sector;     //Subclasificacion dentro de: PRODUCTO, SERVICIO, PROYECTO
@@ -69,8 +71,9 @@ class ObjetoVenta
 	private static int numServicios=0;   //Contabiliza el numero de SERVICIOS que se registran
 	private static int numProyectos=0;   //Contabiliza el numero de PROYECTOS que se registran
 	
-	public ObjetoVenta(String nombre,String destino,String sector,int cantidad,double coste,String detalles)
+	public ObjetoVenta(int ID,String nombre,String destino,String sector,int cantidad,double coste,String detalles)
 	{
+		this.ID=ID;
 		this.nombre=nombre;
 			if("PRODUCTOS".equals(destino.trim())){numProductos++;}
 			if("SERVICIOS".equals(destino.trim())){numServicios++;}
@@ -82,6 +85,9 @@ class ObjetoVenta
 		this.detalles=detalles;
 	}
 
+	public int getID() {
+		return ID;
+	}
 	public String getNombre() {
 		return nombre;
 	}
@@ -135,5 +141,11 @@ class ObjetoVenta
 	    if (servicios > mayor) mayor = servicios;
 	    if (proyectos > mayor) mayor = proyectos;
 	    return mayor;
+	}
+	public static void reiniciarVariablesEstaticas()
+	{
+		numProductos=0;   //Contabiliza el numero de PRODUCTOS que se registran
+		numServicios=0;   //Contabiliza el numero de SERVICIOS que se registran
+		numProyectos=0;   //Contabiliza el numero de PROYECTOS que se registran
 	}
 }
