@@ -18,10 +18,10 @@ class CRUDopciones
 		this.opciones=opciones;
 		switch(opciones)
 		{
-			case "INSERTAR":{this.selector=1;break;}
-			case "ELIMINAR":{this.selector=2;break;}
-			case "ACTUALIZAR":{this.selector=3;break;}
-			case "EXTRAER":{this.selector=4;break;}
+			case "INVITADO":{this.selector=1;break;}          //ENTRADA A USUARIO INVITADO SIN REGISTRO
+			case "CLIENTE":{this.selector=2;break;}           //ENTRADA A USUARIO REGISTRADO 
+			case "ADMINISTRACION":{this.selector=3;break;}    //ENTRADA A EMPRESA ADMINISTRATIVA
+			case "JEFES":{this.selector=4;break;}             //ENTRADA A DIRECTIVOS
 		}
 	}
 	public String getOpciones() {
@@ -34,14 +34,15 @@ class CRUDopciones
 	{
 		switch(this.selector)
 		{
-			case 1:   //INSERTAR ELEMENTOS EN LA BASE DE DATOS
-			{		  //PARA INSERTAR SE HARAN TODOS LOS CAMPOS PERO SI ALGUNO ESTA VACIO SE MODIFICA LA CONSULTA
-				//CARGA LA INTERFAZ DE USUARIO Y CARGA BASE DE DATOS DE STOCK DE PRDUCTOS (CONSULTAS PARA MOSTRAR NO MODIFICAR)
+			case 1:   //INVITADO
+			{		  //SOLO PODRA VER LA TABLA DE STOCK DISPONIBLE Y CALCULAR PRESUPUESTOS
+				//CARGA LA INTERFAZ DE LA TABLA DE STOCK, NO MODIFICA, NI AGREGA NI ELIMINA DATOS DE LA BBDD
 				MarcoInsertar insertar= new MarcoInsertar();
 				break;
 			}
-			case 2:  //ELIMINAR UN ELEMENTO DE LA BBDD
-			{
+			case 2:  //CLIENTE
+			{		 //PODRA VER LA TABLA DE STOCK DISPONIBLE, CALCULAR PRESUPUESTOS Y EN ELLA PEDIR (AGREGAR A LA BBDD)
+					 //CARGA LA BBDD, PUEDE MODIFICAR, AGREGAR, PERO NO ELIMINAR DATOS DE LA BBDD
 					try {
 						//SE ADICIONA EL PETICIONADOR AL USUARIO
 						String producto= JOptionPane.showInputDialog("INTRODUZCA EL ARTÍCULO QUE QUIERE ALMACENAR");
@@ -72,11 +73,12 @@ class CRUDopciones
 				break;
 			}
 			case 3:  //ACTUALIZAR UN ELEMENTO DE LA BBDD
-			{
+			{		//CARGA LA BBDD, PUEDE MODIFICAR, NO PUEDE AGREGAR, PERO SI ELIMINAR DATOS DE LA BBDD
+			
 				break;
 			}
 			case 4:  //EXTRAER UN ELEMENTO DE LA BBDD
-			{
+			{        //CARGA LA BBDD, PUEDE MODIFICAR, AGREGAR Y ELIMINAR DATOS DE LA BBDD
 					try {
 						//1 - CREAR CONEXION
 						//En el caso de MYSQL
