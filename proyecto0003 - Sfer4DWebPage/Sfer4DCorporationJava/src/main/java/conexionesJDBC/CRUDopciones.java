@@ -24,12 +24,6 @@ class CRUDopciones
 			case "JEFES":{this.selector=4;break;}             //ENTRADA A DIRECTIVOS
 		}
 	}
-	public String getOpciones() {
-		return opciones;
-	}
-	public void setOpciones(String opciones) {
-		this.opciones = opciones;
-	}
 	public void selectorCRUD()
 	{
 		switch(this.selector)
@@ -109,5 +103,11 @@ class CRUDopciones
 			}
 			
 		}
+	}
+	public String getOpciones() {
+		return opciones;
+	}
+	public void setOpciones(String opciones) {
+		this.opciones = opciones;
 	}
 }
