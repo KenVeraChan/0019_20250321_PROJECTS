@@ -20,11 +20,10 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class ConectaGestion {
+public class PanelPrincipal {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -68,8 +67,7 @@ class PanelHalldeApp extends JPanel implements ActionListener
 	private JLabel tituloCliente, tituloAdministracion, tituloJefe;                     //TITULO DEL CLIENTE, ADMINISTRACION Y JEFES
 	private JLabel nombreCliente, nombreAdministracion, nombreJefe;                       //TITULO DE LA ETIQUETA DE LA CAJA NOMBRE      
 	private JLabel passwordCliente, passwordAdministracion, passwordJefe;                 //TITULO DE LA ETIQUETA DE LA CAJA CONTRASEÑA      
-	private JTextField cajanNombreCliente, cajanNombreAdministracion, cajanNombreJefe;     //CAJA DEL CONTENIDO DEL NOMBRE DEL USUARIO
-	private JTextField cajaPasswordCliente, cajaPasswordAdministracion, cajaPasswordJefe;  //CAJA DEL CONTENIDO DEL NOMBRE DEL USUARIO
+	private JTextField cajanNombre, cajaPassword;  //CAJA DEL CONTENIDO DEL NOMBRE DEL USUARIO
     
     //4) NECESITAMOS CERRAR ESTE MISMO JFRAME TRAS DARLE ACEPTAR LA ELECCION DEL TIPO DE USUARIO
     private JFrame tableroBase;
@@ -140,58 +138,14 @@ class PanelHalldeApp extends JPanel implements ActionListener
 	 		this.passwordCliente.setBounds(30, 250, 240, 20);
 	 		add(this.passwordCliente);
 	 		
-	 		this.cajanNombreCliente= new JTextField("Indique nombre Cliente");
-	 		this.cajanNombreCliente.setBounds(30, 210, 240, 20);
-	 		add(this.cajanNombreCliente);
+	 		this.cajanNombre= new JTextField("Indique nombre Cliente");
+	 		this.cajanNombre.setBounds(30, 210, 240, 20);
+	 		add(this.cajanNombre);
 	 		
-	 		// ESTADO INICIAL DE LA CAJA CLIENTE
-	 		this.cajanNombreCliente.setText("Nombre Cliente...");
-	 		this.cajanNombreCliente.setForeground(Color.GRAY);
+	 		this.cajaPassword= new JTextField("Indique contraseña Cliente");
+	 		this.cajaPassword.setBounds(30, 290, 240, 20);
+	 		add(this.cajaPassword);
 	
-	 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
-	 		this.cajanNombreCliente.addFocusListener(new FocusAdapter() {
-	 		    @Override
-	 		    public void focusGained(FocusEvent d) {
-	 		        if (cajanNombreCliente.getText().equals("Nombre Cliente...")) {
-	 		        	cajanNombreCliente.setText("");
-	 		        	cajanNombreCliente.setForeground(Color.BLACK);
-	 		        }
-	 		    }
-	 		    @Override
-	 		    public void focusLost(FocusEvent d) {
-	 		        if (cajanNombreCliente.getText().isEmpty()) {
-	 		        	cajanNombreCliente.setText("Nombre Cliente...");
-	 		        	cajanNombreCliente.setForeground(Color.GRAY);
-	 		        }
-	 		    }
-	 		});
-	 		
-	 		this.cajaPasswordCliente= new JTextField("Indique contraseña Cliente");
-	 		this.cajaPasswordCliente.setBounds(30, 290, 240, 20);
-	 		add(this.cajaPasswordCliente);
-	 		
-	 		// ESTADO INICIAL DE LA CAJA CONTRASEÑA
-	 		this.cajaPasswordCliente.setText("Contraseña Cliente...");
-	 		this.cajaPasswordCliente.setForeground(Color.GRAY);
-	
-	 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
-	 		this.cajaPasswordCliente.addFocusListener(new FocusAdapter() {
-	 		    @Override
-	 		    public void focusGained(FocusEvent e) {
-	 		        if (cajaPasswordCliente.getText().equals("Contraseña Cliente...")) {
-	 		        	cajaPasswordCliente.setText("");
-	 		        	cajaPasswordCliente.setForeground(Color.BLACK);
-	 		        }
-	 		    }
-	 		    @Override
-	 		    public void focusLost(FocusEvent e) {
-	 		        if (cajaPasswordCliente.getText().isEmpty()) {
-	 		        	cajaPasswordCliente.setText("Contraseña Cliente...");
-	 		        	cajaPasswordCliente.setForeground(Color.GRAY);
-	 		        }
-	 		    }
-	 		});
-	 		
 	 		//ADMINISTRADOR
 	 		//DECLARACION DE LOS COMPONENTES DEL ADMINISTRADOR
 	 		this.tituloAdministracion= new JLabel("BIENVENIDO/A INTRODUZCA SUS DATOS");
@@ -205,59 +159,6 @@ class PanelHalldeApp extends JPanel implements ActionListener
 	 		this.passwordAdministracion= new JLabel("CONTRASEÑA ADMINISTRADOR");
 	 		this.passwordAdministracion.setBounds(30, 250, 240, 20);
 	 		add(this.passwordAdministracion);
-	 		
-	 		this.cajanNombreAdministracion= new JTextField("Indique nombre Administrador");
-	 		this.cajanNombreAdministracion.setBounds(30, 210, 240, 20);
-	 		add(this.cajanNombreAdministracion);
-	 		
-	 		// ESTADO INICIAL DE LA CAJA CLIENTE
-	 		this.cajanNombreAdministracion.setText("Nombre Administrador...");
-	 		this.cajanNombreAdministracion.setForeground(Color.GRAY);
-
-	 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
-	 		this.cajanNombreAdministracion.addFocusListener(new FocusAdapter() {
-	 		    @Override
-	 		    public void focusGained(FocusEvent d) {
-	 		        if (cajanNombreAdministracion.getText().equals("Nombre Administrador...")) {
-	 		        	cajanNombreAdministracion.setText("");
-	 		        	cajanNombreAdministracion.setForeground(Color.BLACK);
-	 		        }
-	 		    }
-	 		    @Override
-	 		    public void focusLost(FocusEvent d) {
-	 		        if (cajanNombreAdministracion.getText().isEmpty()) {
-	 		        	cajanNombreAdministracion.setText("Nombre Administrador...");
-	 		        	cajanNombreAdministracion.setForeground(Color.GRAY);
-	 		        }
-	 		    }
-	 		});
-	 		
-	 		this.cajaPasswordAdministracion= new JTextField("Indique contraseña de Administrador");
-	 		this.cajaPasswordAdministracion.setBounds(30, 290, 240, 20);
-	 		add(this.cajaPasswordAdministracion);
-	 		
-	 		// ESTADO INICIAL DE LA CAJA CONTRASEÑA
-	 		this.cajaPasswordAdministracion.setText("Contraseña Administrador...");
-	 		this.cajaPasswordAdministracion.setForeground(Color.GRAY);
-
-	 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
-	 		this.cajaPasswordAdministracion.addFocusListener(new FocusAdapter() {
-	 		    @Override
-	 		    public void focusGained(FocusEvent e) {
-	 		        if (cajaPasswordAdministracion.getText().equals("Contraseña Administrador...")) {
-	 		        	cajaPasswordAdministracion.setText("");
-	 		        	cajaPasswordAdministracion.setForeground(Color.BLACK);
-	 		        }
-	 		    }
-	 		    @Override
-	 		    public void focusLost(FocusEvent e) {
-	 		        if (cajaPasswordAdministracion.getText().isEmpty()) {
-	 		        	cajaPasswordAdministracion.setText("Contraseña Administrador...");
-	 		        	cajaPasswordAdministracion.setForeground(Color.GRAY);
-	 		        }
-	 		    }
-	 		});
-	 		
 	 		
 	 		//JEFES
 	 		//DECLARACION DE LOS COMPONENTES DE LOS JEFES
@@ -273,77 +174,22 @@ class PanelHalldeApp extends JPanel implements ActionListener
 	 		this.passwordJefe.setBounds(30, 250, 240, 20);
 	 		add(this.passwordJefe);
 	 		
-	 		this.cajanNombreJefe= new JTextField("Indique nombre Jefe/a");
-	 		this.cajanNombreJefe.setBounds(30, 210, 240, 20);
-	 		add(this.cajanNombreJefe);
-	 		
-	 		// ESTADO INICIAL DE LA CAJA CLIENTE
-	 		this.cajanNombreJefe.setText("Nombre Jefe/a...");
-	 		this.cajanNombreJefe.setForeground(Color.GRAY);
-
-	 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
-	 		this.cajanNombreJefe.addFocusListener(new FocusAdapter() {
-	 		    @Override
-	 		    public void focusGained(FocusEvent d) {
-	 		        if (cajanNombreJefe.getText().equals("Nombre Jefe/a...")) {
-	 		        	cajanNombreJefe.setText("");
-	 		        	cajanNombreJefe.setForeground(Color.BLACK);
-	 		        }
-	 		    }
-	 		    @Override
-	 		    public void focusLost(FocusEvent d) {
-	 		        if (cajanNombreJefe.getText().isEmpty()) {
-	 		        	cajanNombreJefe.setText("Nombre Jefe/a...");
-	 		        	cajanNombreJefe.setForeground(Color.GRAY);
-	 		        }
-	 		    }
-	 		});
-	 		
-	 		this.cajaPasswordJefe= new JTextField("Indique contraseña del Jefe/a");
-	 		this.cajaPasswordJefe.setBounds(30, 290, 240, 20);
-	 		add(this.cajaPasswordJefe);
-	 		
-	 		// ESTADO INICIAL DE LA CAJA CONTRASEÑA
-	 		this.cajaPasswordJefe.setText("Contraseña Jefe/a...");
-	 		this.cajaPasswordJefe.setForeground(Color.GRAY);
-
-	 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
-	 		this.cajaPasswordJefe.addFocusListener(new FocusAdapter() {
-	 		    @Override
-	 		    public void focusGained(FocusEvent e) {
-	 		        if (cajaPasswordJefe.getText().equals("Contraseña Jefe/a...")) {
-	 		        	cajaPasswordJefe.setText("");
-	 		        	cajaPasswordJefe.setForeground(Color.BLACK);
-	 		        }
-	 		    }
-	 		    @Override
-	 		    public void focusLost(FocusEvent e) {
-	 		        if (cajaPasswordJefe.getText().isEmpty()) {
-	 		        	cajaPasswordJefe.setText("Contraseña Jefe/a...");
-	 		        	cajaPasswordJefe.setForeground(Color.GRAY);
-	 		        }
-	 		    }
-	 		});
-	 		
 		//ESTADO INICIAL DE EJECUCIÓN PARA EVITAR CONFICTOS DE INTERFERENCIAS VISUALES 
 	 	//SE QUITA EL CLIENTE
  			this.tituloCliente.setVisible(false);
 	 		this.nombreCliente.setVisible(false);
 	 		this.passwordCliente.setVisible(false);
-	 		this.cajanNombreCliente.setVisible(false);
-	 		this.cajaPasswordCliente.setVisible(false);
  		//SE PONE EL ADMINISTRADOR
 	 		this.tituloAdministracion.setVisible(false);
 	 		this.nombreAdministracion.setVisible(false);
 	 		this.passwordAdministracion.setVisible(false);
-	 		this.cajanNombreAdministracion.setVisible(false);
-	 		this.cajaPasswordAdministracion.setVisible(false);
 	 	//SE QUITA EL JEFE/A
 	 		this.tituloJefe.setVisible(false);
 	 		this.nombreJefe.setVisible(false);
 	 		this.passwordJefe.setVisible(false);
-	 		this.cajanNombreJefe.setVisible(false);
-	 		this.cajaPasswordJefe.setVisible(false);
+	 	//SE PONEN LAS CAJAS COMUNNES PARA TODOS INHABILITADOS
+	 		this.cajanNombre.setVisible(false);
+	 		this.cajaPassword.setVisible(false);
 	}
 	public void mostrarPanelConcreto(String valor)
 	{
@@ -358,20 +204,17 @@ class PanelHalldeApp extends JPanel implements ActionListener
 		 			this.tituloCliente.setVisible(false);
 			 		this.nombreCliente.setVisible(false);
 			 		this.passwordCliente.setVisible(false);
-			 		this.cajanNombreCliente.setVisible(false);
-			 		this.cajaPasswordCliente.setVisible(false);
 		 		//SE PONE EL ADMINISTRADOR
 			 		this.tituloAdministracion.setVisible(false);
 			 		this.nombreAdministracion.setVisible(false);
 			 		this.passwordAdministracion.setVisible(false);
-			 		this.cajanNombreAdministracion.setVisible(false);
-			 		this.cajaPasswordAdministracion.setVisible(false);
 			 	//SE QUITA EL JEFE/A
 			 		this.tituloJefe.setVisible(false);
 			 		this.nombreJefe.setVisible(false);
 			 		this.passwordJefe.setVisible(false);
-			 		this.cajanNombreJefe.setVisible(false);
-			 		this.cajaPasswordJefe.setVisible(false);
+			 	//SE QUITAN LAS CAJAS DE LOS CAMPOS DE FORMUALRIO EN CASO DE APARECER LOGIN
+			 		this.cajanNombre.setVisible(false);
+			 		this.cajaPassword.setVisible(false);
 		 		break;
 		 	}     
 		 case "CLIENTE":  //ENTRADA A USUARIO REGISTRADO
@@ -382,20 +225,60 @@ class PanelHalldeApp extends JPanel implements ActionListener
 		 			this.tituloCliente.setVisible(true);
 			 		this.nombreCliente.setVisible(true);
 			 		this.passwordCliente.setVisible(true);
-			 		this.cajanNombreCliente.setVisible(true);
-			 		this.cajaPasswordCliente.setVisible(true);
 		 		//SE PONE EL ADMINISTRADOR
 			 		this.tituloAdministracion.setVisible(false);
 			 		this.nombreAdministracion.setVisible(false);
 			 		this.passwordAdministracion.setVisible(false);
-			 		this.cajanNombreAdministracion.setVisible(false);
-			 		this.cajaPasswordAdministracion.setVisible(false);
 			 	//SE QUITA EL JEFE/A
 			 		this.tituloJefe.setVisible(false);
 			 		this.nombreJefe.setVisible(false);
 			 		this.passwordJefe.setVisible(false);
-			 		this.cajanNombreJefe.setVisible(false);
-			 		this.cajaPasswordJefe.setVisible(false);
+			 	//SE PONEN LAS CAJAS DEL FORMULARIO DEL CLIENTE Y SE ADAPTAN AL CLIENTE
+			 		this.cajanNombre.setVisible(true);
+			 		this.cajaPassword.setVisible(true);
+			 		
+		 		//SE CREA ESTADO INICIAL DE LA CAJA CLIENTE
+		 		this.cajanNombre.setText("Nombre Cliente...");
+		 		this.cajanNombre.setForeground(Color.GRAY);	
+			 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
+			 		this.cajanNombre.addFocusListener(new FocusAdapter() {
+			 		    @Override
+			 		    public void focusGained(FocusEvent d) {
+			 		        if (cajanNombre.getText().equals("Nombre Cliente...")) {
+			 		        	cajanNombre.setText("");
+			 		        	cajanNombre.setForeground(Color.BLACK);
+			 		        }
+			 		    }
+			 		    @Override
+			 		    public void focusLost(FocusEvent d) {
+			 		        if (cajanNombre.getText().isEmpty()) {
+			 		        	cajanNombre.setText("Nombre Cliente...");
+			 		        	cajanNombre.setForeground(Color.GRAY);
+			 		        }
+			 		    }
+			 		});
+			 		
+			 		// ESTADO INICIAL DE LA CAJA CONTRASEÑA
+			 		this.cajaPassword.setText("Contraseña Cliente...");
+			 		this.cajaPassword.setForeground(Color.GRAY);
+			
+			 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
+			 		this.cajaPassword.addFocusListener(new FocusAdapter() {
+			 		    @Override
+			 		    public void focusGained(FocusEvent e) {
+			 		        if (cajaPassword.getText().equals("Contraseña Cliente...")) {
+			 		        	cajaPassword.setText("");
+			 		        	cajaPassword.setForeground(Color.BLACK);
+			 		        }
+			 		    }
+			 		    @Override
+			 		    public void focusLost(FocusEvent e) {
+			 		        if (cajaPassword.getText().isEmpty()) {
+			 		        	cajaPassword.setText("Contraseña Cliente...");
+			 		        	cajaPassword.setForeground(Color.GRAY);
+			 		        }
+			 		    }
+			 		});
 		 		break;
 		 	}       
 		 case "ADMINISTRACION":  //ENTRADA A EMPRESA ADMINISTRATIVA
@@ -406,20 +289,59 @@ class PanelHalldeApp extends JPanel implements ActionListener
 		 			this.tituloCliente.setVisible(false);
 			 		this.nombreCliente.setVisible(false);
 			 		this.passwordCliente.setVisible(false);
-			 		this.cajanNombreCliente.setVisible(false);
-			 		this.cajaPasswordCliente.setVisible(false);
 		 		//SE PONE EL ADMINISTRADOR
 			 		this.tituloAdministracion.setVisible(true);
 			 		this.nombreAdministracion.setVisible(true);
 			 		this.passwordAdministracion.setVisible(true);
-			 		this.cajanNombreAdministracion.setVisible(true);
-			 		this.cajaPasswordAdministracion.setVisible(true);
 			 	//SE QUITA EL JEFE/A
 			 		this.tituloJefe.setVisible(false);
 			 		this.nombreJefe.setVisible(false);
 			 		this.passwordJefe.setVisible(false);
-			 		this.cajanNombreJefe.setVisible(false);
-			 		this.cajaPasswordJefe.setVisible(false);
+			 	//SE PONEN LAS CAJAS DEL FORMULARIO DEL ADMINISTRADOR Y SE ADAPTAN AL ADMINISTRADOR
+			 		this.cajanNombre.setVisible(true);
+			 		this.cajaPassword.setVisible(true);	
+			 		//SE CREA ESTADO INICIAL DE LA CAJA CLIENTE
+			 		this.cajanNombre.setText("Nombre Administrador...");
+			 		this.cajanNombre.setForeground(Color.GRAY);	
+				 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
+				 		this.cajanNombre.addFocusListener(new FocusAdapter() {
+				 		    @Override
+				 		    public void focusGained(FocusEvent d) {
+				 		        if (cajanNombre.getText().equals("Nombre Administrador...")) {
+				 		        	cajanNombre.setText("");
+				 		        	cajanNombre.setForeground(Color.BLACK);
+				 		        }
+				 		    }
+				 		    @Override
+				 		    public void focusLost(FocusEvent d) {
+				 		        if (cajanNombre.getText().isEmpty()) {
+				 		        	cajanNombre.setText("Nombre Administrador...");
+				 		        	cajanNombre.setForeground(Color.GRAY);
+				 		        }
+				 		    }
+				 		});
+				 		
+				 		// ESTADO INICIAL DE LA CAJA CONTRASEÑA
+				 		this.cajaPassword.setText("Contraseña Administrador...");
+				 		this.cajaPassword.setForeground(Color.GRAY);
+				
+				 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
+				 		this.cajaPassword.addFocusListener(new FocusAdapter() {
+				 		    @Override
+				 		    public void focusGained(FocusEvent e) {
+				 		        if (cajaPassword.getText().equals("Contraseña Administrador...")) {
+				 		        	cajaPassword.setText("");
+				 		        	cajaPassword.setForeground(Color.BLACK);
+				 		        }
+				 		    }
+				 		    @Override
+				 		    public void focusLost(FocusEvent e) {
+				 		        if (cajaPassword.getText().isEmpty()) {
+				 		        	cajaPassword.setText("Contraseña Administrador...");
+				 		        	cajaPassword.setForeground(Color.GRAY);
+				 		        }
+				 		    }
+				 		});
 		 		break;
 		 	}   
 		 case "JEFES":    //ENTRADA A DIRECTIVOS
@@ -430,21 +352,60 @@ class PanelHalldeApp extends JPanel implements ActionListener
 		 			this.tituloCliente.setVisible(false);
 			 		this.nombreCliente.setVisible(false);
 			 		this.passwordCliente.setVisible(false);
-			 		this.cajanNombreCliente.setVisible(false);
-			 		this.cajaPasswordCliente.setVisible(false);
 		 		//SE QUITA EL ADMINISTRADOR
 			 		this.tituloAdministracion.setVisible(false);
 			 		this.nombreAdministracion.setVisible(false);
 			 		this.passwordAdministracion.setVisible(false);
-			 		this.cajanNombreAdministracion.setVisible(false);
-			 		this.cajaPasswordAdministracion.setVisible(false);
 			 	//SE PONE EL JEFE/A
 			 		this.tituloJefe.setVisible(true);
 			 		this.nombreJefe.setVisible(true);
 			 		this.passwordJefe.setVisible(true);
-			 		this.cajanNombreJefe.setVisible(true);
-			 		this.cajaPasswordJefe.setVisible(true);
-		 		break;
+				//SE PONEN LAS CAJAS DEL FORMULARIO DEL JEFE Y SE ADAPTAN AL JEFE
+			 		this.cajanNombre.setVisible(true);
+			 		this.cajaPassword.setVisible(true);	
+			 		//SE CREA ESTADO INICIAL DE LA CAJA CLIENTE
+			 		this.cajanNombre.setText("Nombre Jefe/a...");
+			 		this.cajanNombre.setForeground(Color.GRAY);	
+				 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
+				 		this.cajanNombre.addFocusListener(new FocusAdapter() {
+				 		    @Override
+				 		    public void focusGained(FocusEvent d) {
+				 		        if (cajanNombre.getText().equals("Nombre Jefe/a...")) {
+				 		        	cajanNombre.setText("");
+				 		        	cajanNombre.setForeground(Color.BLACK);
+				 		        }
+				 		    }
+				 		    @Override
+				 		    public void focusLost(FocusEvent d) {
+				 		        if (cajanNombre.getText().isEmpty()) {
+				 		        	cajanNombre.setText("Nombre Jefe/a...");
+				 		        	cajanNombre.setForeground(Color.GRAY);
+				 		        }
+				 		    }
+				 		});
+				 		
+				 		// ESTADO INICIAL DE LA CAJA CONTRASEÑA
+				 		this.cajaPassword.setText("Contraseña Jefe/a...");
+				 		this.cajaPassword.setForeground(Color.GRAY);
+				
+				 		//CREA EL EFECTO DE PLACEHOLDER SEGUN POSEA EL FOCO O LO PIERDA
+				 		this.cajaPassword.addFocusListener(new FocusAdapter() {
+				 		    @Override
+				 		    public void focusGained(FocusEvent e) {
+				 		        if (cajaPassword.getText().equals("Contraseña Jefe/a...")) {
+				 		        	cajaPassword.setText("");
+				 		        	cajaPassword.setForeground(Color.BLACK);
+				 		        }
+				 		    }
+				 		    @Override
+				 		    public void focusLost(FocusEvent e) {
+				 		        if (cajaPassword.getText().isEmpty()) {
+				 		        	cajaPassword.setText("Contraseña Jefe/a...");
+				 		        	cajaPassword.setForeground(Color.GRAY);
+				 		        }
+				 		    }
+				 		});
+			 	break;
 		 	}     
 		 default:break; //No hace nada al respecto
 		 }
@@ -464,22 +425,23 @@ class PanelHalldeApp extends JPanel implements ActionListener
 		// TODO Auto-generated method stub
 		 Object elegido = this.eleccionUsuario.getSelectedItem().toString();   //Deteccion del JCOMBOBOX ELEGIDO
 		 String parada = e.getActionCommand();   //Deteccion del boton de aceptar
-		 CRUDopciones cargarInterfaz;
+		 ConsultasTipoUsuario cargarInterfaz;
 		 String eleccion="";
 		 
 		 switch(elegido.toString())
 		 {
-		 case "INVITADO":{eleccion="INVITADO";break;}     //ENTRADA A USUARIO INVITADO SIN REGISTRO
-		 case "CLIENTE":{eleccion="CLIENTE";break;}       //ENTRADA A USUARIO REGISTRADO
-		 case "ADMINISTRACION":{eleccion="ADMINISTRACION";break;}   //ENTRADA A EMPRESA ADMINISTRATIVA
-		 case "JEFES":{eleccion="JEFES";break;}     //ENTRADA A DIRECTIVOS
-		 default:break; //No hace nada al respecto
+			 case "INVITADO":{eleccion="INVITADO";break;}     //ENTRADA A USUARIO INVITADO SIN REGISTRO
+			 case "CLIENTE":{eleccion="CLIENTE";break;}       //ENTRADA A USUARIO REGISTRADO
+			 case "ADMINISTRACION":{eleccion="ADMINISTRACION";break;}   //ENTRADA A EMPRESA ADMINISTRATIVA
+			 case "JEFES":{eleccion="JEFES";break;}     //ENTRADA A DIRECTIVOS
+			 default:break; //No hace nada al respecto
 		 }
 		 if(parada.contains("ACEPTAR"))
 		 {
 		   this.tableroBase.dispose();  //Al darle a aceptar se cierra el panel completo
-		   cargarInterfaz= new CRUDopciones(eleccion);    //Asigna la eleccion del usuario
-		   cargarInterfaz.selectorCRUD();    //Carga la interfaz del usuario
+		   cargarInterfaz= new ConsultasTipoUsuario(eleccion);    //Asigna la eleccion del usuario
+		 //Carga la interfaz del usuario: SI ES INVITADO ENVIARAN NULL EN OTRO CASO EL CONTENIDO DE AMBAS JTEXTFIELD
+		   cargarInterfaz.selectorCRUD(this.cajanNombre.getText(),this.cajaPassword.getText());    
 		 }
 	}
 }

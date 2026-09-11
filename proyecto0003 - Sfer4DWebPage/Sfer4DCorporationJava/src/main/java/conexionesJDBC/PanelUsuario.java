@@ -6,22 +6,18 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.URL;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -34,25 +30,37 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import javax.swing.Timer;
 
 import org.jdesktop.swingx.JXDatePicker;
 
-public class CRUDcodInsercciones {
+public class PanelUsuario {
 
 }
 
 //AREA SE INSERCCIONES
-class MarcoInsertar extends JFrame
+class MarcoBaseOp extends JFrame
 {
-	public MarcoInsertar()
-	{
+	public MarcoBaseOp()
+	{	//ZONA DE MOSTRAR AL USUARIO INVITADO QUE DEBE VER
+		setBounds(250,100,400,200);    //No se necesitara que ocupe tanto en vertical
+		setTitle("AREA DE USUARIO INVITADO");
+		setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
+
+		setResizable(false);
+		PanelInsertar lamina1= new PanelInsertar("ficherosUtilizados/paisaje.jpg",30,this,false);  //No se muestra formulario
+			//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
+		add(lamina1);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+	}
+	public MarcoBaseOp(ClienteRegistrado clienteLogin)
+	{	//ZONA DE INSERCCIONES USUARIO CLIENTE, ADMINISTRADOR O JEFE
 		setBounds(250,100,480,530);
 		setTitle("AREA DE INSERCCIÓN COMPRAS");
 		setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
 
 		setResizable(false);
-		PanelInsertar lamina1= new PanelInsertar("ficherosUtilizados/paisaje.jpg",30,this);
+		PanelInsertar lamina1= new PanelInsertar("ficherosUtilizados/paisaje.jpg",30,this,true);  //Si se muestra formulario
 			//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
 		add(lamina1);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,19 +69,19 @@ class MarcoInsertar extends JFrame
 }
 class PanelInsertar extends JPanel implements ActionListener
 {
-	private MarcoInsertar ventanaBase;
+	private MarcoBaseOp ventanaBase;
     private BufferedImage imagen;
     private float alfaImagen = 1.0f; // opaco por defecto
  
 	//1) JLABELS DE LAS ENTRADAS DE DATOS
-    			//EL NUMERO SE PONDRA COMO BOTON (DATOS DEL USUARIO)
-	private JLabel nombre, telefono, direccion, correo;  
+    		//EL NUMERO SE PONDRA COMO BOTON (DATOS DEL USUARIO)
+	private JLabel nombre, telefono, direccion, correo, tituloInvitado;  
 
-				//DATOS DEL PRODUCTO O SERVICIO PEDIDO (DATOS DEL PEDIDO)
+			//DATOS DEL PRODUCTO O SERVICIO PEDIDO (DATOS DEL PEDIDO)
 	private JLabel concepto, departamento, cantidad, costeUnitario, costeTotal, fechaPedido, referencia, entregado;    
 	
 	//2) JTEXTAREAS DE LAS ENTRADAS DE DATOS
-				//DATOS DEL USUARIO
+			//DATOS DEL USUARIO
 	private JTextArea cajaNombre, cajaTelefono, cajaDireccion, cajaCorreo;
 	
 				//DATOS DEL PRODUCTO O SERVICIO PEDIDO: 
@@ -91,10 +99,11 @@ class PanelInsertar extends JPanel implements ActionListener
 	private JXDatePicker datePicker = new JXDatePicker();
     private Date calendario;
 
-	public PanelInsertar(String ruta, int transparencia, MarcoInsertar ventanaBase)
+	public PanelInsertar(String ruta, int transparencia, MarcoBaseOp ventanaBase,Boolean MostrarFormulario)
 	{
         this.ventanaBase = ventanaBase;   //Se recoge el objeto creado del JFrame para poder moverla al final en el boton mostrar STOCK
-	    /////// TRATAMIENTO DE FONDO LAMINA /////////////////////
+
+        /////// TRATAMIENTO DE FONDO LAMINA /////////////////////
         try {
             if (ruta.startsWith("http")) {
                 // URL remota
@@ -118,58 +127,77 @@ class PanelInsertar extends JPanel implements ActionListener
         }	
 	//5) ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
 		setLayout(null);  //Para que respeten el setBounds
+		
+        if(MostrarFormulario)
+        {
+			//6) ASIGNACION DE JLABELS A LAS ENTRADAS DE DATOS
+						
+				this.nombre= new JLabel("NOMBRE");   			  this.nombre.setBounds(30,30,150,20);         add(this.nombre);              
+				this.telefono= new JLabel("NÚMERO TELEFONO");     this.telefono.setBounds(30, 60,150,20);      add(this.telefono);
+				this.direccion= new JLabel("DIRECCION");          this.direccion.setBounds(30,90,150,20);      add(this.direccion);
+				this.correo= new JLabel("CORREO ELECTRÓNICO");    this.correo.setBounds(30,120,150,20);        add(this.correo);
 			
-	//6) ASIGNACION DE JLABELS A LAS ENTRADAS DE DATOS
+				this.concepto=new JLabel("CONCEPTO");             this.concepto.setBounds(30,180,150,20);      add(this.concepto);
+				this.departamento= new JLabel("DEPARTAMENTO");    this.departamento.setBounds(30,210,150,20);  add(this.departamento);
+				this.cantidad= new JLabel("CANTIDAD");            this.cantidad.setBounds(30,240,150,20);      add(this.cantidad);
+				this.costeUnitario= new JLabel("COSTE UNITARIO"); this.costeUnitario.setBounds(30,270,150,20); add(this.costeUnitario);
+				this.costeTotal= new JLabel("COSTE TOTAL");       this.costeTotal.setBounds(30,300,150,20);    add(this.costeTotal);
+				this.fechaPedido= new JLabel("FECHA PEDIDO");     this.fechaPedido.setBounds(30,330,150,20);   add(this.fechaPedido);
+				this.referencia= new JLabel("REFERENCIA");        this.referencia.setBounds(30,360,150,20);    add(this.referencia);
+				this.entregado= new JLabel("ENTREGADO");          this.entregado.setBounds(30,390,150,20);     add(this.entregado); 
 				
-		setLayout(null);  //Para que respeten el setBounds
-		this.nombre= new JLabel("NOMBRE");   			  this.nombre.setBounds(30,30,150,20);         add(this.nombre);              
-		this.telefono= new JLabel("NÚMERO TELEFONO");     this.telefono.setBounds(30, 60,150,20);      add(this.telefono);
-		this.direccion= new JLabel("DIRECCION");          this.direccion.setBounds(30,90,150,20);      add(this.direccion);
-		this.correo= new JLabel("CORREO ELECTRÓNICO");    this.correo.setBounds(30,120,150,20);        add(this.correo);
-	
-		this.concepto=new JLabel("CONCEPTO");             this.concepto.setBounds(30,180,150,20);      add(this.concepto);
-		this.departamento= new JLabel("DEPARTAMENTO");    this.departamento.setBounds(30,210,150,20);  add(this.departamento);
-		this.cantidad= new JLabel("CANTIDAD");            this.cantidad.setBounds(30,240,150,20);      add(this.cantidad);
-		this.costeUnitario= new JLabel("COSTE UNITARIO"); this.costeUnitario.setBounds(30,270,150,20); add(this.costeUnitario);
-		this.costeTotal= new JLabel("COSTE TOTAL");       this.costeTotal.setBounds(30,300,150,20);    add(this.costeTotal);
-		this.fechaPedido= new JLabel("FECHA PEDIDO");     this.fechaPedido.setBounds(30,330,150,20);   add(this.fechaPedido);
-		this.referencia= new JLabel("REFERENCIA");        this.referencia.setBounds(30,360,150,20);    add(this.referencia);
-		this.entregado= new JLabel("ENTREGADO");          this.entregado.setBounds(30,390,150,20);     add(this.entregado); 
+			//7) ASIGNACION JTEXTAREAS Y JCOMBOBOX A LAS ENTRADAS DE DATOS
+				
+				//TEXTAREA y JCOMBOBOX (Y DATEPIKER PARA FECHA UNA UNICA INSERCCION)
+				this.cajaNombre=new JTextArea();        this.cajaNombre.setBounds(210,30,210,20);      add(this.cajaNombre);
+				this.cajaTelefono=new JTextArea();	    this.cajaTelefono.setBounds(280,60,140,20);    add(this.cajaTelefono);
+				this.cajaDireccion=new JTextArea();	    this.cajaDireccion.setBounds(210,90,210,20);   add(this.cajaDireccion);
+				this.cajaCorreo=new JTextArea();        this.cajaCorreo.setBounds(210,120,210,20);     add(this.cajaCorreo);
+				
+				this.cajaConcepto=new JTextArea();               this.cajaConcepto.setBounds(210,180,210,20);       add(this.cajaConcepto);
+				this.cajaDepartamento= new JComboBox<String>();  this.cajaDepartamento.setBounds(210,210,210,20);   add(this.cajaDepartamento);
+				this.cajaCantidad= new JComboBox<String>();      this.cajaCantidad.setBounds(210,240,210,20);     	add(this.cajaCantidad);
+				this.cajaCosteUnitario=new JTextArea();          this.cajaCosteUnitario.setBounds(210,270,210,20);  add(this.cajaCosteUnitario);		
+				this.cajaCostetotal=new JTextArea();          	 this.cajaCostetotal.setBounds(210,300,210,20);     add(this.cajaCostetotal);		
 		
-	//7) ASIGNACION JTEXTAREAS Y JCOMBOBOX A LAS ENTRADAS DE DATOS
-		
-		//TEXTAREA y JCOMBOBOX (Y DATEPIKER PARA FECHA UNA UNICA INSERCCION)
-		this.cajaNombre=new JTextArea();        this.cajaNombre.setBounds(210,30,210,20);      add(this.cajaNombre);
-		this.cajaTelefono=new JTextArea();	    this.cajaTelefono.setBounds(280,60,140,20);    add(this.cajaTelefono);
-		this.cajaDireccion=new JTextArea();	    this.cajaDireccion.setBounds(210,90,210,20);   add(this.cajaDireccion);
-		this.cajaCorreo=new JTextArea();        this.cajaCorreo.setBounds(210,120,210,20);     add(this.cajaCorreo);
-		
-		this.cajaConcepto=new JTextArea();               this.cajaConcepto.setBounds(210,180,210,20);       add(this.cajaConcepto);
-		this.cajaDepartamento= new JComboBox<String>();  this.cajaDepartamento.setBounds(210,210,210,20);   add(this.cajaDepartamento);
-		this.cajaCantidad= new JComboBox<String>();      this.cajaCantidad.setBounds(210,240,210,20);     	add(this.cajaCantidad);
-		this.cajaCosteUnitario=new JTextArea();          this.cajaCosteUnitario.setBounds(210,270,210,20);  add(this.cajaCosteUnitario);		
-		this.cajaCostetotal=new JTextArea();          	 this.cajaCostetotal.setBounds(210,300,210,20);     add(this.cajaCostetotal);		
-
-		this.cajaPrefijoTelefono= new JComboBox<String>();  this.cajaPrefijoTelefono.setBounds(210,60,65,21);  add(this.cajaPrefijoTelefono);
-		this.datePicker= new JXDatePicker();      			this.datePicker.setBounds(210,330,210,20);         add(this.datePicker);         
-		this.cajaReferencia= new JTextArea();               this.cajaReferencia.setBounds(210,360,210,20);     add(this.cajaReferencia); 
-		this.cajaEntregado= new JTextArea();				this.cajaEntregado.setBounds(210,390,210,20);      add(this.cajaEntregado);
-		
-		//DECLARACION DE BOTONES Y ACCIONAMIENTOS
-		this.aceptar= new JButton("ACEPTAR");         this.aceptar.setBounds(30,440,100,25);     add(this.aceptar);
-		this.cancelar= new JButton("SALIR");	      this.cancelar.setBounds(150,440,100,25);   add(this.cancelar);
-		this.cargar= new JButton("CARGAR STOCK");	  this.cargar.setBounds(270,440,150,25);     add(this.cargar);
+				this.cajaPrefijoTelefono= new JComboBox<String>();  this.cajaPrefijoTelefono.setBounds(210,60,65,21);  add(this.cajaPrefijoTelefono);
+				this.datePicker= new JXDatePicker();      			this.datePicker.setBounds(210,330,210,20);         add(this.datePicker);         
+				this.cajaReferencia= new JTextArea();               this.cajaReferencia.setBounds(210,360,210,20);     add(this.cajaReferencia); 
+				this.cajaEntregado= new JTextArea();				this.cajaEntregado.setBounds(210,390,210,20);      add(this.cajaEntregado);
+				
+				//DECLARACION DE BOTONES Y ACCIONAMIENTOS
+				this.aceptar= new JButton("ACEPTAR");         this.aceptar.setBounds(30,440,100,25);     add(this.aceptar);
+				this.cancelar= new JButton("SALIR");	      this.cancelar.setBounds(150,440,100,25);   add(this.cancelar);
+				this.cargar= new JButton("CARGAR STOCK");	  this.cargar.setBounds(270,440,150,25);     add(this.cargar);
+					
+				//ESTETICA DE BOTON DE FECHA SWING
+				this.datePicker.setFormats("dd/MM/yyyy");
+				datePicker.addActionListener(e -> {
+				    this.calendario = this.datePicker.getDate();  //Si no se ha elegido fecha se pone Hoy
+				});
 			
-		//ESTETICA DE BOTON DE FECHA SWING
-		this.datePicker.setFormats("dd/MM/yyyy");
-		datePicker.addActionListener(e -> {
-		    this.calendario = this.datePicker.getDate();  //Si no se ha elegido fecha se pone Hoy
-		});
-	
-		//REACCIONES DEL BOTON ACEPTAR Y CANCELAR OPERACIONES
+				//REACCIONES DEL BOTON ACEPTAR Y CANCELAR OPERACIONES
+					this.cancelar.addActionListener(this);
+					this.aceptar.addActionListener(this);
+					this.cargar.addActionListener(this);
+        }
+        else    //SI SOLO ES UN USUARIO INVITADO NO PUEDE MOSTRARSELE EL FORMULARIO COMPLETO SOLO VER STOCK
+        {
+        	//DECLARACION DEL TITULO DE BIENVENIDA AL USUARIO INVITADO
+        	this.tituloInvitado = new JLabel(      //SE EMPLEA HTML PARA PODER PROCESAR EL DECORADO CSS DEL INTERIOR
+        		    "<html><span style='text-shadow: 3px 3px 4px white; font-size:9px;'>BIENVENIDO USUARIO INVITADO - VEA NUESTRO STOCK</span></html>");
+    		this.tituloInvitado.setBounds(30, 30, 340,30);   
+    		this.tituloInvitado.setHorizontalAlignment(SwingConstants.LEFT);   
+    		add(this.tituloInvitado);
+    		
+			//DECLARACION DE BOTONES Y ACCIONAMIENTOS
+			this.cancelar= new JButton("SALIR");	      this.cancelar.setBounds(50,90,100,25);   add(this.cancelar);
+			this.cargar= new JButton("CARGAR STOCK");	  this.cargar.setBounds(170,90,150,25);     add(this.cargar);
+				
+    		//REACCIONES DEL BOTON ACEPTAR Y CANCELAR OPERACIONES
 			this.cancelar.addActionListener(this);
-			this.aceptar.addActionListener(this);
 			this.cargar.addActionListener(this);
+        }
 	}
     @Override
     protected void paintComponent(Graphics g) {
@@ -192,7 +220,7 @@ class PanelInsertar extends JPanel implements ActionListener
 				
 				//1 - CREAR CONEXION
 				//En el caso de MYSQL
-				Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3306/pruebasdef","root","1234");
+				Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
 				
 				//2 - CREAR EL STATENMENT
 				Statement myst = conector.createStatement();
@@ -219,7 +247,7 @@ class PanelInsertar extends JPanel implements ActionListener
         }
         if (src == cargar) {
 			this.cargar.setEnabled(false);    //Se deshabilita el botón para evitar crear más instancias del segundo JFrame
-			CRUDcodConsultas nuevo= new CRUDcodConsultas();
+			PanelProcesamientoStock nuevo= new PanelProcesamientoStock();
 			//ENVIA EL MAPA DE DATOS
         	//Procedemos a mover la ventana hacia la izquierda para mostrar otro panel: el de STOCK disponible
         	MarcoInsertarStock panelStock= new MarcoInsertarStock(true,this.cargar,nuevo.getMapaDatosStock());
@@ -268,7 +296,7 @@ class MarcoInsertarStock extends JFrame
         add(scroll, BorderLayout.CENTER);
 
 
-        //7) Botón VOLVER (debe estar dentro del panel si quieres que se desplace)
+        //7) Botón VOLVER (debe estar dentro del panel anterior si se quiere que se cierre el presente)
         cerrar = new JButton("VOLVER");
         cerrar.setBounds(30,60+63*this.dimensionVerticalScroll, 100, 25);
         cerrar.addActionListener(e -> {

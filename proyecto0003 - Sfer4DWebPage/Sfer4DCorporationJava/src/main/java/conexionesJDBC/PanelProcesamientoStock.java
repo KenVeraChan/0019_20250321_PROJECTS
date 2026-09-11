@@ -10,12 +10,12 @@ import java.util.HashMap;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
-public class CRUDcodConsultas {
+public class PanelProcesamientoStock {
 
 	private HashMap<Integer,ObjetoVenta> stock= new HashMap<>();    //Siempre se debera declarar para evitar errores de NULL
 	private int puntero=1;   //Clave que aumentara en el input del HashMap
 
-	public CRUDcodConsultas()
+	public PanelProcesamientoStock()
 	{
 		//No hace nada
 	}
@@ -24,7 +24,7 @@ public class CRUDcodConsultas {
 		try {
 			//1 - CREAR CONEXION
 			//En el caso de MYSQL
-			Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3306/pruebasdef","root","1234");
+			Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
 			
 			//2 - CREAR EL STATENMENT
 			Statement myst = conector.createStatement();
