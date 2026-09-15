@@ -3,6 +3,7 @@
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
 			<item value="C:\Users\Sfer4\Desktop\AVANCES\0019_20250321_PROJECTS\proyecto0003 - Sfer4DWebPage\Sfer4DCorporationJava"/>
+			<item value="C:\Users\Sfer4\Desktop\AVANCES\0019_20250321_PROJECTS\proyecto0003 - Sfer4DWebPage"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>

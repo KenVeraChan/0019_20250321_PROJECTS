@@ -29,86 +29,95 @@ class ConsultasTipoUsuario
 	}
 	public void selectorCRUD(String usuario,String contrasenia)    //AVISO: Estos datos no deberan estar expuestos en codigo fuente
 	{
-		this.user=usuario == null?"":usuario;               //SE ACTUALIZA EL DATO RECIBIDO DE USUARIO COMPROBANDOSE QUE LLEGO BIEN Y NO ES NULL
-		this.password=contrasenia == null?"":contrasenia;   //SE ACTUALIZA EL DATO RECIBIDO DE PASSWORD COMPROBANDOS QUE LLEGO BIEN Y NO ES NULL
+		this.user=usuario;               //SE ACTUALIZA EL DATO RECIBIDO DE USUARIO COMPROBANDOSE QUE LLEGO BIEN Y NO ES NULL
+		this.password=contrasenia;   //SE ACTUALIZA EL DATO RECIBIDO DE PASSWORD COMPROBANDOS QUE LLEGO BIEN Y NO ES NULL
 		
 		switch(this.selector)
 		{
 			case 1:   //INVITADO
 			{		  //SOLO PODRA VER LA TABLA DE STOCK DISPONIBLE Y CALCULAR PRESUPUESTOS
 				//CARGA LA INTERFAZ DE LA TABLA DE STOCK, NO MODIFICA, NI AGREGA NI ELIMINA DATOS DE LA BBDD
-				MarcoBaseOp insertar= new MarcoBaseOp();
+				MarcoBaseOp insertar= new MarcoBaseOp(false);
 				break;
 			}
 			case 2:  //CLIENTE
 			{		 //PODRA VER LA TABLA DE STOCK DISPONIBLE, CALCULAR PRESUPUESTOS Y EN ELLA PEDIR (AGREGAR A LA BBDD)
 					 //CARGA LA BBDD, PUEDE MODIFICAR, AGREGAR, PERO NO ELIMINAR DATOS DE LA BBDD
-					try {
-						//1) CREAR CONEXION
-						//EN EL CASO DE USO DE MYSQL SE EJECUTA LA CONEXION
-						Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
-						
-						//2) SE PREPARA LA CONSULTA SENSIBLE CON DATOS PERSONALES: USUARIO Y PASSWORD DE LA TABLA: loginclientes
-						String consulta = "SELECT * FROM loginclientes WHERE USUARIO = ? AND CONTRASENIA = ?";
-
-						//3) SE ESTABLECE LA CONSULTA PARA VERIFICAR EL LOGGEADO
-						PreparedStatement cohesion = conector.prepareStatement(consulta);
-							//SE DECLARAN LAS VARIALES DE ENTRADA AL USUARIO CLIENTE
-						cohesion.setString(1, this.user);
-						cohesion.setString(2, this.password);
-						
-						//4) SE COMPRUEBA LA VERACIDAD DE LAS CREDENCIALES INTRODUCIDAS EJECUTANDO LA CONSULTA
-						ResultSet ejecutaConsulta = cohesion.executeQuery();
-
-						if (ejecutaConsulta.next()) {
-						    // Login correcto porque con el metodo next() podemos saber si el siguiente elemento esta vacio o no y si no lo esta es que 
-							 JOptionPane.showInternalMessageDialog(null, "CLIENTE: "+this.user+" CONECTADO", "ESTADO: online", JOptionPane.INFORMATION_MESSAGE);
-							//AHORA PROCEDEMOS A LEER LOS DATOS DEL PUNTERO RESULTSET GUARDANDOLOS EN UN OBJETO DE TIPO: ClienteRegistrado
-							 ClienteRegistrado clienteLogin= new ClienteRegistrado(     //La contrasenia no se puede guardar en un objeto
-									 ejecutaConsulta.getInt(1),       //RECOGE EL ID
-									 ejecutaConsulta.getString(2),    //RECOGE EL NOMBRE
-									 ejecutaConsulta.getLong(4),      //RECOGE EL TELEFONO
-									 ejecutaConsulta.getString(5),    //RECOGE LA DIRECCION
-									 ejecutaConsulta.getString(6),    //RECOGE LA ENTIDAD
-									 ejecutaConsulta.getString(7),    //RECOGE EL CORREO
-									 ejecutaConsulta.getString(8),    //RECOGE LA FOTO IDENTIDAD
-									 ejecutaConsulta.getInt(9)        //RECOGE EL NUMERO DE COMPRAS REALIZADAS
-									 );
-							//5) SI SE HA TERMINADO LA OPERACION DE LOGIN SE CIERRA COMO BUENA PRACTICA
-							ejecutaConsulta.close();  //Liberar los recursos que se usaban en memoria
-							conector.close();  //Liberar el conector que se establecio
+					 if(usuario.equals("") || contrasenia.equals(""))
+					 {			//NO SE HA CONECTADO EL USUARIO
+						 JOptionPane.showInternalMessageDialog(null, "USUARIO O CONTRASEÑA INCORRECTOS", "Estado: Acceso Denegado",  JOptionPane.OK_OPTION);
+						 System.exit(0);  //Se sale de la aplicacion
+					 }
+					 else
+					 {			//SE HA CONTECTADO EL USUARIO
+						try {
+							//1) CREAR CONEXION
+							//EN EL CASO DE USO DE MYSQL SE EJECUTA LA CONEXION
+							Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
 							
-							//6) SE INICIA LA ETAPA DEL PANEL DE CONTROL DEL USUARIO CLIENTE CON SUS COMPRAS Y EL PROCESO CRUD
-							MarcoBaseOp insertar= new MarcoBaseOp(clienteLogin);
-						} else {
-						    // Login incorrecto
-							 JOptionPane.showInternalMessageDialog(null, "USUARIO O CONTRASEÑA INCORRECTOS", "Estado: Acceso Denegado",  JOptionPane.OK_OPTION);
-							//5) SI SE HA TERMINADO LA OPERACION DE LOGIN SE CIERRA COMO BUENA PRACTICA
-							ejecutaConsulta.close();  //Liberar los recursos que se usaban en memoria
-							conector.close();  //Liberar el conector que se establecio
+							//2) SE PREPARA LA CONSULTA SENSIBLE CON DATOS PERSONALES: USUARIO Y PASSWORD DE LA TABLA: loginclientes
+							String consulta = "SELECT * FROM loginclientes WHERE USUARIO = ? AND CONTRASENIA = ?";
+	
+							//3) SE ESTABLECE LA CONSULTA PARA VERIFICAR EL LOGGEADO
+							PreparedStatement cohesion = conector.prepareStatement(consulta);
+								//SE DECLARAN LAS VARIALES DE ENTRADA AL USUARIO CLIENTE
+							cohesion.setString(1, this.user);
+							cohesion.setString(2, this.password);
+							
+							//4) SE COMPRUEBA LA VERACIDAD DE LAS CREDENCIALES INTRODUCIDAS EJECUTANDO LA CONSULTA
+							ResultSet ejecutaConsulta = cohesion.executeQuery();
+	
+							if (ejecutaConsulta.next()) {
+							    // Login correcto porque con el metodo next() podemos saber si el siguiente elemento esta vacio o no y si no lo esta es que 
+								 JOptionPane.showInternalMessageDialog(null, "CLIENTE: "+this.user+" CONECTADO", "ESTADO: online", JOptionPane.INFORMATION_MESSAGE);
+								//AHORA PROCEDEMOS A LEER LOS DATOS DEL PUNTERO RESULTSET GUARDANDOLOS EN UN OBJETO DE TIPO: ClienteRegistrado
+								 ClienteRegistrado clienteLogin= new ClienteRegistrado(     //La contrasenia no se puede guardar en un objeto
+										 ejecutaConsulta.getInt(1),       //RECOGE EL ID
+										 ejecutaConsulta.getString(2),    //RECOGE EL NOMBRE
+										 ejecutaConsulta.getLong(4),      //RECOGE EL TELEFONO
+										 ejecutaConsulta.getString(5),    //RECOGE LA DIRECCION
+										 ejecutaConsulta.getString(6),    //RECOGE LA ENTIDAD
+										 ejecutaConsulta.getString(7),    //RECOGE EL CORREO
+										 ejecutaConsulta.getString(8),    //RECOGE LA FOTO IDENTIDAD
+										 ejecutaConsulta.getInt(9)        //RECOGE EL NUMERO DE COMPRAS REALIZADAS
+										 );
+								//5) SI SE HA TERMINADO LA OPERACION DE LOGIN SE CIERRA COMO BUENA PRACTICA
+								ejecutaConsulta.close();  //Liberar los recursos que se usaban en memoria
+								conector.close();  //Liberar el conector que se establecio
+								
+								//6) SE INICIA LA ETAPA DEL PANEL DE CONTROL DEL USUARIO CLIENTE CON SUS COMPRAS Y EL PROCESO CRUD
+								MarcoBaseOp insertar= new MarcoBaseOp(clienteLogin,true);
+							} else {
+							    // Login incorrecto
+								 JOptionPane.showInternalMessageDialog(null, "EL USUARIO NO EXISTE EN LA BASE DE DATOS", "Estado: Acceso Denegado",  JOptionPane.OK_OPTION);
+								//5) SI SE HA TERMINADO LA OPERACION DE LOGIN SE CIERRA COMO BUENA PRACTICA
+								ejecutaConsulta.close();  //Liberar los recursos que se usaban en memoria
+								conector.close();  //Liberar el conector que se establecio
+								System.exit(0);  //Se sale de la aplicacion
+							}
+							
+							
+							//LA CONSULTA A CONTINUACION ES PARA AÑADIR ELEMENTOS
+	
+							//2 - CREAR EL STATENMENT
+							//Statement myst = conector.createStatement();
+							
+							//3 - CREAR INSTRUCCIÓN SQL
+							//String inSQL="INSERT INTO productos(CODIGOARTICULO,NOMBREARTICULO,PRECIO) VALUES ('AR45','"+producto+"',50)";
+			
+							//4 - EJECUTAR SQL
+							//myst.executeUpdate(inSQL);
+							
+							//5 - CERRAR LA CONEXION
+							//Si se ha terminado la operación se cierra todo como buena practica
+							//myst.close();  //Liberar los recursos que se usaban en memoria
+							//conector.close();  //Liberar el conector que se establecio
+							//JOptionPane.showMessageDialog(null, "INFORMACIÓN ACTUALIZADA");
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-						
-						
-						//LA CONSULTA A CONTINUACION ES PARA AÑADIR ELEMENTOS
-
-						//2 - CREAR EL STATENMENT
-						//Statement myst = conector.createStatement();
-						
-						//3 - CREAR INSTRUCCIÓN SQL
-						//String inSQL="INSERT INTO productos(CODIGOARTICULO,NOMBREARTICULO,PRECIO) VALUES ('AR45','"+producto+"',50)";
-		
-						//4 - EJECUTAR SQL
-						//myst.executeUpdate(inSQL);
-						
-						//5 - CERRAR LA CONEXION
-						//Si se ha terminado la operación se cierra todo como buena practica
-						//myst.close();  //Liberar los recursos que se usaban en memoria
-						//conector.close();  //Liberar el conector que se establecio
-						//JOptionPane.showMessageDialog(null, "INFORMACIÓN ACTUALIZADA");
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					 }
 				break;
 			}
 			case 3:  //ACTUALIZAR UN ELEMENTO DE LA BBDD
@@ -227,4 +236,9 @@ class ClienteRegistrado
 	public void setCompras(int compras) {
 		this.compras = compras;
 	}
+}
+
+class CompraEjecutada
+{
+	
 }
