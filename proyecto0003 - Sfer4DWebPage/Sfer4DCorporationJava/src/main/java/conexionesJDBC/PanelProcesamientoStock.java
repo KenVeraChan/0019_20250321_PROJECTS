@@ -162,6 +162,7 @@ class CarritoCompra
 	private double costeVenta;
 	private double totalVenta;
 	private static HashMap<Integer,CarritoCompra> compras=new HashMap<>();
+	private int opcionCompra;  //Se activa la opcion compra o no
 	
 	public CarritoCompra(String nombreVenta, String destinoVenta,String sectorVenta,int cantidadVenta,double costeVenta)
 	{
@@ -198,7 +199,7 @@ class CarritoCompra
 		//SE GUARDA EL OBJETO Y LA CLAVE DENTRO DE UN PUT PARA QUE NO SE REPITAN LAS CLAVES Y SE SOBREESCRIBA
 			compras.put(Integer.parseInt(elecciones.getActionCommand().substring(8)),elementoElegido);
 	}
-	public static void getMapaCarro()
+	public static int getMapaCarro(Boolean InvitadoCliente)
 	{
 		//SE CALCULA EL COSTE TOTAL DE TODA LA SUPUESTA COMPRA DE TODOS LOS ARTICULOS
 		final double[] costeTotal = {0.0};   //Funciona porque el array es final, pero su contenido no.
@@ -214,22 +215,84 @@ class CarritoCompra
 		html.append("<tr><th>VENTA</th><th>DESTINO</th><th>SECTOR</th><th>CANTIDAD</th><th>COSTE</th><th>TOTAL</th></tr>");
 
 		compras.forEach((clave, valor) -> {
-		    html.append("<tr>");
-		    html.append("<td>").append(valor.nombreVenta).append("</td>");
-		    html.append("<td>").append(valor.destinoVenta).append("</td>");
-		    html.append("<td>").append(valor.sectorVenta).append("</td>");
-		    html.append("<td>").append(valor.cantidadVenta).append("</td>");
-		    html.append("<td>").append(String.format("%.2f",valor.costeVenta)+"€").append("</td>");
-		    html.append("<td>").append(String.format("%.2f",valor.cantidadVenta*valor.costeVenta)+"€").append("</td>");
-		    html.append("</tr>");
+		    if(valor.cantidadVenta==0)
+		    {
+		    	//NO HACE NADA PORQUE EL ARTICULO TIENE CANTIDAD CERO
+		    }
+		    else
+		    {
+				html.append("<tr>");
+			    html.append("<td>").append(valor.nombreVenta).append("</td>");
+			    html.append("<td>").append(valor.destinoVenta).append("</td>");
+			    html.append("<td>").append(valor.sectorVenta).append("</td>");
+			    html.append("<td>").append(valor.cantidadVenta).append("</td>");
+			    html.append("<td>").append(String.format("%.2f",valor.costeVenta)+"€").append("</td>");
+			    html.append("<td>").append(String.format("%.2f",valor.cantidadVenta*valor.costeVenta)+"€").append("</td>");
+			    html.append("</tr>");
+		    }
 		});
 	    html.append("<tr>");
 	    html.append("<td colspan=2>").append("COSTE TOTAL: ").append("</td>");
 	    html.append("<td colspan=4>").append(String.format("%.3f",costeTotal[0])+"€").append("</td>");
 	    html.append("</tr>");
 		html.append("</table>");
-		html.append("</html>");
-
-		JOptionPane.showMessageDialog(null, html.toString(), "Carrito de compra", JOptionPane.INFORMATION_MESSAGE);
+		
+		if(InvitadoCliente)
+		{
+			//EN EL CASO DE QUE SEA UN CLIENTE: Se habilita la opcion de compra
+			html.append("<div><strong>¿Desea realizar la compra de todo el carrito?</strong></div>");
+			html.append("</html>");
+			int opcionCompra=JOptionPane.showConfirmDialog(null, html.toString(), "Carrito de la compra", JOptionPane.YES_NO_OPTION);
+			return opcionCompra;     //Aqui puede elegir en si comprar o no por eso se le da ambas opciones
+		}
+		else
+		{
+			//EN EL CASO DE QUE NO SEA UN CLIENTE SINO UN INVITADO: Se deshabilita la opcion de compra
+			html.append("</html>");
+			JOptionPane.showMessageDialog(null, html.toString(), "Carrito de compra", JOptionPane.INFORMATION_MESSAGE);
+			return JOptionPane.NO_OPTION;
+		}
 	}
+	public static HashMap<Integer,CarritoCompra> getMapaCompras()
+	{
+		return compras;
+	}
+}
+class CompraEjecutada
+{
+	private HashMap<Integer,CarritoCompra> carritoCompra;
+	private ClienteRegistrado clienteLogin;
+	private HashMap<Integer,ObjetoVenta> stock;
+	
+	public CompraEjecutada(ClienteRegistrado clienteLogin,HashMap<Integer,ObjetoVenta> stock)
+	{		
+		//PRIMERO RECEPCION DE DATOS EXISTENTES
+		this.clienteLogin=clienteLogin;  					  //CLIENTE REGISTRADO (bbdd003_clientes ---> Tabla: loginclientes
+		this.stock=stock;                					  //STOCK EXISTENTE    (bbdd003_clientes ---> Tabla: imagenesinterfazweb
+		this.carritoCompra=CarritoCompra.getMapaCompras();	  //CLIENTE COMPRANDO  (bbdd003_clientes ---> Tabla: clientescarrito
+		
+		//SEGUNDO DESCARGA DE DATOS DE LA TABLA DATOSBANCARIOS (CUIDADO ESTA ZONA EN LAS CONSULTAS SQL) PARA DETECTAR TARJETA BANCARIA Y REALZIAR COMPRA
+		
+		
+		//TERCERO SE DEBE MODIFICAR LAS BASES DE DATOS 
+	
+		//Servidor: mysql
+		//Base de datos: bbdd003_clientes
+		//Tabla: clientescarrito
+		//Columnas: ID, NOMBRE, DEPARTAMENTO, CANTIDAD, COSTE_UNITARIO, COSTE_TOTAL
+		//Comentarios: No se modifica desde esta aplicacion de Escritorio eso en WEB
+		
+		//Servidor: mysql
+		//Base de datos: bbdd003_clientes
+		//Tabla: clientespedidos
+		//Comentarios: Si se modifica porque se ha generado un nuevo pedido y se AÑADE un nuevo pedido
+		
+		
+		//Servidor: mysql
+		//Base de datos: bbdd003_clientes
+		//Tabla: imagenesinterfazweb
+		//Comentarios: Si se modifica despues para ACTUALIZAR el STOCK de los articulos comprados
+	}
+	
+	
 }

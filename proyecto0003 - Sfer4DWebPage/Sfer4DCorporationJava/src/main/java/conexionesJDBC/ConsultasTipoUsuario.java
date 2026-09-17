@@ -237,8 +237,3 @@ class ClienteRegistrado
 		this.compras = compras;
 	}
 }
-
-class CompraEjecutada
-{
-	
-}

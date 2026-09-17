@@ -274,6 +274,7 @@ class MarcoInsertarStock extends JFrame
     private Point PanelAlmacenajeSalida;
     private JButton botonPrincipal, cerrar, mostrarPanel;
     private int dimensionVerticalScroll=0,numProductos=0,numServicios=0,numProyectos=0;
+    private static int opcionCompra;
 
     public MarcoInsertarStock(Boolean semaforo, JButton cargar, HashMap<Integer, ObjetoVenta> mapeo,boolean activadorCompras,ClienteRegistrado clienteLogin)
     {
@@ -294,7 +295,7 @@ class MarcoInsertarStock extends JFrame
         this.botonPrincipal = cargar;
 
         //3) El panel original
-        PanelInsertarStock almacen = new PanelInsertarStock("ficherosUtilizados/almacen.jpg", 30, mapeo,activadorCompras, clienteLogin,this.dimensionVerticalScroll);
+        PanelInsertarStock almacen = new PanelInsertarStock("ficherosUtilizados/almacen.jpg", 30, mapeo, clienteLogin,this.dimensionVerticalScroll);
 
         //4) IMPORTANTE: tamaño mayor para que aparezca scroll
         almacen.setPreferredSize(new Dimension(680,60+65*this.dimensionVerticalScroll)); 
@@ -320,8 +321,19 @@ class MarcoInsertarStock extends JFrame
         mostrarPanel= new JButton("MOSTRAR RECOPILADO VENTAS");
         mostrarPanel.setBounds(150,60+63*this.dimensionVerticalScroll, 220, 25);
         mostrarPanel.addActionListener(e -> {
-            //DEBE MOSTREAR POR PANTALLA UN CUADRO CON LAS VENTAS SELECCIONADAS Y EL TOTAL
-        		CarritoCompra.getMapaCarro();
+            //DEBE MOSTRAR POR PANTALLA UN CUADRO CON LAS VENTAS SELECCIONADAS Y EL TOTAL
+        		opcionCompra=CarritoCompra.getMapaCarro(activadorCompras);
+        	//AHORA SI EL USUARIO DE TIPO CLIENTE EJECUTA LA ORDEN DE COMPRAR, NOS VAMOS A INSTANCIAR EL OBJETO CARRITO COMPRA
+        		if (opcionCompra == JOptionPane.YES_OPTION) {
+        		    //SE ENVIA EL CLIENTE LOGIN PORQUE SE NECESITA SABER QUÉ CLIENTE SE HA CONECTADO Y COMPRADO
+        		    //SE ENVIA ADEMAS EL STOCK DE LA EMPRESA PARA MODIFICARLO TRAS EJECUTAR EL PEDIDO
+        		    	CompraEjecutada ejecucionCompra= new CompraEjecutada(clienteLogin,mapeo);
+
+        		} else if (opcionCompra == JOptionPane.NO_OPTION) {
+        			JOptionPane.showMessageDialog(null, "No se realizó la compra!","Compra no realizada", JOptionPane.INFORMATION_MESSAGE);
+        		} else {
+        			JOptionPane.showMessageDialog(null, "Se cerró la ventana de los presupuestos!","Compra no realizada", JOptionPane.INFORMATION_MESSAGE);
+        		}
         });
         //9) Si quieres que el botón se mueva con el scroll:
         almacen.add(cerrar);
@@ -342,23 +354,19 @@ class PanelInsertarStock extends JPanel implements ActionListener
     private int punteroProdu=0, punteroServ=0, punteroProy=0;   //Puntero de relleno
     private JLabel productos,servicios,proyectos;
     private HashMap<Integer,ObjetoVenta> mapaStockDatos;
-    private boolean activadorComprasUsuario=false;   //FALSE cuando sea Invitado, TRUE para adaptarlo al CLIENTE
     private ClienteRegistrado clienteLogin;          //SE NECESITAN LOS DATOS DEL USUARIO CLIENTE LOGGEADO
     private JButton realizarCompra;
     private int dimensionVerticalScroll=0;
     
-	public PanelInsertarStock(String ruta,int transparencia,HashMap<Integer, ObjetoVenta> mapaStock, boolean activadorCompras, ClienteRegistrado clienteLogin,int dimensionVerticalScroll)
+	public PanelInsertarStock(String ruta,int transparencia,HashMap<Integer, ObjetoVenta> mapaStock, ClienteRegistrado clienteLogin,int dimensionVerticalScroll)
 	{	
 		//1) SE RECOGE EL VALOR DE LA DISPOSICIÓN VERTICAL VARIABLE DE LOS BOTONES DE MOSTRAR MENU, VOLVER Y COMPRAR EN FUNCION DE LA CANTIDAD DE PRODUCTOS, SERVICIOS O PROYECTOS QUE HAYA
 			this.dimensionVerticalScroll=dimensionVerticalScroll;
 		
-		//3) SE RECOGEN LOS DATOS DEL USUARIO LOGGEADO QUE PUEDE O NO HACER COMPRAS USANDO EL BOTON DE AÑADIR AL CARRITO
+		//2) SE RECOGEN LOS DATOS DEL USUARIO LOGGEADO QUE PUEDE O NO HACER COMPRAS USANDO EL BOTON DE AÑADIR AL CARRITO
 			this.clienteLogin=clienteLogin;    //SE USARA EN EL BOTON DE AÑDIR AL CARRITO Y EJECUTAR COMPRA
 		
-		//3) SE CAPTA LA VARIABLE BOOLEANA QUE ADAPTA EL FORMULARIO A UN USUARIO INVITADO O A UN CLIENTE
-			this.activadorComprasUsuario=activadorCompras;
-		
-		//4) SE GUARDA EL MAPA DE DATOS HASHMAP<CLAVE,VALOR>
+		//3) SE GUARDA EL MAPA DE DATOS HASHMAP<CLAVE,VALOR>
 			this.mapaStockDatos=mapaStock;
 		
 	    /////// TRATAMIENTO DE FONDO LAMINA /////////////////////
@@ -408,26 +416,12 @@ class PanelInsertarStock extends JPanel implements ActionListener
 				botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
 				botones.addActionListener(this);
 				
-				if(this.activadorComprasUsuario)
-				{
-					//PANEL ADAPTADO AL MODO USUARIO: CLIENTE
-					JButton adicionarAlCarrito= new JButton("AL CARRITO");
-					adicionarAlCarrito.setBounds(30,80+60*this.punteroProdu,100,18);
-					adicionarAlCarrito.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-					adicionarAlCarrito.setActionCommand("CARRITO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
-					adicionarAlCarrito.addActionListener(this);
-					add(adicionarAlCarrito);
-					add(this.realizarCompra);   //SE ADICIONA EL BOTON DE COMRPAR LO METIDO EN EL CARRITO
-				}
-				else
-				{
-					//PANEL ADAPTADO AL MODO USUARIO: INVITADO
-					//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
-					JLabel titulo= new JLabel("Cantidad PRODUCTOS:");
-					titulo.setBounds(30,80+60*this.punteroProdu,165,18); 
-					titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-					add(titulo);
-				}
+				//PANEL ADAPTADO AL MODO USUARIO
+				//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
+				JLabel titulo= new JLabel("Cantidad PRODUCTOS:");
+				titulo.setBounds(30,80+60*this.punteroProdu,165,18); 
+				titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+				add(titulo);
 
 				//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADES
 					//Se llena el vector de opciones numericas
@@ -454,28 +448,14 @@ class PanelInsertarStock extends JPanel implements ActionListener
 				add(botones);
 				botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
 				botones.addActionListener(this);
+
+				//PANEL ADAPTADO AL MODO USUARIO
 				
-				if(this.activadorComprasUsuario)
-				{
-					//PANEL ADAPTADO AL MODO USUARIO: CLIENTE
-					JButton adicionarAlCarrito= new JButton("AL CARRITO");
-					adicionarAlCarrito.setBounds(230,80+60*this.punteroServ,100,18);
-					adicionarAlCarrito.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-					adicionarAlCarrito.setActionCommand("CARRITO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
-					adicionarAlCarrito.addActionListener(this);
-					add(adicionarAlCarrito);
-					add(this.realizarCompra);   //SE ADICIONA EL BOTON DE COMRPAR LO METIDO EN EL CARRITO
-				}
-				else
-				{
-					//PANEL ADAPTADO AL MODO USUARIO: INVITADO
-					
-					//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
-					JLabel titulo= new JLabel("Cantidad SERVICIOS:");
-					titulo.setBounds(230,80+60*this.punteroServ,165,18);
-					titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-					add(titulo);
-				}
+				//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
+				JLabel titulo= new JLabel("Cantidad SERVICIOS:");
+				titulo.setBounds(230,80+60*this.punteroServ,165,18);
+				titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+				add(titulo);
 					
 				//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADES
 					//Se llena el vector de opciones numericas
@@ -504,28 +484,14 @@ class PanelInsertarStock extends JPanel implements ActionListener
 				add(botones);
 				botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
 				botones.addActionListener(this);
+
+				//PANEL ADAPTADO AL MODO USUARIO
 				
-				if(this.activadorComprasUsuario)
-				{
-					//PANEL ADAPTADO AL MODO USUARIO: CLIENTE
-					JButton adicionarAlCarrito= new JButton("AL CARRITO");
-					adicionarAlCarrito.setBounds(430,80+60*this.punteroProy,100,18); 
-					adicionarAlCarrito.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-					adicionarAlCarrito.setActionCommand("CARRITO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
-					adicionarAlCarrito.addActionListener(this);
-					add(adicionarAlCarrito);
-					add(this.realizarCompra);   //SE ADICIONA EL BOTON DE COMRPAR LO METIDO EN EL CARRITO
-				}
-				else
-				{
-					//PANEL ADAPTADO AL MODO USUARIO: INVITADO
-					
-					//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
-					JLabel titulo= new JLabel("Cantidad PROYECTOS:");
-					titulo.setBounds(430,80+60*this.punteroProy,165,18); 
-					titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-					add(titulo);
-				}
+				//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
+				JLabel titulo= new JLabel("Cantidad PROYECTOS:");
+				titulo.setBounds(430,80+60*this.punteroProy,165,18); 
+				titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+				add(titulo);
 					
 				//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADES
 					//Se llena el vector de opciones numericas
@@ -589,14 +555,6 @@ class PanelInsertarStock extends JPanel implements ActionListener
 	        	    "Información de la venta seleccionada del tipo: "+this.mapaStockDatos.get(indice).getDestino(),
 	        	    JOptionPane.INFORMATION_MESSAGE
 	        	);
-	    }
-	    if (cmd.startsWith("CARRITO")) 
-	    {
-	        int indice = Integer.parseInt(cmd.substring(7));
-	        System.out.println("METIDO EN EL CARRITO: "+indice);
-	        
-	        
-	        
 	    }
 	}
 	public String fragmentarTexto(String texto, int maxLongitud) {
