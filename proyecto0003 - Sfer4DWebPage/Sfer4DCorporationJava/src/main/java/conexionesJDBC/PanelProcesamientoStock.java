@@ -2,11 +2,14 @@ package conexionesJDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.crypto.SecretKey;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
@@ -153,6 +156,8 @@ class ObjetoVenta
 	}
 }
 
+
+
 class CarritoCompra
 {
 	private String nombreVenta;
@@ -252,17 +257,22 @@ class CarritoCompra
 			JOptionPane.showMessageDialog(null, html.toString(), "Carrito de compra", JOptionPane.INFORMATION_MESSAGE);
 			return JOptionPane.NO_OPTION;
 		}
+		
 	}
 	public static HashMap<Integer,CarritoCompra> getMapaCompras()
 	{
 		return compras;
 	}
 }
+
+
+
 class CompraEjecutada
 {
-	private HashMap<Integer,CarritoCompra> carritoCompra;
-	private ClienteRegistrado clienteLogin;
-	private HashMap<Integer,ObjetoVenta> stock;
+	private HashMap<Integer,CarritoCompra> carritoCompra;             //CARRITO COMPRA CLIENTE
+	private ClienteRegistrado clienteLogin;							  //CLIENTE REGISTRADO
+	private HashMap<Integer,ObjetoVenta> stock;                       //STOCK TOTAL EMPRESA
+	private ArrayList<DatosBancariosCliente> datosBancariosClientes;  //DATOS BANCARIOS PAGO
 	
 	public CompraEjecutada(ClienteRegistrado clienteLogin,HashMap<Integer,ObjetoVenta> stock)
 	{		
@@ -272,7 +282,7 @@ class CompraEjecutada
 		this.carritoCompra=CarritoCompra.getMapaCompras();	  //CLIENTE COMPRANDO  (bbdd003_clientes ---> Tabla: clientescarrito
 		
 		//SEGUNDO DESCARGA DE DATOS DE LA TABLA DATOSBANCARIOS (CUIDADO ESTA ZONA EN LAS CONSULTAS SQL) PARA DETECTAR TARJETA BANCARIA Y REALZIAR COMPRA
-		
+		this.datosBancariosClientes= new DatosBancariosCliente().getDatosBancariosCliente();
 		
 		//TERCERO SE DEBE MODIFICAR LAS BASES DE DATOS 
 	
@@ -284,15 +294,192 @@ class CompraEjecutada
 		
 		//Servidor: mysql
 		//Base de datos: bbdd003_clientes
-		//Tabla: clientespedidos
-		//Comentarios: Si se modifica porque se ha generado un nuevo pedido y se AÑADE un nuevo pedido
+		//Columnas: NOMBRE, NUMERO CUENTA, MES, ANIO
+		//Comentarios: Se comprueba antes que exista una tarjeta de crédito para ejecutar la compra
 		
+			//De todos los clientes registrados con cuenta bancaria se debe seleccionar el que ha ejecutado la compra al loggearse y comprar
+		int puntero=0;	
+		for(DatosBancariosCliente cliente: this.datosBancariosClientes)
+		{
+			if(cliente.getNombreCliente().equals(this.clienteLogin.getUsuario()))
+				{
+					System.out.println("CLIENTE ENCONTRADO "+ puntero);
+				}
+			else
+			{
+				System.out.println("NO ENCONTRADO "+puntero);
+			}
+			puntero ++;
+		}		
 		
 		//Servidor: mysql
 		//Base de datos: bbdd003_clientes
-		//Tabla: imagenesinterfazweb
-		//Comentarios: Si se modifica despues para ACTUALIZAR el STOCK de los articulos comprados
+		//Tabla: clientespedidos
+		//Comentarios: Si se modifica porque se ha generado un nuevo pedido y se AÑADE un nuevo pedido
+			
+		
+		
+		
+		
+				// Recorre cada elemento del HashMap
+				// Sustituye los datos de la tabla por los del mapa
+				// Usa PreparedStatement → seguro, sin inyección SQL
+				// Actualiza solo las filas que existen (por ID)
+				
+				//String sql = "UPDATE stock SET nombre=?, cantidad=?, precio=? WHERE id=?";
+			/*
+				try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+		
+				    mapaStock.forEach((id, objeto) -> {
+				        try {
+				            ps.setString(1, objeto.getNombre());
+				            ps.setInt(2, objeto.getCantidad());
+				            ps.setDouble(3, objeto.getPrecio());
+				            ps.setInt(4, id);
+				            ps.executeUpdate();
+				        } catch (Exception e) {
+				            e.printStackTrace();
+				        }
+				    });
+		
+				} catch (Exception e) {
+				    e.printStackTrace();
+				}
+		 	*/
+		
+		
+		
+		
+		
+		
+			
+			//Servidor: mysql
+			//Base de datos: bbdd003_clientes
+			//Tabla: imagenesinterfazweb
+			//Comentarios: Si se modifica despues para ACTUALIZAR el STOCK de los articulos comprados
+	}
+}
+
+
+
+class DatosBancariosCliente
+{
+	private String nombreCliente;
+	private String numeroCuentaCliente;
+	private int mesTarjeta;
+	private int anioTarjeta;
+	private ArrayList<DatosBancariosCliente> datosBancarios= new ArrayList<DatosBancariosCliente>();
+	
+	private SecretKey clave;      // Clave que cifrará el numero de la cuenta bancaria del usuario
+	private String pan = "";      // Cadena de prueba para el cifrado
+	private String cifrado="";    // Cadena cifrada posterior
+	private String descifrado;    // Cadena descifrada posterior
+	
+	public DatosBancariosCliente()
+	{
+		//CONSTRUCTOR QUE NO HACE NADA PARA EL CASO DE SOLO INVOCAR LOS MÉTODOS INTERNOS SIN INSTANCIAR EL OBJETO
 	}
 	
-	
+	public DatosBancariosCliente(String nombreCliente,String numeroCuentaCliente, int mesTarjeta, int anioTarjeta)
+	{
+		this.nombreCliente=nombreCliente;
+		this.numeroCuentaCliente= numeroCuentaCliente;
+		this.mesTarjeta=mesTarjeta;
+		this.anioTarjeta=anioTarjeta;
+	}
+	public ArrayList<DatosBancariosCliente> getDatosBancariosCliente()
+	{
+		try {
+			//1 - CREAR CONEXION
+			//En el caso de MYSQL
+			Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
+			
+			//2 - CREAR EL STATENMENT
+			Statement myst = conector.createStatement();
+			
+			//3 - EJECUTAR PETICION O CONSULTA SQL: se guardara una tabla virtual dentro de "myrs"
+			ResultSet myrs= myst.executeQuery("SELECT * FROM datosbancarios");
+			
+			//4 - LEER EL ResultSet
+			while(myrs.next())
+			{
+				//5 - SE GENERA LA CLAVE CIFRADA QUE SE USARÁ PARA ENCRIPTAR LA LECTURA DE LA CUENTA BANCARIA DE LA BBDD
+				try {      //GENERANDO LA CLAVE NCRIPTADA POR CADA USUARIO CLIENTE REGISTRADO, CADA CLIENTE TENDRA UNA DIFERENTE
+					this.clave = AESGCM.generarClave();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				try {    //APLICANDO LA ENCRIPTACION PREVIAMENTE ANTES DE METERLA EN EL OBJETO
+					this.cifrado = AESGCM.cifrar(myrs.getString("NUMERO"), clave);
+						//Devuelve los codigos de los articulos
+						//Como los productos están agrupados por ID (clave) para apuntar a un objeto (VALOR) se usara HASHMAP
+						this.datosBancarios.add(new DatosBancariosCliente(     //Guardando en el HASHMAP: OJO no por int columna sino por cabecera de la columna
+									myrs.getString("NOMBRE"),    //OBTIENE EL ID (SOLO LECTURA NO SE MODIFICARA SU VALOR NUNCA)
+									this.cifrado,    			 //OBTIENE EL NUMERO CUENTA BANCARIA (PREVIAMENTE ENCRIPTADO)
+									myrs.getInt("MES"),          //OBTIENE EL MES FECHA CADUCIDAD TARJETA
+									myrs.getInt("ANIO")			 //OBTIENE EL ANIO FECHA CADUCIDAD TARJETA
+							)); 
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			}
+			//6 - Si se ha terminado la operación se cierra todo como buena practica
+			myrs.close();  //Liberar los recursos que se usaban en memoria
+			conector.close();  //Liberar el conector que se establecio
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return this.datosBancarios;     //Devuelve el STOCK de ventas planteadas desde la direccion de la empresa
+	}
+	public String getNombreCliente() {
+		return nombreCliente;
+	}
+	public void setNombreCliente(String nombreCliente) {
+		this.nombreCliente = nombreCliente;
+	}
+	public String getNumeroCuentaCliente(String PANencriptado) {  //Devolucion del desencriptado PAN (Primary Account Number)
+		
+		return this.descifrado;
+	}
+	public boolean validarTarjeta(String PANencriptado) {
+		//1 - SE BUSCA EL CLIENTE QUE COMPRO TRAS LOGFEARSE
+
+		
+		//2 - PRIMERO PARA VALIDAR EL PAN INTRODUCIDO SE DEBE DESENCRIPTAR
+		try {    //APLICANDO LA DESENCRIPTACION
+			this.descifrado = AESGCM.descifrar(PANencriptado, this.clave);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//3 - LUEGO SE APLICA LA VALIDEZ DEL PAN DETECTADO Y DESENCRIPTADO
+	    if (this.descifrado == null) return false;
+		    // Elimina espacios en blanco al inicio y final
+		    this.descifrado = this.descifrado.trim();
+		    // Expresión regular:
+		    // 4 dígitos + separador + 4 dígitos + separador + 4 dígitos + separador + 4 dígitos
+		    // Separador permitido: espacio o guion
+		    	String regex = "^[0-9]{4}([ -])[0-9]{4}\\1[0-9]{4}\\1[0-9]{4}$";
+	    return this.descifrado.matches(regex);
+	}
+	public void setNumeroCuentaCliente(String numeroCuentaCliente) {
+		this.numeroCuentaCliente = numeroCuentaCliente;
+	}
+	public int getMesTarjeta() {
+		return mesTarjeta;
+	}
+	public void setMesTarjeta(int mesTarjeta) {
+		this.mesTarjeta = mesTarjeta;
+	}
+	public int getAnioTarjeta() {
+		return anioTarjeta;
+	}
+	public void setAnioTarjeta(int anioTarjeta) {
+		this.anioTarjeta = anioTarjeta;
+	}
 }
+
