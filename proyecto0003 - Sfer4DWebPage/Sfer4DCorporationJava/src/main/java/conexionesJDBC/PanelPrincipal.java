@@ -27,11 +27,8 @@ public class PanelPrincipal {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		//CASO 1: MOSTRAR AL USUARIO INVITADO LA TABLA DE STOCK CALCULANDO COSTES TABULADOS SIN PEDIR
-		//CRUDopciones selector= new CRUDopciones("INVITADO");  
-		//CASO 2: MOSTRAR AL USUARIO REGISTRADO LA TABLA DE STOCK Y SUS PEDIDOS
-			//CARGAR LOS PEDIDOS Y PODER MODIFICARLOS O ELIMINARLOS
-		//selector.selectorCRUD();
+		SeguridadAES.inicializarClaveAES();   // SOLO UNA VEZ PARA CREAR LA CLAVE DEL FICHERO externo (destinado a cuenta bancaria compras)
+		SeguridadAES.CargarFicheroClave();    //SOLO UNA VEZ PARA CARGAR EL FICHERO DE LA CLAVE
 		HalldeApp app= new HalldeApp();
   }
 }

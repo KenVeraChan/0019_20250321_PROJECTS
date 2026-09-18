@@ -2,7 +2,6 @@ package conexionesJDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,6 +11,7 @@ import java.util.HashMap;
 import javax.crypto.SecretKey;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+
 
 public class PanelProcesamientoStock {
 
@@ -62,6 +62,9 @@ public class PanelProcesamientoStock {
 		return this.stock;     //Devuelve el STOCK de ventas planteadas desde la direccion de la empresa
 	}
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ObjetoVenta
 {
@@ -156,7 +159,8 @@ class ObjetoVenta
 	}
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class CarritoCompra
 {
@@ -265,7 +269,8 @@ class CarritoCompra
 	}
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class CompraEjecutada
 {
@@ -297,29 +302,36 @@ class CompraEjecutada
 		//Columnas: NOMBRE, NUMERO CUENTA, MES, ANIO
 		//Comentarios: Se comprueba antes que exista una tarjeta de crédito para ejecutar la compra
 		
-			//De todos los clientes registrados con cuenta bancaria se debe seleccionar el que ha ejecutado la compra al loggearse y comprar
-		int puntero=0;	
-		for(DatosBancariosCliente cliente: this.datosBancariosClientes)
+		for (DatosBancariosCliente cliente : this.datosBancariosClientes)
 		{
-			if(cliente.getNombreCliente().equals(this.clienteLogin.getUsuario()))
-				{
-					System.out.println("CLIENTE ENCONTRADO "+ puntero);
-				}
-			else
-			{
-				System.out.println("NO ENCONTRADO "+puntero);
-			}
-			puntero ++;
-		}		
+		    // 1. Se busca si coincide el nombre del cliente loggeado
+		    if (cliente.getNombreCliente().equals(this.clienteLogin.getUsuario()))
+		    {
+		        // 2. Se busca si se valida la tarjeta (descifra internamente)
+		        boolean tarjetaValida = cliente.validarTarjeta(cliente.getNumeroCuentaCliente());
+
+		        if (tarjetaValida)
+		        {
+					JOptionPane.showMessageDialog(null, "TARJETA VÁLIDA. SE PUEDE EJECUTAR LA COMPRA.", "PROCESO COMPRA CONFIRMADA", JOptionPane.INFORMATION_MESSAGE);
+		            // Aquí ya puedes continuar con la compra
+		        }
+		        else
+		        {
+					JOptionPane.showMessageDialog(null, "ERROR: TARJETA NO VÁLIDA. COMPRA BLOQUEADA.", "PROCESO COMPRA INTERRUMPIDO", JOptionPane.WARNING_MESSAGE);
+		        }
+		    }
+		    else
+		    {
+				JOptionPane.showMessageDialog(null, "USUARIO NO REGISTRADO O NO SE HA ENCONTRADO ", "PROCESO COMPRA INTERRUMPIDO", JOptionPane.WARNING_MESSAGE);
+		    }
+		}
+	
 		
 		//Servidor: mysql
 		//Base de datos: bbdd003_clientes
 		//Tabla: clientespedidos
 		//Comentarios: Si se modifica porque se ha generado un nuevo pedido y se AÑADE un nuevo pedido
 			
-		
-		
-		
 		
 				// Recorre cada elemento del HashMap
 				// Sustituye los datos de la tabla por los del mapa
@@ -347,12 +359,7 @@ class CompraEjecutada
 				}
 		 	*/
 		
-		
-		
-		
-		
-		
-			
+
 			//Servidor: mysql
 			//Base de datos: bbdd003_clientes
 			//Tabla: imagenesinterfazweb
@@ -360,7 +367,8 @@ class CompraEjecutada
 	}
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class DatosBancariosCliente
 {
@@ -370,7 +378,7 @@ class DatosBancariosCliente
 	private int anioTarjeta;
 	private ArrayList<DatosBancariosCliente> datosBancarios= new ArrayList<DatosBancariosCliente>();
 	
-	private SecretKey clave;      // Clave que cifrará el numero de la cuenta bancaria del usuario
+	private SecretKey claveAES;      // Clave que cifrará el numero de la cuenta bancaria del usuario
 	private String pan = "";      // Cadena de prueba para el cifrado
 	private String cifrado="";    // Cadena cifrada posterior
 	private String descifrado;    // Cadena descifrada posterior
@@ -378,41 +386,50 @@ class DatosBancariosCliente
 	public DatosBancariosCliente()
 	{
 		//CONSTRUCTOR QUE NO HACE NADA PARA EL CASO DE SOLO INVOCAR LOS MÉTODOS INTERNOS SIN INSTANCIAR EL OBJETO
+	    try {
+	        this.claveAES = SeguridadAES.cargarClaveAES();   // Clave cargada también aquí
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
-	
 	public DatosBancariosCliente(String nombreCliente,String numeroCuentaCliente, int mesTarjeta, int anioTarjeta)
 	{
 		this.nombreCliente=nombreCliente;
 		this.numeroCuentaCliente= numeroCuentaCliente;
 		this.mesTarjeta=mesTarjeta;
 		this.anioTarjeta=anioTarjeta;
+	    try {
+	        this.claveAES = SeguridadAES.cargarClaveAES();   // Clave cargada para cada objeto
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 	public ArrayList<DatosBancariosCliente> getDatosBancariosCliente()
 	{
-		try {
-			//1 - CREAR CONEXION
-			//En el caso de MYSQL
-			Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
-			
-			//2 - CREAR EL STATENMENT
-			Statement myst = conector.createStatement();
-			
-			//3 - EJECUTAR PETICION O CONSULTA SQL: se guardara una tabla virtual dentro de "myrs"
-			ResultSet myrs= myst.executeQuery("SELECT * FROM datosbancarios");
-			
-			//4 - LEER EL ResultSet
-			while(myrs.next())
-			{
-				//5 - SE GENERA LA CLAVE CIFRADA QUE SE USARÁ PARA ENCRIPTAR LA LECTURA DE LA CUENTA BANCARIA DE LA BBDD
-				try {      //GENERANDO LA CLAVE NCRIPTADA POR CADA USUARIO CLIENTE REGISTRADO, CADA CLIENTE TENDRA UNA DIFERENTE
-					this.clave = AESGCM.generarClave();
+		//1 - SE CARGA LA CLAVE CIFRADA QUE SE USARÁ PARA ENCRIPTAR LA LECTURA DE LA CUENTA BANCARIA DE LA BBDD
+		//GENERANDO LA CLAVE NCRIPTADA POR CADA USUARIO CLIENTE REGISTRADO, CADA CLIENTE TENDRA UNA DIFERENTE
+				try {
+					this.claveAES = SeguridadAES.cargarClaveAES();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-
+				}  // clave ya cargada
+		try {
+			//2 - CREAR CONEXION
+			//En el caso de MYSQL
+			Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
+			
+			//3 - CREAR EL STATENMENT
+			Statement myst = conector.createStatement();
+			
+			//4 - EJECUTAR PETICION O CONSULTA SQL: se guardara una tabla virtual dentro de "myrs"
+			ResultSet myrs= myst.executeQuery("SELECT * FROM datosbancarios");
+			
+			//5 - LEER EL ResultSet
+			while(myrs.next())
+			{
 				try {    //APLICANDO LA ENCRIPTACION PREVIAMENTE ANTES DE METERLA EN EL OBJETO
-					this.cifrado = AESGCM.cifrar(myrs.getString("NUMERO"), clave);
+					this.cifrado = SeguridadAES.cifrar(myrs.getString("NUMERO"), this.claveAES);
 						//Devuelve los codigos de los articulos
 						//Como los productos están agrupados por ID (clave) para apuntar a un objeto (VALOR) se usara HASHMAP
 						this.datosBancarios.add(new DatosBancariosCliente(     //Guardando en el HASHMAP: OJO no por int columna sino por cabecera de la columna
@@ -441,22 +458,18 @@ class DatosBancariosCliente
 	public void setNombreCliente(String nombreCliente) {
 		this.nombreCliente = nombreCliente;
 	}
-	public String getNumeroCuentaCliente(String PANencriptado) {  //Devolucion del desencriptado PAN (Primary Account Number)
-		
-		return this.descifrado;
+	public String getNumeroCuentaCliente() {     //Devolucion del desencriptado PAN (Primary Account Number)
+	    return this.numeroCuentaCliente;   // devuelve el PAN cifrado
 	}
 	public boolean validarTarjeta(String PANencriptado) {
-		//1 - SE BUSCA EL CLIENTE QUE COMPRO TRAS LOGFEARSE
-
-		
-		//2 - PRIMERO PARA VALIDAR EL PAN INTRODUCIDO SE DEBE DESENCRIPTAR
+		//1 - PRIMERO PARA VALIDAR EL PAN INTRODUCIDO SE DEBE DESENCRIPTAR
 		try {    //APLICANDO LA DESENCRIPTACION
-			this.descifrado = AESGCM.descifrar(PANencriptado, this.clave);
+			this.descifrado = SeguridadAES.descifrar(PANencriptado, claveAES);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//3 - LUEGO SE APLICA LA VALIDEZ DEL PAN DETECTADO Y DESENCRIPTADO
+		//2 - LUEGO SE APLICA LA VALIDEZ DEL PAN DETECTADO Y DESENCRIPTADO
 	    if (this.descifrado == null) return false;
 		    // Elimina espacios en blanco al inicio y final
 		    this.descifrado = this.descifrado.trim();
@@ -480,6 +493,17 @@ class DatosBancariosCliente
 	}
 	public void setAnioTarjeta(int anioTarjeta) {
 		this.anioTarjeta = anioTarjeta;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class MovimientoStockBBDD
+{
+	public MovimientoStockBBDD()
+	{
+		
 	}
 }
 
