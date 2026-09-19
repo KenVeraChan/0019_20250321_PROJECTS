@@ -327,8 +327,12 @@ class MarcoInsertarStock extends JFrame
         		if (opcionCompra == JOptionPane.YES_OPTION) {
         		    //SE ENVIA EL CLIENTE LOGIN PORQUE SE NECESITA SABER QUÉ CLIENTE SE HA CONECTADO Y COMPRADO
         		    //SE ENVIA ADEMAS EL STOCK DE LA EMPRESA PARA MODIFICARLO TRAS EJECUTAR EL PEDIDO
-        		    	CompraEjecutada ejecucionCompra= new CompraEjecutada(clienteLogin,mapeo);
-
+        			try {
+        				//SE RODEA EN UNA EXCEPTION PORQUE EN LA INSTANCIACIÓN LANZA EXCEPCIONES SI ALGUNA CONSULTA FALLA
+        			    CompraEjecutada ejecucionCompra = new CompraEjecutada(clienteLogin, mapeo);
+        			} catch (Exception error) {
+        			    error.printStackTrace();
+        			}
         		} else if (opcionCompra == JOptionPane.NO_OPTION) {
         			JOptionPane.showMessageDialog(null, "No se realizó la compra!","Compra no realizada", JOptionPane.INFORMATION_MESSAGE);
         		} else {

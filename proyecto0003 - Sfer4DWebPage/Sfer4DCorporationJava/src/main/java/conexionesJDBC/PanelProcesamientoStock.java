@@ -2,9 +2,12 @@ package conexionesJDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -180,11 +183,21 @@ class CarritoCompra
 		this.sectorVenta=sectorVenta;
 		this.cantidadVenta=cantidadVenta;
 		this.costeVenta=costeVenta;
-		this.totalVenta=totalVenta;
+		this.totalVenta=cantidadVenta*costeVenta;
 	}
 	public static void getMapaCompras(HashMap<Integer,ObjetoVenta> mapaStock,JComboBox<Integer> elecciones)
 	{		
-		//RECOPILADO DE DATOS:
+		//1) SE FILTRA EL OBJETO Y LA CLAVE SI EXISTE ALGUN VALOR DE CANTIDAD COMO 0
+	    int idProducto = Integer.parseInt(elecciones.getActionCommand().substring(8));
+	    int cantidadVenta = (Integer) elecciones.getSelectedItem();
+
+	    	//FILTRADO ANTES DE HACER NADA
+		    if (cantidadVenta == 0) {
+		        compras.remove(idProducto);
+		        return;
+		    }
+		
+		//2) RECOPILADO DE DATOS siempre que el usuario no haya metido 0 en algun articulo metido en el carrito de la compra:
 			String nombreVenta=mapaStock.get(Integer
 									 .parseInt(elecciones
 									 .getActionCommand()
@@ -199,7 +212,7 @@ class CarritoCompra
 									 					 .length()-4);
 			String destinoVenta=mapaStock.get(Integer.parseInt(elecciones.getActionCommand().substring(8))).getDestino();
 			String sectorVenta=mapaStock.get(Integer.parseInt(elecciones.getActionCommand().substring(8))).getSector();
-			int cantidadVenta=elecciones.getSelectedIndex();
+			
 			double costeVenta=mapaStock.get(Integer.parseInt(elecciones.getActionCommand().substring(8))).getCoste();
 			
 		//CONSTRUYENDO EL OBJETO QUE SE USARA
@@ -267,6 +280,54 @@ class CarritoCompra
 	{
 		return compras;
 	}
+	public String getNombreVenta() {
+		return nombreVenta;
+	}
+	public void setNombreVenta(String nombreVenta) {
+		this.nombreVenta = nombreVenta;
+	}
+	public String getDestinoVenta() {
+		return destinoVenta;
+	}
+	public void setDestinoVenta(String destinoVenta) {
+		this.destinoVenta = destinoVenta;
+	}
+	public String getSectorVenta() {
+		return sectorVenta;
+	}
+	public void setSectorVenta(String sectorVenta) {
+		this.sectorVenta = sectorVenta;
+	}
+	public int getCantidadVenta() {
+		return cantidadVenta;
+	}
+	public void setCantidadVenta(int cantidadVenta) {
+		this.cantidadVenta = cantidadVenta;
+	}
+	public double getCosteVenta() {
+		return costeVenta;
+	}
+	public void setCosteVenta(double costeVenta) {
+		this.costeVenta = costeVenta;
+	}
+	public double getTotalVenta() {
+		return totalVenta;
+	}
+	public void setTotalVenta(double totalVenta) {
+		this.totalVenta = totalVenta;
+	}
+	public static HashMap<Integer, CarritoCompra> getCompras() {
+		return compras;
+	}
+	public static void setCompras(HashMap<Integer, CarritoCompra> compras) {
+		CarritoCompra.compras = compras;
+	}
+	public int getOpcionCompra() {
+		return opcionCompra;
+	}
+	public void setOpcionCompra(int opcionCompra) {
+		this.opcionCompra = opcionCompra;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,7 +340,7 @@ class CompraEjecutada
 	private HashMap<Integer,ObjetoVenta> stock;                       //STOCK TOTAL EMPRESA
 	private ArrayList<DatosBancariosCliente> datosBancariosClientes;  //DATOS BANCARIOS PAGO
 	
-	public CompraEjecutada(ClienteRegistrado clienteLogin,HashMap<Integer,ObjetoVenta> stock)
+	public CompraEjecutada(ClienteRegistrado clienteLogin,HashMap<Integer,ObjetoVenta> stock) throws Exception   //AL SER UN METODO DELICADO CON TANTAS CONSULTAS SE LANZARAN EXCEPCIONES SI ALGO FALLA
 	{		
 		//PRIMERO RECEPCION DE DATOS EXISTENTES
 		this.clienteLogin=clienteLogin;  					  //CLIENTE REGISTRADO (bbdd003_clientes ---> Tabla: loginclientes
@@ -304,16 +365,103 @@ class CompraEjecutada
 		
 		for (DatosBancariosCliente cliente : this.datosBancariosClientes)
 		{
-		    // 1. Se busca si coincide el nombre del cliente loggeado
-		    if (cliente.getNombreCliente().equals(this.clienteLogin.getUsuario()))
-		    {
-		        // 2. Se busca si se valida la tarjeta (descifra internamente)
-		        boolean tarjetaValida = cliente.validarTarjeta(cliente.getNumeroCuentaCliente());
+		  // 1. Se busca si coincide el nombre del cliente loggeado
+		  if (cliente.getNombreCliente().equals(this.clienteLogin.getUsuario()))
+		  {
+		     // 2. Se busca si se valida la tarjeta (descifra internamente)
+		      boolean tarjetaValida = cliente.validarTarjeta(cliente.getNumeroCuentaCliente());
 
-		        if (tarjetaValida)
-		        {
-					JOptionPane.showMessageDialog(null, "TARJETA VÁLIDA. SE PUEDE EJECUTAR LA COMPRA.", "PROCESO COMPRA CONFIRMADA", JOptionPane.INFORMATION_MESSAGE);
-		            // Aquí ya puedes continuar con la compra
+		      if (tarjetaValida)
+		      {
+			    JOptionPane.showMessageDialog(null, "TARJETA VÁLIDA. SE PUEDE EJECUTAR LA COMPRA.", "PROCESO COMPRA CONFIRMADA", JOptionPane.INFORMATION_MESSAGE);
+		          
+			    // Aquí ya puedes continuar con la compra
+				    //1) SE ACTUALIZA EL NUMERO DE COMPRAS HECHAS POR EL CLIENTE LOGGEADO EN LA BBDD: loginclientes
+				       //1.1 - CREAR CONEXION
+						Connection conector1 = DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
+	
+					   //1.2 - CREAR EL PREPAREDSTATEMENT para ACTUALIZAR
+						String sql1 = "UPDATE loginclientes SET NUMERO_COMPRAS = NUMERO_COMPRAS + 1 WHERE USUARIO = ?";
+						PreparedStatement myst1 = conector1.prepareStatement(sql1);
+	
+					   //1.3 - ASIGNAR VALORES A LOS ? EN ORDEN
+						myst1.setString(1, cliente.getNombreCliente());
+	
+					   //1.4 - EJECUTAR LA ACTUALIZACIÓN
+						int filasAfectadas = myst1.executeUpdate();
+	
+					   //1.5 - CERRAR RECURSOS
+						myst1.close();
+						conector1.close();
+
+				    //2) SE ACTUALIZA EL STOCK REDUCIENDO LA CANTIDAD DISPONIBLE DE LOS ARTICULOS QUE SE OFERTAN
+					   //2.1 - SE CREA CONEXION
+						Connection conector2= DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
+						
+						this.carritoCompra.forEach((clave,CarritoCompra)->{
+						   try {
+							  //2.2 - CREAR EL PREPAREDSTATEMENT para ACTUALIZAR
+								String sql2 = "UPDATE imagenesinterfazweb SET STOCK = STOCK - ? WHERE NOMBRE = ?";
+								PreparedStatement myst2 = conector2.prepareStatement(sql2);
+								
+							  //2.3 - ASIGNAR VALORES A LOS ? EN ORDEN
+							    myst2.setInt(1, CarritoCompra.getCantidadVenta());
+							    myst2.setString(2, CarritoCompra.getNombreVenta()+".png");    //EN LA BBDD ESTA GUARDADO CON EL FORMATO DE LA IMAGEN 
+		
+							  //2.4 - EJECUTAR LA ACTUALIZACIÓN
+							    int filasAfectadas2 = myst2.executeUpdate();
+							    
+							  //2.5 - SE CIERRA EL STATEMENT
+							    myst2.close();
+						    } catch (SQLException e) {
+						        e.printStackTrace();
+						    }
+						});
+						//2.6 - CERRAR RECURSOS
+					    conector2.close();
+					
+				    //3) SE INSERTA UNA FILA NUEVA POR CADA ARTICULO PEDIDO DEL CARRITO DE LA COMPRA EN CLIENTESPEDIDOS
+	 				    
+					//3.1 - CREAR CONEXION
+					    Connection conector3 = DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
+
+				    //3.2 - CARGAR LA CLAVE PARA EVITAR HACERLO EN EL BUCLE REPETIDAMENTE
+					    SecretKey claveAES = SeguridadAES.cargarClaveAES();
+					    String numeroCuentaDescifrado = SeguridadAES.descifrar(cliente.getNumeroCuentaCliente(), claveAES);
+
+					    this.carritoCompra.forEach((clave,CarritoCompra)->{
+							   try {
+									//3.3 - CREAR EL PREPAREDSTATEMENT
+									String sql3 = "INSERT INTO clientespedidos (NOMBRE, NUMERO, TELEFONO, DIRECCION, CORREO, CONCEPTO, DEPARTAMENTO, CANTIDAD, COSTE_UNITARIO, COSTE_TOTAL, FECHA_PEDIDO, REFERENCIA, ENTREGADO)"
+																	 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";      
+									PreparedStatement myst3 = conector3.prepareStatement(sql3);   //Se usa PreparedStatement para Insercciones
+				
+									//3.4 - ASIGNAR VALORES A LOS ? EN ORDEN
+									myst3.setString(1, cliente.getNombreCliente());      //NOMBRE
+								    myst3.setString(2, numeroCuentaDescifrado);          //NUMERO CUENTA BANCARIA DESCIFRADO (PARA EMPRESA)
+									myst3.setLong(3, clienteLogin.getTelefono());        //TELEFONO DEL USUARIO
+									myst3.setString(4, clienteLogin.getDireccion());     //DIRECCION DEL USUARIO
+									myst3.setString(5, clienteLogin.getCorreo());		 //CORREO ELECTRONICO DEL USUARIO
+									myst3.setString(6, CarritoCompra.getNombreVenta());  //NOMBRE DEL ARTICULO
+									myst3.setString(7, CarritoCompra.getDestinoVenta()); //DEPARTAMENTO AL QUE PERTENECE EL ARTICULO
+									myst3.setInt(8, CarritoCompra.getCantidadVenta());   //CANTIDAD DE ARTICULO
+									myst3.setDouble(9, CarritoCompra.getCosteVenta());   //COSTE DEL ARTICULO
+									myst3.setDouble(10, CarritoCompra.getCantidadVenta()*CarritoCompra.getCosteVenta());   //COSTE TOTAL
+									myst3.setDate(11, new java.sql.Date(System.currentTimeMillis()));   //FECHA ACTUAL DEL PEDIDO
+									myst3.setString(12,generarReferencia(clienteLogin));   //SE INVOCA AL METODO DE GENERAR REFERENCIA
+									myst3.setString(13, "PENDIENTE");  //EL ESTADO DE ENTREGA SERA PENDIENTE PORQUE SE ACABA DE REALIZAR
+									
+									//3.5 - EJECUTAR LA INSERCIÓN
+									myst3.executeUpdate();
+				
+									//3.6 - CERRAR EL STATEMENT
+									myst3.close();
+							    } catch (SQLException e) {
+							        e.printStackTrace();
+							    }
+							});
+						//3.7 - CERRAR RECURSOS		
+						conector3.close();
 		        }
 		        else
 		        {
@@ -325,45 +473,37 @@ class CompraEjecutada
 				JOptionPane.showMessageDialog(null, "USUARIO NO REGISTRADO O NO SE HA ENCONTRADO ", "PROCESO COMPRA INTERRUMPIDO", JOptionPane.WARNING_MESSAGE);
 		    }
 		}
-	
-		
-		//Servidor: mysql
-		//Base de datos: bbdd003_clientes
-		//Tabla: clientespedidos
-		//Comentarios: Si se modifica porque se ha generado un nuevo pedido y se AÑADE un nuevo pedido
-			
-		
-				// Recorre cada elemento del HashMap
-				// Sustituye los datos de la tabla por los del mapa
-				// Usa PreparedStatement → seguro, sin inyección SQL
-				// Actualiza solo las filas que existen (por ID)
-				
-				//String sql = "UPDATE stock SET nombre=?, cantidad=?, precio=? WHERE id=?";
-			/*
-				try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-		
-				    mapaStock.forEach((id, objeto) -> {
-				        try {
-				            ps.setString(1, objeto.getNombre());
-				            ps.setInt(2, objeto.getCantidad());
-				            ps.setDouble(3, objeto.getPrecio());
-				            ps.setInt(4, id);
-				            ps.executeUpdate();
-				        } catch (Exception e) {
-				            e.printStackTrace();
-				        }
-				    });
-		
-				} catch (Exception e) {
-				    e.printStackTrace();
-				}
-		 	*/
-		
+	}
+	public static String generarReferencia(ClienteRegistrado clienteLogin) {
 
-			//Servidor: mysql
-			//Base de datos: bbdd003_clientes
-			//Tabla: imagenesinterfazweb
-			//Comentarios: Si se modifica despues para ACTUALIZAR el STOCK de los articulos comprados
+	    // 1. Nombre completo en un solo String
+	    String nombreCompleto = clienteLogin.getUsuario().trim();  // Ej: "Laura Gómez"
+
+	    // 2. Separar por espacios
+	    String[] partes = nombreCompleto.split("\\s+");
+
+	    // 3. Primera letra del nombre
+	    String primeraLetraNombre = partes[0].substring(0, 1).toUpperCase();
+
+	    // 4. Primera letra del apellido (primer apellido)
+	    String primeraLetraApellido = "";
+	    if (partes.length > 1) {
+	        primeraLetraApellido = partes[1].substring(0, 1).toUpperCase();
+	    } else {
+	        // Si no hay apellido, usa X o cualquier marcador
+	        primeraLetraApellido = "X";
+	    }
+
+	    // 5. Últimos 4 dígitos del teléfono
+	    String telefono = String.valueOf(clienteLogin.getTelefono()).trim();  //Conversion del numero telefono como LONG a STRING
+	    String ultimos4 = telefono.substring(telefono.length() - 4);
+
+	    // 6. Fecha AAAAMMDD
+	    LocalDate hoy = LocalDate.now();
+	    String fecha = hoy.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+	    // 7. Construcción final
+	    return primeraLetraNombre + primeraLetraApellido + ultimos4 +"-"+ fecha;
 	}
 }
 
@@ -493,17 +633,6 @@ class DatosBancariosCliente
 	}
 	public void setAnioTarjeta(int anioTarjeta) {
 		this.anioTarjeta = anioTarjeta;
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class MovimientoStockBBDD
-{
-	public MovimientoStockBBDD()
-	{
-		
 	}
 }
 
