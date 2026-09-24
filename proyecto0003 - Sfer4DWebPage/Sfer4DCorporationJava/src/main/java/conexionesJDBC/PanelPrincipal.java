@@ -56,9 +56,11 @@ class PanelHalldeApp extends JPanel implements ActionListener
     
 	//2) DECLARACION DE JBUTTON, JLABELS Y EL JCOMBOBOX
 	private JButton aceptar;    //BOTON DE ACEPTAR LA ELECCION IMPUESTA POR EL DESPLEGABLE
-	private JComboBox<String> eleccionUsuario;    //EL USUARIO ELIGE EL TIPO DE PERSONA QUE ACCEDE A LA APP
+	private JComboBox<String> eleccionUsuario = new JComboBox<String>();    //EL USUARIO ELIGE EL TIPO DE PERSONA QUE ACCEDE A LA APP
 	private JLabel tituloEleccion; //TITULO DEL DESPLEGABLE
     private String vector[]= {"INVITADO","CLIENTE","ADMINISTRACION","JEFES"};
+    private boolean interfazPreparada = false;
+    private boolean listenerEleccionRegistrado = false;
     
     //3) DECLARACION DE JBUTTON, JLABELS Y EL JCOMBOBX QUE APARECERAN CON LA LLAMADA DEL EVENTLISTENER PARA: CLIENTES, ADMINISTRACION Y JEFES, TODOS DIFERENTES
 	private JLabel tituloCliente, tituloAdministracion, tituloJefe;                     //TITULO DEL CLIENTE, ADMINISTRACION Y JEFES
@@ -105,15 +107,11 @@ class PanelHalldeApp extends JPanel implements ActionListener
 		this.tituloEleccion.setHorizontalAlignment(SwingConstants.CENTER);   
 		add(this.tituloEleccion);
 		
-		this.eleccionUsuario=new JComboBox<String>(this.vector);    
+		for (String tipoUsuario : this.vector) {
+			this.eleccionUsuario.addItem(tipoUsuario);
+		}
 		this.eleccionUsuario.setBounds(30, 50, 240,20); 
 		add(this.eleccionUsuario);
-		this.eleccionUsuario.addItemListener(e -> {     //SE PRETENDE DETECTAR LA ELECCION DESDE EL JCOMBOBOX PARA MOSTRAR UN FORMULARIO DIFERENTE
-		    if (e.getStateChange() == ItemEvent.SELECTED) {
-		        Object valor = eleccionUsuario.getSelectedItem();
-		        this.mostrarPanelConcreto(valor.toString());
-		    }
-		});
 
 		this.aceptar=new JButton("ACEPTAR ELECCIÓN");    
 		this.aceptar.setBounds(50, 90, 200,20);   
@@ -187,6 +185,26 @@ class PanelHalldeApp extends JPanel implements ActionListener
 	 	//SE PONEN LAS CAJAS COMUNNES PARA TODOS INHABILITADOS
 	 		this.cajanNombre.setVisible(false);
 	 		this.cajaPassword.setVisible(false);
+
+		this.registrarListenerEleccion();
+		this.interfazPreparada = true;
+	}
+	private void registrarListenerEleccion()
+	{
+		if (this.listenerEleccionRegistrado || this.eleccionUsuario == null) {
+			return;
+		}
+		this.listenerEleccionRegistrado = true;
+		this.eleccionUsuario.addItemListener(e -> {
+		    if (!this.interfazPreparada || e.getStateChange() != ItemEvent.SELECTED) {
+		        return;
+		    }
+		    Object valor = this.eleccionUsuario.getSelectedItem();
+		    if (valor == null) {
+		        return;
+		    }
+		    this.mostrarPanelConcreto(valor.toString());
+		});
 	}
 	public void mostrarPanelConcreto(String valor)
 	{
