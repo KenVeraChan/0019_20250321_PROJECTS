@@ -362,12 +362,16 @@ class CompraEjecutada
 		//Base de datos: bbdd003_clientes
 		//Columnas: NOMBRE, NUMERO CUENTA, MES, ANIO
 		//Comentarios: Se comprueba antes que exista una tarjeta de crédito para ejecutar la compra
+		boolean encontrado = false;   // aún no sabemos si el usuario está en la lista
 		
 		for (DatosBancariosCliente cliente : this.datosBancariosClientes)
 		{
 		  // 1. Se busca si coincide el nombre del cliente loggeado
 		  if (cliente.getNombreCliente().equals(this.clienteLogin.getUsuario()))
 		  {
+			 // 1. Se pone e luz verde porque se encontró
+		        encontrado = true;  // lo hemos encontrado
+			  
 		     // 2. Se busca si se valida la tarjeta (descifra internamente)
 		      boolean tarjetaValida = cliente.validarTarjeta(cliente.getNumeroCuentaCliente());
 
@@ -462,16 +466,24 @@ class CompraEjecutada
 							});
 						//3.7 - CERRAR RECURSOS		
 						conector3.close();
-		        }
-		        else
+				}
+		        else     //EN EL CASO DE QUE NO HAYA INCLUIDO LA TARJETA DE COMPRA EN EL REGISTRO
 		        {
 					JOptionPane.showMessageDialog(null, "ERROR: TARJETA NO VÁLIDA. COMPRA BLOQUEADA.", "PROCESO COMPRA INTERRUMPIDO", JOptionPane.WARNING_MESSAGE);
 		        }
+				//3.8 - NO HARA FALTA QUE EL BUCLE SIGA BUSCANDO SI YA SE LE ENCONTRÓ
+		      	break;   //SALE DEL BUCLE
 		    }
-		    else
-		    {
-				JOptionPane.showMessageDialog(null, "USUARIO NO REGISTRADO O NO SE HA ENCONTRADO ", "PROCESO COMPRA INTERRUMPIDO", JOptionPane.WARNING_MESSAGE);
-		    }
+		}
+		// Si después del bucle no se encontró el usuario:
+		if (!encontrado)
+		{     //DEBE BUSCAR AL USUARIO Y RECONOCERLO, PERO SI EN TODO EL TAMAÑO DESCARGADO NO APARECE DEBE MOSTRAR EL MENSAJE
+		    JOptionPane.showMessageDialog(
+		        null,
+		        "USUARIO NO REGISTRADO O NO SE HA ENCONTRADO",
+		        "PROCESO COMPRA INTERRUMPIDO",
+		        JOptionPane.WARNING_MESSAGE
+		    );
 		}
 	}
 	public static String generarReferencia(ClienteRegistrado clienteLogin) {

@@ -27,7 +27,7 @@ public class PanelPrincipal {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		SeguridadAES.inicializarClaveAES();   // SOLO UNA VEZ PARA CREAR LA CLAVE DEL FICHERO externo (destinado a cuenta bancaria compras)
+		SeguridadAES.inicializarClaveAES();   //SOLO UNA VEZ PARA CREAR LA CLAVE DEL FICHERO externo (destinado a cuenta bancaria compras)
 		SeguridadAES.CargarFicheroClave();    //SOLO UNA VEZ PARA CARGAR EL FICHERO DE LA CLAVE
 		HalldeApp app= new HalldeApp();
   }
