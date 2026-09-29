@@ -1,4 +1,4 @@
-package conexionesJDBC;
+package conexionesJDBC;						//// PORTAL DE: INVITADO, CLIENTE, ADMINISTRACION Y JEFE ////
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -95,24 +95,6 @@ class ConsultasTipoUsuario
 								conector.close();  //Liberar el conector que se establecio
 								System.exit(0);  //Se sale de la aplicacion
 							}
-							
-							
-							//LA CONSULTA A CONTINUACION ES PARA AÑADIR ELEMENTOS
-	
-							//2 - CREAR EL STATENMENT
-							//Statement myst = conector.createStatement();
-							
-							//3 - CREAR INSTRUCCIÓN SQL
-							//String inSQL="INSERT INTO productos(CODIGOARTICULO,NOMBREARTICULO,PRECIO) VALUES ('AR45','"+producto+"',50)";
-			
-							//4 - EJECUTAR SQL
-							//myst.executeUpdate(inSQL);
-							
-							//5 - CERRAR LA CONEXION
-							//Si se ha terminado la operación se cierra todo como buena practica
-							//myst.close();  //Liberar los recursos que se usaban en memoria
-							//conector.close();  //Liberar el conector que se establecio
-							//JOptionPane.showMessageDialog(null, "INFORMACIÓN ACTUALIZADA");
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -120,9 +102,91 @@ class ConsultasTipoUsuario
 					 }
 				break;
 			}
-			case 3:  //ACTUALIZAR UN ELEMENTO DE LA BBDD
-			{		//CARGA LA BBDD, PUEDE MODIFICAR, NO PUEDE AGREGAR, PERO SI ELIMINAR DATOS DE LA BBDD
-			
+			case 3:  //ADMINSITRACION 
+			{		
+				//1) SE COMPRUEBA SU EXISTENCIA COMO USUARIO DE ADMINSITRACION
+				 if(usuario.equals("") || contrasenia.equals(""))
+				 {			//NO SE HA CONECTADO EL USUARIO
+					 JOptionPane.showInternalMessageDialog(null, "USUARIO O CONTRASEÑA INCORRECTOS DE ADMINISTACION", "Estado: Acceso Denegado al sector Administrativo",  JOptionPane.OK_OPTION);
+					 System.exit(0);  //Se sale de la aplicacion
+				 }
+				 else
+				 {			//SE HA CONTECTADO EL USUARIO DE ADMINISTRACION
+					try {
+						//1) CREAR CONEXION
+						//EN EL CASO DE USO DE MYSQL SE EJECUTA LA CONEXION
+						Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd001_jefes_rrhh","root","1234");
+						
+						//2) SE PREPARA LA CONSULTA SENSIBLE CON DATOS PERSONALES: USUARIO Y PASSWORD DE LA TABLA: loginclientes
+						String consulta = "SELECT * FROM login WHERE USUARIO = ? AND CONTRASENIA = ?";
+
+						//3) SE ESTABLECE LA CONSULTA PARA VERIFICAR EL LOGGEADO
+						PreparedStatement cohesion = conector.prepareStatement(consulta);
+							//SE DECLARAN LAS VARIALES DE ENTRADA AL USUARIO CLIENTE
+						cohesion.setString(1, this.user);
+						cohesion.setString(2, this.password);
+						
+						//4) SE COMPRUEBA LA VERACIDAD DE LAS CREDENCIALES INTRODUCIDAS EJECUTANDO LA CONSULTA
+						ResultSet ejecutaConsulta = cohesion.executeQuery();
+
+						if (ejecutaConsulta.next()) {
+						    // Login correcto porque con el metodo next() podemos saber si el siguiente elemento esta vacio o no y si no lo esta es que 
+							 JOptionPane.showInternalMessageDialog(null, "ADMINISTADOR: "+this.user+" EN SERVICIO", "ESTADO: online", JOptionPane.INFORMATION_MESSAGE);
+							//AHORA PROCEDEMOS A LEER LOS DATOS DEL PUNTERO RESULTSET GUARDANDOLOS EN UN OBJETO DE TIPO: ClienteRegistrado
+							 AdministradorDatos clienteLogin= new AdministradorDatos(     //La contrasenia no se puede guardar en un objeto
+									 ejecutaConsulta.getInt(1),      //RECOGE EL ID
+									 ejecutaConsulta.getString(3),   //RECOGE EL NOMBRE
+									 ejecutaConsulta.getString(4),   //RECOGE EL ROL DEL USUARIO ADMINISTRACION
+									 ejecutaConsulta.getString(5)    //RECOGE EL DEPARTAMENTO AL QUE PERTENECE
+									 );
+							//5) SI SE HA TERMINADO LA OPERACION DE LOGIN SE CIERRA COMO BUENA PRACTICA
+							ejecutaConsulta.close();  //Liberar los recursos que se usaban en memoria
+							conector.close();  //Liberar el conector que se establecio
+							
+							//6) SE INICIA LA ETAPA DEL PANEL DE CONTROL DEL USUARIO ADMINISTRATIVO
+									
+							MarcoBaseOp insertar= new MarcoBaseOp(clienteLogin,true);
+						} else {
+						    // Login incorrecto
+							 JOptionPane.showInternalMessageDialog(null, "EL USUARIO NO EXISTE EN LA BASE DE DATOS", "Estado: Acceso Denegado",  JOptionPane.OK_OPTION);
+							//5) SI SE HA TERMINADO LA OPERACION DE LOGIN SE CIERRA COMO BUENA PRACTICA
+							ejecutaConsulta.close();  //Liberar los recursos que se usaban en memoria
+							conector.close();  //Liberar el conector que se establecio
+							System.exit(0);  //Se sale de la aplicacion
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				 }
+				
+				
+				
+					
+				
+					//	1.1. Gestión de Ventas y Pedidos
+					//  - Procesamiento de Pedidos: Recepción, preparación, cambio de estados
+				    //		(Pendiente, En Preparación, Enviado, Entregado) y cancelaciones.
+				  	//	- Facturación y Cobros: Emisión de facturas electrónicas, albaranes,
+				    //		registro de pagos manuales/transferencias y tramitación de devoluciones.
+				  	//  - Atención al Cliente: Gestión de tickets de soporte, resolución de
+				    //		incidencias con envíos y asignación de cupones de descuento directos.
+				 JOptionPane.showInternalMessageDialog(null, "ENTRADO EN ADMINISTRACION", "Estado: Acceso Denegado",  JOptionPane.OK_OPTION);
+				
+					//	1.2. Gestión Avanzada de Stock e Inventario
+				  	//	- Catálogo de Productos: Alta, baja y modificación de productos, precios,
+				    //	  	categorías e imágenes.
+				  	//	- Recepción de Mercancía: Registro de entrada de stock proveniente de
+				    //		proveedores y ajuste de mermas (productos dañados o extraviados).
+				  	//	- Configuración de Alertas: Establecimiento de umbrales mínimos de stock
+				    //		para notificar la necesidad de reposición.
+
+					//	1.3. Gestión de Clientes
+				  	//	- Administración de Clientes: Edición de datos de contacto, consulta del
+				    //		historial de compras y estado de la cuenta del cliente.
+				  	//	- Seguimiento de Invitados: Visualización del interés manifestado por
+				    //		usuarios invitados para posibles acciones de captación.
+				
 				break;
 			}
 			case 4:  //EXTRAER UN ELEMENTO DE LA BBDD

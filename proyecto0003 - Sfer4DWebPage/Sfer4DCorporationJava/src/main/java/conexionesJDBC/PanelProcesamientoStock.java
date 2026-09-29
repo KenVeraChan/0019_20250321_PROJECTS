@@ -1,4 +1,4 @@
-package conexionesJDBC;
+package conexionesJDBC;        //// STOCK DE CLIENTES ////
 
 import java.sql.Connection;
 import java.sql.DriverManager;

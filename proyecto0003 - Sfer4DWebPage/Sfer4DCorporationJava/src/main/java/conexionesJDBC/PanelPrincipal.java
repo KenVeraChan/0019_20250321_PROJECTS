@@ -110,7 +110,7 @@ class PanelHalldeApp extends JPanel implements ActionListener
 		for (String tipoUsuario : this.vector) {
 			this.eleccionUsuario.addItem(tipoUsuario);
 		}
-		this.eleccionUsuario.setBounds(30, 50, 240,20); 
+		this.eleccionUsuario.setBounds(30, 50, 240, 20); 
 		add(this.eleccionUsuario);
 
 		this.aceptar=new JButton("ACEPTAR ELECCIÓN");    

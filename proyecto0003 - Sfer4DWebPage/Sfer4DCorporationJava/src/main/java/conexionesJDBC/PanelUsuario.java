@@ -1,4 +1,4 @@
-package conexionesJDBC;
+package conexionesJDBC;               //// INVITADO Y CLIENTE ////
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
@@ -47,34 +47,47 @@ public class PanelUsuario {
 class MarcoBaseOp extends JFrame
 {
 	public MarcoBaseOp(Boolean habilitadorCliente)
-	{	
-		//1) ZONA DE CREAR VARIABLE INERTE
-		ClienteRegistrado clienteLoginSinNada=null;
-		
-		//2) ZONA DE MOSTRAR AL USUARIO INVITADO QUE DEBE VER
-		setBounds(250,100,400,200);    //No se necesitara que ocupe tanto en vertical
-		setTitle("AREA DE USUARIO INVITADO");
-		setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
-
-		setResizable(false);
-		PanelInsertar lamina1= new PanelInsertar("ficherosUtilizados/paisaje.jpg",30,this,false,habilitadorCliente,clienteLoginSinNada);  //No se muestra formulario
-			//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
-		add(lamina1);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
+	{	//1) ZONA DE INSERCCIONES USUARIO INVITADO
+			//1.1) ZONA DE CREAR VARIABLE INERTE
+			ClienteRegistrado clienteLoginSinNada=null;
+			
+			//1.2) ZONA DE MOSTRAR AL USUARIO INVITADO QUE DEBE VER
+			setBounds(250,100,400,200);    //No se necesitara que ocupe tanto en vertical
+			setTitle("AREA DE USUARIO INVITADO");
+			setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
+	
+			setResizable(false);
+			PanelInsertar lamina1= new PanelInsertar("ficherosUtilizados/paisaje.jpg",30,this,false,habilitadorCliente,clienteLoginSinNada);  //No se muestra formulario
+				//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
+			add(lamina1);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setVisible(true);
 	}
 	public MarcoBaseOp(ClienteRegistrado clienteLogin,Boolean habilitadorCliente)
-	{	//ZONA DE INSERCCIONES USUARIO CLIENTE, ADMINISTRADOR O JEFE
-		setBounds(250,100,480,530);
-		setTitle("AREA DE INSERCCIÓN COMPRAS");
-		setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
-
-		setResizable(false);
-		PanelInsertar lamina1= new PanelInsertar("ficherosUtilizados/paisaje.jpg",30,this,true,habilitadorCliente,clienteLogin);  //Si se muestra formulario
-			//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
-		add(lamina1);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
+	{	//2) ZONA DE INSERCCIONES USUARIO CLIENTE
+			setBounds(250,100,480,530);
+			setTitle("AREA DE INSERCCIÓN COMPRAS");
+			setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
+	
+			setResizable(false);
+			PanelInsertar lamina1= new PanelInsertar("ficherosUtilizados/paisaje.jpg",30,this,true,habilitadorCliente,clienteLogin);  //Si se muestra formulario
+				//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
+			add(lamina1);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setVisible(true);
+	}
+	public MarcoBaseOp(AdministradorDatos clienteLogin,Boolean habilitadorCliente)
+	{	//3) ZONA DE INSERCCIONES USUARIO ADMINISTRADOR
+			setBounds(250,100,480,530);
+			setTitle("AREA DE INSERCCIÓN COMPRAS");
+			setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
+	
+			setResizable(false);
+			PanelModificar lamina2= new PanelModificar(clienteLogin,habilitadorCliente);  //Si se muestra formulario
+				//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
+			add(lamina2);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setVisible(true);
 	}
 }
 class PanelInsertar extends JPanel implements ActionListener
@@ -125,7 +138,7 @@ class PanelInsertar extends JPanel implements ActionListener
 	//7) CREACION DE ESTRUCTURAS NECESARIAS
 	private Map<String, List<PedidosClientes>> comprasPorReferencia = new LinkedHashMap<>();
     
-	public PanelInsertar(String ruta, int transparencia, MarcoBaseOp ventanaBase,Boolean MostrarFormulario, Boolean habilitadorCliente,ClienteRegistrado clienteLogin)
+	public PanelInsertar(String ruta, int transparencia, MarcoBaseOp ventanaBase,Boolean MostrarFormulario, Boolean habilitadorCliente,ClienteRegistrado clienteLogin) 
 	{
 		//1) RECOGIENDO LA INFORMACION DEL CLIENTE LOGEADO COMO CLIENTE QUE PODRA O NO COMPRAR
 			this.clienteLogin=clienteLogin;
@@ -235,6 +248,7 @@ class PanelInsertar extends JPanel implements ActionListener
 			this.cargar.addActionListener(this);
         }
 	}
+
 	public String getEstilos(String datoAExponer)
 	{
 		String textoFiltrado=escaparHTML(datoAExponer);
