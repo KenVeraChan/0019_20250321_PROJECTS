@@ -66,7 +66,7 @@ class MarcoBaseOp extends JFrame
 	public MarcoBaseOp(ClienteRegistrado clienteLogin,Boolean habilitadorCliente)
 	{	//2) ZONA DE INSERCCIONES USUARIO CLIENTE
 			setBounds(250,100,480,530);
-			setTitle("AREA DE INSERCCIÓN COMPRAS");
+			setTitle("AREA DE PERSONAL DEL CLIENTE: "+clienteLogin.getUsuario().toUpperCase());
 			setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
 	
 			setResizable(false);
@@ -79,11 +79,11 @@ class MarcoBaseOp extends JFrame
 	public MarcoBaseOp(AdministradorDatos clienteLogin,Boolean habilitadorCliente)
 	{	//3) ZONA DE INSERCCIONES USUARIO ADMINISTRADOR
 			setBounds(250,100,480,530);
-			setTitle("AREA DE INSERCCIÓN COMPRAS");
+			setTitle("AREA DEL ADMINISTRADOR: "+clienteLogin.getUsuario().toUpperCase());
 			setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
 	
 			setResizable(false);
-			PanelModificar lamina2= new PanelModificar(clienteLogin,habilitadorCliente);  //Si se muestra formulario
+			PanelModificar lamina2= new PanelModificar("ficherosUtilizados/administracion.jpg",30,clienteLogin);  //Si se muestra formulario
 				//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
 			add(lamina2);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

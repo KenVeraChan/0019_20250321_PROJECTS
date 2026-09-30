@@ -135,7 +135,7 @@ class ConsultasTipoUsuario
 							//AHORA PROCEDEMOS A LEER LOS DATOS DEL PUNTERO RESULTSET GUARDANDOLOS EN UN OBJETO DE TIPO: ClienteRegistrado
 							 AdministradorDatos clienteLogin= new AdministradorDatos(     //La contrasenia no se puede guardar en un objeto
 									 ejecutaConsulta.getInt(1),      //RECOGE EL ID
-									 ejecutaConsulta.getString(3),   //RECOGE EL NOMBRE
+									 ejecutaConsulta.getString(2),   //RECOGE EL NOMBRE
 									 ejecutaConsulta.getString(4),   //RECOGE EL ROL DEL USUARIO ADMINISTRACION
 									 ejecutaConsulta.getString(5)    //RECOGE EL DEPARTAMENTO AL QUE PERTENECE
 									 );
@@ -159,34 +159,6 @@ class ConsultasTipoUsuario
 						e.printStackTrace();
 					}
 				 }
-				
-				
-				
-					
-				
-					//	1.1. Gestión de Ventas y Pedidos
-					//  - Procesamiento de Pedidos: Recepción, preparación, cambio de estados
-				    //		(Pendiente, En Preparación, Enviado, Entregado) y cancelaciones.
-				  	//	- Facturación y Cobros: Emisión de facturas electrónicas, albaranes,
-				    //		registro de pagos manuales/transferencias y tramitación de devoluciones.
-				  	//  - Atención al Cliente: Gestión de tickets de soporte, resolución de
-				    //		incidencias con envíos y asignación de cupones de descuento directos.
-				 JOptionPane.showInternalMessageDialog(null, "ENTRADO EN ADMINISTRACION", "Estado: Acceso Denegado",  JOptionPane.OK_OPTION);
-				
-					//	1.2. Gestión Avanzada de Stock e Inventario
-				  	//	- Catálogo de Productos: Alta, baja y modificación de productos, precios,
-				    //	  	categorías e imágenes.
-				  	//	- Recepción de Mercancía: Registro de entrada de stock proveniente de
-				    //		proveedores y ajuste de mermas (productos dañados o extraviados).
-				  	//	- Configuración de Alertas: Establecimiento de umbrales mínimos de stock
-				    //		para notificar la necesidad de reposición.
-
-					//	1.3. Gestión de Clientes
-				  	//	- Administración de Clientes: Edición de datos de contacto, consulta del
-				    //		historial de compras y estado de la cuenta del cliente.
-				  	//	- Seguimiento de Invitados: Visualización del interés manifestado por
-				    //		usuarios invitados para posibles acciones de captación.
-				
 				break;
 			}
 			case 4:  //EXTRAER UN ELEMENTO DE LA BBDD
