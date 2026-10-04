@@ -78,7 +78,7 @@ class MarcoBaseOp extends JFrame
 	}
 	public MarcoBaseOp(AdministradorDatos clienteLogin,Boolean habilitadorCliente)
 	{	//3) ZONA DE INSERCCIONES USUARIO ADMINISTRADOR
-			setBounds(250,100,480,530);
+			setBounds(250,100,420,400);
 			setTitle("AREA DEL ADMINISTRADOR: "+clienteLogin.getUsuario().toUpperCase());
 			setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
 	

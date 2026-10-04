@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXDatePicker;
@@ -72,8 +73,12 @@ class PanelModificar extends JPanel implements ActionListener
     //2) DECLARACION DE ACTIVADOR DE SI ES INVITADO A CLIENTE MODIFICANDO LO QUE MUESTRAEL PANEL DE STOCK
     private AdministradorDatos clienteLogin;
 
-    //3)  
-    
+    //3) LABELS DE QUÉ ACCIONES POSEEN LOS DE ADMINISTRACIÓN
+    private JLabel compras,aspirantes,tareas,stock;  //Gestion de compras clientes, gestión de futuros empleados, gestión tareas empresariales y gestion de stock 
+
+	//4) DECLARACION DE BOTONES Y ACCIONAMIENTOS
+	private JButton cajaCompras, cajaAspirantes, cajaTareas, cajaStock;
+	
 	public PanelModificar(String ruta, int transparencia, AdministradorDatos clienteLogin)
 	{
 		//PANEL DEL ADMINISTRADOR
@@ -102,8 +107,27 @@ class PanelModificar extends JPanel implements ActionListener
 		    } catch (Exception e) {
 		        e.printStackTrace();
 		    }	
-		//3) ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
+		//2) ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
 			setLayout(null);  //Para que respeten el setBounds
+			
+		//3) ADICION DE LABELS DECLARADOS
+			this.compras= new JLabel("GESTIÓN DE COMPRAS");        this.compras.setBounds(30,30,180,20);      add(this.compras); 
+			this.aspirantes= new JLabel("GESTIÓN DE ASPIRANTES");  this.aspirantes.setBounds(30,110,180,20);  add(this.aspirantes); 
+			this.tareas= new JLabel("GESTIÓN DE TAREAS");          this.tareas.setBounds(30,190,180,20);      add(this.tareas); 
+			this.stock= new JLabel("GESTIÓN DE STOCK");            this.stock.setBounds(30,270,180,20);       add(this.stock); 
+
+		//4) ADICION DE BOTONES DECLARADOS
+			this.cajaCompras= new JButton("ACCEDER A COMPRAS");         this.cajaCompras.setBounds(30,70,230,20);      add(this.cajaCompras);
+			this.cajaAspirantes= new JButton("ACCEDER A ASPIRANTES");   this.cajaAspirantes.setBounds(30,150,230,20);  add(this.cajaAspirantes);
+			this.cajaTareas= new JButton("ACCEDER A TAREAS");           this.cajaTareas.setBounds(30,230,230,20);      add(this.cajaTareas);
+			this.cajaStock= new JButton("ACCEDER A REPOSICIÓN STOCK");  this.cajaStock.setBounds(30,310,230,20);       add(this.cajaStock);
+
+	    //5) DECLARACION DE LOS ACTIONLISTENER
+			//REACCIONES DEL BOTON ACEPTAR Y CANCELAR OPERACIONES
+			this.cajaCompras.addActionListener(this);
+			this.cajaAspirantes.addActionListener(this);
+			this.cajaTareas.addActionListener(this);
+			this.cajaStock.addActionListener(this);
 	}
 	
 	
@@ -157,6 +181,24 @@ class PanelModificar extends JPanel implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+        Object src = e.getSource();
+     
+        if (src == cajaCompras) {   //CARGA EL HISTORIAL DE COMPRAS QUE YA SE HABÍAN REALIZADO
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA COMPRAS");
+            System.exit(0);
+        }
+        if (src == cajaAspirantes) {   //SALE DE LA APLICACION
+            JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA ASPIRANTES");
+            System.exit(0);
+        }
+        if (src == cajaTareas) {   //SALE DE LA APLICACION
+            JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA TAREAS");
+            System.exit(0);
+        }
+        if (src == cajaStock) {   //CARGA EL PANEL DE STOCK CON POSIBILIDAD DE EJECUTAR UNA COMPRA O NO
+			this.cajaStock.setEnabled(false);    //Se deshabilita el botón para evitar crear más instancias del segundo JFrame
+            JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA STOCK");
+            System.exit(0);
+        }
 	}
 }
