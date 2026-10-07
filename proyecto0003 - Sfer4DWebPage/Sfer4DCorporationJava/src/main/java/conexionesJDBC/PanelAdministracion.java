@@ -69,21 +69,26 @@ class PanelModificar extends JPanel implements ActionListener
 	//1) VARIABLES DE ENTRADA
     private BufferedImage imagen;
     private float alfaImagen = 1.0f; // opaco por defecto
-    
-    //2) DECLARACION DE ACTIVADOR DE SI ES INVITADO A CLIENTE MODIFICANDO LO QUE MUESTRAEL PANEL DE STOCK
-    private AdministradorDatos clienteLogin;
 
-    //3) LABELS DE QUÉ ACCIONES POSEEN LOS DE ADMINISTRACIÓN
+    //2) LABELS DE QUÉ ACCIONES POSEEN LOS DE ADMINISTRACIÓN
     private JLabel compras,aspirantes,tareas,stock;  //Gestion de compras clientes, gestión de futuros empleados, gestión tareas empresariales y gestion de stock 
 
-	//4) DECLARACION DE BOTONES Y ACCIONAMIENTOS
+	//3) DECLARACION DE BOTONES Y ACCIONAMIENTOS
 	private JButton cajaCompras, cajaAspirantes, cajaTareas, cajaStock;
 	
-	public PanelModificar(String ruta, int transparencia, AdministradorDatos clienteLogin)
+	//4) DECLARACION DEL CUADROBASE PARA POSTERIOR UTILIZACION PARA EJECUTAR LAS FUNCIONES DEL ADMINISTRADOR
+	private MarcoBaseOp cuadroBase;
+	
+	//5) DECLARACION DE LOS BOTONES DE ACEPTAR CAMBIOS Y CANCELAR OPERACION QUE SIEMPRE APARECERAN EN LAS CUATRO FUNCIONES DEL PANEL
+	private JButton aceptar,cancelar;
+	
+	//6) DECLARACION DEL OBJETO USADO PARA DETECTAR LA FUNCION DE LAS CUATRO PROPUESTAS, QUE FUE ELEGIDA
+	private Object selector;
+	
+	public PanelModificar(String ruta, int transparencia,MarcoBaseOp cuadroBase)
 	{
-		//PANEL DEL ADMINISTRADOR
-		//1) RECOGIENDO LA INFORMACION DEL CLIENTE LOGEADO COMO CLIENTE QUE PODRA O NO COMPRAR
-		this.clienteLogin=clienteLogin;
+		//PANEL DEL ADMINISTRADOR: recepcion del cuadro FRAME base anterior para la carga de las funciones del administrador
+		this.cuadroBase=cuadroBase;
 		
 		/////// TRATAMIENTO DE FONDO LAMINA /////////////////////
 		    try {
@@ -111,16 +116,16 @@ class PanelModificar extends JPanel implements ActionListener
 			setLayout(null);  //Para que respeten el setBounds
 			
 		//3) ADICION DE LABELS DECLARADOS
-			this.compras= new JLabel("GESTIÓN DE COMPRAS");        this.compras.setBounds(30,30,180,20);      add(this.compras); 
-			this.aspirantes= new JLabel("GESTIÓN DE ASPIRANTES");  this.aspirantes.setBounds(30,110,180,20);  add(this.aspirantes); 
-			this.tareas= new JLabel("GESTIÓN DE TAREAS");          this.tareas.setBounds(30,190,180,20);      add(this.tareas); 
-			this.stock= new JLabel("GESTIÓN DE STOCK");            this.stock.setBounds(30,270,180,20);       add(this.stock); 
+			this.compras= new JLabel("GESTIÓN DE COMPRAS");        this.compras.setBounds(120,30,180,20);      add(this.compras); 
+			this.aspirantes= new JLabel("GESTIÓN DE ASPIRANTES");  this.aspirantes.setBounds(120,110,180,20);  add(this.aspirantes); 
+			this.tareas= new JLabel("GESTIÓN DE TAREAS");          this.tareas.setBounds(120,190,180,20);      add(this.tareas); 
+			this.stock= new JLabel("GESTIÓN DE STOCK");            this.stock.setBounds(120,270,180,20);       add(this.stock); 
 
 		//4) ADICION DE BOTONES DECLARADOS
-			this.cajaCompras= new JButton("ACCEDER A COMPRAS");         this.cajaCompras.setBounds(30,70,230,20);      add(this.cajaCompras);
-			this.cajaAspirantes= new JButton("ACCEDER A ASPIRANTES");   this.cajaAspirantes.setBounds(30,150,230,20);  add(this.cajaAspirantes);
-			this.cajaTareas= new JButton("ACCEDER A TAREAS");           this.cajaTareas.setBounds(30,230,230,20);      add(this.cajaTareas);
-			this.cajaStock= new JButton("ACCEDER A REPOSICIÓN STOCK");  this.cajaStock.setBounds(30,310,230,20);       add(this.cajaStock);
+			this.cajaCompras= new JButton("ACCEDER A COMPRAS");         this.cajaCompras.setBounds(80,70,230,20);      add(this.cajaCompras);
+			this.cajaAspirantes= new JButton("ACCEDER A ASPIRANTES");   this.cajaAspirantes.setBounds(80,150,230,20);  add(this.cajaAspirantes);
+			this.cajaTareas= new JButton("ACCEDER A TAREAS");           this.cajaTareas.setBounds(80,230,230,20);      add(this.cajaTareas);
+			this.cajaStock= new JButton("ACCEDER A REPOSICIÓN STOCK");  this.cajaStock.setBounds(80,310,230,20);       add(this.cajaStock);
 
 	    //5) DECLARACION DE LOS ACTIONLISTENER
 			//REACCIONES DEL BOTON ACEPTAR Y CANCELAR OPERACIONES
@@ -162,12 +167,7 @@ class PanelModificar extends JPanel implements ActionListener
   	//	- Seguimiento de Invitados: Visualización del interés manifestado por
     //		usuarios invitados para posibles acciones de captación.
 
-	
-	
-	
-	
-	
-	
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -185,20 +185,105 @@ class PanelModificar extends JPanel implements ActionListener
      
         if (src == cajaCompras) {   //CARGA EL HISTORIAL DE COMPRAS QUE YA SE HABÍAN REALIZADO
 			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA COMPRAS");
-            System.exit(0);
+
         }
         if (src == cajaAspirantes) {   //SALE DE LA APLICACION
             JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA ASPIRANTES");
-            System.exit(0);
+
         }
         if (src == cajaTareas) {   //SALE DE LA APLICACION
             JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA TAREAS");
-            System.exit(0);
+
         }
         if (src == cajaStock) {   //CARGA EL PANEL DE STOCK CON POSIBILIDAD DE EJECUTAR UNA COMPRA O NO
-			this.cajaStock.setEnabled(false);    //Se deshabilita el botón para evitar crear más instancias del segundo JFrame
-            JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA STOCK");
-            System.exit(0);
+            //1) Se deshabilitan los botones para evitar interferencias entre funciones ejecutadas al mismo tiempo
+	        	this.cajaCompras.setEnabled(false);
+				this.cajaAspirantes.setEnabled(false);
+				this.cajaTareas.setEnabled(false);
+				this.cajaStock.setEnabled(false);
+				
+			//2) Se redimensiona el FRAME añadido
+				this.cuadroBase.setBounds(250,100,720,400);
+		
+			//3) Se guarda el selector que fue elegido para tener la funcion detectada
+				this.setSelector(src);
+				
+			//4) Ubicacion de botonera, identica para todas las funciones
+				ubicacionBotones();
+        }
+        if (src == aceptar) {   //CARGA EL HISTORIAL DE COMPRAS QUE YA SE HABÍAN REALIZADO
+        	//1) Se ejecutan las acciones correspondientes a la FUNCION ELEGIDA
+        		this.ejecutaAcciones(src);
+        	//2) Se reestablece el panel inicial
+        		this.reestablecerInterfazInicial();
+        }
+        if (src == cancelar) {   //CARGA EL HISTORIAL DE COMPRAS QUE YA SE HABÍAN REALIZADO
+        	//1) Se reestablece el panel inicial
+    			this.reestablecerInterfazInicial();
         }
 	}
+	
+	public void setSelector(Object objetoElegido)
+	{
+		this.selector=objetoElegido;
+	}
+	public Object getSelector()
+	{
+		return this.selector;
+	}
+	
+	public void ubicacionBotones()
+	{
+	    //3) Aparicion del sistema de botones
+		this.aceptar= new JButton("CONFIRMAR ACCIONES");   this.aceptar.setBounds(400,50,190,20);   add(this.aceptar);
+		this.cancelar= new JButton("CANCELAR OPERACIÓN");  this.cancelar.setBounds(400,90,190,20);  add(this.cancelar);			
+		
+		//4) Se adicionan los EventListeners de los dos botones
+		this.aceptar.addActionListener(this);
+		this.cancelar.addActionListener(this);
+	}
+	public void reestablecerInterfazInicial()
+	{
+    	//2) Se vuelven a habilitar los botones con todas las acciones que poseia adminsitracion
+    	this.cajaCompras.setEnabled(true);
+		this.cajaAspirantes.setEnabled(true);
+		this.cajaTareas.setEnabled(true);
+		this.cajaStock.setEnabled(true);
+	
+		//3) Se desaparecen todo el cuadro de botones y desplegables que se adicionaron:
+			
+			//3.1) DE LA FUNCION: CAJA COMPRAS
+		
+			//3.2) DE LA FUNCION: CAJA ASPIRANTES
+			
+			//3.3) DE LA FUNCION: CAJA TAREAS
+			
+			//3.4) DE LA FUNCION: CAJA STOCK
+			this.aceptar.setVisible(false);
+			this.cancelar.setVisible(false);
+			
+		//4) Se devuelve el setbounds a la forma anterior
+			this.cuadroBase.setBounds(250,100,420,400);
+	}
+	public void ejecutaAcciones(Object objetoElegido)
+	{
+		if(objetoElegido==cajaCompras)
+		{
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA COMPRAS");
+		}
+		if(objetoElegido==cajaAspirantes)
+		{
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA ASPIRANTES");	
+		}
+		if(objetoElegido==cajaTareas)
+		{
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA TAREAS");
+		}
+		if(objetoElegido==cajaStock)
+		{
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA STOCK");
+		}
+	}
 }
+
+

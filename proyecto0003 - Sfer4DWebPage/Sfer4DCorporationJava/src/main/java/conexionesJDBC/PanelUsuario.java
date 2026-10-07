@@ -79,11 +79,11 @@ class MarcoBaseOp extends JFrame
 	public MarcoBaseOp(AdministradorDatos clienteLogin,Boolean habilitadorCliente)
 	{	//3) ZONA DE INSERCCIONES USUARIO ADMINISTRADOR
 			setBounds(250,100,420,400);
-			setTitle("AREA DEL ADMINISTRADOR: "+clienteLogin.getUsuario().toUpperCase());
+			setTitle("AREA ADMINISTRADOR: "+clienteLogin.getUsuario().toUpperCase());
 			setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());  //CAMBIA EL ICONO DE LA APLICACION
 	
 			setResizable(false);
-			PanelModificar lamina2= new PanelModificar("ficherosUtilizados/administracion.jpg",30,clienteLogin);  //Si se muestra formulario
+			PanelModificar lamina2= new PanelModificar("ficherosUtilizados/administracion.jpg",30,this);  //Si se muestra formulario
 				//EL THIS DE LA INSTANCIACIÓN ANTERIOR ES PORQUE SE NECESITA EL MarcoInsertar CREADO
 			add(lamina2);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -482,7 +482,7 @@ class MarcoInsertarStock extends JFrame
         
         //8) Boton de MOSTRAR EL PANEL COMPLETO DE VENTAS para el usuario
         mostrarPanel= new JButton("MOSTRAR RECOPILADO VENTAS");
-        mostrarPanel.setBounds(150,60+63*this.dimensionVerticalScroll, 220, 25);
+        mostrarPanel.setBounds(150,60+63*this.dimensionVerticalScroll, 280, 25);
         mostrarPanel.addActionListener(e -> {
             //DEBE MOSTRAR POR PANTALLA UN CUADRO CON LAS VENTAS SELECCIONADAS Y EL TOTAL
         		opcionCompra=CarritoCompra.getMapaCarro(activadorCompras);
@@ -561,124 +561,173 @@ class PanelInsertarStock extends JPanel implements ActionListener
 	//2) ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
 		setLayout(null);  //Para que respeten el setBounds
 		
-	//3) DECLARACION DE BOTONES PARA PODER MOSTRAR AL USUARIO LAS POSIBLES ELECCIONES EXISTENTES
+	//3) DECLARCION DEL BOTON DE LA COMPRA RECOPILADA EN EL CARRITO POR PARTE DEL USUARIO COMO CLIENTE
+		this.realizarCompra=new JButton("COMPRAR");  this.realizarCompra.setBounds(390,60+63*this.dimensionVerticalScroll, 120, 25);   this.realizarCompra.setHorizontalAlignment(SwingConstants.CENTER);   
+	
+		this.muestraCuadroStockCategorias(mapaStock,true);
+	}
+	
+	public void muestraCuadroStockCategorias(HashMap<Integer, ObjetoVenta> mapaStock,boolean invitadoCliente)
+	{
+		//PARA EL CASO DEL PANEL INVITADO, CLIENTE Y ADMINISTRACION. 
+		//EN ADMINISTRCION NO PRECISA DE BOTONES DE COMPRA NI NADA POR EL ESTILO
+		//SOLO REPOSICION DE STOCK DE PRODUCTOS, SERVICIOS Y PROYECTOS
+		//LA VARIABLE: invitadoCliente, permite discernir entre si es INVITADO O CLIENTE, por un lado o ADMINISTRACION
+		
+		//4) DECLARACION DE TITULOS PARA PODER MOSTRAR AL USUARIO LAS POSIBLES ELECCIONES EXISTENTES
 		this.productos=new JLabel("PRODUCTOS");      this.productos.setBounds(30, 10, 180,20);   this.productos.setHorizontalAlignment(SwingConstants.CENTER);   add(this.productos);   
 		this.servicios=new JLabel("SERVICIOS");      this.servicios.setBounds(230, 10, 180,20);  this.servicios.setHorizontalAlignment(SwingConstants.CENTER);   add(this.servicios);
 		this.proyectos=new JLabel("PROYECTOS");      this.proyectos.setBounds(430, 10, 180,20);  this.proyectos.setHorizontalAlignment(SwingConstants.CENTER);   add(this.proyectos);
 		
-	//4) DECLARCION DEL BOTON DE LA COMPRA RECOPILADA EN EL CARRITO POR PARTE DEL USUARIO COMO CLIENTE
-		this.realizarCompra=new JButton("COMPRAR");  this.realizarCompra.setBounds(390,60+63*this.dimensionVerticalScroll, 120, 25);   this.realizarCompra.setHorizontalAlignment(SwingConstants.CENTER);   
-		
 		mapaStock.forEach((clave,valor)->
-		{
-			if("PRODUCTOS".equals(valor.getDestino().trim()))
-			{	//SOLO SE MOSTRARAN LOS PRODUCTOS, SERVICIOS O PROYECTOS el resto es de la interfaz Angular de la pagina web				
-				
-				//SE AÑADIRA EL JBUTTON
-				JButton botones= new JButton("<html>"+(this.punteroProdu+1)+") "+valor.getNombre().substring(0, valor.getNombre().length() - 4)+"<br>"+valor.getSector()+"</html>");
-				botones.setBounds(30,50+60*this.punteroProdu,180,30);  
-				botones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-				botones.setHorizontalAlignment(SwingConstants.CENTER);     //alineacion fuente
-				add(botones);
-				botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
-				botones.addActionListener(this);
-				
-				//PANEL ADAPTADO AL MODO USUARIO
-				//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
-				JLabel titulo= new JLabel("Cantidad PRODUCTOS:");
-				titulo.setBounds(30,80+60*this.punteroProdu,165,18); 
-				titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-				add(titulo);
-
-				//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADES
+			{
+				if("PRODUCTOS".equals(valor.getDestino().trim()))
+				{	//SOLO SE MOSTRARAN LOS PRODUCTOS, SERVICIOS O PROYECTOS el resto es de la interfaz Angular de la pagina web				
+					
+					//SE AÑADIRA EL JBUTTON
+					JButton botones= new JButton("<html>"+(this.punteroProdu+1)+") "+valor.getNombre().substring(0, valor.getNombre().length() - 4)+"<br>"+valor.getSector()+"</html>");
+					botones.setBounds(30,50+60*this.punteroProdu,180,30);  
+					botones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+					botones.setHorizontalAlignment(SwingConstants.CENTER);     //alineacion fuente
+					add(botones);
+					botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
+					botones.addActionListener(this);
+					
+					//PANEL ADAPTADO AL MODO USUARIO
+					//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
+					JLabel titulo= new JLabel("Cantidad PRODUCTOS:");
+					titulo.setBounds(30,80+60*this.punteroProdu,165,18); 
+					titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+					add(titulo);
+	
+					//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADES
+						//Se llena el vector de opciones numericas
+						Integer[] cantidades;
+						if(invitadoCliente)
+						{
+							//ES INVITADO O CLIENTE
+							cantidades= new Integer[valor.getCantidad()+1];
+							for(int i=0;i<valor.getCantidad()+1;i++)
+							{
+								cantidades[i]=i;
+							}
+						}
+						else {
+							//ES ADMINSTRACION
+							cantidades= new Integer[10];
+							for(int i=0;i<cantidades.length;i++)    //CORREGIR DESBORDAMIENTO....
+							{
+								cantidades[i]=100*i*i;
+							}
+						}
+						//Se rellena el JCOMBOBOX
+						JComboBox<Integer>elecciones= new JComboBox<Integer>(cantidades);
+						elecciones.setBounds(150,80+60*this.punteroProdu,60,18);  
+						elecciones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+						add(elecciones);
+						elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener				
+						elecciones.addActionListener(e->{CarritoCompra.getMapaCompras(mapaStock,elecciones);});
+					this.punteroProdu++;
+				}
+				if("SERVICIOS".equals(valor.getDestino().trim()))
+				{	//SOLO SE MOSTRARAN LOS PRODUCTOS, SERVICIOS O PROYECTOS el resto es de la interfaz Angular de la pagina web				
+					JButton botones= new JButton("<html>"+(this.punteroServ+1)+") "+valor.getNombre().substring(0, valor.getNombre().length() - 4)+"<br>"+valor.getSector()+"</html>");
+					botones.setBounds(230,50+60*this.punteroServ,180,30);
+					botones.setFont(new Font("Arial", Font.PLAIN, 10));
+					botones.setHorizontalAlignment(SwingConstants.CENTER);
+					add(botones);
+					botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
+					botones.addActionListener(this);
+	
+					//PANEL ADAPTADO AL MODO USUARIO
+					
+					//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
+					JLabel titulo= new JLabel("Cantidad SERVICIOS:");
+					titulo.setBounds(230,80+60*this.punteroServ,165,18);
+					titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+					add(titulo);
+						
+					//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADESS
 					//Se llena el vector de opciones numericas
-					Integer[] cantidades= new Integer[valor.getCantidad()+1];
-					for(int i=0;i<valor.getCantidad()+1;i++)
-					{
-						cantidades[i]=i;
-					}
-					//Se rellena el JCOMBOBOX
-					JComboBox<Integer>elecciones= new JComboBox<Integer>(cantidades);
-					elecciones.setBounds(150,80+60*this.punteroProdu,60,18);  
-					elecciones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-					add(elecciones);
-					elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener				
-					elecciones.addActionListener(e->{CarritoCompra.getMapaCompras(mapaStock,elecciones);});
-				this.punteroProdu++;
-			}
-			if("SERVICIOS".equals(valor.getDestino().trim()))
-			{	//SOLO SE MOSTRARAN LOS PRODUCTOS, SERVICIOS O PROYECTOS el resto es de la interfaz Angular de la pagina web				
-				JButton botones= new JButton("<html>"+(this.punteroServ+1)+") "+valor.getNombre().substring(0, valor.getNombre().length() - 4)+"<br>"+valor.getSector()+"</html>");
-				botones.setBounds(230,50+60*this.punteroServ,180,30);
-				botones.setFont(new Font("Arial", Font.PLAIN, 10));
-				botones.setHorizontalAlignment(SwingConstants.CENTER);
-				add(botones);
-				botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
-				botones.addActionListener(this);
-
-				//PANEL ADAPTADO AL MODO USUARIO
-				
-				//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
-				JLabel titulo= new JLabel("Cantidad SERVICIOS:");
-				titulo.setBounds(230,80+60*this.punteroServ,165,18);
-				titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-				add(titulo);
+						Integer[] cantidades;
+						if(invitadoCliente)
+						{
+							//ES INVITADO O CLIENTE
+							cantidades= new Integer[valor.getCantidad()+1];
+							for(int i=0;i<valor.getCantidad()+1;i++)
+							{
+								cantidades[i]=i;
+							}
+						}
+						else {
+							//ES ADMINSTRACION
+							cantidades= new Integer[10];
+							for(int i=0;i<cantidades.length;i++)    //CORREGIR DESBORDAMIENTO....
+							{
+								cantidades[i]=100*i;
+							}
+						}
+						//Se rellena el JCOMBOBOX
+						JComboBox<Integer>elecciones= new JComboBox<Integer>(cantidades);
+						elecciones.setBounds(350,80+60*this.punteroServ,60,18);  
+						elecciones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+						elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
+						add(elecciones);
+						
+						elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener				
+						elecciones.addActionListener(e->{CarritoCompra.getMapaCompras(mapaStock,elecciones);});
+					this.punteroServ++;
+				}
+				if("PROYECTOS".equals(valor.getDestino().trim()))
+				{	//SOLO SE MOSTRARAN LOS PRODUCTOS, SERVICIOS O PROYECTOS el resto es de la interfaz Angular de la pagina web				
+					JButton botones= new JButton("<html>"+(this.punteroProy+1)+") "+valor.getNombre().substring(0, valor.getNombre().length() - 4)+"<br>"+valor.getSector()+"</html>");
+					botones.setBounds(430,50+60*this.punteroProy,180,30);
+					botones.setFont(new Font("Arial", Font.PLAIN, 10));
+					botones.setHorizontalAlignment(SwingConstants.CENTER);
+					add(botones);
+					botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
+					botones.addActionListener(this);
+	
+					//PANEL ADAPTADO AL MODO USUARIO
 					
-				//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADES
+					//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
+					JLabel titulo= new JLabel("Cantidad PROYECTOS:");
+					titulo.setBounds(430,80+60*this.punteroProy,165,18); 
+					titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+					add(titulo);
+						
+					//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADES
 					//Se llena el vector de opciones numericas
-					Integer[] cantidades= new Integer[valor.getCantidad()+1];
-					for(int i=0;i<valor.getCantidad()+1;i++)
-					{
-						cantidades[i]=i;
-					}
-					//Se rellena el JCOMBOBOX
-					JComboBox<Integer>elecciones= new JComboBox<Integer>(cantidades);
-					elecciones.setBounds(350,80+60*this.punteroServ,60,18);  
-					elecciones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-					elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
-					add(elecciones);
-					
-					elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener				
-					elecciones.addActionListener(e->{CarritoCompra.getMapaCompras(mapaStock,elecciones);});
-				this.punteroServ++;
-			}
-			if("PROYECTOS".equals(valor.getDestino().trim()))
-			{	//SOLO SE MOSTRARAN LOS PRODUCTOS, SERVICIOS O PROYECTOS el resto es de la interfaz Angular de la pagina web				
-				JButton botones= new JButton("<html>"+(this.punteroProy+1)+") "+valor.getNombre().substring(0, valor.getNombre().length() - 4)+"<br>"+valor.getSector()+"</html>");
-				botones.setBounds(430,50+60*this.punteroProy,180,30);
-				botones.setFont(new Font("Arial", Font.PLAIN, 10));
-				botones.setHorizontalAlignment(SwingConstants.CENTER);
-				add(botones);
-				botones.setActionCommand("ACCIONADO" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
-				botones.addActionListener(this);
-
-				//PANEL ADAPTADO AL MODO USUARIO
-				
-				//SE AÑADIRA EL JLABEL PARA LA TITULACION DE POSTERIOR JCOMBOBOX
-				JLabel titulo= new JLabel("Cantidad PROYECTOS:");
-				titulo.setBounds(430,80+60*this.punteroProy,165,18); 
-				titulo.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-				add(titulo);
-					
-				//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADES
-					//Se llena el vector de opciones numericas
-					Integer[] cantidades= new Integer[valor.getCantidad()+1];
-					for(int i=0;i<valor.getCantidad()+1;i++)
-					{
-						cantidades[i]=i;
-					}
-					//Se rellena el JCOMBOBOX
-					JComboBox<Integer>elecciones= new JComboBox<Integer>(cantidades);
-					elecciones.setBounds(550,80+60*this.punteroProy,60,18);  
-					elecciones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
-					elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
-					add(elecciones);
-					
-					elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener				
-					elecciones.addActionListener(e->{CarritoCompra.getMapaCompras(mapaStock,elecciones);});
-				this.punteroProy++;
-			}
-		});
+						Integer[] cantidades;
+						if(invitadoCliente)
+						{
+							//ES INVITADO O CLIENTE
+							cantidades= new Integer[valor.getCantidad()+1];
+							for(int i=0;i<valor.getCantidad()+1;i++)
+							{
+								cantidades[i]=i;
+							}
+						}
+						else {
+							//ES ADMINSTRACION
+							cantidades= new Integer[10];
+							for(int i=0;i<cantidades.length;i++)    //CORREGIR DESBORDAMIENTO....
+							{
+								cantidades[i]=10*i;
+							}
+						}
+						//Se rellena el JCOMBOBOX
+						JComboBox<Integer>elecciones= new JComboBox<Integer>(cantidades);
+						elecciones.setBounds(550,80+60*this.punteroProy,60,18);  
+						elecciones.setFont(new Font("Arial", Font.PLAIN, 10));      //tamanio fuente
+						elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener
+						add(elecciones);
+						
+						elecciones.setActionCommand("CANTIDAD" + valor.getID());  //Registro interno del boton para la deteccion del ActionListener				
+						elecciones.addActionListener(e->{CarritoCompra.getMapaCompras(mapaStock,elecciones);});
+					this.punteroProy++;
+				}
+			});	
 	}
     @Override
     protected void paintComponent(Graphics g) {
