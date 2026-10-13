@@ -8,7 +8,9 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -85,6 +87,17 @@ class PanelModificar extends JPanel implements ActionListener
 	//6) DECLARACION DEL OBJETO USADO PARA DETECTAR LA FUNCION DE LAS CUATRO PROPUESTAS, QUE FUE ELEGIDA
 	private Object selector;
 	
+	//7) DECLARACION DE LAS VARIABES, DESPLEGABLES Y BOTONES DE LA ZONA DE ADMINISTRACION
+    private int punteroProdu=0, punteroServ=0, punteroProy=0;   //Puntero de relleno
+    private JLabel tituloCategoria,tituloArticulo,tituloCantidad;
+    private JComboBox<String> cajaCategoria;
+    private JComboBox<String> cajaArticulo;
+    private JComboBox<Integer> cajaCantidad;
+    
+	//8) DECLARACION DEL OBJETO HASHMAP PARA LA SELECCION DE DATOS DEL STOCK ACTUAL
+	private HashMap<Integer, ObjetoVenta> stockActual= new HashMap<>();
+	private int puntero=0; //Valor a ser recorrido dentro del vector de los PRODUCTOS, SERVICIOS O PROYECTOS para ser rellenado
+    
 	public PanelModificar(String ruta, int transparencia,MarcoBaseOp cuadroBase)
 	{
 		//PANEL DEL ADMINISTRADOR: recepcion del cuadro FRAME base anterior para la carga de las funciones del administrador
@@ -181,46 +194,27 @@ class PanelModificar extends JPanel implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-        Object src = e.getSource();
-     
-        if (src == cajaCompras) {   //CARGA EL HISTORIAL DE COMPRAS QUE YA SE HABÍAN REALIZADO
-			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA COMPRAS");
-
-        }
-        if (src == cajaAspirantes) {   //SALE DE LA APLICACION
-            JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA ASPIRANTES");
-
-        }
-        if (src == cajaTareas) {   //SALE DE LA APLICACION
-            JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA TAREAS");
-
-        }
-        if (src == cajaStock) {   //CARGA EL PANEL DE STOCK CON POSIBILIDAD DE EJECUTAR UNA COMPRA O NO
-            //1) Se deshabilitan los botones para evitar interferencias entre funciones ejecutadas al mismo tiempo
-	        	this.cajaCompras.setEnabled(false);
-				this.cajaAspirantes.setEnabled(false);
-				this.cajaTareas.setEnabled(false);
-				this.cajaStock.setEnabled(false);
-				
-			//2) Se redimensiona el FRAME añadido
-				this.cuadroBase.setBounds(250,100,720,400);
-		
-			//3) Se guarda el selector que fue elegido para tener la funcion detectada
-				this.setSelector(src);
-				
-			//4) Ubicacion de botonera, identica para todas las funciones
-				ubicacionBotones();
-        }
-        if (src == aceptar) {   //CARGA EL HISTORIAL DE COMPRAS QUE YA SE HABÍAN REALIZADO
-        	//1) Se ejecutan las acciones correspondientes a la FUNCION ELEGIDA
-        		this.ejecutaAcciones(src);
-        	//2) Se reestablece el panel inicial
-        		this.reestablecerInterfazInicial();
-        }
-        if (src == cancelar) {   //CARGA EL HISTORIAL DE COMPRAS QUE YA SE HABÍAN REALIZADO
-        	//1) Se reestablece el panel inicial
-    			this.reestablecerInterfazInicial();
-        }
+		Object src = e.getSource();
+		//SE DIBUJA LA INTERFAZ Y SE PREPARA TODO SEGUN EL OBJETO IMPLICADO ELEGIDO
+		 ubicacionBotones(e.getSource());
+        //if (src == aceptar) {   //EJECUTA LA ACCION CORRESPONDIENTE A LA SELECCION DEL MENU ANTERIOR
+    	  //1) SE EJECUTAN LAS ACCIONES SEGUN EL SELECTOR DEL MENU PRINCIPAL
+            if(this.getSelector()==cajaCompras)
+            {
+            	JOptionPane.showInputDialog("Elegido CAJA COMPRAS");
+            }
+            if(this.getSelector()==cajaAspirantes)
+            {
+            	JOptionPane.showInputDialog("Elegido CAJA ASPIRANTES");
+            }
+            if(this.getSelector()==cajaTareas)
+            {
+            	JOptionPane.showInputDialog("Elegido CAJA TAREAS");
+            }
+            if(this.getSelector()==cajaStock)
+            {
+            	JOptionPane.showInputDialog("Elegido CAJA STOCK");
+            }
 	}
 	
 	public void setSelector(Object objetoElegido)
@@ -232,15 +226,39 @@ class PanelModificar extends JPanel implements ActionListener
 		return this.selector;
 	}
 	
-	public void ubicacionBotones()
+	public void ubicacionBotones(Object seleccionado)
 	{
-	    //3) Aparicion del sistema de botones
-		this.aceptar= new JButton("CONFIRMAR ACCIONES");   this.aceptar.setBounds(400,50,190,20);   add(this.aceptar);
-		this.cancelar= new JButton("CANCELAR OPERACIÓN");  this.cancelar.setBounds(400,90,190,20);  add(this.cancelar);			
+        //1) Se deshabilitan los botones para evitar interferencias entre funciones ejecutadas al mismo tiempo
+        	this.cajaCompras.setEnabled(false);
+			this.cajaAspirantes.setEnabled(false);
+			this.cajaTareas.setEnabled(false);
+			this.cajaStock.setEnabled(false);
+			
+		//2) Se redimensiona el FRAME añadido
+			this.cuadroBase.setBounds(250,100,720,400);
+	
+		//3) Se guarda el selector que fue elegido para tener la funcion detectada
+			this.setSelector(seleccionado);
+			
+		//4) Se expone la interfaz elegida correspondientes a la FUNCION ELEGIDA
+			this.dibujaInterfazElegida(seleccionado);  
+			
+	    //5) Aparicion del sistema de botones
+			this.aceptar= new JButton("CONFIRMAR ACCIONES");   this.aceptar.setBounds(440,270,190,20);   add(this.aceptar);
+			this.cancelar= new JButton("CANCELAR OPERACIÓN");  this.cancelar.setBounds(440,310,190,20);   add(this.cancelar);				
 		
-		//4) Se adicionan los EventListeners de los dos botones
-		this.aceptar.addActionListener(this);
-		this.cancelar.addActionListener(this);
+		//6) Se adicionan los EventListeners de los dos botones
+			this.aceptar.addActionListener(e->{
+            	JOptionPane.showInputDialog("HAS ACEPTADO OPERACION. EJECUTANDO ACCIONES");
+			});     //METER EN UNA ASGINACIONN LAMDA LAS ACCIONES DE LISTENER AQUI
+			this.cancelar.addActionListener(e->{
+            	JOptionPane.showInputDialog("HAS CANCELADO OPERACION");
+                //SE EJECUTAN EL RETORNO DE LA INTERFAZ ANTERIOR TRAS TERMINADAS LAS ACCIONES
+           		this.reestablecerInterfazInicial();
+			});
+		
+		//7) Se deshabilitan el boton de EJECUTAR ACCIONES pero no el de CANCELAR porque se puede volver sin hacer nada
+			this.aceptar.setEnabled(false);
 	}
 	public void reestablecerInterfazInicial()
 	{
@@ -265,7 +283,7 @@ class PanelModificar extends JPanel implements ActionListener
 		//4) Se devuelve el setbounds a la forma anterior
 			this.cuadroBase.setBounds(250,100,420,400);
 	}
-	public void ejecutaAcciones(Object objetoElegido)
+	public void dibujaInterfazElegida(Object objetoElegido)
 	{
 		if(objetoElegido==cajaCompras)
 		{
@@ -280,8 +298,96 @@ class PanelModificar extends JPanel implements ActionListener
 			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA TAREAS");
 		}
 		if(objetoElegido==cajaStock)
-		{
-			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA STOCK");
+		{	
+			//0) COLOCA LOS JLABELS CORRESPONDIENTES		    
+			this.tituloCategoria= new JLabel("CATEGORIA");  this.tituloCategoria.setBounds(400,130,190,20);   add(this.tituloCategoria);   
+			this.tituloArticulo= new JLabel("ARTICULO");    this.tituloArticulo.setBounds(400,170,190,20);    add(this.tituloArticulo);   
+			this.tituloCantidad= new JLabel("CANTIDAD");    this.tituloCantidad.setBounds(400,210,190,20);   add(this.tituloCantidad);   
+
+			//1) INVOCA EL STOCK QUE QUEDA PARA EL CASO DE REPOSICION DE ALMACENAJE
+			PanelProcesamientoStock nuevo= new PanelProcesamientoStock();
+			
+			//2) GUARDADO DE STOCK ACTUAL EN LA VARIABLE CREADA ANTERIORMENTE
+			stockActual=nuevo.getMapaDatosStock();
+			
+			//3) SE RELLENA EL PRIMER JCOMBOBOX DE CATEGORIAS
+				this.cajaCategoria= new JComboBox<String>();  
+				this.cajaCategoria.addItem("PRODUCTOS");
+				this.cajaCategoria.addItem("SERVICIOS");
+				this.cajaCategoria.addItem("PROYECTOS");
+				
+				this.cajaCategoria.setBounds(480,130,200,20);   
+				add(this.cajaCategoria);
+			
+			//4) DECLARACION DE LOS JCOMBOBOX RESTANTES: ARTICULOS Y CANTIDADES, QUE SERAN VARIABLES SEGUN EL SELECTOR
+				this.cajaArticulo= new JComboBox<String>();
+				this.cajaCantidad= new JComboBox<Integer>();  
+				
+			//5) SE ESTABLECE EL DETECTOR DE CAMBIO DE CATEGORIA Y POR CONSIGUIENTE CAMBIO DE SECTOR DE ARTICULOS MOSTRADOS EN EL SEGUNDO JCOMBOBOX
+				//5.2) SE PROCEDE CON EL ASIGNAMIENTO DE LOS ARTICULOS QUE FUERON ASIGNADOS A QUE CATEGORIA
+
+			this.cajaCategoria.addActionListener(e -> {
+			   //5.3) SE HABILITAN LOS BOTONES DE EJECUTAR ACCIONES, EL DE CANCELAR NUNCA SE DESHABILITO
+				this.aceptar.setEnabled(true);
+				
+			   String seleccionado = (String) this.cajaCategoria.getSelectedItem();
+				if(seleccionado=="PRODUCTOS")
+				{
+				  this.cajaArticulo.removeAllItems();  //Borrado previo para evitar superposicion de elementos adicionados antes
+				  this.cajaCantidad.removeAllItems();  //Borrado previo para evitar superposicion de cantidades
+				  stockActual.forEach((clave,valor)->{
+					if(valor.getDestino().toString().startsWith("PRODUCTOS"))
+					{
+						this.cajaArticulo.addItem(valor.getNombre().substring(0,valor.getNombre().length()-4));
+					}
+				 });
+				  for(puntero=1;puntero<stockActual.size();puntero++)
+				  	{
+					  if(puntero<11)
+					  {
+						  this.cajaCantidad.addItem(puntero*150);  //UNIDADES DE PRODUCTOS ADICIONADOS
+					  }
+					}
+				}
+				if(seleccionado=="SERVICIOS")
+				{
+				  this.cajaArticulo.removeAllItems();  //Borrado previo para evitar superposicion de elementos adicionados antes
+				  this.cajaCantidad.removeAllItems();  //Borrado previo para evitar superposicion de cantidades
+				  stockActual.forEach((clave,valor)->{
+					if(valor.getDestino().toString().startsWith("SERVICIOS"))
+					{
+						this.cajaArticulo.addItem(valor.getNombre().substring(0,valor.getNombre().length()-4));
+					}
+				 });
+				  for(puntero=1;puntero<stockActual.size();puntero++)
+				  	{
+					  if(puntero<11)
+					  {
+						  this.cajaCantidad.addItem(puntero*10);  //UNIDADES DE SERVICIOS ADICIONADAS
+					  }
+					}
+				}
+				if(seleccionado =="PROYECTOS")
+				{
+				  this.cajaArticulo.removeAllItems();  //Borrado previo para evitar superposicion de elementos adicionados antes
+				  this.cajaCantidad.removeAllItems();  //Borrado previo para evitar superposicion de cantidades
+				  stockActual.forEach((clave,valor)->{
+					if(valor.getDestino().toString().startsWith("PROYECTOS"))
+					{
+						this.cajaArticulo.addItem(valor.getNombre().substring(0,valor.getNombre().length()-4));
+					}
+				 });
+				  for(puntero=1;puntero<stockActual.size();puntero++)
+				  	{
+					  if(puntero<11)
+					  {
+						  this.cajaCantidad.addItem(puntero*5);  //UNIDADES DE PROYECTOS ADICIONADOS
+					  }
+					}
+				}
+			});
+			this.cajaArticulo.setBounds(480,170,200,20);  add(this.cajaArticulo);
+			this.cajaCantidad.setBounds(480,210,200,20);  add(this.cajaCantidad);
 		}
 	}
 }

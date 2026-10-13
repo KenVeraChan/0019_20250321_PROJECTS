@@ -525,6 +525,11 @@ class PanelInsertarStock extends JPanel implements ActionListener
     private JButton realizarCompra;
     private int dimensionVerticalScroll=0;
     
+    public PanelInsertarStock()
+    {
+    	//Constructor sin contenido para la llamada al panel por parte de Administracion
+    }
+    
 	public PanelInsertarStock(String ruta,int transparencia,HashMap<Integer, ObjetoVenta> mapaStock, ClienteRegistrado clienteLogin,int dimensionVerticalScroll)
 	{	
 		//1) SE RECOGE EL VALOR DE LA DISPOSICIÓN VERTICAL VARIABLE DE LOS BOTONES DE MOSTRAR MENU, VOLVER Y COMPRAR EN FUNCION DE LA CANTIDAD DE PRODUCTOS, SERVICIOS O PROYECTOS QUE HAYA
@@ -564,10 +569,10 @@ class PanelInsertarStock extends JPanel implements ActionListener
 	//3) DECLARCION DEL BOTON DE LA COMPRA RECOPILADA EN EL CARRITO POR PARTE DEL USUARIO COMO CLIENTE
 		this.realizarCompra=new JButton("COMPRAR");  this.realizarCompra.setBounds(390,60+63*this.dimensionVerticalScroll, 120, 25);   this.realizarCompra.setHorizontalAlignment(SwingConstants.CENTER);   
 	
-		this.muestraCuadroStockCategorias(mapaStock,true);
+		this.muestraCuadroStockCategorias(mapaStock);
 	}
 	
-	public void muestraCuadroStockCategorias(HashMap<Integer, ObjetoVenta> mapaStock,boolean invitadoCliente)
+	public void muestraCuadroStockCategorias(HashMap<Integer, ObjetoVenta> mapaStock)
 	{
 		//PARA EL CASO DEL PANEL INVITADO, CLIENTE Y ADMINISTRACION. 
 		//EN ADMINISTRCION NO PRECISA DE BOTONES DE COMPRA NI NADA POR EL ESTILO
@@ -603,22 +608,11 @@ class PanelInsertarStock extends JPanel implements ActionListener
 					//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADES
 						//Se llena el vector de opciones numericas
 						Integer[] cantidades;
-						if(invitadoCliente)
+						//ES INVITADO O CLIENTE
+						cantidades= new Integer[valor.getCantidad()+1];
+						for(int i=0;i<valor.getCantidad()+1;i++)
 						{
-							//ES INVITADO O CLIENTE
-							cantidades= new Integer[valor.getCantidad()+1];
-							for(int i=0;i<valor.getCantidad()+1;i++)
-							{
-								cantidades[i]=i;
-							}
-						}
-						else {
-							//ES ADMINSTRACION
-							cantidades= new Integer[10];
-							for(int i=0;i<cantidades.length;i++)    //CORREGIR DESBORDAMIENTO....
-							{
-								cantidades[i]=100*i*i;
-							}
+							cantidades[i]=i;
 						}
 						//Se rellena el JCOMBOBOX
 						JComboBox<Integer>elecciones= new JComboBox<Integer>(cantidades);
@@ -650,22 +644,11 @@ class PanelInsertarStock extends JPanel implements ActionListener
 					//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADESS
 					//Se llena el vector de opciones numericas
 						Integer[] cantidades;
-						if(invitadoCliente)
+						//ES INVITADO O CLIENTE
+						cantidades= new Integer[valor.getCantidad()+1];
+						for(int i=0;i<valor.getCantidad()+1;i++)
 						{
-							//ES INVITADO O CLIENTE
-							cantidades= new Integer[valor.getCantidad()+1];
-							for(int i=0;i<valor.getCantidad()+1;i++)
-							{
-								cantidades[i]=i;
-							}
-						}
-						else {
-							//ES ADMINSTRACION
-							cantidades= new Integer[10];
-							for(int i=0;i<cantidades.length;i++)    //CORREGIR DESBORDAMIENTO....
-							{
-								cantidades[i]=100*i;
-							}
+							cantidades[i]=i;
 						}
 						//Se rellena el JCOMBOBOX
 						JComboBox<Integer>elecciones= new JComboBox<Integer>(cantidades);
@@ -699,22 +682,11 @@ class PanelInsertarStock extends JPanel implements ActionListener
 					//SE AÑADIRA EL JCOMBOBOX PARA LA ELECCION DE CANTIDADES
 					//Se llena el vector de opciones numericas
 						Integer[] cantidades;
-						if(invitadoCliente)
+						//ES INVITADO O CLIENTE
+						cantidades= new Integer[valor.getCantidad()+1];
+						for(int i=0;i<valor.getCantidad()+1;i++)
 						{
-							//ES INVITADO O CLIENTE
-							cantidades= new Integer[valor.getCantidad()+1];
-							for(int i=0;i<valor.getCantidad()+1;i++)
-							{
-								cantidades[i]=i;
-							}
-						}
-						else {
-							//ES ADMINSTRACION
-							cantidades= new Integer[10];
-							for(int i=0;i<cantidades.length;i++)    //CORREGIR DESBORDAMIENTO....
-							{
-								cantidades[i]=10*i;
-							}
+							cantidades[i]=i;
 						}
 						//Se rellena el JCOMBOBOX
 						JComboBox<Integer>elecciones= new JComboBox<Integer>(cantidades);
