@@ -287,6 +287,7 @@ class PanelModificar extends JPanel implements ActionListener
 					this.tituloArticulo.setVisible(false);
 					this.tituloCantidad.setVisible(false);
 					this.tituloCantidadActual.setVisible(false);
+					this.cajaCantidadActual.setVisible(false);
 				//3.4.2) CAJAS DESPLEGABLES
 					this.cajaArticulo.setVisible(false);
 					this.cajaCategoria.setVisible(false);
