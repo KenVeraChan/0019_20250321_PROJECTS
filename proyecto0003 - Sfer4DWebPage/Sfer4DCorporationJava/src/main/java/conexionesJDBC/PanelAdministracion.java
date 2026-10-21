@@ -5,11 +5,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -18,8 +17,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import org.jdesktop.swingx.JXDatePicker;
 
 public class PanelAdministracion {
 
@@ -88,8 +85,9 @@ class PanelModificar extends JPanel implements ActionListener
 	private Object selector;
 	
 	//7) DECLARACION DE LAS VARIABES, DESPLEGABLES Y BOTONES DE LA ZONA DE ADMINISTRACION
+	//7.1) REPOSICION STOCK DE ALMACENAJE
     private int punteroProdu=0, punteroServ=0, punteroProy=0;   //Puntero de relleno
-    private JLabel tituloCategoria,tituloArticulo,tituloCantidad;
+    private JLabel tituloCategoria,tituloArticulo,tituloCantidad,tituloCantidadActual,cajaCantidadActual;
     private JComboBox<String> cajaCategoria;
     private JComboBox<String> cajaArticulo;
     private JComboBox<Integer> cajaCantidad;
@@ -97,7 +95,14 @@ class PanelModificar extends JPanel implements ActionListener
 	//8) DECLARACION DEL OBJETO HASHMAP PARA LA SELECCION DE DATOS DEL STOCK ACTUAL
 	private HashMap<Integer, ObjetoVenta> stockActual= new HashMap<>();
 	private int puntero=0; //Valor a ser recorrido dentro del vector de los PRODUCTOS, SERVICIOS O PROYECTOS para ser rellenado
-    
+	
+	//9) DECLARACION DEL OBJETO HASHMAP MOMENTANEO QUE GUARDE DATOS DEL NOMBRE ARTICULO Y CANTIDAD
+		//ELIGIENDO UN ARTICULO ACTIVE UN EVENTLISTENER Y LUEGO CAMBIE EL VALOR NUMERICO DE SU CANTIDAD
+	private HashMap<String,Integer> stockMomentaneo= new HashMap<>();
+
+	//10) DECLARACION DE LA CANTIDAD EXTRAIDA DEL HASHMAP MOMENTANEO PARA PONER CANTIDAD EN EL JLABEL
+	private String cantidadConcepto;
+	
 	public PanelModificar(String ruta, int transparencia,MarcoBaseOp cuadroBase)
 	{
 		//PANEL DEL ADMINISTRADOR: recepcion del cuadro FRAME base anterior para la carga de las funciones del administrador
@@ -277,6 +282,16 @@ class PanelModificar extends JPanel implements ActionListener
 			//3.3) DE LA FUNCION: CAJA TAREAS
 			
 			//3.4) DE LA FUNCION: CAJA STOCK
+				//3.4.1) LABELS QUE DESAPARECEN
+					this.tituloCategoria.setVisible(false);
+					this.tituloArticulo.setVisible(false);
+					this.tituloCantidad.setVisible(false);
+					this.tituloCantidadActual.setVisible(false);
+				//3.4.2) CAJAS DESPLEGABLES
+					this.cajaArticulo.setVisible(false);
+					this.cajaCategoria.setVisible(false);
+					this.cajaCantidad.setVisible(false);
+			//3.5) DE LOS BOTONES QUE SON COMUNES PARA TODOS
 			this.aceptar.setVisible(false);
 			this.cancelar.setVisible(false);
 			
@@ -299,11 +314,12 @@ class PanelModificar extends JPanel implements ActionListener
 		}
 		if(objetoElegido==cajaStock)
 		{	
-			//0) COLOCA LOS JLABELS CORRESPONDIENTES		    
-			this.tituloCategoria= new JLabel("CATEGORIA");  this.tituloCategoria.setBounds(400,130,190,20);   add(this.tituloCategoria);   
-			this.tituloArticulo= new JLabel("ARTICULO");    this.tituloArticulo.setBounds(400,170,190,20);    add(this.tituloArticulo);   
-			this.tituloCantidad= new JLabel("CANTIDAD");    this.tituloCantidad.setBounds(400,210,190,20);   add(this.tituloCantidad);   
-
+			//0) COLOCA LOS JLABELS CORRESPONDIENTES
+			this.tituloCategoria= new JLabel("CATEGORIA");  this.tituloCategoria.setBounds(400,90,190,20);   add(this.tituloCategoria);   
+			this.tituloArticulo= new JLabel("ARTICULO");    this.tituloArticulo.setBounds(400,130,190,20);    add(this.tituloArticulo);   
+			this.tituloCantidad= new JLabel("CANTIDAD");    this.tituloCantidad.setBounds(400,170,190,20);   add(this.tituloCantidad);   
+			this.tituloCantidadActual=new JLabel("CANTIDAD ACTUAL");  this.tituloCantidadActual.setBounds(400,210,190,20);  add(this.tituloCantidadActual);
+			
 			//1) INVOCA EL STOCK QUE QUEDA PARA EL CASO DE REPOSICION DE ALMACENAJE
 			PanelProcesamientoStock nuevo= new PanelProcesamientoStock();
 			
@@ -316,7 +332,7 @@ class PanelModificar extends JPanel implements ActionListener
 				this.cajaCategoria.addItem("SERVICIOS");
 				this.cajaCategoria.addItem("PROYECTOS");
 				
-				this.cajaCategoria.setBounds(480,130,200,20);   
+				this.cajaCategoria.setBounds(480,90,200,20);   
 				add(this.cajaCategoria);
 			
 			//4) DECLARACION DE LOS JCOMBOBOX RESTANTES: ARTICULOS Y CANTIDADES, QUE SERAN VARIABLES SEGUN EL SELECTOR
@@ -324,72 +340,100 @@ class PanelModificar extends JPanel implements ActionListener
 				this.cajaCantidad= new JComboBox<Integer>();  
 				
 			//5) SE ESTABLECE EL DETECTOR DE CAMBIO DE CATEGORIA Y POR CONSIGUIENTE CAMBIO DE SECTOR DE ARTICULOS MOSTRADOS EN EL SEGUNDO JCOMBOBOX
-				//5.2) SE PROCEDE CON EL ASIGNAMIENTO DE LOS ARTICULOS QUE FUERON ASIGNADOS A QUE CATEGORIA
+			  //5.1) SE DECLARA LA VARIABLE QUE IRA EN EL JLABEL
+				this.cantidadConcepto="";
+			  //5.2) SE PROCEDE CON EL ASIGNAMIENTO DE LOS ARTICULOS QUE FUERON ASIGNADOS A QUE CATEGORIA
+				//CAMBIARA SEGUN LA CATEGORIA ELEGIDA
+				this.cajaCantidadActual=new JLabel();		
 
-			this.cajaCategoria.addActionListener(e -> {
-			   //5.3) SE HABILITAN LOS BOTONES DE EJECUTAR ACCIONES, EL DE CANCELAR NUNCA SE DESHABILITO
-				this.aceptar.setEnabled(true);
+				// 1. EL LISTENER DE LA CAJA ARTÍCULO SE DEFINE UNA SOLA VEZ FUERA PARA EVITAR DUPLICADOS
+				this.cajaArticulo.addItemListener(estado -> {
+				    if (estado.getStateChange() == ItemEvent.SELECTED) {
+				        Object itemSeleccionado = estado.getItem();
+				        Integer cantidad = this.stockMomentaneo.get(itemSeleccionado);
+
+				        if (cantidad != null) {
+				            this.cantidadConcepto = cantidad + " unidades";
+				        } else {
+				            this.cantidadConcepto = "Elija artículo!";
+				        }
+				        
+				        // ¡CRÍTICO! Actualizar el texto del JLabel en tiempo real
+				        if (this.cajaCantidadActual != null) {
+				            this.cajaCantidadActual.setText(this.cantidadConcepto);
+				        }
+				    }
+				});
 				
-			   String seleccionado = (String) this.cajaCategoria.getSelectedItem();
-				if(seleccionado=="PRODUCTOS")
-				{
-				  this.cajaArticulo.removeAllItems();  //Borrado previo para evitar superposicion de elementos adicionados antes
-				  this.cajaCantidad.removeAllItems();  //Borrado previo para evitar superposicion de cantidades
-				  stockActual.forEach((clave,valor)->{
-					if(valor.getDestino().toString().startsWith("PRODUCTOS"))
-					{
-						this.cajaArticulo.addItem(valor.getNombre().substring(0,valor.getNombre().length()-4));
-					}
-				 });
-				  for(puntero=1;puntero<stockActual.size();puntero++)
-				  	{
-					  if(puntero<11)
-					  {
-						  this.cajaCantidad.addItem(puntero*150);  //UNIDADES DE PRODUCTOS ADICIONADOS
-					  }
-					}
-				}
-				if(seleccionado=="SERVICIOS")
-				{
-				  this.cajaArticulo.removeAllItems();  //Borrado previo para evitar superposicion de elementos adicionados antes
-				  this.cajaCantidad.removeAllItems();  //Borrado previo para evitar superposicion de cantidades
-				  stockActual.forEach((clave,valor)->{
-					if(valor.getDestino().toString().startsWith("SERVICIOS"))
-					{
-						this.cajaArticulo.addItem(valor.getNombre().substring(0,valor.getNombre().length()-4));
-					}
-				 });
-				  for(puntero=1;puntero<stockActual.size();puntero++)
-				  	{
-					  if(puntero<11)
-					  {
-						  this.cajaCantidad.addItem(puntero*10);  //UNIDADES DE SERVICIOS ADICIONADAS
-					  }
-					}
-				}
-				if(seleccionado =="PROYECTOS")
-				{
-				  this.cajaArticulo.removeAllItems();  //Borrado previo para evitar superposicion de elementos adicionados antes
-				  this.cajaCantidad.removeAllItems();  //Borrado previo para evitar superposicion de cantidades
-				  stockActual.forEach((clave,valor)->{
-					if(valor.getDestino().toString().startsWith("PROYECTOS"))
-					{
-						this.cajaArticulo.addItem(valor.getNombre().substring(0,valor.getNombre().length()-4));
-					}
-				 });
-				  for(puntero=1;puntero<stockActual.size();puntero++)
-				  	{
-					  if(puntero<11)
-					  {
-						  this.cajaCantidad.addItem(puntero*5);  //UNIDADES DE PROYECTOS ADICIONADOS
-					  }
-					}
-				}
-			});
-			this.cajaArticulo.setBounds(480,170,200,20);  add(this.cajaArticulo);
-			this.cajaCantidad.setBounds(480,210,200,20);  add(this.cajaCantidad);
+				this.cajaCategoria.addActionListener(e -> {
+				    // 5.3) BORRADO DEL MAPA MOMENTANEO
+				    this.stockMomentaneo.clear();
+				    
+				    // 5.4) SE HABILITAN LOS BOTONES
+				    this.aceptar.setEnabled(true);
+				    
+				    String seleccionado = (String) this.cajaCategoria.getSelectedItem();
+				    if (seleccionado == null) return;
+
+				    // Limpieza previa de los combos
+				    this.cajaArticulo.removeAllItems();  
+				    this.cajaCantidad.removeAllItems();  
+
+				    // USAR .equals() PARA COMPARAR STRINGS EN JAVA
+				    if (seleccionado.equals("PRODUCTOS")) {
+				        stockActual.forEach((clave, valor) -> {
+				            if (valor.getDestino().toString().startsWith("PRODUCTOS")) {
+				                String nombreLimpio = valor.getNombre().substring(0, valor.getNombre().length() - 4);
+				                this.cajaArticulo.addItem(nombreLimpio);
+				                this.stockMomentaneo.put(nombreLimpio, valor.getCantidad());  
+				            }
+				        });
+				        
+				        for (puntero = 1; puntero < stockActual.size() && puntero < 11; puntero++) {
+				            this.cajaCantidad.addItem(puntero * 150);  
+				        }
+				    }
+				    else if (seleccionado.equals("SERVICIOS")) {
+				        stockActual.forEach((clave, valor) -> {
+				            if (valor.getDestino().toString().startsWith("SERVICIOS")) {
+				                String nombreLimpio = valor.getNombre().substring(0, valor.getNombre().length() - 4);
+				                this.cajaArticulo.addItem(nombreLimpio);
+				                this.stockMomentaneo.put(nombreLimpio, valor.getCantidad());  
+				            }
+				        });
+				        
+				        for (puntero = 1; puntero < stockActual.size() && puntero < 11; puntero++) {
+				            this.cajaCantidad.addItem(puntero * 10);  
+				        }
+				    }
+				    else if (seleccionado.equals("PROYECTOS")) {
+				        stockActual.forEach((clave, valor) -> {
+				            if (valor.getDestino().toString().startsWith("PROYECTOS")) {
+				                String nombreLimpio = valor.getNombre().substring(0, valor.getNombre().length() - 4);
+				                this.cajaArticulo.addItem(nombreLimpio);
+				                this.stockMomentaneo.put(nombreLimpio, valor.getCantidad());  
+				            }
+				        });
+				        
+				        for (puntero = 1; puntero < stockActual.size() && puntero < 11; puntero++) {
+				            this.cajaCantidad.addItem(puntero * 5);  
+				        }
+				    }
+				    
+				    // Forzar una actualización visual inicial si se seleccionó un artículo automáticamente
+				    if (this.cajaArticulo.getItemCount() == 0) {
+				        this.cajaCantidadActual.setText("Elija Artículo!");
+				    }
+				});
+
+				// Configuración de componentes visuales en el constructor/método de inicialización
+				this.cajaArticulo.setBounds(480, 130, 200, 20);  
+				add(this.cajaArticulo);
+
+				this.cajaCantidad.setBounds(480, 170, 200, 20);  
+				add(this.cajaCantidad);
+
+				this.cajaCantidadActual.setBounds(520, 210,200,20);   add(this.cajaCantidadActual);
+			}
 		}
-	}
 }
-
-
