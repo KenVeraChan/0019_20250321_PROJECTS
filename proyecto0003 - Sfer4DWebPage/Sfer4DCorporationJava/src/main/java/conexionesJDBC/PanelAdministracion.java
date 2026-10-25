@@ -9,6 +9,9 @@ import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -145,7 +148,13 @@ class PanelModificar extends JPanel implements ActionListener
 			this.cajaTareas= new JButton("ACCEDER A TAREAS");           this.cajaTareas.setBounds(80,230,230,20);      add(this.cajaTareas);
 			this.cajaStock= new JButton("ACCEDER A REPOSICIÓN STOCK");  this.cajaStock.setBounds(80,310,230,20);       add(this.cajaStock);
 
-	    //5) DECLARACION DE LOS ACTIONLISTENER
+		//5) DECLARACION DE LOS SETNAME DE LOS BOTONES PARA POSTERIORES USOS
+			this.cajaCompras.setName("cajaCompras"); 
+			this.cajaAspirantes.setName("cajaAspirantes"); 
+			this.cajaTareas.setName("cajaTareas"); 
+			this.cajaStock.setName("cajaStock"); 
+			
+	    //6) DECLARACION DE LOS ACTIONLISTENER
 			//REACCIONES DEL BOTON ACEPTAR Y CANCELAR OPERACIONES
 			this.cajaCompras.addActionListener(this);
 			this.cajaAspirantes.addActionListener(this);
@@ -202,35 +211,8 @@ class PanelModificar extends JPanel implements ActionListener
 		Object src = e.getSource();
 		//SE DIBUJA LA INTERFAZ Y SE PREPARA TODO SEGUN EL OBJETO IMPLICADO ELEGIDO
 		 ubicacionBotones(e.getSource());
-        //if (src == aceptar) {   //EJECUTA LA ACCION CORRESPONDIENTE A LA SELECCION DEL MENU ANTERIOR
-    	  //1) SE EJECUTAN LAS ACCIONES SEGUN EL SELECTOR DEL MENU PRINCIPAL
-            if(this.getSelector()==cajaCompras)
-            {
-            	JOptionPane.showInputDialog("Elegido CAJA COMPRAS");
-            }
-            if(this.getSelector()==cajaAspirantes)
-            {
-            	JOptionPane.showInputDialog("Elegido CAJA ASPIRANTES");
-            }
-            if(this.getSelector()==cajaTareas)
-            {
-            	JOptionPane.showInputDialog("Elegido CAJA TAREAS");
-            }
-            if(this.getSelector()==cajaStock)
-            {
-            	JOptionPane.showInputDialog("Elegido CAJA STOCK");
-            }
 	}
-	
-	public void setSelector(Object objetoElegido)
-	{
-		this.selector=objetoElegido;
-	}
-	public Object getSelector()
-	{
-		return this.selector;
-	}
-	
+
 	public void ubicacionBotones(Object seleccionado)
 	{
         //1) Se deshabilitan los botones para evitar interferencias entre funciones ejecutadas al mismo tiempo
@@ -241,46 +223,118 @@ class PanelModificar extends JPanel implements ActionListener
 			
 		//2) Se redimensiona el FRAME añadido
 			this.cuadroBase.setBounds(250,100,720,400);
-	
-		//3) Se guarda el selector que fue elegido para tener la funcion detectada
-			this.setSelector(seleccionado);
 			
-		//4) Se expone la interfaz elegida correspondientes a la FUNCION ELEGIDA
+		//3) Se expone la interfaz elegida correspondientes a la FUNCION ELEGIDA
 			this.dibujaInterfazElegida(seleccionado);  
 			
-	    //5) Aparicion del sistema de botones
+	    //4) Aparicion del sistema de botones
 			this.aceptar= new JButton("CONFIRMAR ACCIONES");   this.aceptar.setBounds(440,270,190,20);   add(this.aceptar);
 			this.cancelar= new JButton("CANCELAR OPERACIÓN");  this.cancelar.setBounds(440,310,190,20);   add(this.cancelar);				
 		
-		//6) Se adicionan los EventListeners de los dos botones
+		//5) Se adicionan los EventListeners de los dos botones
 			this.aceptar.addActionListener(e->{
-            	JOptionPane.showInputDialog("HAS ACEPTADO OPERACION. EJECUTANDO ACCIONES");
-			});     //METER EN UNA ASGINACIONN LAMDA LAS ACCIONES DE LISTENER AQUI
+			    //5.1) Validamos que el origen del evento realmente sea un botón
+			    if (seleccionado instanceof JButton) 
+			    {
+			        JButton botonAccionado = (JButton) seleccionado;
+			        
+			        //5.2) Extraemos el nombre de la variable JButton
+			        String valorBoton = botonAccionado.getName().toString();
+			        
+			        //5.3) Logica de deteccion del boton accionado para que el accionamiento aceptar haga su trabajo asignado
+			        
+			        
+			        
+			        //// BLOQUE 4 - GESTION ADMINSITRATIVO DE STOCK ////
+			        if (valorBoton.equals("cajaStock")) 
+			        {  
+			        	int stockFinal= Integer.parseInt(this.cajaCantidadActual.getText()) + Integer.parseInt(this.cajaCantidad.getSelectedItem().toString());
+			        		
+			        	   //5.4) SE ACTUALIZA EL NUMERO DE STOCK ADICIONADO POR ADMINISTRACION
+					       try {
+			        		//5.4.1 - CREAR CONEXION
+							Connection conector04 = DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
+		
+						   //5.4.2 - CREAR EL PREPAREDSTATEMENT para ACTUALIZAR
+							String sql1 = "UPDATE imagenesinterfazweb SET STOCK = ? WHERE NOMBRE = ? AND DESTINO = ?";
+							PreparedStatement myst1 = conector04.prepareStatement(sql1);
+		
+						   //5.4.3 - ASIGNAR VALORES A LOS ? EN ORDEN
+							myst1.setInt(1, stockFinal);  //ADICIONANDO LA CANTIDAD ASIGNADA POR ADMINSITRACION
+							myst1.setString(2, this.cajaArticulo.getSelectedItem().toString()+".png"); //NOMBRE DEL ARTICULO INCLUYENDO EL FORMATO DE IMAGEN .PNG QUE YA TENIA
+							myst1.setString(3, this.cajaCategoria.getSelectedItem().toString()); //DESTINO DEL ARTICULO
+							
+						   //5.4.4 - EJECUTAR LA ACTUALIZACIÓN
+							int filasAfectadas = myst1.executeUpdate();
+
+							if (filasAfectadas > 0)   //SE COMPRUEBA QUE HAY FILAS SUFICIENTES QUE SE ACTUALIZARON PARA REFRESCAR DE NUEVO EL HASHMAP 
+							{
+							    // 5.4.4.1. Conseguimos el nombre del artículo actual (tal como está en el combo)
+							    String articuloActual = this.cajaArticulo.getSelectedItem().toString();
+							    
+							    // 5.4.4.2. Sincronizamos el mapa local con el nuevo valor numérico
+							    this.stockMomentaneo.put(articuloActual, stockFinal);
+							    
+							    // 5.4.4.3. Refrescamos la interfaz visual en tiempo real
+							    this.cajaCantidadActual.setText(String.valueOf(stockFinal));
+							}
+							
+						   //5.4.5 - COMPROBACION DE LA CANTIDAD DE FILAS AFECTADAS O BIEN NINGUNA SI HUBO ERROR O INEXISTENCIA DEL ARTICULO QUE SE PRETENDIO ACTUALIZAR
+							JOptionPane.showMessageDialog(null, "Filas actualizadas en la Base de Datos: " + filasAfectadas +" filas y base de datos e Interfaz sincronizadas con éxito","Información de Stock",JOptionPane.INFORMATION_MESSAGE);
+							if (filasAfectadas == 0) {
+							    System.out.println("ALERTA: No se encontró ningún registro que coincida exactamente con NOMBRE='" 
+							        + this.cajaArticulo.getSelectedItem().toString() 
+							        + "' y DESTINO='" + this.cajaCategoria.getSelectedItem().toString() + "'");
+							}
+						   //5.4.6 - CERRAR RECURSOS
+							myst1.close();		  //Libera la consulta realizada
+							conector04.close();   //Cierra la conexion
+					       }catch(Exception error) {
+					    	   error.printStackTrace();
+					       }
+			        }
+			    }
+			}); 
+			//METER EN UNA ASGINACIONN LAMDA LAS ACCIONES DE LISTENER AQUI
 			this.cancelar.addActionListener(e->{
-            	JOptionPane.showInputDialog("HAS CANCELADO OPERACION");
-                //SE EJECUTAN EL RETORNO DE LA INTERFAZ ANTERIOR TRAS TERMINADAS LAS ACCIONES
-           		this.reestablecerInterfazInicial();
+           		this.reestablecerInterfazInicial(seleccionado);
 			});
 		
-		//7) Se deshabilitan el boton de EJECUTAR ACCIONES pero no el de CANCELAR porque se puede volver sin hacer nada
+		//6) Se deshabilitan el boton de EJECUTAR ACCIONES pero no el de CANCELAR porque se puede volver sin hacer nada
 			this.aceptar.setEnabled(false);
 	}
-	public void reestablecerInterfazInicial()
+	public void reestablecerInterfazInicial(Object seleccionado)
 	{
     	//2) Se vuelven a habilitar los botones con todas las acciones que poseia adminsitracion
     	this.cajaCompras.setEnabled(true);
 		this.cajaAspirantes.setEnabled(true);
 		this.cajaTareas.setEnabled(true);
 		this.cajaStock.setEnabled(true);
-	
-		//3) Se desaparecen todo el cuadro de botones y desplegables que se adicionaron:
-			
-			//3.1) DE LA FUNCION: CAJA COMPRAS
 		
-			//3.2) DE LA FUNCION: CAJA ASPIRANTES
+	    if (seleccionado instanceof JButton) 
+	    {
+	        JButton botonAccionado = (JButton) seleccionado;
+	        
+	        //1) Extraemos el nombre de la variable JButton
+	        String valorBoton = botonAccionado.getName().toString();
+	        
+	        //2) Logica de deteccion del boton accionado para que el accionamiento aceptar haga su trabajo asignado
+	        
+	        //3) Se desaparecen todo el cuadro de botones y desplegables que se adicionaron:
 			
-			//3.3) DE LA FUNCION: CAJA TAREAS
+				//3.1) DE LA FUNCION: CAJA COMPRAS
 			
+				//3.2) DE LA FUNCION: CAJA ASPIRANTES
+				
+				//3.3) DE LA FUNCION: CAJA TAREAS
+			
+		
+
+	        
+	        
+	        //// BLOQUE 4 - GESTION ADMINSITRATIVO DE STOCK ////
+	        if (valorBoton.equals("cajaStock")) 
+	        {  
 			//3.4) DE LA FUNCION: CAJA STOCK
 				//3.4.1) LABELS QUE DESAPARECEN
 					this.tituloCategoria.setVisible(false);
@@ -292,10 +346,11 @@ class PanelModificar extends JPanel implements ActionListener
 					this.cajaArticulo.setVisible(false);
 					this.cajaCategoria.setVisible(false);
 					this.cajaCantidad.setVisible(false);
+	        }
 			//3.5) DE LOS BOTONES QUE SON COMUNES PARA TODOS
 			this.aceptar.setVisible(false);
 			this.cancelar.setVisible(false);
-			
+	     }
 		//4) Se devuelve el setbounds a la forma anterior
 			this.cuadroBase.setBounds(250,100,420,400);
 	}
@@ -303,15 +358,15 @@ class PanelModificar extends JPanel implements ActionListener
 	{
 		if(objetoElegido==cajaCompras)
 		{
-			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA COMPRAS");
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA COMPRAS","Información de Stock",JOptionPane.INFORMATION_MESSAGE);
 		}
 		if(objetoElegido==cajaAspirantes)
 		{
-			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA ASPIRANTES");	
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA ASPIRANTES","Información de Stock",JOptionPane.INFORMATION_MESSAGE);	
 		}
 		if(objetoElegido==cajaTareas)
 		{
-			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA TAREAS");
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA TAREAS","Información de Stock",JOptionPane.INFORMATION_MESSAGE);
 		}
 		if(objetoElegido==cajaStock)
 		{	
@@ -319,7 +374,7 @@ class PanelModificar extends JPanel implements ActionListener
 			this.tituloCategoria= new JLabel("CATEGORIA");  this.tituloCategoria.setBounds(400,90,190,20);   add(this.tituloCategoria);   
 			this.tituloArticulo= new JLabel("ARTICULO");    this.tituloArticulo.setBounds(400,130,190,20);    add(this.tituloArticulo);   
 			this.tituloCantidad= new JLabel("CANTIDAD");    this.tituloCantidad.setBounds(400,170,190,20);   add(this.tituloCantidad);   
-			this.tituloCantidadActual=new JLabel("CANTIDAD ACTUAL");  this.tituloCantidadActual.setBounds(400,210,190,20);  add(this.tituloCantidadActual);
+			this.tituloCantidadActual=new JLabel("CANTIDAD ACTUAL: ");  this.tituloCantidadActual.setBounds(400,210,190,20);  add(this.tituloCantidadActual);
 			
 			//1) INVOCA EL STOCK QUE QUEDA PARA EL CASO DE REPOSICION DE ALMACENAJE
 			PanelProcesamientoStock nuevo= new PanelProcesamientoStock();
@@ -354,9 +409,9 @@ class PanelModificar extends JPanel implements ActionListener
 				        Integer cantidad = this.stockMomentaneo.get(itemSeleccionado);
 
 				        if (cantidad != null) {
-				            this.cantidadConcepto = cantidad + " unidades";
+				            this.cantidadConcepto = String.valueOf(cantidad);
 				        } else {
-				            this.cantidadConcepto = "Elija artículo!";
+				            this.cantidadConcepto = String.valueOf(this.stockMomentaneo.values().stream().findFirst().orElse(null));
 				        }
 				        
 				        // ¡CRÍTICO! Actualizar el texto del JLabel en tiempo real
@@ -375,11 +430,11 @@ class PanelModificar extends JPanel implements ActionListener
 				    
 				    String seleccionado = (String) this.cajaCategoria.getSelectedItem();
 				    if (seleccionado == null) return;
-
+				
 				    // Limpieza previa de los combos
 				    this.cajaArticulo.removeAllItems();  
 				    this.cajaCantidad.removeAllItems();  
-
+				
 				    // USAR .equals() PARA COMPARAR STRINGS EN JAVA
 				    if (seleccionado.equals("PRODUCTOS")) {
 				        stockActual.forEach((clave, valor) -> {
@@ -421,12 +476,25 @@ class PanelModificar extends JPanel implements ActionListener
 				        }
 				    }
 				    
-				    // Forzar una actualización visual inicial si se seleccionó un artículo automáticamente
+				    // Forzar la actualización de la cantidad del artículo seleccionado por defecto
 				    if (this.cajaArticulo.getItemCount() == 0) {
-				        this.cajaCantidadActual.setText("Elija Artículo!");
+				        this.cajaCantidadActual.setText("Elija Artículo 1!");
+				    } else {
+				        // Obtenemos el primer artículo que se seleccionó automáticamente al rellenar el combo
+				        Object primerItem = this.cajaArticulo.getSelectedItem();
+				        Integer cantidad = this.stockMomentaneo.get(primerItem);
+				        
+				        if (cantidad != null) {
+				            this.cantidadConcepto = String.valueOf(cantidad);
+				        } else {
+				            this.cantidadConcepto = String.valueOf(0);
+				        }
+				        
+				        if (this.cajaCantidadActual != null) {
+				            this.cajaCantidadActual.setText(this.cantidadConcepto);
+				        }
 				    }
 				});
-
 				// Configuración de componentes visuales en el constructor/método de inicialización
 				this.cajaArticulo.setBounds(480, 130, 200, 20);  
 				add(this.cajaArticulo);

@@ -122,7 +122,7 @@ class PanelHalldeApp extends JPanel implements ActionListener
 			//CLIENTE
 	 		//DECLARACION DE LOS COMPONENTES DEL CLIENTE
 	 		this.tituloCliente= new JLabel("BIENVENIDO/A INTRODUZCA SUS DATOS");
-	 		this.tituloCliente.setBounds(30, 130, 240,20);
+	 		this.tituloCliente.setBounds(30, 130, 280,20);
 	 		add(this.tituloCliente);
 	 		
 	 		this.nombreCliente= new JLabel("NOMBRE CLIENTE");
@@ -144,7 +144,7 @@ class PanelHalldeApp extends JPanel implements ActionListener
 	 		//ADMINISTRADOR
 	 		//DECLARACION DE LOS COMPONENTES DEL ADMINISTRADOR
 	 		this.tituloAdministracion= new JLabel("BIENVENIDO/A INTRODUZCA SUS DATOS");
-	 		this.tituloAdministracion.setBounds(30, 130, 240,20);
+	 		this.tituloAdministracion.setBounds(30, 130, 280,20);
 	 		add(this.tituloAdministracion);
 	 		
 	 		this.nombreAdministracion= new JLabel("NOMBRE ADMINISTRADOR");
@@ -158,7 +158,7 @@ class PanelHalldeApp extends JPanel implements ActionListener
 	 		//JEFES
 	 		//DECLARACION DE LOS COMPONENTES DE LOS JEFES
 	 		this.tituloJefe= new JLabel("BIENVENIDO/A INTRODUZCA SUS DATOS");
-	 		this.tituloJefe.setBounds(30, 130, 240,20);
+	 		this.tituloJefe.setBounds(30, 130, 280,20);
 	 		add(this.tituloJefe);
 	 		
 	 		this.nombreJefe= new JLabel("NOMBRE DEL JEFE/A");
