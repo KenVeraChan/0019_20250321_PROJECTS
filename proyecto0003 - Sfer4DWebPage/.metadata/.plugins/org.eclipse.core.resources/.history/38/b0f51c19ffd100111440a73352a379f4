@@ -1,0 +1,610 @@
+package conexionesJDBC;                //// ZONA: ADMINISTRACION  ////
+
+import java.awt.AlphaComposite;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.HashMap;
+
+import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+public class PanelAdministracion {
+
+}
+
+class AdministradorDatos
+{
+	private int id;          	  //ID administrador
+	private String usuario;  	  //Nombre usuari. NO SE RECOGE SU CONTRASENIA
+	private String rol;			  //Rol del usuario: Administrador o Jefe
+	private String departamento;  //Departamento al que pertenece
+	
+	public AdministradorDatos(int id, String usuario, String rol, String departamento) 
+	{
+		//SE RECOGE LA INFORMACIÓN DEL USUARIO DE ADMINISTRACION
+		this.id = id;
+		this.usuario = usuario;
+		this.rol = rol;
+		this.departamento = departamento;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+	public String getRol() {
+		return rol;
+	}
+	public void setRol(String rol) {
+		this.rol = rol;
+	}
+	public String getDepartamento() {
+		return departamento;
+	}
+	public void setDepartamento(String departamento) {
+		this.departamento = departamento;
+	}
+}
+
+class PanelModificar extends JPanel implements ActionListener
+{
+	//1) VARIABLES DE ENTRADA
+    private BufferedImage imagen;
+    private float alfaImagen = 1.0f; // opaco por defecto
+
+    //2) LABELS DE QUÉ ACCIONES POSEEN LOS DE ADMINISTRACIÓN
+    private JLabel compras,aspirantes,tareas,stock;  //Gestion de compras clientes, gestión de futuros empleados, gestión tareas empresariales y gestion de stock 
+
+	//3) DECLARACION DE BOTONES Y ACCIONAMIENTOS
+	private JButton cajaCompras, cajaAspirantes, cajaTareas, cajaStock;
+	
+	//4) DECLARACION DEL CUADROBASE PARA POSTERIOR UTILIZACION PARA EJECUTAR LAS FUNCIONES DEL ADMINISTRADOR
+	private MarcoBaseOp cuadroBase;
+	
+	//5) DECLARACION DE LOS BOTONES DE ACEPTAR CAMBIOS Y CANCELAR OPERACION QUE SIEMPRE APARECERAN EN LAS CUATRO FUNCIONES DEL PANEL
+	private JButton aceptar,cancelar;
+	
+	//6) DECLARACION DEL OBJETO USADO PARA DETECTAR LA FUNCION DE LAS CUATRO PROPUESTAS, QUE FUE ELEGIDA
+	private Object selector;
+	
+	//7) DECLARACION DE LAS VARIABES, DESPLEGABLES Y BOTONES DE LA ZONA DE ADMINISTRACION
+	
+	//7.3) GESTION DE TAREAS
+	private JLabel tituloID, tituloTarea, tituloDepartamento, tituloTecnicos, tituloCostes, tituloFecha, tituloResolucion, tituloResolucionActual;  
+	private JLabel cajaID, cajaDepartamento, cajaTecnicos, cajaCostes, cajaFecha, cajaResolucion;
+	private JComboBox<String> cajaTarea, cajaResolucionActual;
+	
+	//7.4) REPOSICION STOCK DE ALMACENAJE
+    private int punteroProdu=0, punteroServ=0, punteroProy=0;   //Puntero de relleno
+    private JLabel tituloCategoria,tituloArticulo,tituloCantidad,tituloCantidadActual,cajaCantidadActual;
+    private JComboBox<String> cajaCategoria;
+    private JComboBox<String> cajaArticulo;
+    private JComboBox<Integer> cajaCantidad;
+    
+	//8) DECLARACION DEL OBJETO HASHMAP PARA LA SELECCION DE DATOS DEL STOCK ACTUAL
+	private HashMap<Integer, ObjetoVenta> stockActual= new HashMap<>();
+	private int puntero=0; //Valor a ser recorrido dentro del vector de los PRODUCTOS, SERVICIOS O PROYECTOS para ser rellenado
+	
+	//9) DECLARACION DEL OBJETO HASHMAP MOMENTANEO QUE GUARDE DATOS DEL NOMBRE ARTICULO Y CANTIDAD
+		//ELIGIENDO UN ARTICULO ACTIVE UN EVENTLISTENER Y LUEGO CAMBIE EL VALOR NUMERICO DE SU CANTIDAD
+	private HashMap<String,Integer> stockMomentaneo= new HashMap<>();
+
+	//10) DECLARACION DE LA CANTIDAD EXTRAIDA DEL HASHMAP MOMENTANEO PARA PONER CANTIDAD EN EL JLABEL
+	private String cantidadConcepto;
+	
+	public PanelModificar(String ruta, int transparencia,MarcoBaseOp cuadroBase)
+	{
+		//PANEL DEL ADMINISTRADOR: recepcion del cuadro FRAME base anterior para la carga de las funciones del administrador
+		this.cuadroBase=cuadroBase;
+		
+		/////// TRATAMIENTO DE FONDO LAMINA /////////////////////
+		    try {
+		        if (ruta.startsWith("http")) {
+		            // URL remota
+		        	Path path = Path.of(ruta);
+		        	this.imagen = ImageIO.read(path.toFile());
+		        }
+		        else if (ruta.startsWith("file:/")) {
+		            // URL local absoluta
+		        	Path path = Path.of(ruta);
+		        	this.imagen = ImageIO.read(path.toFile());
+		        }
+		        else {
+		           // Ruta local normal (MI CASO)
+		            File archivo = new File(ruta);
+		            this.imagen = ImageIO.read(archivo);
+		        }
+		        // transparencia de 0 a 100 → alpha de 0.0 a 1.0
+		        this.alfaImagen = Math.max(0, Math.min(100, transparencia)) / 100f;
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }	
+		//2) ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
+			setLayout(null);  //Para que respeten el setBounds
+			
+		//3) ADICION DE LABELS DECLARADOS
+			this.compras= new JLabel("GESTIÓN DE COMPRAS");        this.compras.setBounds(120,30,180,20);      add(this.compras); 
+			this.aspirantes= new JLabel("GESTIÓN DE ASPIRANTES");  this.aspirantes.setBounds(120,110,180,20);  add(this.aspirantes); 
+			this.tareas= new JLabel("GESTIÓN DE TAREAS");          this.tareas.setBounds(120,190,180,20);      add(this.tareas); 
+			this.stock= new JLabel("GESTIÓN DE STOCK");            this.stock.setBounds(120,270,180,20);       add(this.stock); 
+
+		//4) ADICION DE BOTONES DECLARADOS
+			this.cajaCompras= new JButton("ACCEDER A COMPRAS");         this.cajaCompras.setBounds(80,70,230,20);      add(this.cajaCompras);
+			this.cajaAspirantes= new JButton("ACCEDER A ASPIRANTES");   this.cajaAspirantes.setBounds(80,150,230,20);  add(this.cajaAspirantes);
+			this.cajaTareas= new JButton("ACCEDER A TAREAS");           this.cajaTareas.setBounds(80,230,230,20);      add(this.cajaTareas);
+			this.cajaStock= new JButton("ACCEDER A REPOSICIÓN STOCK");  this.cajaStock.setBounds(80,310,230,20);       add(this.cajaStock);
+
+		//5) DECLARACION DE LOS SETNAME DE LOS BOTONES PARA POSTERIORES USOS
+			this.cajaCompras.setName("cajaCompras"); 
+			this.cajaAspirantes.setName("cajaAspirantes"); 
+			this.cajaTareas.setName("cajaTareas"); 
+			this.cajaStock.setName("cajaStock"); 
+			
+	    //6) DECLARACION DE LOS ACTIONLISTENER
+			//REACCIONES DEL BOTON ACEPTAR Y CANCELAR OPERACIONES
+			this.cajaCompras.addActionListener(this);
+			this.cajaAspirantes.addActionListener(this);
+			this.cajaTareas.addActionListener(this);
+			this.cajaStock.addActionListener(this);
+	}
+	
+	
+	
+
+	
+	
+	
+	
+	
+	//	1.1. Gestión de Ventas y Pedidos
+	//  - Procesamiento de Pedidos: Recepción, preparación, cambio de estados
+    //		(Pendiente, En Preparación, Enviado, Entregado) y cancelaciones.
+  	//	- Facturación y Cobros: Emisión de facturas electrónicas, albaranes,
+    //		registro de pagos manuales/transferencias y tramitación de devoluciones.
+  	//  - Atención al Cliente: Gestión de tickets de soporte, resolución de
+    //		incidencias con envíos y asignación de cupones de descuento directos.
+
+ 
+ 
+	//	1.2. Gestión Avanzada de Stock e Inventario
+  	//	- Catálogo de Productos: Alta, baja y modificación de productos, precios,
+    //	  	categorías e imágenes.
+  	//	- Recepción de Mercancía: Registro de entrada de stock proveniente de
+    //		proveedores y ajuste de mermas (productos dañados o extraviados).
+  	//	- Configuración de Alertas: Establecimiento de umbrales mínimos de stock
+    //		para notificar la necesidad de reposición.
+
+	//	1.3. Gestión de Clientes
+  	//	- Administración de Clientes: Edición de datos de contacto, consulta del
+    //		historial de compras y estado de la cuenta del cliente.
+  	//	- Seguimiento de Invitados: Visualización del interés manifestado por
+    //		usuarios invitados para posibles acciones de captación.
+
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (this.imagen != null) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, this.alfaImagen));
+            g2.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+            g2.dispose();
+        }
+    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Object src = e.getSource();
+		//SE DIBUJA LA INTERFAZ Y SE PREPARA TODO SEGUN EL OBJETO IMPLICADO ELEGIDO
+		 ubicacionBotones(e.getSource());
+	}
+
+	public void ubicacionBotones(Object seleccionado)
+	{
+        //1) Se deshabilitan los botones para evitar interferencias entre funciones ejecutadas al mismo tiempo
+        	this.cajaCompras.setEnabled(false);
+			this.cajaAspirantes.setEnabled(false);
+			this.cajaTareas.setEnabled(false);
+			this.cajaStock.setEnabled(false);
+			
+		//2) Se redimensiona el FRAME añadido
+			this.cuadroBase.setBounds(250,100,720,400);
+			
+		//3) Se expone la interfaz elegida correspondientes a la FUNCION ELEGIDA
+			this.dibujaInterfazElegida(seleccionado);  
+			
+	    //4) Aparicion del sistema de botones
+			this.aceptar= new JButton("CONFIRMAR ACCIONES");   this.aceptar.setBounds(440,270,190,20);   add(this.aceptar);
+			this.cancelar= new JButton("CANCELAR OPERACIÓN");  this.cancelar.setBounds(440,310,190,20);   add(this.cancelar);				
+		
+		//5) Se adicionan los EventListeners de los dos botones
+			this.aceptar.addActionListener(e->{
+			    //5.1) Validamos que el origen del evento realmente sea un botón
+			    if (seleccionado instanceof JButton) 
+			    {
+			        JButton botonAccionado = (JButton) seleccionado;
+			        
+			        //5.2) Extraemos el nombre de la variable JButton
+			        String valorBoton = botonAccionado.getName().toString();
+			        
+			        //5.3) Logica de deteccion del boton accionado para que el accionamiento aceptar haga su trabajo asignado
+			        
+			        
+			        
+			        //// BLOQUE 4 - GESTION ADMINSITRATIVO DE STOCK ////
+			        if (valorBoton.equals("cajaStock")) 
+			        {  
+			        	int stockFinal= Integer.parseInt(this.cajaCantidadActual.getText()) + Integer.parseInt(this.cajaCantidad.getSelectedItem().toString());
+			        		
+			        	   //5.4) SE ACTUALIZA EL NUMERO DE STOCK ADICIONADO POR ADMINISTRACION
+					       try {
+			        		//5.4.1 - CREAR CONEXION
+							Connection conector04 = DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
+		
+						   //5.4.2 - CREAR EL PREPAREDSTATEMENT para ACTUALIZAR
+							String sql1 = "UPDATE imagenesinterfazweb SET STOCK = ? WHERE NOMBRE = ? AND DESTINO = ?";
+							PreparedStatement myst1 = conector04.prepareStatement(sql1);
+		
+						   //5.4.3 - ASIGNAR VALORES A LOS ? EN ORDEN
+							myst1.setInt(1, stockFinal);  //ADICIONANDO LA CANTIDAD ASIGNADA POR ADMINSITRACION
+							myst1.setString(2, this.cajaArticulo.getSelectedItem().toString()+".png"); //NOMBRE DEL ARTICULO INCLUYENDO EL FORMATO DE IMAGEN .PNG QUE YA TENIA
+							myst1.setString(3, this.cajaCategoria.getSelectedItem().toString()); //DESTINO DEL ARTICULO
+							
+						   //5.4.4 - EJECUTAR LA ACTUALIZACIÓN
+							int filasAfectadas = myst1.executeUpdate();
+
+							if (filasAfectadas > 0)   //SE COMPRUEBA QUE HAY FILAS SUFICIENTES QUE SE ACTUALIZARON PARA REFRESCAR DE NUEVO EL HASHMAP 
+							{
+							    // 5.4.4.1. Conseguimos el nombre del artículo actual (tal como está en el combo)
+							    String articuloActual = this.cajaArticulo.getSelectedItem().toString();
+							    
+							    // 5.4.4.2. Sincronizamos el mapa local con el nuevo valor numérico
+							    this.stockMomentaneo.put(articuloActual, stockFinal);
+							    
+							    // 5.4.4.3. Refrescamos la interfaz visual en tiempo real
+							    this.cajaCantidadActual.setText(String.valueOf(stockFinal));
+							}
+							
+						   //5.4.5 - COMPROBACION DE LA CANTIDAD DE FILAS AFECTADAS O BIEN NINGUNA SI HUBO ERROR O INEXISTENCIA DEL ARTICULO QUE SE PRETENDIO ACTUALIZAR
+							JOptionPane.showMessageDialog(null, "Filas actualizadas en la Base de Datos: " + filasAfectadas +" filas y base de datos e Interfaz sincronizadas con éxito","Información de Stock",JOptionPane.INFORMATION_MESSAGE);
+							if (filasAfectadas == 0) {
+							    System.out.println("ALERTA: No se encontró ningún registro que coincida exactamente con NOMBRE='" 
+							        + this.cajaArticulo.getSelectedItem().toString() 
+							        + "' y DESTINO='" + this.cajaCategoria.getSelectedItem().toString() + "'");
+							}
+						   //5.4.6 - CERRAR RECURSOS
+							myst1.close();		  //Libera la consulta realizada
+							conector04.close();   //Cierra la conexion
+					       }catch(Exception error) {
+					    	   error.printStackTrace();
+					       }
+			        }
+			    }
+			}); 
+			//METER EN UNA ASGINACIONN LAMDA LAS ACCIONES DE LISTENER AQUI
+			this.cancelar.addActionListener(e->{
+           		this.reestablecerInterfazInicial(seleccionado);
+			});
+		
+		//6) Se deshabilitan el boton de EJECUTAR ACCIONES pero no el de CANCELAR porque se puede volver sin hacer nada
+			this.aceptar.setEnabled(false);
+	}
+	public void reestablecerInterfazInicial(Object seleccionado)
+	{
+    	//2) Se vuelven a habilitar los botones con todas las acciones que poseia adminsitracion
+    	this.cajaCompras.setEnabled(true);
+		this.cajaAspirantes.setEnabled(true);
+		this.cajaTareas.setEnabled(true);
+		this.cajaStock.setEnabled(true);
+		
+	    if (seleccionado instanceof JButton) 
+	    {
+	        JButton botonAccionado = (JButton) seleccionado;
+	        
+	        //1) Extraemos el nombre de la variable JButton
+	        String valorBoton = botonAccionado.getName().toString();
+	        
+	        //2) Logica de deteccion del boton accionado para que el accionamiento aceptar haga su trabajo asignado
+	        
+	        //3) Se desaparecen todo el cuadro de botones y desplegables que se adicionaron:
+			
+				//3.1) DE LA FUNCION: CAJA COMPRAS
+			
+				//3.2) DE LA FUNCION: CAJA ASPIRANTES
+				
+
+	        //// BLOQUE 3 - GESTION ADMINSITRATIVO DE TAREAS ////
+	        if (valorBoton.equals("cajaTareas")) 
+	        {  
+			//3.3) DE LA FUNCION: CAJA TAREAS
+				//3.3.1) LABELS QUE DESAPARECEN
+					this.tituloID.setVisible(false);
+					this.tituloTarea.setVisible(false);
+					this.tituloDepartamento.setVisible(false);
+					this.tituloTecnicos.setVisible(false);
+					this.tituloCostes.setVisible(false);
+					this.tituloFecha.setVisible(false);
+					this.tituloResolucion.setVisible(false);
+	        }
+	        //// BLOQUE 4 - GESTION ADMINSITRATIVO DE STOCK ////
+	        if (valorBoton.equals("cajaStock")) 
+	        {  
+			//3.4) DE LA FUNCION: CAJA STOCK
+				//3.4.1) LABELS QUE DESAPARECEN
+					this.tituloCategoria.setVisible(false);
+					this.tituloArticulo.setVisible(false);
+					this.tituloCantidad.setVisible(false);
+					this.tituloCantidadActual.setVisible(false);
+					this.cajaCantidadActual.setVisible(false);
+				//3.4.2) CAJAS DESPLEGABLES
+					this.cajaArticulo.setVisible(false);
+					this.cajaCategoria.setVisible(false);
+					this.cajaCantidad.setVisible(false);
+	        }
+			//3.5) DE LOS BOTONES QUE SON COMUNES PARA TODOS
+			this.aceptar.setVisible(false);
+			this.cancelar.setVisible(false);
+	     }
+		//4) Se devuelve el setbounds a la forma anterior
+			this.cuadroBase.setBounds(250,100,420,400);
+	}
+	public void preparaInterfaz(Boolean activadorInicial, Object objetoElegido)
+	{
+		//1) CARGA TODOS LOS COMPONENTES COMPLETOS DE TODOS LOS CUATRO MENUS 
+		if(activadorInicial)
+		{
+		  //0) COLOCA LOS JLABELS CORRESPONDIENTES
+			
+			///0.1) ADMINISTRACION DE LAS COMPRAS
+			
+			///0.2) ADMINISTRACION DE LOS ASPIRANTES
+			
+			///0.3) ADMINISTRACION DE LAS TAREAS
+			
+				this.tituloID= new JLabel("ID:");                      this.tituloID.setBounds(400,30,190,20);             add(this.tituloID);   
+				this.tituloTarea= new JLabel("TAREA:");                this.tituloTarea.setBounds(400,60,190,20);         add(this.tituloTarea);   
+				this.tituloDepartamento= new JLabel("DEPARTAMENTO:");  this.tituloDepartamento.setBounds(400,90,190,20);  add(this.tituloDepartamento);   
+				this.tituloTecnicos=new JLabel("TECNICOS:");           this.tituloTecnicos.setBounds(400,120,190,20);      add(this.tituloTecnicos);
+				this.tituloCostes= new JLabel("COSTES:");              this.tituloCostes.setBounds(400,150,190,20);         add(this.tituloCostes);   
+				this.tituloFecha= new JLabel("FECHA:");                     this.tituloFecha.setBounds(400,180,190,20);         add(this.tituloFecha);   
+				this.tituloResolucion= new JLabel("RESOLUCION ANTERIOR:");  this.tituloResolucion.setBounds(400,210,190,20);    add(this.tituloResolucion);   
+				this.tituloResolucionActual= new JLabel("RESOLUCION ACTUAL:");    this.tituloResolucionActual.setBounds(400,240,190,20);    add(this.tituloResolucion);   
+				
+				this.cajaID= new JLabel();			  this.cajaID.setBounds(600, 30, 190, 20);         add(this.cajaID);
+				this.cajaDepartamento= new JLabel();  this.cajaDepartamento.setBounds(600,90,190,20);  add(this.cajaDepartamento);
+				this.cajaTecnicos= new JLabel();	  this.cajaTecnicos.setBounds(600,120,190,20);	   add(this.cajaTecnicos);
+				this.cajaCostes= new JLabel();		  this.cajaCostes.setBounds(600,150,190,20);	   add(this.cajaCostes);
+				this.cajaFecha= new JLabel();		  this.cajaFecha.setBounds(600,180,190,20);        add(this.cajaFecha); 
+				this.cajaResolucion= new JLabel();    this.cajaResolucion.setBounds(600,210,190,20);   add(this.cajaResolucion);
+				
+				this.cajaTarea= new JComboBox<>();    this.cajaTarea.setBounds(600,60,190,20);        add(this.cajaTarea);
+				this.cajaResolucionActual= new JComboBox<>();   this.cajaResolucionActual.setBounds(600,240,190,20);  add(this.cajaResolucionActual);
+			
+			   //0.3.1) SE INVISIBILIZAN TODOS PORQUE NO SE HAN INVOCADO EN EL MENU SOLO LLAMADO A PRESENCIA
+				this.tituloID.setVisible(false);
+				this.tituloTarea.setVisible(false);
+				this.tituloDepartamento.setVisible(false);
+				this.tituloTecnicos.setVisible(false);
+				this.tituloCostes.setVisible(false);
+				this.tituloFecha.setVisible(false);
+				this.tituloResolucion.setVisible(false);
+			
+			///0.4) ADMINISTRACION DEL STOCK
+
+				this.tituloCategoria= new JLabel("CATEGORIA");  this.tituloCategoria.setBounds(400,90,190,20);   add(this.tituloCategoria);   
+				this.tituloArticulo= new JLabel("ARTICULO");    this.tituloArticulo.setBounds(400,130,190,20);   add(this.tituloArticulo);   
+				this.tituloCantidad= new JLabel("CANTIDAD");    this.tituloCantidad.setBounds(400,170,190,20);   add(this.tituloCantidad);   
+				this.tituloCantidadActual=new JLabel("CANTIDAD ACTUAL: ");  this.tituloCantidadActual.setBounds(400,210,190,20);  add(this.tituloCantidadActual);
+	
+				this.cajaArticulo= new JComboBox<String>();   this.cajaArticulo.setBounds(480, 130, 200, 20);     add(this.cajaArticulo); 
+				this.cajaCantidad= new JComboBox<Integer>();  this.cajaCantidad.setBounds(480, 170, 200, 20);     add(this.cajaCantidad);   
+				this.cajaCantidadActual=new JLabel();         this.cajaCantidadActual.setBounds(520, 210,200,20); add(this.cajaCantidadActual);
+
+				//0.4.1) SE INVISIBILIZAN TODOS PORQUE NO SE HAN INVOCADO EN EL MENU SOLO LLAMADO A PRESENCIA
+				this.tituloCategoria.setVisible(false);
+				this.tituloArticulo.setVisible(false);
+				this.tituloCantidad.setVisible(false);
+				this.tituloCantidadActual.setVisible(false);
+				
+				this.cajaArticulo.setVisible(false);
+				this.cajaCantidad.setVisible(false);
+				this.cajaCantidadActual.setVisible(false);
+		}
+		else
+		{
+			//2) LOS HACE INVISIBLES TODOS ELLOS
+			if(objetoElegido==cajaCompras)
+			{
+				
+			}
+			if(objetoElegido==cajaAspirantes)
+			{
+				
+			}
+			if(objetoElegido==cajaTareas)
+			{
+			   //2.3.1) SE VISIBILIZAN TODOS PORQUE SE HAN INVOCADO EN EL MENU CORRESPONDIENTE
+				this.tituloID.setVisible(true);
+				this.tituloTarea.setVisible(true);
+				this.tituloDepartamento.setVisible(true);
+				this.tituloTecnicos.setVisible(true);
+				this.tituloCostes.setVisible(true);
+				this.tituloFecha.setVisible(true);
+				this.tituloResolucion.setVisible(true);
+			}
+			if(objetoElegido==cajaStock)
+			{	
+				//2.4.1) SE VISIBILIZAN TODOS PORQUE SE HAN INVOCADO EN EL MENU CORRESPONDIENTE
+				this.tituloCategoria.setVisible(true);
+				this.tituloArticulo.setVisible(true);
+				this.tituloCantidad.setVisible(true);
+				this.tituloCantidadActual.setVisible(true);
+				
+				this.cajaArticulo.setVisible(true);
+				this.cajaCantidad.setVisible(true);
+				this.cajaCantidadActual.setVisible(true);
+			}
+			//3) HARA VISIBLES CON UN CONDICIONAL AQUEL MENU QUE SE HAYA ELEGIDO
+		}
+	}
+	public void dibujaInterfazElegida(Object objetoElegido)
+	{
+		//1) LLAMADA INICIAL SOLO PREPARA LA BASE DE TODOS LOS MENUS
+		preparaInterfaz(true, objetoElegido);  
+
+		if(objetoElegido==cajaCompras)
+		{
+			preparaInterfaz(false, objetoElegido); 
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA COMPRAS","Información de Stock",JOptionPane.INFORMATION_MESSAGE);
+		}
+		if(objetoElegido==cajaAspirantes)
+		{
+			preparaInterfaz(false, objetoElegido); 
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA ASPIRANTES","Información de Stock",JOptionPane.INFORMATION_MESSAGE);	
+		}
+		if(objetoElegido==cajaTareas)
+		{
+			//0) COLOCA LOS JLABELS CORRESPONDIENTES
+			preparaInterfaz(false, objetoElegido); 
+			JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA TAREAS","Información de Stock",JOptionPane.INFORMATION_MESSAGE);
+		}
+		if(objetoElegido==cajaStock)
+		{	
+			//0) COLOCA LOS JLABELS CORRESPONDIENTES
+			preparaInterfaz(false, objetoElegido); 
+
+			//1) INVOCA EL STOCK QUE QUEDA PARA EL CASO DE REPOSICION DE ALMACENAJE
+			PanelProcesamientoStock nuevo= new PanelProcesamientoStock();
+			
+			//2) GUARDADO DE STOCK ACTUAL EN LA VARIABLE CREADA ANTERIORMENTE
+			stockActual=nuevo.getMapaDatosStock();
+			
+			//3) SE RELLENA EL PRIMER JCOMBOBOX DE CATEGORIAS
+				this.cajaCategoria= new JComboBox<String>();  
+				this.cajaCategoria.addItem("PRODUCTOS");
+				this.cajaCategoria.addItem("SERVICIOS");
+				this.cajaCategoria.addItem("PROYECTOS");
+				
+				this.cajaCategoria.setBounds(480,90,200,20);   
+				add(this.cajaCategoria);
+	
+			//4) SE ESTABLECE EL DETECTOR DE CAMBIO DE CATEGORIA Y POR CONSIGUIENTE CAMBIO DE SECTOR DE ARTICULOS MOSTRADOS EN EL SEGUNDO JCOMBOBOX
+			  //4.1) SE DECLARA LA VARIABLE QUE IRA EN EL JLABEL
+				this.cantidadConcepto="";
+			  //4.2) SE PROCEDE CON EL ASIGNAMIENTO DE LOS ARTICULOS QUE FUERON ASIGNADOS A QUE CATEGORIA		
+				// 1. EL LISTENER DE LA CAJA ARTÍCULO SE DEFINE UNA SOLA VEZ FUERA PARA EVITAR DUPLICADOS
+				this.cajaArticulo.addItemListener(estado -> {
+				    if (estado.getStateChange() == ItemEvent.SELECTED) {
+				        Object itemSeleccionado = estado.getItem();
+				        Integer cantidad = this.stockMomentaneo.get(itemSeleccionado);
+
+				        if (cantidad != null) {
+				            this.cantidadConcepto = String.valueOf(cantidad);
+				        } else {
+				            this.cantidadConcepto = String.valueOf(this.stockMomentaneo.values().stream().findFirst().orElse(null));
+				        }
+				        
+				        // ¡CRÍTICO! Actualizar el texto del JLabel en tiempo real
+				        if (this.cajaCantidadActual != null) {
+				            this.cajaCantidadActual.setText(this.cantidadConcepto);
+				        }
+				    }
+				});
+				
+				this.cajaCategoria.addActionListener(e -> {
+				    // 5.3) BORRADO DEL MAPA MOMENTANEO
+				    this.stockMomentaneo.clear();
+				    
+				    // 5.4) SE HABILITAN LOS BOTONES
+				    this.aceptar.setEnabled(true);
+				    
+				    String seleccionado = (String) this.cajaCategoria.getSelectedItem();
+				    if (seleccionado == null) return;
+				
+				    // Limpieza previa de los combos
+				    this.cajaArticulo.removeAllItems();  
+				    this.cajaCantidad.removeAllItems();  
+				
+				    // USAR .equals() PARA COMPARAR STRINGS EN JAVA
+				    if (seleccionado.equals("PRODUCTOS")) {
+				        stockActual.forEach((clave, valor) -> {
+				            if (valor.getDestino().toString().startsWith("PRODUCTOS")) {
+				                String nombreLimpio = valor.getNombre().substring(0, valor.getNombre().length() - 4);
+				                this.cajaArticulo.addItem(nombreLimpio);
+				                this.stockMomentaneo.put(nombreLimpio, valor.getCantidad());  
+				            }
+				        });
+				        
+				        for (puntero = 1; puntero < stockActual.size() && puntero < 11; puntero++) {
+				            this.cajaCantidad.addItem(puntero * 150);  
+				        }
+				    }
+				    else if (seleccionado.equals("SERVICIOS")) {
+				        stockActual.forEach((clave, valor) -> {
+				            if (valor.getDestino().toString().startsWith("SERVICIOS")) {
+				                String nombreLimpio = valor.getNombre().substring(0, valor.getNombre().length() - 4);
+				                this.cajaArticulo.addItem(nombreLimpio);
+				                this.stockMomentaneo.put(nombreLimpio, valor.getCantidad());  
+				            }
+				        });
+				        
+				        for (puntero = 1; puntero < stockActual.size() && puntero < 11; puntero++) {
+				            this.cajaCantidad.addItem(puntero * 10);  
+				        }
+				    }
+				    else if (seleccionado.equals("PROYECTOS")) {
+				        stockActual.forEach((clave, valor) -> {
+				            if (valor.getDestino().toString().startsWith("PROYECTOS")) {
+				                String nombreLimpio = valor.getNombre().substring(0, valor.getNombre().length() - 4);
+				                this.cajaArticulo.addItem(nombreLimpio);
+				                this.stockMomentaneo.put(nombreLimpio, valor.getCantidad());  
+				            }
+				        });
+				        
+				        for (puntero = 1; puntero < stockActual.size() && puntero < 11; puntero++) {
+				            this.cajaCantidad.addItem(puntero * 5);  
+				        }
+				    }
+				    
+				    // Forzar la actualización de la cantidad del artículo seleccionado por defecto
+				    if (this.cajaArticulo.getItemCount() == 0) {
+				        this.cajaCantidadActual.setText("Elija Artículo 1!");
+				    } else {
+				        // Obtenemos el primer artículo que se seleccionó automáticamente al rellenar el combo
+				        Object primerItem = this.cajaArticulo.getSelectedItem();
+				        Integer cantidad = this.stockMomentaneo.get(primerItem);
+				        
+				        if (cantidad != null) {
+				            this.cantidadConcepto = String.valueOf(cantidad);
+				        } else {
+				            this.cantidadConcepto = String.valueOf(0);
+				        }
+				        
+				        if (this.cajaCantidadActual != null) {
+				            this.cajaCantidadActual.setText(this.cantidadConcepto);
+				        }
+				    }
+				});
+			}
+		}
+}

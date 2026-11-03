@@ -1,0 +1,218 @@
+/* Reinicia caja, margen y relleno de todos los elementos */
+* {
+    margin: 0; /* Sin margen por defecto */
+    padding: 0; /* Sin relleno por defecto */
+    box-sizing: border-box; /* El borde cuenta dentro del ancho */
+}
+
+/* La página ocupa toda la ventana */
+html,
+body {
+    width: 100%; /* Ancho de ventana */
+    height: 100%; /* Alto de ventana */
+    overflow: hidden; /* El scroll lo hace el visor */
+    font-family: Arial, Helvetica, sans-serif; /* Fuente del proyecto */
+}
+
+/* Capa que apila fondo y contenido */
+#container {
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Alto completo */
+    position: relative; /* Referencia de apilado */
+}
+
+/* Foto de fondo centrada */
+#imagenFondo {
+    position: fixed; /* Fija detrás de la interfaz */
+    inset: 0; /* Cubre los cuatro bordes */
+    width: 100%; /* Ancho de ventana */
+    height: 100%; /* Alto de ventana */
+    object-fit: cover; /* Cubre sin deformar */
+    object-position: center center; /* Recorte centrado */
+    opacity: 0.55; /* Deja leer las columnas */
+    z-index: -2; /* Detrás de cabecera y visor */
+}
+
+/* Cabecera con título y botones */
+.cabecera {
+    width: min(1100px, 94vw); /* Ancho contenido */
+    margin: 0 auto; /* Centrada */
+    padding: 12px 0 8px; /* Aire superior */
+    color: #1b2734; /* Texto oscuro */
+}
+
+/* Título de la página */
+.cabecera h1 {
+    font-size: clamp(1.1rem, 2vw, 1.7rem); /* Tamaño adaptable */
+    margin-bottom: 10px; /* Separación */
+    text-align: center; /* Centrado */
+}
+
+/* Fila de botones de acción */
+.barra-botones {
+    display: flex; /* En horizontal */
+    flex-wrap: wrap; /* Salto si no caben */
+    gap: 8px; /* Calle */
+    justify-content: center; /* Centrados */
+}
+
+/* Botones azul marino cálido */
+.btn-marino {
+    display: inline-flex; /* Centra el texto */
+    align-items: center; /* Vertical */
+    justify-content: center; /* Horizontal */
+    padding: 8px 14px; /* Interior */
+    border-radius: 8px; /* Esquinas */
+    border: 1px solid #16324f; /* Contorno */
+    background: #1e3d5c; /* Azul marino cálido */
+    color: #f4f0e6; /* Texto claro */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 0.88rem; /* Tamaño */
+    font-weight: 700; /* Negrita */
+    font-family: inherit; /* Misma fuente */
+    cursor: pointer; /* Mano */
+}
+
+/* Hover de botones activos */
+.btn-marino:hover:not(:disabled) {
+    background: #2a5278; /* Un poco más claro */
+    color: #ffffff; /* Blanco */
+}
+
+/* Botón deshabilitado: no se usa hasta el foco o hasta añadir capítulos */
+.btn-marino:disabled {
+    opacity: 0.42; /* Apagado */
+    cursor: not-allowed; /* Prohibido */
+}
+
+/* Zona de dos columnas con scroll */
+.visor {
+    height: calc(100vh - 170px); /* Bajo la cabecera */
+    max-height: 620px; /* Tope */
+    overflow: hidden; /* El scroll va en cada columna */
+    width: min(1100px, 94vw); /* Ancho */
+    margin: 8px auto 40px; /* Aire inferior para ver el fondo */
+    display: grid; /* Dos mitades */
+    grid-template-columns: 1fr 1fr; /* Bloques | capítulos */
+    gap: 14px; /* Calle entre columnas */
+}
+
+/* Títulos de cada columna */
+.columna-bloques h2,
+.columna-capitulos h2 {
+    font-size: 1.05rem; /* Tamaño */
+    margin-bottom: 10px; /* Separación */
+    color: #102033; /* Texto */
+}
+
+/* Columna izquierda: amarillo dorado */
+.columna-bloques {
+    background: rgba(201, 162, 39, 0.78); /* Oro semitransparente */
+    border: 1px solid rgba(140, 105, 12, 0.55); /* Contorno */
+    border-radius: 12px; /* Esquinas */
+    padding: 12px; /* Interior */
+    overflow-y: auto; /* Scroll propio */
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16); /* Sombra */
+}
+
+/* Columna derecha: verde diamante */
+.columna-capitulos {
+    background: rgba(80, 200, 120, 0.72); /* Verde diamante */
+    border: 1px solid rgba(20, 110, 70, 0.5); /* Contorno */
+    border-radius: 12px; /* Esquinas */
+    padding: 12px; /* Interior */
+    overflow-y: auto; /* Scroll propio */
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16); /* Sombra */
+}
+
+/* Formulario de nombre del bloque nuevo */
+.alta-bloque {
+    margin-bottom: 12px; /* Separación */
+}
+
+/* Etiqueta del nombre */
+.alta-bloque label {
+    display: block; /* Encima del campo */
+    font-weight: 700; /* Negrita */
+    margin-bottom: 6px; /* Calle */
+    color: #102033; /* Texto */
+}
+
+/* Nombre + botón de alta */
+.fila-alta {
+    display: flex; /* En fila */
+    gap: 8px; /* Calle */
+}
+
+/* Campo de nombre */
+.fila-alta input {
+    flex: 1; /* Ocupa el resto */
+    min-width: 0; /* Permite encoger */
+    border: 1px solid rgba(80, 60, 10, 0.45); /* Borde */
+    border-radius: 8px; /* Esquinas */
+    padding: 8px 10px; /* Interior */
+    font: inherit; /* Misma fuente */
+}
+
+/* Lista de filas año / bloque */
+.lista-desplegables {
+    display: flex; /* Columna */
+    flex-direction: column; /* Vertical */
+    gap: 10px; /* Separación */
+    margin-top: 12px; /* Aire bajo el botón añadir */
+}
+
+/* Fila: etiqueta a un lado y desplegable */
+.fila-desplegable {
+    display: grid; /* Etiqueta | select */
+    grid-template-columns: 118px 1fr; /* Año o nombre a la izquierda */
+    gap: 8px; /* Calle */
+    align-items: center; /* Centrado vertical */
+    padding: 8px; /* Interior */
+    border-radius: 10px; /* Esquinas */
+    background: rgba(255, 255, 255, 0.28); /* Capa clara */
+}
+
+/* Nombre del bloque o del año, escrito al lado */
+.etiqueta-desplegable {
+    font-weight: 800; /* Negrita */
+    color: #102033; /* Texto */
+    word-break: break-word; /* Nombres largos */
+}
+
+/* Desplegable de capítulos */
+.fila-desplegable select {
+    width: 100%; /* Ancho de la celda */
+    border: 1px solid rgba(20, 40, 30, 0.28); /* Borde */
+    border-radius: 8px; /* Esquinas */
+    padding: 7px 8px; /* Interior */
+    font: inherit; /* Misma fuente */
+    background: #ffffff; /* Fondo blanco */
+}
+
+/* Bloque con el primer focuslistener activo */
+.fila-desplegable.bloque-enfocado {
+    outline: 3px solid #16324f; /* Marco marino */
+    background: rgba(255, 248, 220, 0.72); /* Más claro */
+}
+
+/* Capítulo elegido dentro del bloque (segundo foco) */
+.fila-desplegable.capitulo-enfocado select {
+    box-shadow: 0 0 0 2px #1e3d5c; /* Halo en el select */
+}
+
+/* Avisos de carga o vacío */
+.aviso-columna {
+    font-weight: 700; /* Negrita */
+    color: #102033; /* Texto */
+    padding: 8px 0; /* Aire */
+}
+
+/* En pantallas estrechas, las columnas se apilan */
+@media (max-width: 720px) {
+    .visor {
+        grid-template-columns: 1fr; /* Una columna */
+        overflow-y: auto; /* Scroll general */
+        height: calc(100vh - 200px); /* Más bajo */
+    }
+}

@@ -62,7 +62,7 @@ function activador(puntero)
                     }
                 case 4:
                     {
-                        enlace.setAttribute('href','../0005_Anotaciones/bloquesNovela.php');
+                        enlace.setAttribute('href','../0005_BloquesNovela/bloquesNovela.php');
                         enlace.textContent="ACCEDER A BLOQUES";
                         break;
                     }
@@ -70,6 +70,12 @@ function activador(puntero)
                     {
                         enlace.setAttribute('href','../0006_Calendarios/calendariosPlanetarios.php');
                         enlace.textContent="ACCEDER A CALENDARIOS";
+                        break;
+                    }
+                case 6:
+                    {
+                        enlace.setAttribute('href','../0007_Reflexiones/reflexiones.php');
+                        enlace.textContent="ACCEDER A REFLEXIONES";
                         break;
                     }
                 default:
@@ -130,6 +136,11 @@ function reactivador(puntero)
                 case 5:
                     {
                         matrizCaja[puntero].textContent="CALENDARIOS";
+                        break;
+                    }
+                case 6:
+                    {
+                        matrizCaja[puntero].textContent="REFLEXIONES DEL PERSONAJE";
                         break;
                     }
                 default:

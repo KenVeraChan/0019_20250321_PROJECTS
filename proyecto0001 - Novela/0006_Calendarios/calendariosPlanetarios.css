@@ -1,0 +1,327 @@
+/* Reinicia caja, margen y relleno de todos los elementos */
+* {
+    margin: 0; /* Sin margen por defecto */
+    padding: 0; /* Sin relleno por defecto */
+    box-sizing: border-box; /* El borde cuenta dentro del ancho */
+}
+
+/* La página ocupa toda la ventana */
+html,
+body {
+    width: 100%; /* Ancho de ventana */
+    height: 100%; /* Alto de ventana */
+    overflow: hidden; /* El scroll lo hace el visor */
+    font-family: Arial, Helvetica, sans-serif; /* Fuente del proyecto */
+}
+
+/* Capa que apila fondo y contenido */
+#container {
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Alto completo */
+    position: relative; /* Referencia de apilado */
+}
+
+/* Foto de fondo centrada */
+#imagenFondo {
+    position: fixed; /* Fija detrás de la interfaz */
+    inset: 0; /* Cubre los cuatro bordes */
+    width: 100%; /* Ancho de ventana */
+    height: 100%; /* Alto de ventana */
+    object-fit: cover; /* Cubre sin deformar */
+    object-position: center center; /* Recorte centrado */
+    opacity: 0.55; /* Deja leer las tarjetas */
+    z-index: -2; /* Detrás de cabecera y visor */
+}
+
+/* Columna centrada del visor */
+.zona-trabajo {
+    display: flex; /* Centra el panel */
+    justify-content: center; /* Horizontal */
+    padding: 10px 12px 48px; /* Aire; abajo se ve el fondo */
+}
+
+/* Panel principal elevado */
+.panel-principal {
+    width: min(780px, 92vw); /* Ancho del contenido */
+}
+
+/* Cabecera con título y formulario */
+.cabecera {
+    width: 100%; /* Ocupa el panel */
+    margin: 0; /* Sin margen extra: ya está elevado */
+    padding: 4px 0 8px; /* Poco aire superior */
+    color: #1b2734; /* Texto oscuro */
+}
+
+/* Título de la página */
+.cabecera h1 {
+    font-size: clamp(1.1rem, 2vw, 1.7rem); /* Tamaño adaptable */
+    margin-bottom: 8px; /* Separación */
+    text-align: center; /* Centrado */
+}
+
+/* Planeta a la mitad; el botón ocupa el hueco derecho */
+.fila-planeta {
+    display: flex; /* Desplegable + botón */
+    align-items: stretch; /* Misma altura */
+    gap: 10px; /* Calle entre ambos */
+}
+
+/* Botón de volver al menú, a la derecha del desplegable */
+.btn-volver {
+    display: flex; /* Centra el texto */
+    align-items: center; /* Vertical */
+    justify-content: center; /* Horizontal */
+    flex: 1 1 50%; /* Mitad derecha */
+    width: 50%; /* Mitad de la fila */
+    margin: 0; /* Alineado con el select */
+    padding: 6px 12px; /* Interior */
+    border-radius: 8px; /* Esquinas */
+    border: 1px solid rgba(15, 45, 76, 0.45); /* Contorno */
+    background: rgba(255, 255, 255, 0.9); /* Fondo claro */
+    color: #153454; /* Texto */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 0.88rem; /* Tamaño */
+    font-weight: 700; /* Negrita */
+    text-align: center; /* Texto centrado */
+    white-space: nowrap; /* Una línea */
+}
+
+/* Hover del botón volver */
+.btn-volver:hover {
+    background: rgba(21, 52, 84, 0.93); /* Fondo oscuro */
+    color: #ffffff; /* Texto blanco */
+}
+
+/* Caja del desplegable y la fecha */
+.bloque-calculo {
+    background: rgba(255, 255, 255, 0.92); /* Fondo legible */
+    border-radius: 12px; /* Esquinas */
+    padding: 12px 14px; /* Interior */
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16); /* Sombra */
+    display: flex; /* Columna: planeta y luego la fila de fecha */
+    flex-direction: column; /* Vertical */
+    gap: 8px; /* Calle entre bloques */
+}
+
+/* Etiquetas del formulario */
+.bloque-calculo > label {
+    display: block; /* Encima del select de planeta */
+    font-weight: 700; /* Negrita */
+    margin: 0; /* El gap ya separa */
+}
+
+/* Campos del formulario */
+.bloque-calculo select,
+.bloque-calculo input {
+    border: 1px solid #c8d1de; /* Borde */
+    border-radius: 8px; /* Esquinas */
+    padding: 6px 8px; /* Interior compacto */
+    font: inherit; /* Misma fuente */
+    background: #ffffff; /* Fondo blanco */
+}
+
+/* Select de planeta a la mitad de la fila */
+.bloque-calculo #planetaReferencia {
+    width: 50%; /* Mitad izquierda */
+    flex: 1 1 50%; /* No se estira más de la mitad */
+    min-width: 0; /* Permite encoger en pantallas estrechas */
+}
+
+/* Fecha, día, hora y minuto en una sola línea */
+.fila-fecha-hora {
+    display: flex; /* Todo en horizontal */
+    align-items: center; /* Centrado vertical */
+    flex-wrap: wrap; /* Salto solo si no cabe */
+    gap: 8px 10px; /* Calle entre piezas */
+}
+
+/* Palabras Fecha / Hora / Minuto y el día de la semana */
+.fila-fecha-hora label,
+.nombre-dia-semana {
+    font-family: Arial, Helvetica, sans-serif; /* Misma fuente que Fecha, Hora, Minuto */
+    font-size: 1rem; /* Mismo tamaño */
+    font-weight: 700; /* Misma negrita */
+    font-style: normal; /* Sin cursiva */
+    letter-spacing: normal; /* Mismo tracking */
+    color: inherit; /* Mismo color de la fila */
+    white-space: nowrap; /* No se parte la palabra */
+    margin: 0; /* Pegadas a su caja */
+}
+
+/* Desplegable de fecha, más estrecho */
+.caja-fecha {
+    width: 138px; /* Compacto */
+    flex: 0 0 138px; /* No crece */
+}
+
+/* Minuto: caja corta de enteros */
+.caja-entero {
+    width: 64px; /* Compacto */
+    flex: 0 0 64px; /* Fijo */
+    text-align: center; /* El número centrado */
+}
+
+/* Hora: número más grande y en negrita */
+.caja-hora {
+    width: 78px; /* Un poco más ancha */
+    flex: 0 0 78px; /* Fijo */
+    font-size: 1.2rem; /* Número más grande */
+    font-weight: 800; /* Negrita */
+    padding: 6px 6px; /* Interior para el dígito */
+}
+
+/* Hueco del día junto a la fecha, sin título propio */
+.nombre-dia-semana {
+    min-width: 5.5em; /* Hueco estable (miércoles) */
+    text-transform: none; /* Misma capitalización que el texto JS */
+}
+
+/* Zona de tarjetas con scroll */
+.visor {
+    height: calc(100vh - 250px); /* Más alto: el botón ya no resta altura arriba */
+    max-height: 560px; /* Tope */
+    overflow-x: hidden; /* No recorta a la derecha por scroll horizontal de página */
+    overflow-y: auto; /* Scroll vertical */
+    width: 100%; /* Mismo ancho que el panel */
+    margin: 10px 0 0; /* El padding de zona-trabajo deja ver el fondo abajo */
+}
+
+/* Grosor del scroll */
+.visor::-webkit-scrollbar {
+    width: 10px; /* Ancho */
+}
+
+/* Pista del scroll */
+.visor::-webkit-scrollbar-track {
+    background: #0b1f3a33; /* Semitransparente */
+    border-radius: 5px; /* Esquinas */
+}
+
+/* Pulgar del scroll */
+.visor::-webkit-scrollbar-thumb {
+    background: #0b1f3a; /* Color */
+    border-radius: 5px; /* Esquinas */
+}
+
+/* Columna de planetas destino */
+.lista-tarjetas {
+    display: flex; /* Columna */
+    flex-direction: column; /* Vertical */
+    gap: 12px; /* Separación */
+    padding: 6px 8px 24px; /* Aire */
+}
+
+/* Tarjeta del planeta que no está elegido */
+.tarjeta-planeta {
+    border-radius: 12px; /* Esquinas */
+    border: 1px solid rgba(0, 0, 0, 0.16); /* Contorno */
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18); /* Sombra */
+    padding: 12px; /* Interior */
+    background: rgba(255, 255, 255, 0.55); /* Fondo suave */
+}
+
+/* Nombre del planeta destino */
+.nombre-planeta-tarjeta {
+    font-size: 1.15rem; /* Tamaño */
+    font-weight: 800; /* Negrita */
+    color: #102033; /* Texto */
+    margin-bottom: 10px; /* Separación */
+}
+
+/* Fila de un continente: nombre, fases y fecha */
+.fila-continente {
+    display: grid; /* Tres zonas */
+    grid-template-columns: minmax(110px, 22%) 1fr minmax(180px, 38%); /* Nombre, fases, fecha */
+    gap: 8px; /* Calle */
+    align-items: center; /* Centrado vertical */
+    margin-top: 8px; /* Separación entre continentes */
+    padding: 8px 10px; /* Interior */
+    border-radius: 10px; /* Esquinas */
+    border: 1px solid rgba(255, 255, 255, 0.25); /* Contorno claro */
+}
+
+/* Nombre del continente a la izquierda */
+.nombre-continente-tarjeta {
+    font-weight: 800; /* Negrita */
+    color: #102033; /* Texto oscuro */
+    letter-spacing: 0.4px; /* Espaciado */
+}
+
+/* Barra de fases horarias */
+.franja-fases {
+    display: flex; /* Celdas en fila */
+    gap: 2px; /* Separación mínima */
+    align-items: stretch; /* Misma altura */
+}
+
+/* Cada fase de la franja */
+.fase-horaria {
+    flex: 1; /* Reparte el ancho */
+    min-width: 14px; /* Legible */
+    height: 28px; /* Alto clicable */
+    border: 0; /* Sin borde duro */
+    border-radius: 4px; /* Esquinas */
+    background: rgba(255, 255, 255, 0.38); /* Semitransparente */
+    color: #102033; /* Número de desfase */
+    font-size: 0.62rem; /* Compacto */
+    font-weight: 700; /* Negrita */
+    cursor: pointer; /* Indica hover */
+    padding: 0; /* Sin relleno extra */
+}
+
+/* La fase se ilumina al pasar el ratón */
+.fase-horaria:hover,
+.fase-horaria.fase-activa {
+    background: rgba(255, 255, 255, 0.92); /* Más clara */
+    box-shadow: 0 0 0 2px rgba(21, 52, 84, 0.45); /* Halo */
+    transform: scaleY(1.12); /* Crece un poco */
+}
+
+/* Pastillas de fecha a la derecha */
+.bloque-fecha {
+    display: flex; /* En fila */
+    flex-wrap: wrap; /* Si no caben, bajan */
+    gap: 4px; /* Separación */
+    justify-content: flex-end; /* Alineadas a la derecha */
+}
+
+/* Cada dato civil */
+.dato-fecha {
+    background: rgba(21, 52, 84, 0.9); /* Pastilla oscura */
+    color: #ffffff; /* Texto blanco */
+    border-radius: 999px; /* Cápsula */
+    padding: 4px 7px; /* Interior */
+    font-size: 0.7rem; /* Compacto */
+    font-weight: 700; /* Negrita */
+    white-space: nowrap; /* Sin corte de palabra */
+}
+
+/* La hora se destaca un poco más */
+.dato-hora {
+    background: rgba(8, 90, 72, 0.95); /* Verde para la hora local */
+}
+
+/* Mensaje si faltan planetas */
+.aviso-vacio {
+    background: rgba(255, 255, 255, 0.92); /* Fondo claro */
+    border-radius: 10px; /* Esquinas */
+    padding: 16px; /* Interior */
+    color: #153454; /* Texto */
+    font-weight: 700; /* Negrita */
+}
+
+/* En pantallas estrechas, el continente apila nombre / fases / fecha */
+@media (max-width: 640px) {
+    .fila-continente {
+        grid-template-columns: 1fr; /* Una columna */
+    }
+
+    .panel-principal {
+        width: 100%;
+    }
+
+    .btn-volver {
+        white-space: normal; /* Permite dos líneas si no cabe */
+    }
+}

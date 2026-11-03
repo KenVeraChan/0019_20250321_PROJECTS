@@ -1,0 +1,270 @@
+/* Reinicia caja, margen y relleno */
+* {
+    margin: 0; /* Sin margen por defecto */
+    padding: 0; /* Sin relleno por defecto */
+    box-sizing: border-box; /* El borde cuenta dentro del ancho */
+}
+
+/* La página ocupa toda la ventana */
+html,
+body {
+    width: 100%; /* Ancho de ventana */
+    height: 100%; /* Alto de ventana */
+    overflow: hidden; /* El scroll lo hace el visor */
+    font-family: Arial, Helvetica, sans-serif; /* Misma fuente en todos los paneles */
+}
+
+/* Capa que apila fondo y contenido */
+#container {
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Alto completo */
+    position: relative; /* Referencia de apilado */
+}
+
+/* Foto de fondo centrada */
+#imagenFondo {
+    position: fixed; /* Fija detrás de la interfaz */
+    inset: 0; /* Cubre los cuatro bordes */
+    width: 100%; /* Ancho de ventana */
+    height: 100%; /* Alto de ventana */
+    object-fit: cover; /* Cubre sin deformar */
+    object-position: center center; /* Recorte centrado */
+    opacity: 0.55; /* Deja leer los paneles */
+    z-index: -2; /* Detrás de cabecera y visor */
+}
+
+/* Cabecera con título y botón */
+.cabecera {
+    width: min(960px, 94vw); /* Ancho contenido */
+    margin: 0 auto; /* Centrada */
+    padding: 16px 0 8px; /* Aire */
+    color: #1b2734; /* Texto oscuro */
+}
+
+/* Título de la página */
+.cabecera h1 {
+    font-size: clamp(1.2rem, 2vw, 1.8rem); /* Tamaño adaptable */
+    margin-bottom: 8px; /* Separación */
+    text-align: center; /* Centrado */
+}
+
+/* Botón de volver, mismo estilo que personajes */
+.btn-volver,
+.btn-accion {
+    display: inline-block; /* Caja de enlace o botón */
+    margin-top: 8px; /* Aire superior */
+    margin-right: 8px; /* Calle */
+    padding: 8px 14px; /* Interior */
+    border-radius: 8px; /* Esquinas */
+    border: 1px solid rgba(15, 45, 76, 0.45); /* Contorno */
+    background: rgba(255, 255, 255, 0.9); /* Fondo claro */
+    color: #153454; /* Texto */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 0.9rem; /* Tamaño */
+    font-weight: 700; /* Negrita */
+    cursor: pointer; /* Mano */
+    font-family: Arial, Helvetica, sans-serif; /* Misma fuente */
+}
+
+/* Hover de botones */
+.btn-volver:hover,
+.btn-accion:hover:not(:disabled) {
+    background: rgba(21, 52, 84, 0.93); /* Fondo oscuro */
+    color: #ffffff; /* Texto blanco */
+}
+
+/* Registrar sin fecha: apagado */
+.btn-accion:disabled {
+    opacity: 0.42; /* Apagado */
+    cursor: not-allowed; /* Prohibido */
+}
+
+/* Zona de paneles con scroll */
+.visor {
+    height: calc(100vh - 160px); /* Bajo la cabecera */
+    max-height: 600px; /* Tope */
+    overflow-x: hidden; /* Sin scroll horizontal de página */
+    overflow-y: auto; /* Scroll vertical */
+    width: min(960px, 94vw); /* Ancho */
+    margin: 8px auto 40px; /* Aire inferior */
+}
+
+/* Grosor del scroll */
+.visor::-webkit-scrollbar {
+    width: 10px; /* Ancho */
+}
+
+/* Pista del scroll */
+.visor::-webkit-scrollbar-track {
+    background: #0b1f3a33; /* Semitransparente */
+    border-radius: 5px; /* Esquinas */
+}
+
+/* Pulgar del scroll */
+.visor::-webkit-scrollbar-thumb {
+    background: #0b1f3a; /* Color */
+    border-radius: 5px; /* Esquinas */
+}
+
+/* Personajes en fila */
+.galeria-paneles {
+    display: flex; /* Fila */
+    flex-direction: row; /* Horizontal */
+    flex-wrap: wrap; /* Salto si no caben */
+    gap: 12px; /* Calle entre paneles */
+    padding: 6px 4px 20px; /* Aire */
+    align-items: flex-start; /* Arriba */
+}
+
+/* Cada personaje: color distinto, misma fuente */
+.panel-personaje {
+    flex: 1 1 220px; /* En fila, ancho similar */
+    min-width: 200px; /* Mínimo legible */
+    min-height: 72px; /* Alto de tarjeta */
+    border-radius: 12px; /* Esquinas */
+    border: 1px solid rgba(0, 0, 0, 0.16); /* Contorno */
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18); /* Sombra */
+    padding: 16px 20px; /* Interior */
+    cursor: pointer; /* Clic para desplegar */
+    overflow: hidden; /* Recorte */
+    font-family: Arial, Helvetica, sans-serif; /* Misma fuente en todos */
+    transition: filter 0.25s ease, box-shadow 0.25s ease, min-height 0.3s ease; /* Hover como personajes */
+}
+
+/* Al abrir, el panel ocupa la fila entera para la lista */
+.panel-personaje.abierto {
+    flex: 1 1 100%; /* Ancho completo */
+    min-height: 240px; /* Sitio para la lista */
+}
+
+/* Nombre y apellidos siempre visibles */
+.resumen-personaje {
+    opacity: 1; /* Visible */
+    font-family: Arial, Helvetica, sans-serif; /* Misma fuente */
+    font-weight: 800; /* Negrita */
+    color: #102033; /* Texto */
+    font-size: 1.2rem; /* Tamaño */
+    letter-spacing: 0.3px; /* Espaciado */
+    line-height: 1.35; /* Interlineado */
+    transition: color 0.25s ease, text-shadow 0.25s ease; /* Hover */
+}
+
+/* Hover: brillo, como en personajes */
+.panel-personaje:hover {
+    filter: brightness(1.14); /* Aclara */
+    box-shadow: 0 12px 24px rgba(255, 255, 255, 0.4); /* Halo */
+}
+
+/* El nombre se ilumina al pasar el ratón */
+.panel-personaje:hover .resumen-personaje {
+    color: #ffffff; /* Blanco */
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45); /* Sombra */
+}
+
+/* Lista y formulario, ocultos hasta el clic */
+.detalle-reflexiones {
+    display: none; /* Plegado */
+    margin-top: 12px; /* Separación */
+    cursor: default; /* El interior no parece un enlace */
+}
+
+/* Visible al abrir */
+.panel-personaje.abierto .detalle-reflexiones {
+    display: block; /* Desplegado */
+}
+
+/* Cada idea ya guardada */
+.item-idea {
+    margin: 8px 0; /* Calle */
+    padding: 8px 10px; /* Interior */
+    background: rgba(255, 255, 255, 0.58); /* Capa clara */
+    border-radius: 8px; /* Esquinas */
+    font-family: Arial, Helvetica, sans-serif; /* Misma fuente */
+    color: #1f2c3d; /* Texto */
+}
+
+/* Fecha de la idea ya guardada */
+.item-idea strong {
+    display: block; /* Encima del texto */
+    margin-bottom: 4px; /* Calle */
+    color: #0b1f3a; /* Título */
+    font-size: 1.15rem; /* Un poco más grande */
+    font-weight: 800; /* Negrita */
+}
+
+/* Área para escribir una reflexión nueva */
+.texto-reflexion {
+    width: 100%; /* Ancho del panel */
+    min-height: 70px; /* Alto */
+    margin: 10px 0; /* Calle */
+    border: 1px solid #c8d1de; /* Borde */
+    border-radius: 8px; /* Esquinas */
+    padding: 8px 10px; /* Interior */
+    font-family: Arial, Helvetica, sans-serif; /* Misma fuente */
+    resize: vertical; /* El usuario estira */
+}
+
+/* Fecha + registrar + cancelar: misma línea y misma altura */
+.fila-acciones {
+    display: flex; /* Horizontal */
+    flex-wrap: nowrap; /* No bajan de fila */
+    align-items: stretch; /* Misma altura */
+    gap: 8px; /* Calle */
+}
+
+/* Los tres controles miden lo mismo */
+.fila-acciones .fecha-idea,
+.fila-acciones .btn-accion {
+    height: 44px; /* Altura común */
+    margin: 0; /* Sin empujar respecto a los demás */
+    box-sizing: border-box; /* El padding no suma altura */
+}
+
+/* Desplegable de fecha, más grande y en negrita */
+.fecha-idea {
+    display: inline-flex; /* Alinea el valor */
+    align-items: center; /* Centrado vertical */
+    border: 1px solid #c8d1de; /* Borde */
+    border-radius: 8px; /* Esquinas */
+    padding: 0 10px; /* Interior */
+    font-family: Arial, Helvetica, sans-serif; /* Misma fuente */
+    font-size: 1.15rem; /* Un poco más grande */
+    font-weight: 800; /* Negrita */
+    background: #ffffff; /* Fondo */
+    color: #102033; /* Texto */
+}
+
+/* Botones de la fila, centrados en esa misma altura */
+.fila-acciones .btn-accion {
+    display: inline-flex; /* Centra el texto */
+    align-items: center; /* Vertical */
+    justify-content: center; /* Horizontal */
+    white-space: nowrap; /* Una línea */
+}
+
+/* Aviso si no hay personajes o ideas */
+.aviso-vacio {
+    background: rgba(255, 255, 255, 0.92); /* Fondo claro */
+    border-radius: 10px; /* Esquinas */
+    padding: 14px; /* Interior */
+    color: #153454; /* Texto */
+    font-weight: 700; /* Negrita */
+    font-family: Arial, Helvetica, sans-serif; /* Misma fuente */
+}
+
+/* Lista vacía dentro del panel */
+.aviso-lista {
+    font-weight: 700; /* Negrita */
+    color: #102033; /* Texto */
+    margin: 8px 0; /* Calle */
+}
+
+/* Colores distintos por personaje; misma transparencia */
+.color-0 { background: rgba(46, 109, 164, 0.78); }
+.color-1 { background: rgba(164, 86, 46, 0.78); }
+.color-2 { background: rgba(62, 140, 92, 0.78); }
+.color-3 { background: rgba(140, 62, 118, 0.78); }
+.color-4 { background: rgba(176, 140, 48, 0.78); }
+.color-5 { background: rgba(48, 140, 176, 0.78); }
+.color-6 { background: rgba(118, 70, 160, 0.78); }
+.color-7 { background: rgba(180, 80, 80, 0.78); }

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;conexionesJDBC.AESCGM.java&apos; to &apos;AESGCM.java&apos;&#x0D;&#x0A;- Original project: &apos;Sfer4DCorporationJava&apos;&#x0D;&#x0A;- Original element: &apos;conexionesJDBC.AESCGM.java&apos;&#x0D;&#x0A;- Renamed element: &apos;conexionesJDBC.AESGCM.java&apos;" description="Rename compilation unit &apos;AESCGM.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;conexionesJDBC{AESCGM.java" name="AESGCM.java" references="false" stamp="1789727578584" version="1.0"/>
+</session>

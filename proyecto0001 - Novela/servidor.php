@@ -5,11 +5,18 @@ class Database{
     private $username = "root";  //usuario de la base de datos
     private $password = "root";  //contraseña de la base de datos
     private $dbname = "cronologia";  //nombre de la base de datos
+    private $nombreArchivoSqlite = "cronologia.db";  //archivo SQLite por defecto (cronologia)
+
+    public function __construct($nombreArchivoSqlite = "cronologia.db")
+    {
+        $this->nombreArchivoSqlite = $nombreArchivoSqlite;  //permite usar otro archivo, por ejemplo cartografia.db
+        $this->dbname = pathinfo($nombreArchivoSqlite, PATHINFO_FILENAME);  //el nombre lógico coincide con el archivo
+    }
 
     public function connexion()
     {
         try {
-            $dbPath = __DIR__ . "/data/cronologia.db";    //Ahora no se usa mysql sino sqlite, por lo que se define la ruta del archivo de la base de datos sqlite
+            $dbPath = __DIR__ . "/data/" . $this->nombreArchivoSqlite;    //ruta del archivo sqlite dentro de /data
             $dsn = "sqlite:" . $dbPath;                   //Se define el DSN para sqlite, que es diferente al de mysql
             $conn = new PDO($dsn, $this->username, $this->password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

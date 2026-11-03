@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="java.lang.Class">
+		<item key="replaceBarOpen" value="true"/>
+		<list key="findhistory">
+			<item value="getMapaDatosStock"/>
+			<item value="pedidosClientes"/>
+			<item value="correo"/>
+			<item value="CompraEjecutada"/>
+			<item value="getMapaCompras"/>
+			<item value="CargarFicheroClave"/>
+			<item value="clientespedidos"/>
+			<item value="JComboBox"/>
+		</list>
+	</section>
+</section>

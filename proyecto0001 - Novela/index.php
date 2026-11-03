@@ -21,6 +21,7 @@
             <div class="caja" onmouseenter="activador(3)" onmouseleave="reactivador(3)">ACONTECIMIENTOS</div>
             <div class="caja" onmouseenter="activador(4)" onmouseleave="reactivador(4)">BLOQUES</div>
             <div class="caja" onmouseenter="activador(5)" onmouseleave="reactivador(5)">CALENDARIOS</div>
+            <div class="caja" onmouseenter="activador(6)" onmouseleave="reactivador(6)">REFLEXIONES DEL PERSONAJE</div>
       </div>
 </section>
 <footer>
