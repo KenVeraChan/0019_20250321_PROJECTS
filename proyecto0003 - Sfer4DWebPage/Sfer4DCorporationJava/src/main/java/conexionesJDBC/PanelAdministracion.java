@@ -12,6 +12,9 @@ import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -89,37 +92,47 @@ class PanelModificar extends JPanel implements ActionListener
 	
 	//7) DECLARACION DE LAS VARIABES, DESPLEGABLES Y BOTONES DE LA ZONA DE ADMINISTRACION
 	
-	//7.3) GESTION DE TAREAS
-	private JLabel tituloID, tituloTarea, tituloDepartamento, tituloTecnicos, tituloCostes, tituloFecha, tituloResolucion, tituloResolucionActual;  
-	private JLabel cajaID, cajaDepartamento, cajaTecnicos, cajaCostes, cajaFecha, cajaResolucion;
-	private JComboBox<String> cajaTarea, cajaResolucionActual;
+	/// CARGA VARIABLES BLOQUE 3 - ADMINISTRACION DE TAREAS ///
 	
-	//7.4) REPOSICION STOCK DE ALMACENAJE
-    private int punteroProdu=0, punteroServ=0, punteroProy=0;   //Puntero de relleno
-    private JLabel tituloCategoria,tituloArticulo,tituloCantidad,tituloCantidadActual,cajaCantidadActual;
-    private JComboBox<String> cajaCategoria;
-    private JComboBox<String> cajaArticulo;
-    private JComboBox<Integer> cajaCantidad;
-    
-	//8) DECLARACION DEL OBJETO HASHMAP PARA LA SELECCION DE DATOS DEL STOCK ACTUAL
-	private HashMap<Integer, ObjetoVenta> stockActual= new HashMap<>();
-	private int puntero=0; //Valor a ser recorrido dentro del vector de los PRODUCTOS, SERVICIOS O PROYECTOS para ser rellenado
-	
-	//9) DECLARACION DEL OBJETO HASHMAP MOMENTANEO QUE GUARDE DATOS DEL NOMBRE ARTICULO Y CANTIDAD
-		//ELIGIENDO UN ARTICULO ACTIVE UN EVENTLISTENER Y LUEGO CAMBIE EL VALOR NUMERICO DE SU CANTIDAD
-	private HashMap<String,Integer> stockMomentaneo= new HashMap<>();
+	  //7.3) GESTION DE TAREAS
+		private JLabel tituloID, tituloTarea, tituloDepartamento, tituloTecnicos, tituloCostes, tituloFecha, tituloResolucion, tituloResolucionActual;  
+		private JLabel cajaID, cajaDepartamento, cajaTecnicos, cajaCostes, cajaFecha, cajaResolucion;
+		private JComboBox<String> cajaTarea, cajaResolucionActual;
 
-	//10) DECLARACION DE LA CANTIDAD EXTRAIDA DEL HASHMAP MOMENTANEO PARA PONER CANTIDAD EN EL JLABEL
-	private String cantidadConcepto;
+		private HashMap<Integer, ObjetoVenta> tareasActual= new HashMap<>();
 
-	//11) LOS CUATRO MENUS SE CONSTRUYEN UNA SOLA VEZ Y LUEGO SOLO CAMBIA SU VISIBILIDAD
-	private boolean menusCargados = false;
-	private boolean listenerStockRegistrado = false;
-	private boolean cargandoStock = false;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/// CARGA VARIABLES BLOQUE 4 - ADMINISTRACION DE STOCK ///
+
+	  //7.4) REPOSICION STOCK DE ALMACENAJE
+	    private int punteroProdu=0, punteroServ=0, punteroProy=0;   //Puntero de relleno
+	    private JLabel tituloCategoria,tituloArticulo,tituloCantidad,tituloCantidadActual,cajaCantidadActual;
+	    private JComboBox<String> cajaCategoria;
+	    private JComboBox<String> cajaArticulo;
+	    private JComboBox<Integer> cajaCantidad;
+	
+		//7.4.1) DECLARACION DEL OBJETO HASHMAP PARA LA SELECCION DE DATOS DEL STOCK ACTUAL
+		private HashMap<Integer, ObjetoVenta> stockActual= new HashMap<>();
+		private int puntero=0; //Valor a ser recorrido dentro del vector de los PRODUCTOS, SERVICIOS O PROYECTOS para ser rellenado
+		
+		//7.4.2) DECLARACION DEL OBJETO HASHMAP MOMENTANEO QUE GUARDE DATOS DEL NOMBRE ARTICULO Y CANTIDAD
+			//ELIGIENDO UN ARTICULO ACTIVE UN EVENTLISTENER Y LUEGO CAMBIE EL VALOR NUMERICO DE SU CANTIDAD
+		private HashMap<String,Integer> stockMomentaneo= new HashMap<>();
+	
+		//7.4.3) DECLARACION DE LA CANTIDAD EXTRAIDA DEL HASHMAP MOMENTANEO PARA PONER CANTIDAD EN EL JLABEL
+		private String cantidadConcepto;
+	
+		//7.4.4) LOS CUATRO MENUS SE CONSTRUYEN UNA SOLA VEZ Y LUEGO SOLO CAMBIA SU VISIBILIDAD
+		private boolean menusCargados = false;
+		private boolean listenerStockRegistrado = false;
+		private boolean cargandoStock = false;
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+		
 	public PanelModificar(String ruta, int transparencia,MarcoBaseOp cuadroBase)
 	{
-		//PANEL DEL ADMINISTRADOR: recepcion del cuadro FRAME base anterior para la carga de las funciones del administrador
+		//1) PANEL DEL ADMINISTRADOR: recepcion del cuadro FRAME base anterior para la carga de las funciones del administrador
 		this.cuadroBase=cuadroBase;
 		
 		/////// TRATAMIENTO DE FONDO LAMINA /////////////////////
@@ -321,32 +334,35 @@ class PanelModificar extends JPanel implements ActionListener
 			///0.2) ADMINISTRACION DE LOS ASPIRANTES
 			
 			///0.3) ADMINISTRACION DE LAS TAREAS
-			
-				this.tituloID= new JLabel("ID:");                      this.tituloID.setBounds(400,30,190,20);             add(this.tituloID);   
-				this.tituloTarea= new JLabel("TAREA:");                this.tituloTarea.setBounds(400,60,190,20);         add(this.tituloTarea);   
-				this.tituloDepartamento= new JLabel("DEPARTAMENTO:");  this.tituloDepartamento.setBounds(400,90,190,20);  add(this.tituloDepartamento);   
-				this.tituloTecnicos=new JLabel("TECNICOS:");           this.tituloTecnicos.setBounds(400,120,190,20);      add(this.tituloTecnicos);
-				this.tituloCostes= new JLabel("COSTES:");              this.tituloCostes.setBounds(400,150,190,20);         add(this.tituloCostes);   
-				this.tituloFecha= new JLabel("FECHA:");                     this.tituloFecha.setBounds(400,180,190,20);         add(this.tituloFecha);   
-				this.tituloResolucion= new JLabel("RESOLUCION ANTERIOR:");  this.tituloResolucion.setBounds(400,210,190,20);    add(this.tituloResolucion);   
-				this.tituloResolucionActual= new JLabel("RESOLUCION ACTUAL:");    this.tituloResolucionActual.setBounds(400,240,190,20);    add(this.tituloResolucionActual);   
+
+		  		int desplazamientoTitulosX=375;
+		  		int desplazamientoCajasX=530;
+		  
+				this.tituloID= new JLabel("ID:");                      this.tituloID.setBounds(desplazamientoTitulosX,30,190,20);             add(this.tituloID);   
+				this.tituloTarea= new JLabel("TAREA:");                this.tituloTarea.setBounds(desplazamientoTitulosX,60,190,20);         add(this.tituloTarea);   
+				this.tituloDepartamento= new JLabel("DEPARTAMENTO:");  this.tituloDepartamento.setBounds(desplazamientoTitulosX,90,190,20);  add(this.tituloDepartamento);   
+				this.tituloTecnicos=new JLabel("TECNICOS:");           this.tituloTecnicos.setBounds(desplazamientoTitulosX,120,190,20);      add(this.tituloTecnicos);
+				this.tituloCostes= new JLabel("COSTES:");              this.tituloCostes.setBounds(desplazamientoTitulosX,150,190,20);         add(this.tituloCostes);   
+				this.tituloFecha= new JLabel("FECHA:");                     this.tituloFecha.setBounds(desplazamientoTitulosX,180,190,20);         add(this.tituloFecha);   
+				this.tituloResolucion= new JLabel("RESOLUCION ANTERIOR:");  this.tituloResolucion.setBounds(desplazamientoTitulosX,210,190,20);    add(this.tituloResolucion);   
+				this.tituloResolucionActual= new JLabel("RESOLUCION ACTUAL:");    this.tituloResolucionActual.setBounds(desplazamientoTitulosX,240,190,20);    add(this.tituloResolucionActual);   
 				
-				this.cajaID= new JLabel("NO RECONOCIDO");			 this.cajaID.setBounds(550,30,150,20);            add(this.cajaID);
-				this.cajaDepartamento= new JLabel("NO RECONOCIDO");  this.cajaDepartamento.setBounds(550,90,150,20);  add(this.cajaDepartamento);
-				this.cajaTecnicos= new JLabel("NO RECONOCIDO");	     this.cajaTecnicos.setBounds(550,120,150,20);	  add(this.cajaTecnicos);
-				this.cajaCostes= new JLabel("NO RECONOCIDO");		 this.cajaCostes.setBounds(550,150,150,20);	      add(this.cajaCostes);
-				this.cajaFecha= new JLabel("NO RECONOCIDO");		 this.cajaFecha.setBounds(550,180,150,20);        add(this.cajaFecha); 
-				this.cajaResolucion= new JLabel("NO RECONOCIDO");    this.cajaResolucion.setBounds(550,210,150,20);   add(this.cajaResolucion);
+				this.cajaID= new JLabel("NO RECONOCIDO");			 this.cajaID.setBounds(desplazamientoCajasX,30,150,20);            add(this.cajaID);
+				this.cajaDepartamento= new JLabel("NO RECONOCIDO");  this.cajaDepartamento.setBounds(desplazamientoCajasX,90,150,20);  add(this.cajaDepartamento);
+				this.cajaTecnicos= new JLabel("NO RECONOCIDO");	     this.cajaTecnicos.setBounds(desplazamientoCajasX,120,150,20);	  add(this.cajaTecnicos);
+				this.cajaCostes= new JLabel("NO RECONOCIDO");		 this.cajaCostes.setBounds(desplazamientoCajasX,150,150,20);	      add(this.cajaCostes);
+				this.cajaFecha= new JLabel("NO RECONOCIDO");		 this.cajaFecha.setBounds(desplazamientoCajasX,180,150,20);        add(this.cajaFecha); 
+				this.cajaResolucion= new JLabel("NO RECONOCIDO");    this.cajaResolucion.setBounds(desplazamientoCajasX,210,150,20);   add(this.cajaResolucion);
 				
-				this.cajaTarea= new JComboBox<>();    this.cajaTarea.setBounds(550,60,150,20);        add(this.cajaTarea);
-				this.cajaResolucionActual= new JComboBox<>();   this.cajaResolucionActual.setBounds(550,240,150,20);  add(this.cajaResolucionActual);
+				this.cajaTarea= new JComboBox<>();    this.cajaTarea.setBounds(desplazamientoCajasX,60,150,20);        add(this.cajaTarea);
+				this.cajaResolucionActual= new JComboBox<>();   this.cajaResolucionActual.setBounds(desplazamientoCajasX,240,150,20);  add(this.cajaResolucionActual);
 			
 			///0.4) ADMINISTRACION DEL STOCK
 
-				this.tituloCategoria= new JLabel("CATEGORIA");  this.tituloCategoria.setBounds(400,90,190,20);   add(this.tituloCategoria);   
-				this.tituloArticulo= new JLabel("ARTICULO");    this.tituloArticulo.setBounds(400,130,190,20);   add(this.tituloArticulo);   
-				this.tituloCantidad= new JLabel("CANTIDAD");    this.tituloCantidad.setBounds(400,170,190,20);   add(this.tituloCantidad);   
-				this.tituloCantidadActual=new JLabel("CANTIDAD ACTUAL: ");  this.tituloCantidadActual.setBounds(400,210,190,20);  add(this.tituloCantidadActual);
+				this.tituloCategoria= new JLabel("CATEGORIA");  this.tituloCategoria.setBounds(desplazamientoTitulosX,90,190,20);   add(this.tituloCategoria);   
+				this.tituloArticulo= new JLabel("ARTICULO");    this.tituloArticulo.setBounds(desplazamientoTitulosX,130,190,20);   add(this.tituloArticulo);   
+				this.tituloCantidad= new JLabel("CANTIDAD");    this.tituloCantidad.setBounds(desplazamientoTitulosX,170,190,20);   add(this.tituloCantidad);   
+				this.tituloCantidadActual=new JLabel("CANTIDAD ACTUAL: ");  this.tituloCantidadActual.setBounds(desplazamientoTitulosX,210,190,20);  add(this.tituloCantidadActual);
 	
 				this.cajaCategoria= new JComboBox<String>();
 				this.cajaCategoria.addItem("PRODUCTOS");
@@ -453,6 +469,7 @@ class PanelModificar extends JPanel implements ActionListener
 		if(objetoElegido==cajaTareas)
 		{
 			//JOptionPane.showMessageDialog(null, "SELECCIONADA CAJA TAREAS","Información de Stock",JOptionPane.INFORMATION_MESSAGE);
+			this.cargarDatosTareas();   //Al igual que en la administracion de STOCK, aqui se cargan las tareas
 		}
 		if(objetoElegido==cajaStock)
 		{
@@ -489,6 +506,61 @@ class PanelModificar extends JPanel implements ActionListener
 			this.rellenarArticulosStock();
 		});
 	}
+	
+	/// METODOS PARA EL BLOQUE 3 - ADMINISTRACION DE TAREAS ///
+	private void cargarDatosTareas()
+	{
+		//GENERAMOS LA LLAMADA
+		try {
+			
+			//TERMINAR Y MODIFICAR DESDE AQUI//
+			
+			//1 - CREAR CONEXION
+			//En el caso de MYSQL
+			Connection conector= DriverManager.getConnection("jdbc:mysql://localhost:3307/bbdd003_clientes","root","1234");
+			pedidosClientes.clear();
+			
+			//2 - CREAR EL STATENMENT
+			Statement myst = conector.createStatement();
+			
+			//3 - EJECUTAR PETICION O CONSULTA SQL: se guardara una tabla virtual dentro de "myrs"
+			ResultSet myrs= myst.executeQuery("SELECT ID,NOMBRE,CORREO,CONCEPTO,DEPARTAMENTO,CANTIDAD,COSTE_UNITARIO,COSTE_TOTAL,FECHA_PEDIDO,REFERENCIA,ENTREGADO FROM clientespedidos");
+			
+			//4 - TRATAMIENTO DE LA FECHA
+			java.util.Date fechaJava;     //Convertirla a java.util.Date (para EL DATEPICKER del formulario)
+			
+			//4 - LEER EL ResultSet
+			while(myrs.next())
+			{
+				//Devuelve los codigos de los articulos
+				//Como los productos están agrupados por ID (clave) para apuntar a un objeto (VALOR) se usara HASHMAP
+				pedidosClientes.put(myrs.getInt("ID"), new PedidosClientes(     //Guardando en el HASHMAP: OJO no por int columna sino por cabecera de la columna
+							myrs.getInt("ID"),    		      //OBTIENE EL ID (SOLO LECTURA NO SE MODIFICARA SU VALOR NUNCA)
+							myrs.getString("NOMBRE"),         //OBTIENE EL NOMBRE
+							myrs.getString("CORREO"),         //OBTIENE EL CORREO
+							myrs.getString("CONCEPTO"),       //OBTIENE EL CONCEPTO
+							myrs.getString("DEPARTAMENTO"),   //OBTIENE EL DEPARTAMENTO
+							myrs.getInt("CANTIDAD"),		  //OBTIENE LA CANTIDAD
+							myrs.getDouble("COSTE_UNITARIO"), //OBTIENE EL COSTE UNITARIO
+							myrs.getDouble("COSTE_TOTAL"),    //OBTIENE EL COSTE TOTAL
+							fechaJava = new java.util.Date(myrs.getDate("FECHA_PEDIDO").getTime()),  //OBTIENE LA FECHA CONVERTIDA TRAS EXTRACCION EN DATEPICKER
+							myrs.getString("REFERENCIA"),     //OBTIENE LA REFERENCIA
+							myrs.getString("ENTREGADO")       //OBTIENE EL ESTADO DEL PEDIDO
+						));
+			}
+			//Si se ha terminado la operación se cierra todo como buena practica
+			myrs.close();  //Liberar los recursos que se usaban en memoria
+			conector.close();  //Liberar el conector que se establecio
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return pedidosClientes;
+	}
+		
+	/// METODOS PARA EL BLOQUE 4 - ADMINISTRACION DE STOCK ///
 	private void cargarDatosStock()
 	{
 		PanelProcesamientoStock nuevo = new PanelProcesamientoStock();
