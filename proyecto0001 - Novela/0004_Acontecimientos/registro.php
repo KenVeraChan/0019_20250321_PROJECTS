@@ -1,5 +1,5 @@
 <?php
-require "../servidor.php";
+require_once __DIR__ . "/../servidor.php";
 
 $mensaje = "";
 $tipoMensaje = "";

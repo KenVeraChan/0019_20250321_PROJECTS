@@ -22,8 +22,8 @@ class Database{
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
         } catch(PDOException $e) {
-            echo "Error de conexión: " . $e->getMessage();
-            return "El error que hubo en la conexion fue: " . $e->getMessage();
+            error_log("Error de conexión SQLite (" . $this->nombreArchivoSqlite . "): " . $e->getMessage());
+            return "No se pudo conectar con la base de datos.";
         }
     }
     public function getHost(){

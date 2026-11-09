@@ -1,15 +1,18 @@
-version: '3.8'
-
 services:
   app:
-    build: .
-    #container_name: php_app         No sera necesario crear contenedor en DOCKER
+    build:
+      context: .
+      dockerfile: dockerfile
     ports:
       - "8080:80"
     volumes:
       - .:/var/www/html
-    #depends_on:                    Tampoco será necesario crear una BBDD en DOCKER del tipo SQL
-    #  - db
+      - novela_sqlite_data:/var/www/html/data
+    restart: unless-stopped
+
+volumes:
+  novela_sqlite_data:
+    name: proyecto0001_novela_sqlite_data
 
   #db:
   #  image: mysql:8.0
