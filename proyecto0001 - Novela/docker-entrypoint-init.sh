@@ -1,15 +1,11 @@
 #!/bin/bash
-DB_PATH="/var/www/html/data/cronologia.db"
-SQL_FILE="/var/www/html/data/datos.sql"
+set -e
 
-# Si la base de datos NO existe, la creamos
-if [ ! -f "$DB_PATH" ]; then
-    echo ">>> Creando base de datos SQLite..."
-    sqlite3 "$DB_PATH" < "$SQL_FILE"
-    echo ">>> Base de datos creada e inicializada."
-else
-    echo ">>> La base de datos ya existe. No se hace nada."
-fi
+echo ">>> Ajustando permisos de las bases de datos SQLite..."
+chown -R www-data:www-data /var/www/html/data
 
-# Ejecutar Apache en primer plano
-apache2-foreground
+echo ">>> Inicializando bases de datos SQLite..."
+php /var/www/html/inicializarBasesDatos.php
+
+echo ">>> Inicialización completada; iniciando Apache."
+exec apache2-foreground

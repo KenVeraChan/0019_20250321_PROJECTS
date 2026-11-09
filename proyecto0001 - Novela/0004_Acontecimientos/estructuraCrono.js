@@ -155,7 +155,12 @@ window.addEventListener("wheel", function (evento) {
 window.addEventListener("resize", aplicarDesplazamiento);
 
 fetch("transformadorJSON.php")
-    .then((respuesta) => respuesta.json())
+    .then((respuesta) => respuesta.json().then((data) => {
+        if (!respuesta.ok) {
+            throw new Error(data.error || `Error HTTP ${respuesta.status}`);
+        }
+        return data;
+    }))
     .then((data) => {
         pintarEventos(data);
     })
