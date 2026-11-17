@@ -14,6 +14,7 @@
             <a class="btn-volver" href="../index.php">Volver al menu principal</a>
             <a class="btn-registrar" href="../0004_Acontecimientos/registro.php">Registrar fecha</a>
             <a class="btn-actualizar" href="../0004_Acontecimientos/actualizar.php">Actualizar fecha</a>
+            <a class="btn-descargar" href="../0004_Acontecimientos/descargar.php">Descargar fecha</a>   <!-- Botón para descargar el archivo de texto -->
         </header>
         <main class="visor">
             <section class="linea-tiempo" id="lineaTiempo">
