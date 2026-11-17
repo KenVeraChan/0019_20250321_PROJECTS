@@ -1,0 +1,49 @@
+Creación de proyecto en JAVA de todas las instrucciones del Power-Point de las macros para agilizar el proceso de elaboración de las mismas instrucciones.
+
+
+1. ¿Qué librerías necesitas en el pom.xml?
+
+Para leer PowerPoint (.pptx): Necesitas Apache POI (poi y poi-ooxml).
+
+Para generar Word (.docx): Utiliza también Apache POI (poi-ooxml incluye soporte tanto para lectura de PowerPoint como para escritura de Word a través de XWPF).
+
+Para generar PDF (.pdf): Apache POI no genera PDFs por sí mismo (está especializado exclusivamente en formatos Office). Para crear archivos PDF desde Java de forma limpia, la mejor pareja de baile para POI es Apache PDFBox.
+
+Para generar Textos (.txt): No necesitas ninguna librería externa; Java trae clases nativas ultra rápidas para esto (como java.nio.file.Files).
+
+2. Las dependencias para tu pom.xml
+Puedes añadir estas dependencias dentro de la etiqueta <dependencies>...</dependencies> de tu archivo pom.xml:
+
+FICHERO XML
+------------------------------------------------------------------------------------
+<dependencies>
+    <!-- Apache POI para leer PowerPoint (.pptx) y escribir Word (.docx) -->
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>5.2.5</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>5.2.5</version>
+    </dependency>
+
+    <!-- Apache PDFBox para la generación de ficheros PDF -->
+    <dependency>
+        <groupId>org.apache.pdfbox</groupId>
+        <artifactId>pdfbox</artifactId>
+        <version>3.0.1</version>
+    </dependency>
+</dependencies>
+
+------------------------------------------------------------------------------------
+
+¿Cómo proceder ahora en tu estructura?
+Una vez que guardes el pom.xml con estas dependencias, Eclipse descargará automáticamente losfrascos necesarios (JARs) en la sección de Maven Dependencies.
+
+A partir de ahí, tu lógica se repartirá muy bien:
+
+Una clase en tu paquete encargada de abrir el .pptx con POI y extraer todo el texto de las diapositivas.
+
+Métodos de transformación que cojan ese texto extraído y lo escriban según lo que el usuario pida: un .txt nativo de Java, un .docx usando POI XWPF, o un .pdf usando PDFBox.
