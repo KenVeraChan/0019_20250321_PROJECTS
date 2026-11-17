@@ -3,14 +3,46 @@
 <h2 class="tituloNoticias">Escritores Sin Fronteras</h2>
 <div class="fondo">
     <div class="cajaNoticias">
-        @for(escenas of objetoNoticias.noticia;track escenas;let i=$index)
+        @for(escenas of noticiasInicio;track escenas;let i=$index)
         {
-            <div class="areaNoticias">
-                <ul class="casilleroNoticias">
+            <div class="areaNoticias" [class.expanded]="isExpanded(i)">
+                <div class="noticias-header">
+                    <span class="etiqueta-noticia">Fecha {{escenas.getFecha()}}</span>
+                </div>
+                <ul class="casilleroNoticias" [class.expanded]="isExpanded(i)">
                     <li class="titular">{{ escenas.getTitular() }}</li>
                     <li class="subTitular">{{ escenas.getsubTitular() }}</li>
-                    <li class="noticia">{{ escenas.getNoticia()}}</li>
+                    <li class="noticia">{{ escenas.getNoticia()}}
+                        <!--EN LA ZONA DE FOTOS DE LIBROS SE VERIFICA QUE EXISTA Y ESTE EN SU DIRECTORIO CORRESPONDIENTE-->
+                            @if(escenas.getImagen()!="") {
+                            <div class="detailContent">
+                                <img src="{{ escenas.getImagen() }}" alt="imagenNoticia" class="imagenNoticia">
+                            </div>
+                            }
+                            <!--EN LA ZONA DE AUDIOS SE VERIFICA QUE EXISTA Y ESTE EN SU DIRECTORIO CORRESPONDIENTE-->
+                            @if(escenas.getAudio()!="") {
+                            <div class="detailContent">
+                                <audio controls controlsList="nodownload" class="audioNoticia">
+                                <source src="{{ escenas.getAudio() }}" type="audio/mpeg">
+                                Tu navegador no soporta la etiqueta audio.
+                                </audio>
+                            </div>
+                            }
+                        <!--EN LA ZONA DE VIDEOS SE VERIFICA QUE EXISTA Y ESTE EN SU DIRECTORIO CORRESPONDIENTE-->
+                            @if(escenas.getVideo()!="") {
+                                <div class="detailContent">  
+                                    <video controls controlsList="nodownload" class="videoNoticia">
+                                        <source src="{{ escenas.getVideo() }}" type="video/mp4">
+                                        Tu navegador no soporta la etiqueta video.
+                                    </video>
+                                </div>
+                            }
+                    </li>  <!--Metemos todo en un div para ocultar la información desplegable-->
                 </ul>
+                <button class="btn-expandir" (click)="toggleExpanded(i)"
+                        [class.contraer]="isExpanded(i)">
+                    {{ isExpanded(i) ? '− Contraer' : '+ Expandir' }}
+                </button>
             </div>
         }
     </div>

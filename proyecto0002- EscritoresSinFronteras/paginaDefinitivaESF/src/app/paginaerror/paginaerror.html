@@ -1,1 +1,79 @@
-<p>pagina-error works!</p>
+<section class="errorFondo" aria-labelledby="errorTituloPrincipal">
+  <div class="errorWrap">
+    <header class="errorHeader">
+      <p class="errorTipo" role="status">Tipo de error: <strong>{{ vista.tipoError }}</strong></p>
+      <p class="errorCodigo" aria-hidden="true">{{ vista.codigo }}</p>
+      <h1 id="errorTituloPrincipal" class="errorTitle">{{ vista.titulo }}</h1>
+      <p class="errorLead">{{ vista.lead }}</p>
+
+      @if (vista.operacion) {
+        <p class="errorMeta" role="status">
+          Operación: <span class="mono">{{ vista.operacion }}</span>
+        </p>
+      }
+      @if (vista.httpStatus) {
+        <p class="errorMeta" role="status">
+          Código HTTP: <span class="mono">{{ vista.httpStatus }}</span>
+        </p>
+      }
+      @if (vista.detalle) {
+        <p class="errorRuta" role="status">
+          Detalle: <span class="mono">{{ vista.detalle }}</span>
+        </p>
+      }
+    </header>
+
+    <div class="errorLayout">
+      <article class="errorPanel errorPanelTexto">
+        <blockquote class="errorCita">
+          <p>
+            «A veces el lector abre un capítulo que no pertenece a su novela: no es un final,
+            sino un desvío. Volver al índice es reencontrar el hilo de la historia.»
+          </p>
+          <footer class="errorCitaAutor">Escritores Sin Fronteras</footer>
+        </blockquote>
+
+        @if (vista.consejos.length) {
+          <ul class="errorLista" aria-label="Qué puedes hacer ahora">
+            @for (consejo of vista.consejos; track consejo) {
+              <li>{{ consejo }}</li>
+            }
+          </ul>
+        }
+
+        <div class="errorAcciones">
+          <button type="button" class="btn primary" (click)="reintentar()">
+            Reintentar
+          </button>
+          <button type="button" class="btn ghost" (click)="volverInicio()">
+            Volver al inicio
+          </button>
+          <button type="button" class="btn ghost" (click)="irContacto()">
+            Contacto
+          </button>
+        </div>
+      </article>
+
+      <figure class="errorFigura">
+        <div class="errorMarcoImg">
+          <img
+            class="errorImg"
+            src="assets/images/pagerror/mundoesf.jpeg"
+            alt="Ilustración del mundo literario de Escritores Sin Fronteras"
+            width="640"
+            height="480"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <figcaption class="errorCaption">
+          <span class="captionTitulo">Mundo ESF</span>
+          <span class="captionPie">
+            Entre ficción y realidad hay fronteras que se cruzan con palabras. Esta imagen
+            representa el universo que compartimos con nuestros lectores y autores.
+          </span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>

@@ -16,7 +16,6 @@ function cargando()
 function activador(puntero)
 {
     //proceso eventual de cambio de cartel
-        matrizCaja[puntero].addEventListener("mouseenter", function(){
         matrizCaja[puntero].style.transitionDuration = "0.15s";
         matrizCaja[puntero].style.transform = "rotate3d(1,0,0,360deg)";
         matrizCaja[puntero].style.backgroundColor= "rgba(18, 158, 139, 1)";
@@ -63,7 +62,7 @@ function activador(puntero)
                     }
                 case 4:
                     {
-                        enlace.setAttribute('href','../0005_Anotaciones/bloquesNovela.php');
+                        enlace.setAttribute('href','../0005_BloquesNovela/bloquesNovela.php');
                         enlace.textContent="ACCEDER A BLOQUES";
                         break;
                     }
@@ -73,16 +72,20 @@ function activador(puntero)
                         enlace.textContent="ACCEDER A CALENDARIOS";
                         break;
                     }
+                case 6:
+                    {
+                        enlace.setAttribute('href','../0007_Reflexiones/reflexiones.php');
+                        enlace.textContent="ACCEDER A REFLEXIONES";
+                        break;
+                    }
                 default:
                     {   break;    }
             }
             //SE DARA LA VUELTA A LA CARA OCULTA MIENTRAS SE MUESTRA LA CARA PRINCIPAL
-        });
     }
 
 function reactivador(puntero)
 {   
-        matrizCaja[puntero].addEventListener("mouseleave", function(){
             //SE DARA LA VUELTA A LA CARA OCULTA PARA DEJARLA EN OCULTA DE NUEVO
             matrizCaja[puntero].style.transitionDuration = "0.15s";
             matrizCaja[puntero].style.transform = "rotate3d(1,0,0,360deg)";
@@ -135,11 +138,13 @@ function reactivador(puntero)
                         matrizCaja[puntero].textContent="CALENDARIOS";
                         break;
                     }
+                case 6:
+                    {
+                        matrizCaja[puntero].textContent="REFLEXIONES DEL PERSONAJE";
+                        break;
+                    }
                 default:
                     {   break;    }
             }
-        });
-        pulsador[puntero].addEventListener("click", function(){  
-    });
 }
 

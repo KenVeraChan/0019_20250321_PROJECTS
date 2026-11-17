@@ -1,0 +1,114 @@
+NOTAS PARA REUNION: EJECUCION DE LA APLICACION CON DOCKER
+Proyecto: Novela
+Fecha: 6 de noviembre de 2026
+
+OBJETIVO
+--------
+Unificar la forma recomendada de iniciar la aplicacion y explicar los
+problemas observados con los puertos, SQLite y las respuestas JSON.
+
+ARRANQUE RECOMENDADO
+--------------------
+Desde la carpeta del proyecto, ejecutar:
+
+    docker compose up --build
+
+Docker construye la imagen si es necesario e inicia Apache con PHP dentro
+del contenedor. Abrir la aplicacion en:
+
+    http://localhost:8080
+
+Para dejarla en segundo plano:
+
+    docker compose up --build -d
+
+Para ver el estado y los registros:
+
+    docker compose ps
+    docker compose logs -f app
+
+Para detenerla:
+
+    docker compose down
+
+No usar "docker compose down -v" salvo que se quiera borrar tambien el
+volumen de datos.
+
+PUERTOS 3000 Y 8080
+-------------------
+El puerto 8080 es el publicado por Docker Compose (8080 del equipo hacia
+el puerto 80 del contenedor).
+
+El puerto 3000 lo estaba usando un servidor PHP local iniciado con un
+comando similar a:
+
+    php -S localhost:3000 -t .
+
+Son dos servidores independientes. Para el trabajo habitual se recomienda
+usar Docker en http://localhost:8080 y no hace falta iniciar el servidor
+PHP local de Visual Studio Code. Si el servidor local ya esta activo, puede
+detenerse con Ctrl+C en la terminal donde se inicio. No terminar procesos
+sin comprobar antes que pertenecen a este proyecto.
+
+BASES SQLITE Y PERSISTENCIA
+---------------------------
+Compose monta un volumen con nombre:
+
+    proyecto0001_novela_sqlite_data
+
+Ese volumen esta montado en /var/www/html/data dentro del contenedor. Las
+bases SQLite y los cambios guardados por la aplicacion persisten al
+recrear o detener el contenedor. El script de inicio ejecuta
+inicializarBasesDatos.php para preparar las bases y cargar datos iniciales
+cuando corresponda.
+
+El volumen pertenece al equipo/instalacion Docker local; el nombre comun
+no sincroniza automaticamente los datos entre ordenadores. Para compartir
+datos entre desarrolladores, acordar un mecanismo de exportacion/respaldo
+o distribuir los SQL de inicializacion. No borrar el volumen al detener
+la aplicacion.
+
+ERROR JSON DE CALENDARIOS: CAUSA Y CORRECCION
+---------------------------------------------
+El navegador esperaba JSON de las API de planetas y horarios, pero recibia
+HTML de error de PHP (por eso aparecia "Unexpected token '<'"). La causa
+confirmada en Linux era que Apache (usuario www-data) no podia escribir en
+cartografia.db dentro del volumen SQLite. El inicializador de cartografia
+actualiza datos al abrir la base; al fallar, PHP generaba el error HTML.
+
+La correccion se hizo en docker-entrypoint-init.sh: antes de inicializar
+las bases, asigna /var/www/html/data al usuario www-data. Luego ejecuta
+inicializarBasesDatos.php y arranca Apache.
+
+Se reconstruyo y arranco el contenedor. La comprobacion confirmo que
+www-data puede escribir en las bases, y que las API de cartografia y
+horarios responden con JSON. En Windows Docker Desktop puede presentar el
+mapeo de permisos de forma diferente; el ajuste se ejecuta solo dentro del
+contenedor de esta aplicacion y sobre su carpeta/volumen de datos.
+
+PHP SQLITE: LOCAL Y DOCKER
+--------------------------
+El contenedor ya incluye pdo_sqlite. No hace falta instalarlo en el PHP
+del equipo para usar Docker.
+
+Para ejecutar PHP directamente en el equipo, ese PHP local tambien debe
+tener PDO SQLite habilitado. En Ubuntu/Debian:
+
+    sudo apt update
+    sudo apt install php-sqlite3
+
+Verificacion:
+
+    php -r 'var_export(PDO::getAvailableDrivers());'
+
+La lista debe incluir "sqlite". Instalar el controlador local no modifica
+el PHP dentro de Docker, ni es requisito para acceder a la aplicacion en
+http://localhost:8080.
+
+PUNTOS PARA ACORDAR EN LA REUNION
+---------------------------------
+1. Usar Docker y el puerto 8080 como flujo recomendado.
+2. Mantener el volumen SQLite; documentar como hacer y restaurar copias.
+3. Decidir como se distribuyen cambios de datos entre los equipos: SQL,
+   exportacion controlada u otro mecanismo acordado.
+4. No borrar volumenes como parte de una limpieza rutinaria.

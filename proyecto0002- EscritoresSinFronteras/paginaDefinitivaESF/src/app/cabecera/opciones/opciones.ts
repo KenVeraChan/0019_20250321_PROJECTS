@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef, Input, Renderer2 } from '@angular/core';
+import { VariablesCompartidas } from '../../servicios/variablesCompartidas';
 
 @Component({
   selector: 'app-opciones',
@@ -7,15 +8,17 @@ import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef, 
   styleUrl: './opciones.css',
 })
 export class Opciones implements OnInit, AfterViewInit {
-    public inicio: string="INICIO";
-    public nuestraHistoria: string="NUESTRA HISTORIA";
-    public anios: string[]=["2020","2021","2022","2023","2024","2025","2026"];
-    public quienesSomos: string="QUIENES SOMOS";
-    public blogLiterario: string="BLOG LITERARIO";
-    public enlaces: string[]= ["PUBLICACIONES EN PROSA","PUBLICACIONES EN VERSO","REFLEXIONES DEL DÍA"];
-    public nuestrosServicios: string="NUESTROS SERVICIOS";
-    public servicios: string[]= ["CURSOS ONLINE","ENTREVISTAS ONLINE","EDICIÓN Y MAQUETACIÓN DE LIBROS","TERTULIAS","CONGRESOS INTERNACIONALES"];
-    public contacto: string="CONTACTO";
+    private readonly rutasSeccion = [
+      '/inicio',
+      '/nuestraHistoria',
+      '/quienesSomos',
+      '/blogLiterario',
+      '/nuestrosServicios',
+      '/publicaciones',
+      '/contacto',
+    ] as const;
+
+    public matrizApartados= new VariablesCompartidas();
     public tamanioHorizontalPantalla:number=0.0;
     public tamanioHorizontalPantallaSegundo:number=0.0;
     public tamanioVerticalPantalla:number=0.0;
@@ -133,13 +136,17 @@ export class Opciones implements OnInit, AfterViewInit {
     //Sector de botones y qué componente fue activado
     public accesoHabilitado(opcion:number):void
     {
-      // Mapear la opción (1..6) a índices (0..5)
-      const indexMap: Record<number, number> = {1:0, 2:1, 3:2, 4:3, 5:4, 6:5};
+      // Mapear la opción (1..8) a índices (0..7)
+      const indexMap: Record<number, number> = {1:0, 2:1, 3:2, 4:3, 5:4, 6:5, 7:6, 8:7};
       const idx = indexMap[opcion] ?? 0;  //Se asegura que idx siempre tenga un valor numérico
       this.activeIndex = idx;  //Se actualiza el índice activo
       this.puntero = idx;  //Se actualiza el puntero
+      if (opcion === 5) {
+        this.matrizApartados.menuPrincipal.limpiarFiltroServicios();
+      }
       if (typeof window !== 'undefined') {
         localStorage.setItem('punteroCabecera', this.puntero.toString());
+        window.location.assign(this.rutasSeccion[idx]);
       }
     }
 }

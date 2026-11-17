@@ -1,31 +1,58 @@
-<div class="fondoCuerpoSuperior">
+<div class="fondoCuerpoSuperior" [class.fondoSinVentanas]="mostrarPaginaError()">
+    @if (!mostrarPaginaError()) {
     <div class="ventanaMensaje">{{mensajeVentana1}}</div>
     <div class="ventanaMensaje">{{mensajeVentana2}}</div>
+    }
+
+    @if (mostrarPaginaError()) {
+        <div class="areaPaginaError">
+            <app-paginaerror></app-paginaerror>
+        </div>
+    } @else {
     @switch(puntero)
     {
         @case (0)
         {
             <div class="areaNoticias">
-                <!-- Área de noticias o contenido adicional que se actualizará con un ngFor o @for para añadir tantos como se quiera -->
                     <app-inicio></app-inicio>
             </div>
         }
         @case (1)
         {
             <div class="areaHistoria">
-                <!--Area de la historia corporativa de cómo evolucionó la empresa a lo largo de los años-->
                     <app-historia></app-historia>
             </div>
         }
         @case (2)
         {
             <div class="areaNosotros">
-                <!--Area de la historia corporativa de cómo evolucionó la empresa a lo largo de los años-->
                     <app-nosotros></app-nosotros>
             </div>
         }
+        @case (3)
+        {
+            <div class="areaBlogs">
+                <app-blogs></app-blogs>
+            </div>
+        }
+        @case (4)
+        {
+            <div class="areaServicios">
+                <app-servicios></app-servicios>
+            </div>
+        }
+        @case (5)
+        {
+            <div class="areaPublicaciones">
+                <app-publicaciones></app-publicaciones>
+            </div>
+        }
+        @case (6)
+        {
+            <div class="areaContacto">
+                <app-contacto></app-contacto>
+            </div>
+        }
+    }
     }
 </div>
-<!--
-<div (window:resize)="onResize($event)" style="z-index:100px; background-color:black; font-size:60px; color:white">{{tamanioPantalla}}</div>
--->

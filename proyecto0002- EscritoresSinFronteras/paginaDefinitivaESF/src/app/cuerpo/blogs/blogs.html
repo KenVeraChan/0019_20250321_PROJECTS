@@ -1,1 +1,259 @@
-<p>blogs works!</p>
+<section class="blogsFondo">
+  <div class="blogsWrap">
+    <header class="blogsHeader">
+      <div class="titleBlock">
+        <h2 class="blogsTitle">Blog literario</h2>
+        <p class="blogsSubtitle">
+          Entradas en verso, prosa o reflexiones.
+        </p>
+        <p class="blogsSubtitle">
+           Lee, comparte y publica con tu correo.
+        </p>
+      </div>
+
+      <div class="actionsBlock">
+        @if (isLoggedIn()) {
+          <div class="userPill" title="Sesión activa">
+            <span class="dot"></span>
+            <span class="userText">{{ userEmail }}</span>
+            <button type="button" class="btn ghost" (click)="logout()">Salir</button>
+          </div>
+          <button type="button" class="btn primary" (click)="openCreate()">Publicar</button>
+        } @else {
+          <form class="loginForm" (submit)="$event.preventDefault(); login()">
+            <input
+              class="input"
+              type="email"
+              inputmode="email"
+              autocomplete="email"
+              placeholder="tu-correo@ejemplo.com"
+              [(ngModel)]="emailInput"
+              name="emailInput"
+            />
+            <button type="submit" class="btn primary">Ingresar</button>
+          </form>
+        }
+      </div>
+    </header>
+
+    @if (errorMsg) {
+      <div class="alert">{{ errorMsg }}</div>
+    }
+
+    <nav class="blogsNav">
+      <button type="button" class="btn tab" [class.active]="view==='list'" (click)="openList()">Entradas</button>
+      <button
+        type="button"
+        class="btn tab"
+        [class.active]="view==='create'"
+        (click)="openCreate()"
+        [disabled]="!isLoggedIn()"
+        title="{{ isLoggedIn() ? 'Crear una entrada' : 'Ingresa con correo para publicar' }}"
+      >
+        Publicar
+      </button>
+      @if (view==='detail') {
+        <button type="button" class="btn tab active" (click)="openList()">Detalle</button>
+      }
+    </nav>
+
+    @if (view==='list') {
+      <div class="filters">
+        <div class="filterGroup">
+          <label class="label">Tipo</label>
+          <select class="select" [(ngModel)]="filterType" name="filterType" (change)="applyFilters()" aria-label="Filtrar por tipo de publicación">
+            <option value="todos">Todos</option>
+            <option value="verso">Verso</option>
+            <option value="prosa">Prosa</option>
+            <option value="reflexion">Reflexión</option>
+          </select>
+        </div>
+        <div class="filterGroup grow">
+          <label class="label">Buscar</label>
+          <input
+            class="input"
+            type="search"
+            placeholder="Título, autor o contenido…"
+            [(ngModel)]="search"
+            name="search"
+            (input)="applyFilters()"
+          />
+        </div>
+      </div>
+
+      <div class="postsGrid">
+        @for (p of filteredPosts; track p.id) {
+          <article class="postCard" (click)="openDetail(p.id)" tabindex="0">
+            <div class="cardTop">
+              <span class="badge">{{ formatTypeLabel(p.tipo) }}</span>
+              <span class="date">{{ formatDate(p.createdAtIso) }}</span>
+            </div>
+            <h3 class="cardTitle">{{ p.titulo }}</h3>
+            <p class="cardPreview">{{ previewText(p) }}</p>
+            <div class="cardBottom">
+              <span class="author">Por {{ p.authorEmail }}</span>
+              <span class="readMore">Leer →</span>
+            </div>
+          </article>
+        } @empty {
+          <div class="empty">
+            No hay entradas que coincidan con tu búsqueda.
+          </div>
+        }
+      </div>
+    }
+
+    @if (view==='detail') {
+      @if (selectedPost(); as post) {
+        <article class="detailCard">
+          <div class="detailTop">
+            <button type="button" class="btn ghost" (click)="openList()">← Volver</button>
+            <div class="meta">
+              <span class="badge">{{ formatTypeLabel(post.tipo) }}</span>
+              <span class="date">{{ formatDate(post.createdAtIso) }}</span>
+              <span class="author">Por {{ post.authorEmail }}</span>
+            </div>
+          </div>
+          <h2 class="detailTitle">{{ post.titulo }}</h2>
+          <pre class="detailContent">{{ post.contenido }}</pre>
+        </article>
+      } @else {
+        <div class="empty">
+          Esta entrada ya no existe.
+          <button type="button" class="btn primary" (click)="openList()">Volver al listado</button>
+        </div>
+      }
+    }
+
+    @if (view==='create') {
+      <section class="createCard">
+        <header class="createHeader">
+          <h3 class="createTitle">Nueva publicación</h3>
+          <p class="createHint">Completa tus datos y redacta tu texto. Los campos con * son obligatorios.</p>
+          @if (isLoggedIn()) {
+            <p class="createSession">
+              Sesión: <span class="createSessionEmail">{{ userEmail }}</span>
+            </p>
+          }
+        </header>
+
+        @if (!isLoggedIn()) {
+          <div class="empty">
+            Para publicar necesitas ingresar con tu correo.
+          </div>
+        } @else {
+          <form class="createForm" (submit)="$event.preventDefault(); submitPost()">
+
+            <fieldset class="formSection">
+              <legend class="formSectionTitle">Datos del autor</legend>
+              <div class="authorGrid">
+                <div class="field">
+                  <label class="label" for="createNombre">Nombre</label>
+                  <input
+                    id="createNombre"
+                    class="input"
+                    type="text"
+                    maxlength="50"
+                    placeholder="¿Cómo te llamas?"
+                    [(ngModel)]="createNombre"
+                    name="createNombre"
+                    autocomplete="given-name"
+                  />
+                </div>
+                <div class="field">
+                  <label class="label" for="createPrimerApellido">Primer apellido</label>
+                  <input
+                    id="createPrimerApellido"
+                    class="input"
+                    type="text"
+                    maxlength="50"
+                    placeholder="¿Cuál es tu primer apellido?"
+                    [(ngModel)]="createPrimerApellido"
+                    name="createPrimerApellido"
+                    autocomplete="family-name"
+                  />
+                </div>
+                <div class="field">
+                  <label class="label" for="createSegundoApellido">Segundo apellido</label>
+                  <input
+                    id="createSegundoApellido"
+                    class="input"
+                    type="text"
+                    maxlength="50"
+                    placeholder="¿Cuál es tu segundo apellido?"
+                    [(ngModel)]="createSegundoApellido"
+                    name="createSegundoApellido"
+                    autocomplete="family-name"
+                  />
+                </div>
+                <div class="field">
+                  <label class="label" for="createPais">País</label>
+                  <input
+                    id="createPais"
+                    class="input"
+                    type="text"
+                    maxlength="50"
+                    placeholder="¿Desde dónde estás publicando?"
+                    [(ngModel)]="createPais"
+                    name="createPais"
+                    autocomplete="country-name"
+                  />
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="formSection">
+              <legend class="formSectionTitle">Tu entrada</legend>
+              <div class="publicationRow">
+                <div class="field fieldGrow">
+                  <label class="label" for="createTitle">Título</label>
+                  <input
+                    id="createTitle"
+                    class="input"
+                    type="text"
+                    maxlength="500"
+                    placeholder="¿En qué título estas pensando?"
+                    [(ngModel)]="createTitle"
+                    name="createTitle"
+                  />
+                </div>
+                <div class="field fieldTipo">
+                  <label class="label" for="createType">Tipo</label>
+                  <select
+                    id="createType"
+                    class="select"
+                    [(ngModel)]="createType"
+                    name="createType"
+                    aria-label="Tipo de publicación"
+                  >
+                    <option value="verso">Verso</option>
+                    <option value="prosa">Prosa</option>
+                    <option value="reflexion">Reflexión</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field fieldFull">
+                <label class="label" for="createContent">Contenido</label>
+                <textarea
+                  id="createContent"
+                  class="textarea"
+                  rows="12"
+                  placeholder="Escribe aquí tu texto. En verso puedes usar saltos de línea."
+                  [(ngModel)]="createContent"
+                  name="createContent"
+                ></textarea>
+              </div>
+            </fieldset>
+
+            <footer class="createActions">
+              <button type="button" class="btn ghost" (click)="openList()">Cancelar</button>
+              <button type="submit" class="btn primary" [disabled]="publicando">
+                {{ publicando ? 'Publicando…' : 'Publicar entrada' }}
+              </button>
+            </footer>
+          </form>
+        }
+      </section>
+    }
+  </div>
+</section>

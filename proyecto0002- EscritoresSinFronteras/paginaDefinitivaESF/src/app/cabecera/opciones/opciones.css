@@ -131,12 +131,22 @@ Escritorio grande: A partir de 1200px
         }
         /* En hamburguesa: submenú "empuja" hacia abajo (no absoluto) */
         .subMenu{
+            display: none;
+            position: absolute;
+            background-color: #060396;
+            margin-top: 0px;
+            padding: 10px;
+            border-radius: 5px;
+            list-style: none;
+            z-index: 10;
+        }
+        .botonera:hover .subMenu{
             display: block;
             position: static;
             background-color: rgb(2, 56, 59);
-            margin: 0 0 0 14px;
-            padding: 0 10px;
-            border-radius: 8px;
+            margin-top: 0px;
+            padding: 10px;
+            border-radius: 5px;
             list-style: none;
             overflow: hidden;
             max-height: 0;
@@ -258,6 +268,6 @@ Escritorio grande: A partir de 1200px
         background-size: 100% 190px;
     }
     .enlaces{
-    font-size: 12px;
+    font-size: 15px;
     }
 }

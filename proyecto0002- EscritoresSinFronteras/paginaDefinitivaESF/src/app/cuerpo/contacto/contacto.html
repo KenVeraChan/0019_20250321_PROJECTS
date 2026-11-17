@@ -1,1 +1,117 @@
-<p>contacto works!</p>
+<section class="contactoFondo" aria-labelledby="contactoTituloPrincipal">
+  <div class="contactoWrap">
+    <header class="contactoHeader">
+      <h2 id="contactoTituloPrincipal" class="contactoTitle">Contacto</h2>
+      <p class="contactoLead">
+        Datos informativos de la empresa. Por defecto se carga
+        <span class="mono">assets/data/contacto.json</span>; si no está disponible, se intenta
+        <span class="mono">/api/contacto</span> (Node en producción).
+      </p>
+    </header>
+
+    @if (cargando) {
+      <p class="contactoEstado" role="status">Cargando información…</p>
+    } @else if (errorCarga) {
+      <p class="contactoError" role="alert">{{ errorCarga }}</p>
+    } @else if (data) {
+      <div class="contactoGrid">
+        <article class="contactoCard contactoCardWide">
+          <h3 class="cardH">Empresa</h3>
+          <p class="empresaNombre">{{ data.empresa.nombreComercial }}</p>
+          <p class="empresaLegal">{{ data.empresa.nombreLegal }}</p>
+          <p class="empresaDesc">{{ data.empresa.descripcion }}</p>
+          <dl class="dlInline">
+            <div>
+              <dt>NIF / identificador</dt>
+              <dd>{{ data.empresa.nif }}</dd>
+            </div>
+            <div>
+              <dt>Registro</dt>
+              <dd>{{ data.empresa.registroMercantil }}</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="contactoCard">
+          <h3 class="cardH">Accionistas y gobierno</h3>
+          <div class="listaSimple" role="list">
+            @for (a of data.accionistas; track $index) {<div class="listaItem" role="listitem">
+              <strong class="listaStrong">{{ a.nombre }}</strong>
+              <p class="listaP">{{ a.detalle }}</p>
+            </div>}
+          </div>
+        </article>
+
+        <article class="contactoCard">
+          <h3 class="cardH">Teléfonos</h3>
+          <div class="listaSimple" role="list">
+            @for (t of data.telefonos; track $index) {<div class="listaItem" role="listitem">
+              <strong class="listaStrong">{{ t.etiqueta }}</strong>
+              <p class="listaP">
+                <a class="enlaceTel" [href]="telHref(t.numero)">{{ t.numero }}</a>
+                @if (t.nota) {
+                  <span class="listaNota">{{ t.nota }}</span>
+                }
+              </p>
+            </div>}
+          </div>
+        </article>
+
+        <article class="contactoCard">
+          <h3 class="cardH">Correos electrónicos</h3>
+          <div class="listaSimple" role="list">
+            @for (c of data.correos; track $index) {<div class="listaItem" role="listitem">
+              <strong class="listaStrong">{{ c.etiqueta }}</strong>
+              <p class="listaP">
+                <a class="enlaceMail" [href]="'mailto:' + c.email">{{ c.email }}</a>
+              </p>
+            </div>}
+          </div>
+        </article>
+
+        <article class="contactoCard contactoCardWide">
+          <h3 class="cardH">Direcciones</h3>
+          <div class="direcciones">
+            @for (d of data.direcciones; track $index) {
+              <div class="dirBloque">
+                <h4 class="dirTitulo">{{ d.etiqueta }}</h4>
+                @for (linea of d.lineas; track linea) {
+                  <p class="dirLinea">{{ linea }}</p>
+                }
+              </div>
+            }
+          </div>
+        </article>
+
+        <article class="contactoCard contactoCardWide">
+          <h3 class="cardH">Disponibilidad y horarios</h3>
+          <p class="dispIntro">{{ data.disponibilidad.intro }}</p>
+          <div class="horarios" role="list">
+            @for (h of data.disponibilidad.horarios; track $index) {<div class="horarioFila" role="listitem">
+              <span class="horarioZona">{{ h.zona }}</span>
+              <span class="horarioTexto">{{ h.texto }}</span>
+            </div>}
+          </div>
+          <p class="dispPie">{{ data.disponibilidad.respuesta }}</p>
+          <p class="dispIdiomas">{{ data.disponibilidad.idiomas }}</p>
+        </article>
+      </div>
+
+      <figure class="contactoFigura">
+        <img
+          class="contactoImg"
+          [src]="data.imagen.src"
+          alt="{{ data.imagen.alt }}"
+          title="{{ data.imagen.alt }}"
+          width="1200"
+          height="630"
+          loading="lazy"
+        />
+        <figcaption class="contactoCaption">
+          <span class="captionTitulo">{{ data.imagen.titulo }}</span>
+          <span class="captionPie">{{ data.imagen.pie }}</span>
+        </figcaption>
+      </figure>
+    }
+  </div>
+</section>

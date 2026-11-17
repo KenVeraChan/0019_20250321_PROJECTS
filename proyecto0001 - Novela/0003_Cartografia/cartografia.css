@@ -1,0 +1,371 @@
+/* Reinicia márgenes, rellenos y caja de todos los elementos */
+* {
+    margin: 0; /* Quita el margen por defecto del navegador */
+    padding: 0; /* Quita el relleno por defecto del navegador */
+    box-sizing: border-box; /* Incluye borde y padding dentro del ancho */
+}
+
+/* La página ocupa toda la ventana */
+html,
+body {
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Alto completo */
+    overflow: hidden; /* El scroll lo gestiona el visor, no el body */
+    font-family: Arial, Helvetica, sans-serif; /* Tipografía del resto del proyecto */
+}
+
+/* Capa contenedora relativa para apilar fondo y contenido */
+#container {
+    width: 100%; /* Ancho de ventana */
+    height: 100%; /* Alto de ventana */
+    position: relative; /* Referencia de posicionamiento interno */
+}
+
+/* Imagen de fondo centrada cubriendo toda la pantalla */
+#imagenFondo {
+    position: fixed; /* Fija la foto detrás de la interfaz */
+    inset: 0; /* Ancla arriba, derecha, abajo e izquierda */
+    width: 100%; /* Ocupa el ancho de la ventana */
+    height: 100%; /* Ocupa el alto de la ventana */
+    object-fit: cover; /* Recorta la foto para cubrir sin deformar */
+    object-position: center center; /* Centra el recorte de la foto */
+    opacity: 0.55; /* Deja ver los paneles encima */
+    z-index: -2; /* Queda detrás de cabecera y paneles */
+}
+
+/* Cabecera copiada en espíritu de acontecimientos.php */
+.cabecera {
+    width: min(560px, 84vw); /* Ancho contenido para que el panel no se desborde */
+    margin: 0 auto; /* Centra la cabecera */
+    padding: 16px 0 6px; /* Separación superior */
+    color: #1b2734; /* Color de título */
+}
+
+/* Título de la página */
+.cabecera h1 {
+    font-size: clamp(1.2rem, 2vw, 1.8rem); /* Tamaño adaptable */
+    margin-bottom: 8px; /* Separación respecto a los botones */
+    text-align: center; /* Centra el título */
+}
+
+/* Botones de cabecera, mismos que en acontecimientos */
+.btn-volver,
+.btn-registrar {
+    display: inline-block; /* Se alinean en fila */
+    margin-top: 10px; /* Separación respecto al título */
+    margin-right: 8px; /* Separación entre botones */
+    padding: 8px 14px; /* Área clicable */
+    border-radius: 8px; /* Esquinas redondeadas */
+    border: 1px solid rgba(15, 45, 76, 0.45); /* Borde suave */
+    background: rgba(255, 255, 255, 0.9); /* Fondo casi opaco */
+    color: #153454; /* Texto azul oscuro */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 0.9rem; /* Tamaño de botón */
+    font-weight: 700; /* Destaca el texto */
+}
+
+/* Estado hover de los botones */
+.btn-volver:hover,
+.btn-registrar:hover {
+    background: rgba(21, 52, 84, 0.93); /* Fondo oscuro al pasar el ratón */
+    color: #ffffff; /* Texto blanco */
+}
+
+/* Visor con scroll interno, como en acontecimientos */
+.visor {
+    height: calc(100vh - 140px); /* Alto restante bajo la cabecera */
+    max-height: 520px; /* Tope similar al visor de cronología */
+    overflow-x: hidden; /* Evita que el deslizamiento recorte el margen derecho de la ventana */
+    overflow-y: auto; /* Scroll vertical de los paneles */
+    width: min(560px, 84vw); /* Mismo ancho contenido que la cabecera */
+    margin: 0 auto; /* Centra el visor */
+    padding-right: 8px; /* Aire junto a la barra de scroll */
+}
+
+/* Grosor de la barra de scroll */
+.visor::-webkit-scrollbar {
+    width: 10px; /* Ancho de la barra */
+}
+
+/* Fondo del track del scroll */
+.visor::-webkit-scrollbar-track {
+    background: #0b1f3a33; /* Track semitransparente */
+    border-radius: 5px; /* Bordes suaves */
+}
+
+/* Pulgar del scroll */
+.visor::-webkit-scrollbar-thumb {
+    background: #0b1f3a; /* Color principal */
+    border-radius: 5px; /* Bordes suaves */
+}
+
+/* Pulgar al pasar el ratón */
+.visor::-webkit-scrollbar-thumb:hover {
+    background: #163a6b; /* Color más claro */
+}
+
+/* Columna de paneles padre e hijo */
+.galeria-paneles {
+    display: flex; /* Coloca los planetas en columna */
+    flex-direction: column; /* Uno debajo de otro */
+    gap: 14px; /* Separación entre planetas */
+    padding: 10px 28px 28px 6px; /* Reserva derecha para el deslizamiento al pasar el ratón */
+}
+
+/* Panel padre de planeta: se desliza al pasar el ratón, sin abrir su ficha física */
+.panel-planeta {
+    border-radius: 12px; /* Esquinas del panel padre */
+    border: 1px solid rgba(0, 0, 0, 0.18); /* Contorno */
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2); /* Sombra de tarjeta */
+    padding: 12px 14px; /* Interior del panel */
+    overflow: hidden; /* Recorta el detalle físico hasta el clic */
+    width: 100%; /* El panel cabe en la galería sin salirse */
+    max-width: 100%; /* Impide que el hijo combinado desborde el visor */
+    transform: translateX(0); /* Posición de reposo */
+    transition: transform 0.35s ease, filter 0.35s ease, box-shadow 0.35s ease; /* Animación de deslizamiento */
+    cursor: pointer; /* Indica que se puede abrir la ficha del planeta */
+}
+
+/* Al pasar el ratón: el planeta se aparta un poco y se ilumina, sin mostrar ficha completa */
+.panel-planeta:hover {
+    transform: translateX(10px); /* Se desliza un poco, sin cortar el margen derecho */
+    filter: brightness(1.12); /* Ilumina levemente el color */
+    box-shadow: 0 14px 28px rgba(255, 255, 255, 0.35); /* Brillo de borde */
+}
+
+/* Planeta abierto tras un clic: muestra la ficha física completa */
+.panel-planeta.abierto {
+    cursor: default; /* El clic interno lo gestionan los hijos */
+}
+
+/* Nombre visible del planeta en estado compacto */
+.resumen-planeta {
+    font-size: 1.15rem; /* Tamaño destacado */
+    font-weight: 700; /* Negrita */
+    color: #102033; /* Texto oscuro legible */
+    letter-spacing: 0.3px; /* Ligera separación */
+}
+
+/* Detalle completo del planeta, oculto hasta desplegar */
+.detalle-planeta {
+    display: none; /* No se ve en estado compacto */
+    margin-top: 12px; /* Separación respecto al nombre */
+}
+
+/* Cuando el planeta está abierto, aparece su ficha */
+.panel-planeta.abierto .detalle-planeta {
+    display: block; /* Muestra los campos del planeta */
+}
+
+/* Lista de continentes hijos dentro del planeta */
+.lista-continentes {
+    display: flex; /* Columna de hijos */
+    flex-direction: column; /* Vertical */
+    gap: 10px; /* Espacio entre continentes */
+    margin-top: 12px; /* Separación del detalle del planeta */
+}
+
+/* Panel hijo de continente: compacto, color distinto y semitransparente */
+.panel-continente {
+    border-radius: 10px; /* Esquinas del hijo */
+    border: 1px solid rgba(0, 0, 0, 0.16); /* Contorno */
+    padding: 10px 12px; /* Interior */
+    overflow: hidden; /* Esconde la ficha larga */
+    max-height: 74px; /* Solo nombre y coordenadas */
+    transform: translateX(0); /* Reposo */
+    transition: transform 0.35s ease, max-height 0.45s ease, filter 0.35s ease, box-shadow 0.35s ease; /* Animación */
+    cursor: pointer; /* Se puede desplegar */
+}
+
+/* Hover del continente: se aparta, se ilumina y destaca nombre + coordenadas */
+.panel-continente:hover {
+    transform: translateX(12px); /* Se desliza un poco más que el padre, dentro del padding */
+    filter: brightness(1.18); /* Iluminación leve */
+    box-shadow: 0 12px 24px rgba(255, 255, 255, 0.45); /* Halo */
+}
+
+/* Nombre y coordenadas más legibles al pasar el ratón */
+.panel-continente:hover .nombre-continente,
+.panel-continente:hover .coordenadas-continente {
+    color: #ffffff; /* Contraste alto */
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55); /* Sombra para leer sobre color */
+    font-weight: 800; /* Más destaque */
+}
+
+/* Continente desplegado: ficha completa */
+.panel-continente.abierto {
+    max-height: 8000px; /* Deja ver todos los apartados */
+}
+
+/* Bloque compacto: único contenido visible sin desplegar */
+.resumen-continente {
+    display: flex; /* Nombre y coordenadas en columna */
+    flex-direction: column; /* Una línea bajo la otra */
+    gap: 4px; /* Poco espacio */
+}
+
+/* Nombre del continente en el resumen */
+.nombre-continente {
+    font-size: 1.05rem; /* Tamaño principal */
+    font-weight: 700; /* Negrita */
+    color: #102033; /* Color base */
+}
+
+/* Coordenadas geográficas en el resumen */
+.coordenadas-continente {
+    font-size: 0.92rem; /* Un poco más pequeño */
+    font-weight: 600; /* Semi-negrita */
+    color: #1f2c3d; /* Color secundario */
+}
+
+/* Ficha completa del continente, oculta hasta clic */
+.detalle-continente {
+    display: none; /* Oculta los 13 apartados */
+    margin-top: 10px; /* Separación del resumen */
+}
+
+/* Muestra la ficha cuando el panel está abierto */
+.panel-continente.abierto .detalle-continente {
+    display: block; /* Contenido registrado */
+}
+
+/* Cada campo de la ficha completa */
+.campo-ficha {
+    margin: 8px 0; /* Separación entre apartados */
+    padding: 8px 10px; /* Caja interna */
+    background: rgba(255, 255, 255, 0.55); /* Capa para leer texto */
+    border-radius: 8px; /* Esquinas */
+}
+
+/* Etiqueta del campo */
+.campo-ficha strong {
+    display: block; /* La etiqueta va encima del texto */
+    margin-bottom: 4px; /* Separación */
+    color: #0b1f3a; /* Color de etiqueta */
+}
+
+/* Texto del campo */
+.campo-ficha p {
+    white-space: pre-wrap; /* Respeta saltos de línea escritos */
+    color: #1f2c3d; /* Color de lectura */
+}
+
+/* Mensaje cuando aún no hay planetas */
+.aviso-vacio {
+    background: rgba(255, 255, 255, 0.92); /* Caja clara */
+    border-radius: 10px; /* Esquinas */
+    padding: 16px; /* Interior */
+    color: #153454; /* Texto */
+    font-weight: 700; /* Destacado */
+}
+
+/* Paleta de colores distintos con transparencia para distinguir paneles */
+.color-0 { background: rgba(46, 109, 164, 0.72); } /* Azul */
+.color-1 { background: rgba(164, 86, 46, 0.72); } /* Terracota */
+.color-2 { background: rgba(62, 140, 92, 0.72); } /* Verde */
+.color-3 { background: rgba(140, 62, 118, 0.72); } /* Magenta */
+.color-4 { background: rgba(176, 140, 48, 0.72); } /* Ocre */
+.color-5 { background: rgba(48, 140, 176, 0.72); } /* Cian */
+.color-6 { background: rgba(118, 70, 160, 0.72); } /* Violeta */
+.color-7 { background: rgba(70, 120, 80, 0.72); } /* Verde musgo */
+.color-8 { background: rgba(180, 80, 80, 0.72); } /* Rojo */
+.color-9 { background: rgba(80, 90, 160, 0.72); } /* Índigo */
+.color-10 { background: rgba(160, 110, 60, 0.72); } /* Marrón */
+.color-11 { background: rgba(50, 130, 130, 0.72); } /* Verde azulado */
+
+/* Formularios de registro (mismas ideas que registro.php de acontecimientos) */
+.contenedor-formulario {
+    width: min(780px, 92vw); /* Ancho del formulario */
+    margin: 28px auto; /* Centrado */
+    background: rgba(255, 255, 255, 0.94); /* Caja blanca semitransparente */
+    border-radius: 12px; /* Esquinas */
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12); /* Sombra */
+    padding: 22px; /* Interior */
+    color: #1f2c3d; /* Texto */
+    position: relative; /* Sobre el fondo */
+    z-index: 1; /* Encima de la foto */
+    max-height: 90vh; /* No se sale de la ventana */
+    overflow-y: auto; /* Scroll si el formulario es largo */
+}
+
+/* Título del formulario */
+.contenedor-formulario h1 {
+    margin: 0 0 16px 0; /* Separación inferior */
+    color: #153454; /* Azul de cabecera */
+    font-size: 1.5rem; /* Tamaño */
+}
+
+/* Fila de botones del formulario */
+.acciones {
+    display: flex; /* Botones en fila */
+    gap: 10px; /* Separación */
+    margin: 14px 0; /* Aire vertical */
+    flex-wrap: wrap; /* Salto de línea en pantallas estrechas */
+}
+
+/* Campos de etiqueta */
+.contenedor-formulario label {
+    display: block; /* Cada etiqueta en su línea */
+    margin: 12px 0 6px; /* Separación */
+    font-weight: 700; /* Negrita */
+}
+
+/* Inputs, selects y textareas del formulario */
+.contenedor-formulario input,
+.contenedor-formulario textarea,
+.contenedor-formulario select {
+    width: 100%; /* Ocupan el ancho de la caja */
+    border: 1px solid #c8d1de; /* Borde */
+    border-radius: 8px; /* Esquinas */
+    padding: 10px 12px; /* Interior */
+    font: inherit; /* Misma fuente */
+}
+
+/* Textareas redimensionables en vertical */
+.contenedor-formulario textarea {
+    min-height: 90px; /* Alto inicial */
+    resize: vertical; /* El usuario puede alargarlas */
+    overflow: hidden; /* El JS ajusta la altura al contenido */
+}
+
+/* Mensajes de guardado o error */
+.mensaje {
+    margin: 8px 0 12px; /* Separación */
+    padding: 10px 12px; /* Interior */
+    border-radius: 8px; /* Esquinas */
+    font-weight: 700; /* Destacado */
+}
+
+/* Mensaje correcto */
+.mensaje.ok {
+    background: #e6f8ec; /* Verde suave */
+    color: #0a5b2f; /* Texto verde */
+    border: 1px solid #b6e6c7; /* Borde */
+}
+
+/* Mensaje de error */
+.mensaje.error {
+    background: #fdecec; /* Rojo suave */
+    color: #8d1f1f; /* Texto rojo */
+    border: 1px solid #f0baba; /* Borde */
+}
+
+/* Botón de envío reutilizando el estilo de cabecera */
+.btn {
+    display: inline-block; /* Caja de botón */
+    padding: 8px 14px; /* Interior */
+    border-radius: 8px; /* Esquinas */
+    border: 1px solid rgba(15, 45, 76, 0.45); /* Borde */
+    background: rgba(255, 255, 255, 0.9); /* Fondo */
+    color: #153454; /* Texto */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 0.9rem; /* Tamaño */
+    font-weight: 700; /* Negrita */
+    cursor: pointer; /* Mano */
+}
+
+/* Hover del botón de formulario */
+.btn:hover {
+    background: rgba(21, 52, 84, 0.93); /* Fondo oscuro */
+    color: #ffffff; /* Texto blanco */
+}

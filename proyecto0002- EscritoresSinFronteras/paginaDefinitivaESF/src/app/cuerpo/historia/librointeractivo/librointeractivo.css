@@ -1,0 +1,138 @@
+/*** INICIO DE LOS ESTILOS DEL LIBRO DE HISTORIA ***/
+    #libroAbierto {
+        position: absolute;
+        width: 650px;
+        height: 400px;
+        margin-top: 20px;
+        margin-left: 20px;
+        background-color: transparent;
+        background-image: url('../../../../assets/images/historia/libroAbierto.png');
+        background-size: cover;
+        background-position: center;
+        perspective: 1200px; /* profundidad para el efecto 3D */
+    }
+    #portada{
+        position: relative;
+        width: 300px;
+        height: 400px;
+        background-color: transparent;
+    }
+    .pagina {
+        position: absolute;
+        margin-top:30px;
+        background-color: rgb(211, 146, 60);
+        background-image: linear-gradient(to bottom right,  rgb(228, 178, 113), rgb(211, 146, 60));
+        color: rgb(0, 0, 0);
+        width: 240px;
+        height: 335px;
+        margin-left: 330px;
+        padding: 20px;
+        box-sizing: border-box;
+        font-family: 'Georgia', serif;
+        font-size: 16px;
+        line-height: 1.5;
+        box-shadow: 0px -3px 5px -5px  rgb(238, 171, 83);
+        border-top-left-radius: 10px; 
+        border-top-right-radius: 10px; 
+        border-bottom-right-radius: 10px; 
+        border-bottom-left-radius: 10px;
+        cursor: pointer;
+        /* Animación suave */ 
+        transition: transform 0.75s ease, box-shadow 0.4s ease; 
+        will-change: transform;
+        /* Aquí está la clave: rotar desde la arista izquierda */ 
+        transform-origin: left center; 
+        /* Para efectos 3D */ 
+        transform-style: preserve-3d;
+        backface-visibility:visible; /* evita ver el reverso del elemento */
+    }
+    .rotado{
+        transform: rotateY(180deg) translateX(15px);
+    }
+    .decolorado{
+        background-image: linear-gradient(to top left,  rgb(228, 178, 113), rgb(253, 208, 150));
+    }
+    .invisible{
+        box-shadow: none;
+        color: transparent;
+    }
+    .textoInvisible{
+        color:transparent;
+    }
+    .abrirLibro{
+        position: absolute;
+        bottom: 10px;
+        margin-left: 40px;
+        transform: translateX(-50%);
+        padding: 8px 12px;
+        font-size: 14px;
+        background-color: transparent;
+        color: black;
+        border: none;
+        cursor: pointer;
+    }
+    .abrirLibro:hover{
+        color:crimson;
+        text-decoration: underline;
+    }   
+    .desaparece{
+    color: transparent;
+    }
+    .aparece{
+    color: black;
+    }
+    .textoPergamino {
+    position: absolute;
+    top: 10%;
+    left: 8%;
+    width: 84%;
+    height: 80%;
+    font-family: 'Georgia', serif;
+    color: #2b1a0a;
+    line-height: 1.4;
+    text-align: justify;
+
+    /* Tamaño base para pantallas grandes */
+    font-size: 1.2vw;
+    }
+/* CONTENEDOR GENERAL PARA CENTRAR TODO */
+.contenedor-libro {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+}
+
+/* 📱 Móviles y tablets (<670px) */
+@media (max-width: 670px) {
+
+  /* PERGAMINO CENTRADO */
+  #libroAbierto {
+    position: absolute;
+    margin-top:-100px;
+    width: 40vw;
+    height: 80vw;
+    margin: 5vh auto;
+    background-image: url('../../../../assets/images/historia/pergaminoAbierto.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  /* CONTENEDOR INTERNO QUE CENTRA LAS PÁGINAS */
+  .paginas-wrapper {
+    position: relative;
+    width: 80%;      /* se adapta al pergamino */
+    height: 80%;
+  }
+  .textoPergamino {
+    font-size: 1.8vw;
+    line-height: 1.35;
+  }
+}
+
+/********************************************/

@@ -1,1 +1,70 @@
-<p>servicios works!</p>
+<section class="serviciosFondo" aria-labelledby="serviciosTitulo">
+  <div class="serviciosWrap">
+    <header class="serviciosHeader">
+      <h2 id="serviciosTitulo" class="serviciosTitle">Nuestros Servicios Ofrecidos</h2>
+      <p class="serviciosSubtitle">Explora cada apartado inferior</p>
+      <p class="serviciosSubtitle">Al pasar el ratón verás una animación</p>
+      <p class="serviciosSubtitle">Al pulsar, se despliega el contenido completo de esa categoría</p>
+    </header>
+
+    @if (errorMsg) {
+      <p class="serviciosError" role="alert">{{ errorMsg }}</p>
+    }
+
+    <div class="apartadosGrid" role="list">
+      @for (apartado of apartadosAgrupados; track apartado.id) {
+        <article class="servicioCard" [class.open]="isOpen(apartado.id)" role="listitem">
+          <button
+            type="button"
+            class="cardFace"
+            (click)="toggle(apartado.id)"
+            [attr.aria-expanded]="isOpen(apartado.id)"
+            [attr.aria-controls]="'panel-' + apartado.id"
+            [id]="'btn-' + apartado.id"
+          >
+            <span class="cardAccent" aria-hidden="true"></span>
+            <span class="cardTitleRow">
+              <span class="cardTitle">{{ apartado.titulo }}</span>
+              <span class="cardChevron" aria-hidden="true">{{ isOpen(apartado.id) ? '▾' : '▸' }}</span>
+            </span>
+            <span class="cardTeaser">{{ apartado.descripcion }}</span>
+            <span class="cardCount">
+              {{ cantidadEnApartado(apartado) }}
+              {{ cantidadEnApartado(apartado) === 1 ? 'actividad' : 'actividades' }}
+            </span>
+          </button>
+
+          <div
+            class="cardPanel"
+            [class.visible]="isOpen(apartado.id)"
+            [attr.aria-hidden]="!isOpen(apartado.id)"
+            [id]="'panel-' + apartado.id"
+            role="region"
+            [attr.aria-labelledby]="'btn-' + apartado.id"
+          >
+            <div class="itemList" role="list">
+              @if (apartado.contenidos.length === 0) {
+                <p class="itemDesc itemEmpty">No hay actividades publicadas en esta categoría por el momento.</p>
+              }
+              @for (item of apartado.contenidos; track item.subtitulo + $index) {
+                <div class="itemRow" role="listitem">
+                  <h3 class="itemTitle">{{ item.subtitulo }}</h3>
+                  <p class="itemDesc">{{ item.subdescripcion }}</p>
+                  @if (item.imagenservicio) {
+                    <p class="itemMedia">{{ item.imagenservicio }}</p>
+                  }
+                  @if (item.audioservicio) {
+                    <p class="itemMedia">{{ item.audioservicio }}</p>
+                  }
+                  @if (item.videoservicio) {
+                    <p class="itemMedia">{{ item.videoservicio }}</p>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

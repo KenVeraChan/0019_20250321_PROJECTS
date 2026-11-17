@@ -1,4 +1,6 @@
-import { Component, signal,OnInit, ViewChild, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Component,OnInit, ViewChild, ElementRef, HostListener, Renderer2, OnDestroy } from '@angular/core';
+import { RutaPrincipal } from '../app/servicios/rutaPrincipal';
+import { EstadoErroresService } from './servicios/estado-errores.service';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +8,17 @@ import { Component, signal,OnInit, ViewChild, ElementRef, HostListener, Renderer
   standalone: false,
   styleUrl: './app.css'
 })
-export class App implements OnInit{
+export class App implements OnInit, OnDestroy {
+  private readonly onOffline = (): void => {
+    this.estadoErrores.activarSinConexion('Pérdida de conexión a internet');
+  };
+
+  private readonly onOnline = (): void => {
+    const snap = this.estadoErrores.obtenerSnapshot();
+    if (snap.modo === 'sin-conexion') {
+      this.estadoErrores.limpiar();
+    }
+  };
   private tamanioHorizontalPantalla:number=0.0;  
     @ViewChild('cabecera') cabecera!: ElementRef;   //ELEMENTO DEL DOM MODIFICADO PARA MOVERSE
     @ViewChild('cuerpo') cuerpo!: ElementRef;   //ELEMENTO DEL DOM DE LA BOTONERA
@@ -16,12 +28,29 @@ export class App implements OnInit{
       this.tamanioHorizontalPantalla = event.target.innerWidth;   
       return(this.tamanioHorizontalPantalla);
     }
-  constructor(private renderer: Renderer2) {}
+  
+  //Variable para probar la conexión con el backend
+  saludo: string | null = null;
+  constructor(
+    private renderer: Renderer2,
+    private rutaPrincipal: RutaPrincipal,
+    private readonly estadoErrores: EstadoErroresService,
+  ) {}
+
   ngOnInit(): void 
   {
     if (typeof window !== 'undefined') 
     {
-      this.tamanioHorizontalPantalla = window.innerWidth;  //Ancho de la pantalla
+      this.tamanioHorizontalPantalla = window.innerWidth;
+      window.addEventListener('offline', this.onOffline);
+      window.addEventListener('online', this.onOnline);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('offline', this.onOffline);
+      window.removeEventListener('online', this.onOnline);
     }
   }
   ngAfterViewInit() 
