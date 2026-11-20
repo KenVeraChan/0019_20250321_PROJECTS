@@ -5,6 +5,6 @@ package Sfer4DCorporation.Cometido4321_Local;
  */
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World again!");
+    	MenuOpciones invocacion= new MenuOpciones();
     }
 }

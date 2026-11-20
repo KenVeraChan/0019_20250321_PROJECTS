@@ -47,3 +47,23 @@ A partir de ahí, tu lógica se repartirá muy bien:
 Una clase en tu paquete encargada de abrir el .pptx con POI y extraer todo el texto de las diapositivas.
 
 Métodos de transformación que cojan ese texto extraído y lo escriban según lo que el usuario pida: un .txt nativo de Java, un .docx usando POI XWPF, o un .pdf usando PDFBox.
+
+
+ARQUITECTURA EMPLEADA:
+-----------------------
+
+PPTX
+ ↓
+Leer diapositiva
+ ↓
+Extraer:
+    - Título
+    - Texto
+    - Comentarios
+ ↓
+Escribir inmediatamente en un archivo temporal
+ ↓
+Liberar referencias
+ ↓
+Siguiente diapositiva
+
