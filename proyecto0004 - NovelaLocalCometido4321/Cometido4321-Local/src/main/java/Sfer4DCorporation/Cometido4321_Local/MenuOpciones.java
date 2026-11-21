@@ -11,6 +11,7 @@ import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -27,7 +28,7 @@ class CuadroOpciones extends JFrame
 		setTitle("BIENVENIDO AL EDITOR NOVELA");
 		setIconImage(new ImageIcon("ficherosUtilizados/icono.png").getImage());
 		setResizable(false);
-		PanelHallNovela almacen = new PanelHallNovela("ficherosUtilizados/cometido4321.jpeg", 30,this);
+		PanelHallNovela almacen = new PanelHallNovela("ficherosUtilizados/cometido4321.jpeg", 80,this);
 		add(almacen);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
@@ -39,6 +40,11 @@ class PanelHallNovela extends JPanel implements ActionListener
 	//1) DECLARACION DE ELEMENTOS USADOS EN LA INTERFAZ
 	private BufferedImage imagen;
     private float alfaImagen = 1.0f; // opaco por defecto
+    
+    //2) DECLARACION DE BOTONES
+    private JButton borradorUnaPagina, borradorVariasPaginas;   //caso borrador novela
+    private JButton novelaUnaPagina, novelaVariasPaginas, novelaIntervaloPaginas;  //caso novela terminada
+    private JButton cronologia;     //Para el caso de sacar una cronologia
     
 	public PanelHallNovela(String ruta,int transparencia,JFrame tableroBase)
 	{
@@ -64,8 +70,37 @@ class PanelHallNovela extends JPanel implements ActionListener
         } catch (Exception e) {
             e.printStackTrace();
         }	
-	    //3) ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
+	    //2) ESTETICA DE CAJAS-TITULOS-DESPLEGABLES-FECHAS
 		setLayout(null);  //Para que respeten el setBounds
+		
+		//3) COLOCACION DE BOTONES DECLARADOS
+		borradorUnaPagina= new JButton("Borrador - Selección de una página");
+	    borradorVariasPaginas=new JButton("Borrador - Seleccion de varias páginas");   //caso borrador novela
+	    novelaUnaPagina= new JButton("Novela - Seleccion de una página");
+	    novelaVariasPaginas= new JButton("Novela - Seleccion de varias páginas");
+	    novelaIntervaloPaginas=new JButton("Novela - Selección de intervalo de páginas");  //caso novela terminada
+	    cronologia= new JButton("Sacar cronología de la Novela");     //Para el caso de sacar una cronologia
+	    
+	    borradorUnaPagina.setBounds(30, 30, 300, 30);
+	    borradorVariasPaginas.setBounds(30, 90, 300, 30);
+	    novelaUnaPagina.setBounds(30, 150, 300, 30);
+	    novelaVariasPaginas.setBounds(30, 210, 300, 30);
+	    novelaIntervaloPaginas.setBounds(30, 270, 300, 30);
+	    
+	    borradorUnaPagina.setName("borradorUnaPagina");
+	    
+	    add(borradorUnaPagina);
+	    add(borradorVariasPaginas);
+	    add(novelaUnaPagina);
+	    add(novelaVariasPaginas);
+	    add(novelaIntervaloPaginas);
+	    
+		//4) DECLARACION DE LOS ADD EVENTLISTENERS
+	    borradorUnaPagina.addActionListener(this);
+	    borradorVariasPaginas.addActionListener(this);
+	    novelaUnaPagina.addActionListener(this);
+	    novelaVariasPaginas.addActionListener(this);
+	    novelaIntervaloPaginas.addActionListener(this);
 	}
 	
     @Override
@@ -80,6 +115,12 @@ class PanelHallNovela extends JPanel implements ActionListener
     }
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		Object pivote;
+		if(e.getActionCommand()==)
+		{
+			System.out.println("COINCIDEN!!!");
+			System.out.println("");
+		}
 		
 	}
 }
