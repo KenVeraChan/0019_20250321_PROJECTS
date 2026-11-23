@@ -23,29 +23,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BorradorNovelaUnaPagina implements ActionListener
+public class BorradorNovela implements ActionListener
 {
     //1) DECLARACION DE TITULOS DE GRUPOS BOTONERAS
     private JLabel nombreSector;
+    private JButton aceptar,volver;
     
     //2) DECLARACION DE SNIPPER SELECTOR DE DIAPOSITIVA
     private SpinnerNumberModel pagina;
     private JSpinner selectorPagina;
        
-    //3) DECLARACION DE BOTONES IMPLICADOS
-    private JButton aceptar,volver;
+    //3) DECLARACION DE VARIABLE SELECTOR DE OPERACIÓN DEL BORRADOR
+    private int semaforoBorrador;
+    private boolean mensajeFueraRango=false;
     
     //4) FICHERO JSON
 	private FileWriter apuntador; 
 	private final ObjectMapper mapper = new ObjectMapper();   //Para el uso de JACKSON no JSON
     
-	public BorradorNovelaUnaPagina(JPanel PanelHallNovela)
+	public BorradorNovela(JPanel PanelHallNovela)
 	{
 		//4) COLOCACION DEL TITULO DE PRESENTACION
 			nombreSector = new JLabel("SECTOR BORRADOR UNA PÁGINA");
@@ -58,7 +59,7 @@ public class BorradorNovelaUnaPagina implements ActionListener
 	    	SpinnerNumberModel modelo = new SpinnerNumberModel(
 	    	        1,    // valor inicial
 	    	        1,    // mínimo
-	    	        100,  // máximo
+	    	        5000,  // máximo
 	    	        1     // incremento
 	    	);
 	    	selectorPagina = new JSpinner(modelo);
@@ -79,46 +80,141 @@ public class BorradorNovelaUnaPagina implements ActionListener
 	    	PanelHallNovela.revalidate();
 	    	PanelHallNovela.repaint();
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==aceptar)
 		{
-			//EJECUTAR CODIGO DE EXTRACCION DE UNA SOLA PAGINA
-			this.informacionExtraida();
-			this.desactivarInterfazUnaPaginaBorrador();
+			switch(this.getSemaforoBorrador())
+			{
+				case 1:
+				{
+				    //ACTUALIZACION DE DATOS DE DIAPOSITIVA INICIAL Y FINAL QUE COINCIDEN
+				       //ATENCION, COMO ES UNA SOLA PAGINA, TANTO EL VALOR INICIAL COMO EL FINAL COINCIDEN
+				    this.informacionExtraida((Integer) selectorPagina.getValue(), (Integer) selectorPagina.getValue());
+					this.desactivarInterfazUnaPaginaBorrador(1);
+					break;
+				}
+				case 2:
+				{
+				    //ACTUALIZACION DE DATOS DE DIAPOSITIVA INICIAL Y FINAL QUE COINCIDEN
+				       //ATENCION, COMO SON VARIAS DIAPOSITIVAS, EL VALOR INICIAL ES 1 Y EL FINAL ES EL ELEGIDO
+					break;
+				}
+				case 3:
+				{
+				    //ACTUALIZACION DE DATOS DE DIAPOSITIVA INICIAL Y FINAL QUE COINCIDEN
+				       //ATENCION, COMO ES UN INTERVALO DE PAGINAS SE TENDRAN UN VALOR INICIAL Y FINAL
+					break;
+				}
+				default:
+				{
+					//NO HACE NADA PORQUE NO EXISTE ESA OPCION
+					break;
+				}
+			}
 		}
 		if(e.getSource()==volver)
 		{
-			this.desactivarInterfazUnaPaginaBorrador();
+			switch(this.getSemaforoBorrador())
+			{
+				case 1:{this.desactivarInterfazUnaPaginaBorrador(1);break;}
+				case 2:{this.desactivarInterfazUnaPaginaBorrador(2);break;}
+				case 3:{this.desactivarInterfazUnaPaginaBorrador(3);break;}
+			}
 		}
 	}
-	public void desactivarInterfazUnaPaginaBorrador()
+	
+	public int getSemaforoBorrador()
 	{
-	    //1) DECLARACION DE TITULOS DE GRUPOS BOTONERAS
-	    this.nombreSector.setVisible(false);
-	    
-	    //2) DECLARACION DE SNIPPER SELECTOR DE DIAPOSITIVA
-	    this.selectorPagina.setVisible(false);
-	       
-	    //3) DECLARACION DE BOTONES IMPLICADOS
-	    this.aceptar.setVisible(false);
-	    this.volver.setVisible(false);
+		return this.semaforoBorrador;
 	}
-	public void activarInterfazUnaPaginaBorrador()
+	
+	public void setSemaforoBorrador(int semaforoBorrador)
 	{
-	    //1) DECLARACION DE TITULOS DE GRUPOS BOTONERAS
-	    this.nombreSector.setVisible(true);
-	    
-	    //2) DECLARACION DE SNIPPER SELECTOR DE DIAPOSITIVA
-	    this.selectorPagina.setVisible(true);
-	       
-	    //3) DECLARACION DE BOTONES IMPLICADOS
-	    this.aceptar.setVisible(true);
-	    this.volver.setVisible(true);
+		this.semaforoBorrador=semaforoBorrador;
 	}
-	public void informacionExtraida() {
+	
+	public void desactivarInterfazUnaPaginaBorrador(int selector)
+	{
+		switch(selector)
+		{
+			case 1:
+			{
+			    //1) DECLARACION DE TITULOS DE GRUPOS BOTONERAS
+			    this.nombreSector.setVisible(false);
+			    
+			    //2) DECLARACION DE SNIPPER SELECTOR DE DIAPOSITIVA
+			    this.selectorPagina.setVisible(false);
+			       
+			    //3) DECLARACION DE BOTONES IMPLICADOS
+			    this.aceptar.setVisible(false);
+			    this.volver.setVisible(false);
+			break;
+			}
+			case 2:
+			{
+				
+				break;
+			}
+			case 3:
+			{
+				
+				break;
+			}
+			case 4:
+			{
+				//Esta opcion solo para el principio del todo al ejecutar de poner todos los 
+				//botones de todas las secciones en invisibilidad: setVisible();
+				break;
+			}
+			default:
+			{
+				break;
+			}
+		}
+	}
+	public void activarInterfazUnaPaginaBorrador(int selector)
+	{
+		switch(selector)
+		{
+			case 1:
+			{
+				//BORRADOR DE UNA SOLA PAGINA
+			    //1) DECLARACION DE TITULOS DE GRUPOS BOTONERAS
+			    this.nombreSector.setVisible(true);
+			    
+			    //2) DECLARACION DE SNIPPER SELECTOR DE DIAPOSITIVA
+			    this.selectorPagina.setVisible(true);
+			       
+			    //3) DECLARACION DE BOTONES IMPLICADOS
+			    this.aceptar.setVisible(true);
+			    this.volver.setVisible(true);
+				break;
+			}
+			case 2:
+			{
+				//BORRADOR DE VARIAS PAGINAS
+				
+				break;
+			}
+			case 3:
+			{
+				//BORRADOR DE INTERVALO DE PAGINAS
+				
+				break;
+			}
+			default:
+			{
+				//NO HACE NADA
+				break;
+			}
+		}
+	    //4) ACTUALIZA EL SELECTOR QUE SE HA ELEGIDO
+	    this.setSemaforoBorrador(selector);
+	}
+	public void informacionExtraida(int numInicial,int numFinal) {
 		//1) COMPROBAMOS LA MEMORIA RAM INICIALMENTE DISPONIBLE
 		System.out.println("Max RAM JVM: "
 			    + Runtime.getRuntime().maxMemory()
@@ -147,85 +243,102 @@ public class BorradorNovelaUnaPagina implements ActionListener
 	         XMLSlideShow ppt = new XMLSlideShow(fis)) 
 	    	{
 	        diapositivas = new ArrayList<>();
-	        int numSlide = 1;
+	        System.out.println("DIAPOSITIVA INICIAL: "+(Integer)numInicial+" DIAPOSITIVA FINAL: "+(Integer)numFinal);
+	        int numSlide = 1;  //SE PONE COMO DIAPOSITIVA INICIAL AQUELLA ELEGIDA POR EL USUARIO
 	        for(XSLFSlide slide : ppt.getSlides()) 
 	        {
-	            //4.1 TEXTO DEL TITULO
-	            String titulo = slide.getTitle();
-	            //4.2 TEXTO DEL CUERPO
-	            StringBuilder cuerpo = new StringBuilder();
-	            //4.3 TEXTO DE LA FIGURA AÑADIDA
-	            String comentario="";
-	            boolean semaforo=false;
-	            
-	            for (XSLFShape shape : slide.getShapes()) 
+	            if((Integer)numInicial>ppt.getSlides().size() || (Integer)numFinal>ppt.getSlides().size())
 	            {
-            	    Rectangle2D area = shape.getAnchor();  //Definimos el ancho de la caja texto detectada
-	            	if (shape instanceof XSLFTextShape textShape) 
-	            	{
-	            	    Placeholder tipo = textShape.getTextType();
-	            	    if (tipo == Placeholder.TITLE || tipo == Placeholder.CENTERED_TITLE){continue;}
-	            	    if(shape instanceof XSLFTextShape txt && area.getX()>600 && area.getY()<150)
-	            	    {
-	            	        comentario=txt.getText();   //Recogemos el contenido del texto de la figura
-	            	        semaforo=true;
-	            	    }
-	            	    String texto = textShape.getText();
-
-	            	    if (texto != null && !texto.isBlank() && !semaforo) {
-	            	        cuerpo.append(texto).append("\n");
-	            	        semaforo=false;
-	            	    }
-	            	}
+	            	mensajeFueraRango=true;
+	            	break;
 	            }
-	            //4.4 TEXTO DE LAS NOTAS
-	            String notasTexto = "";
-	
-	            XSLFNotes notas = slide.getNotes();
-	
-	            if (notas != null) 
+	            if (numSlide<(Integer)numInicial)
 	            {
-	                StringBuilder sbNotas = new StringBuilder();
-	                for (XSLFShape shape : notas.getShapes()) 
-	                {
-	                    if (shape instanceof XSLFTextShape textShape) 
-	                    {
-	                        String texto = textShape.getText();
-	                        if (texto != null && !texto.isBlank()) 
-	                        {
-	                            sbNotas.append(texto).append("\n");
-	                        }
-	                    }
-	                }
-	                notasTexto = sbNotas.toString();   //CONVERTIR A STRING DESDE STRINGBUILDER
+	                numSlide++;
+	                continue;    //ITERA EL BUCLE SIN EJECUTAR EL CODIGO INFERIOR
 	            }
+	            if (numSlide>(Integer)numFinal)
+	            {
+	                break;       //DETIENE EL BUCLE Y TERMINA
+	            }
+		            //4.1 TEXTO DEL TITULO
+		            String titulo = slide.getTitle();
+		            //4.2 TEXTO DEL CUERPO
+		            StringBuilder cuerpo = new StringBuilder();
+		            //4.3 TEXTO DE LA FIGURA AÑADIDA
+		            String comentario="";
+		            boolean semaforo=false;
+		            
+		            for (XSLFShape shape : slide.getShapes()) 
+		            {
+	            	    Rectangle2D area = shape.getAnchor();  //Definimos el ancho de la caja texto detectada
+		            	if (shape instanceof XSLFTextShape textShape) 
+		            	{
+		            	    Placeholder tipo = textShape.getTextType();
+		            	    if (tipo == Placeholder.TITLE || tipo == Placeholder.CENTERED_TITLE){continue;}
+		            	    if(shape instanceof XSLFTextShape txt && area.getX()>600 && area.getY()<150)
+		            	    {
+		            	        comentario=txt.getText();   //Recogemos el contenido del texto de la figura
+		            	        semaforo=true;
+		            	    }
+		            	    String texto = textShape.getText();
 	
-	            InformacionDiapositivas diapositiva =
-	                    new InformacionDiapositivas(
-	                            numSlide,
-	                            titulo,
-	                            cuerpo.toString(),
-	                            notasTexto,
-	                            comentario);
-	
-	            diapositivas.add(diapositiva);
-	            numSlide++;
-	        }
-
-	    //5) SE CREA EL MAPA DE DATOS CONVERTIDOS A JSON PARA GUARDARLOS EN EL FICHERO CREADO JSON 
-	        ObjectMapper mapper =  new ObjectMapper();    //SE CREA EL MAPA
-	        File jsonSalida = new File(fichero.getParent() + File.separator + "ficheroJSON.json");  //SE CREA EL FICHERO JSON
-	        mapper.writerWithDefaultPrettyPrinter().writeValue(jsonSalida,diapositivas);  //SE ESCRIBE EN EL FICHERO JSON
-	        JOptionPane.showMessageDialog(null,"JSON generado correctamente.");  //SE LANZA MENSAJE DE TODO OKEY
-	     } catch (Exception e) {
-	        e.printStackTrace();
-	        JOptionPane.showMessageDialog(null,"Error al procesar el PowerPoint.");
+		            	    if (texto != null && !texto.isBlank() && !semaforo) {
+		            	        cuerpo.append(texto).append("\n");
+		            	        semaforo=false;
+		            	    }
+		            	}
+		            }
+		            //4.4 TEXTO DE LAS NOTAS
+		            String notasTexto = "";
+		
+		            XSLFNotes notas = slide.getNotes();
+		
+		            if (notas != null) 
+		            {
+		                StringBuilder sbNotas = new StringBuilder();
+		                for (XSLFShape shape : notas.getShapes()) 
+		                {
+		                    if (shape instanceof XSLFTextShape textShape) 
+		                    {
+		                        String texto = textShape.getText();
+		                        if (texto != null && !texto.isBlank()) 
+		                        {
+		                            sbNotas.append(texto).append("\n");
+		                        }
+		                    }
+		                }
+		                notasTexto = sbNotas.toString();   //CONVERTIR A STRING DESDE STRINGBUILDER
+		            }
+		
+		            InformacionDiapositivas diapositiva =
+		                    new InformacionDiapositivas(
+		                            numSlide,
+		                            titulo,
+		                            cuerpo.toString(),
+		                            notasTexto,
+		                            comentario);
+     		            diapositivas.add(diapositiva);
+	    	        numSlide++;
+		        }
+		        if(mensajeFueraRango)
+		        {
+			        JOptionPane.showMessageDialog(null,"SELECTOR FUERA DE RANGO, CANCELANDO OPERACIÓN!",
+			                "NOVELA COMETIDO 4321",
+			                JOptionPane.WARNING_MESSAGE);
+			        mensajeFueraRango=false;  //Se devuelve al valor original por si se ejecuta un segundo ciclo
+		        }
+		        else {
+		    	    //5) SE CREA EL MAPA DE DATOS CONVERTIDOS A JSON PARA GUARDARLOS EN EL FICHERO CREADO JSON 
+			        ObjectMapper mapper =  new ObjectMapper();    //SE CREA EL MAPA
+			        File jsonSalida = new File(fichero.getParent() + File.separator + "ficheroJSON.json");  //SE CREA EL FICHERO JSON
+			        mapper.writerWithDefaultPrettyPrinter().writeValue(jsonSalida,diapositivas);  //SE ESCRIBE EN EL FICHERO JSON
+			        JOptionPane.showMessageDialog(null,"JSON generado correctamente.");  //SE LANZA MENSAJE DE TODO OKEY
+		        }
+	       } catch (Exception e) {
+	         e.printStackTrace();
+	         JOptionPane.showMessageDialog(null,"Error al procesar el PowerPoint.");
 	    }
-	    
-	    
-	    
-	    
-	    
 	    
 	    //6) MOSTRAR LA MEMORIA ANTES DE SER LIMPIADA TRAS EL PROCESO DE MOVER INFORMACION DEL POWER POINT AL FICHERO JSON
 	     mostrarRAM("ANTES DE LIMPIAR MEMORIA");

@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import Sfer4DCorporation_BorradorNovela.BorradorNovelaUnaPagina;
+import Sfer4DCorporation_BorradorNovela.BorradorNovela;
 
 public class MenuOpciones {
 	CuadroOpciones base= new CuadroOpciones();
@@ -56,7 +56,7 @@ class PanelHallNovela extends JPanel implements ActionListener
     private JButton cronologia;     //Para el caso de sacar una cronologia
     
     //3) DECLARACION DE LAS INTERFACES SECUNDARIAS DE LOS MENUS SECUNDARIOS PARA TRATAR VISIBILIDAD INTERFACES
-    private BorradorNovelaUnaPagina unaPagina;
+    private BorradorNovela unaPagina;
     
     
 	public PanelHallNovela(String ruta,int transparencia,JFrame tableroBase)
@@ -146,8 +146,8 @@ class PanelHallNovela extends JPanel implements ActionListener
 		
 		//5) PINTAJE DE LOS MENUS SECUNDARIOS
 		    //5.1.) BORRADOR SOLO UNA PAGINA
-		    unaPagina= new BorradorNovelaUnaPagina(this);
-		    unaPagina.desactivarInterfazUnaPaginaBorrador();
+		    unaPagina= new BorradorNovela(this);
+		    unaPagina.desactivarInterfazUnaPaginaBorrador(4);
 	}
 	
     @Override
@@ -164,19 +164,12 @@ class PanelHallNovela extends JPanel implements ActionListener
 		// 1) Accionamiento de BORRADOR sacar UNA SOLA PÁGINA
 		if(e.getSource()==borradorUnaPagina)
 		{
-			//CREAR DOCUMENTO DE WORD
-	        //JOptionPane.showMessageDialog(null,"SE ACCIONÓ BORRADOR A UNA SOLA PAGINA",
-	        //        "NOVELA COMETIDO 4321",
-	        //        JOptionPane.INFORMATION_MESSAGE);
-	        this.unaPagina.activarInterfazUnaPaginaBorrador();
+	        this.unaPagina.activarInterfazUnaPaginaBorrador(1);  //Con numero 1 para identificar BORRADOR y UNA PAGINA
 		}
 		// 2) Accionamiento de BORRADOR sacar VARIAS PAGINAS
 		if(e.getSource()==borradorVariasPaginas)
 		{
-			//CREAR DOCUMENTO DE WORD
-	        JOptionPane.showMessageDialog(null,"SE ACCIONÓ BORRADOR VARIAS PAGINAS",
-	                "NOVELA COMETIDO 4321",
-	                JOptionPane.INFORMATION_MESSAGE);
+	        this.unaPagina.activarInterfazUnaPaginaBorrador(2);  //Con numero 1 para identificar BORRADOR y VARIAS PAGINA
 		}
 		// 3) Accionamiento de BORRADOR sacar INTERVALO DE PAGINAS
 		if(e.getSource()==borradorIntervaloPaginas)
