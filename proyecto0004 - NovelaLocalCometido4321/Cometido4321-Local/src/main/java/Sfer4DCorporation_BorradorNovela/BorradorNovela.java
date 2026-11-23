@@ -1,6 +1,7 @@
 package Sfer4DCorporation_BorradorNovela;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,21 +31,27 @@ import java.util.List;
 
 public class BorradorNovela implements ActionListener
 {
-    //1) DECLARACION DE TITULOS DE GRUPOS BOTONERAS
+    //0) DECLARACION DE TITULOS DE GRUPOS BOTONERAS Y SNIPPER SELECTOR DE DIAPOSITIVA
     private JLabel nombreSector;
     private JButton aceptar,volver;
     
-    //2) DECLARACION DE SNIPPER SELECTOR DE DIAPOSITIVA
     private SpinnerNumberModel pagina;
     private JSpinner selectorPagina;
+    
+    //1) DECLARACION DEL JPANEL TABLERO
+    private JPanel PanelHallNovela;
        
-    //3) DECLARACION DE VARIABLE SELECTOR DE OPERACIÓN DEL BORRADOR
+    //2) DECLARACION DE VARIABLE SELECTOR DE OPERACIÓN DEL BORRADOR
     private int semaforoBorrador;
     private boolean mensajeFueraRango=false;
+    private int diapositivaInicial, diapositivaFinal;
     
-    //4) FICHERO JSON
-	private FileWriter apuntador; 
-	private final ObjectMapper mapper = new ObjectMapper();   //Para el uso de JACKSON no JSON
+    //3) FICHERO JSON Y CONSUMO DE MEMORIA RAM Y DISCO
+	    //3.1) FICHERO JSON
+	    private FileWriter apuntador; 
+		private final ObjectMapper mapper = new ObjectMapper();   //Para el uso de JACKSON no JSON
+		//3.2) CONSUMO DE MEMORIA RAM Y DISCO
+		private JLabel maxRAM,mensajeDinamico,usadaRAM,libreRAM,reservadaRAM,mensajeDiapositivas;
     
 	public BorradorNovela(JPanel PanelHallNovela)
 	{
@@ -76,9 +83,12 @@ public class BorradorNovela implements ActionListener
 	    	PanelHallNovela.add(volver);
 	    	volver.addActionListener(this);
     	
-    	//2) REFRESCA EL JPANEL PARA QUE APAREZCAN LOS COMPONENTES AÑADIDOS, COMO SI SE ACTUALIZARA
+    	//6) REFRESCA EL JPANEL PARA QUE APAREZCAN LOS COMPONENTES AÑADIDOS, COMO SI SE ACTUALIZARA
 	    	PanelHallNovela.revalidate();
 	    	PanelHallNovela.repaint();
+	    
+	    //7) SE GUARDA EL JPANEL PARA EL POSTERIOR USO
+	    	this.setPanelHallNovela(PanelHallNovela);
 	}
 	
 	@Override
@@ -93,7 +103,6 @@ public class BorradorNovela implements ActionListener
 				    //ACTUALIZACION DE DATOS DE DIAPOSITIVA INICIAL Y FINAL QUE COINCIDEN
 				       //ATENCION, COMO ES UNA SOLA PAGINA, TANTO EL VALOR INICIAL COMO EL FINAL COINCIDEN
 				    this.informacionExtraida((Integer) selectorPagina.getValue(), (Integer) selectorPagina.getValue());
-					this.desactivarInterfazUnaPaginaBorrador(1);
 					break;
 				}
 				case 2:
@@ -135,6 +144,30 @@ public class BorradorNovela implements ActionListener
 	{
 		this.semaforoBorrador=semaforoBorrador;
 	}
+	public JPanel getPanelHallNovela()
+	{
+		return this.PanelHallNovela;
+	}
+	public void setPanelHallNovela(JPanel PanelHallNovela)
+	{
+		this.PanelHallNovela=PanelHallNovela;
+	}
+    public int getDiapositivaInicial()
+    {
+    	return this.diapositivaInicial;
+    }
+    public void setDiapositivaInicial(int diapositivaInicial)
+    {
+    	this.diapositivaInicial=diapositivaInicial;
+    }
+    public int getDiapositivaFinal()
+    {
+    	return this.diapositivaFinal;
+    }
+    public void setDiapositivaFinal(int diapositivaFinal)
+    {
+    	this.diapositivaFinal=diapositivaFinal;
+    }
 	
 	public void desactivarInterfazUnaPaginaBorrador(int selector)
 	{
@@ -142,7 +175,7 @@ public class BorradorNovela implements ActionListener
 		{
 			case 1:
 			{
-			    //1) DECLARACION DE TITULOS DE GRUPOS BOTONERAS
+			    //1) DESACTIVACION DE BOTONES DEL SUBMENU BORRADOR UNA PAGINA
 			    this.nombreSector.setVisible(false);
 			    
 			    //2) DECLARACION DE SNIPPER SELECTOR DE DIAPOSITIVA
@@ -151,6 +184,20 @@ public class BorradorNovela implements ActionListener
 			    //3) DECLARACION DE BOTONES IMPLICADOS
 			    this.aceptar.setVisible(false);
 			    this.volver.setVisible(false);
+			    
+			    //4) DECLARACION DE JLABELS QUE SE DESACTIVARAON
+				for(Component componente : this.getPanelHallNovela().getComponents())
+				{
+				    if(componente instanceof JLabel)
+				    {
+				        JLabel lbl = (JLabel) componente;
+
+				        if("estudioRAM".equals(lbl.getName()))
+				        {
+				            lbl.setVisible(false);
+				        }
+				    }
+				}
 			break;
 			}
 			case 2:
@@ -167,6 +214,17 @@ public class BorradorNovela implements ActionListener
 			{
 				//Esta opcion solo para el principio del todo al ejecutar de poner todos los 
 				//botones de todas las secciones en invisibilidad: setVisible();
+				//DESACTIVACION DEL SUBMENU BORRADOR UNA PAGINA
+					//1) DESACTIVACION DE BOTONES
+				    this.nombreSector.setVisible(false);
+				    
+				    //2) DECLARACION DE SNIPPER SELECTOR DE DIAPOSITIVA
+				    this.selectorPagina.setVisible(false);
+				       
+				    //3) DECLARACION DE BOTONES IMPLICADOS
+				    this.aceptar.setVisible(false);
+				    this.volver.setVisible(false);
+				  
 				break;
 			}
 			default:
@@ -214,13 +272,15 @@ public class BorradorNovela implements ActionListener
 	    //4) ACTUALIZA EL SELECTOR QUE SE HA ELEGIDO
 	    this.setSemaforoBorrador(selector);
 	}
-	public void informacionExtraida(int numInicial,int numFinal) {
+	public void informacionExtraida(int numInicial,int numFinal) 
+	{
+		//0) ALMACENAJE DE LAS VARIABLES DE LA DIAPOSITIVA INICIAL Y FINAL
+		setDiapositivaInicial(numInicial);
+		setDiapositivaFinal(numFinal);
+		
 		//1) COMPROBAMOS LA MEMORIA RAM INICIALMENTE DISPONIBLE
-		System.out.println("Max RAM JVM: "
-			    + Runtime.getRuntime().maxMemory()
-			      / 1024 / 1024
-			    + " MB");
-        mostrarRAM("ANTES DE PROCESAR PPT");
+		mostrarRAM("MAXIMA RAM JVM",0);
+        mostrarRAM("ANTES DE PROCESAR PPT",1);
 
         //2) SE SOLICITA EL FICHERO QUE SE PROCESARA DE TIPO POWER POINT
 	    File fichero = selectorURL();
@@ -243,7 +303,6 @@ public class BorradorNovela implements ActionListener
 	         XMLSlideShow ppt = new XMLSlideShow(fis)) 
 	    	{
 	        diapositivas = new ArrayList<>();
-	        System.out.println("DIAPOSITIVA INICIAL: "+(Integer)numInicial+" DIAPOSITIVA FINAL: "+(Integer)numFinal);
 	        int numSlide = 1;  //SE PONE COMO DIAPOSITIVA INICIAL AQUELLA ELEGIDA POR EL USUARIO
 	        for(XSLFSlide slide : ppt.getSlides()) 
 	        {
@@ -341,7 +400,7 @@ public class BorradorNovela implements ActionListener
 	    }
 	    
 	    //6) MOSTRAR LA MEMORIA ANTES DE SER LIMPIADA TRAS EL PROCESO DE MOVER INFORMACION DEL POWER POINT AL FICHERO JSON
-	     mostrarRAM("ANTES DE LIMPIAR MEMORIA");
+	     mostrarRAM("ANTES DE LIMPIAR MEMORIA",2);
 	     diapositivas.clear();   //SE LIMPIA LA COLECCION DE DATOS EXTRAIDOS
 	     diapositivas = null;    //SE LIMPIA DEL TODO
 	     System.gc();            //SE LIBERA LA MEMORIA DEL SISTEMA
@@ -353,7 +412,7 @@ public class BorradorNovela implements ActionListener
 		}
 	    
 	    //7) SE MOSTRARA LA MEMORIA UTILIZADA TRAS LA LIMPIEZA QUE DEBERA QUEDAR SIMILAR AL INICIO O IGUAL
-	     mostrarRAM("DESPUES DE LIMPIAR MEMORIA");  
+	     mostrarRAM("DESPUES DE LIMPIAR MEMORIA",3);  
 	}
 	//METODO PARA ELEGIR LA URL DEL FICHERO POR EL USUARIO
 	public File selectorURL()
@@ -394,27 +453,159 @@ public class BorradorNovela implements ActionListener
 		apuntador.write("]}");
 		apuntador.close();
 	}
-	private void mostrarRAM(String mensaje)
+	private void mostrarRAM(String mensaje,int sincronizado)
 	{
-	    Runtime runtime = Runtime.getRuntime();
+		JPanel panelMensajes=this.getPanelHallNovela();
+		if(sincronizado==0)
+		{
+			maxRAM= new JLabel(mensaje+ Runtime.getRuntime().maxMemory()
+				      / 1024 / 1024
+					    + " MB");
+			maxRAM.setBounds(500, 250, 100, 20);
+			maxRAM.setName("estudioRAM");
+			panelMensajes.add(nombreSector);
+		}
+		if(sincronizado==1)
+		{
+			//CALCULO DE LA OCUPACION DE LOS RECURSOS DEL PC
+		    Runtime runtime = Runtime.getRuntime();
 
-	    long memoriaUsada =
-	            (runtime.totalMemory() - runtime.freeMemory())
-	            / 1024 / 1024;
+		    long memoriaUsada =
+		            (runtime.totalMemory() - runtime.freeMemory())
+		            / 1024 / 1024;
 
-	    long memoriaTotal =
-	            runtime.totalMemory()
-	            / 1024 / 1024;
+		    long memoriaTotal =
+		            runtime.totalMemory()
+		            / 1024 / 1024;
 
-	    long memoriaLibre =
-	            runtime.freeMemory()
-	            / 1024 / 1024;
+		    long memoriaLibre =
+		            runtime.freeMemory()
+		            / 1024 / 1024;
+		    
+		    //MENSAJE DINAMICO
+			mensajeDinamico=new JLabel("=== " + mensaje + " ===");
+			mensajeDinamico.setBounds(410, 160+20*sincronizado, 250, 20);
+			mensajeDinamico.setName("estudioRAM");
+			panelMensajes.add(mensajeDinamico);
+			
+			//MEMORIA RAM USADA: ANTES, DURANTE Y DESPUES DEL PROCESO
+			usadaRAM= new JLabel("RAM usada: " + memoriaUsada + " MB");
+			usadaRAM.setBounds(410, 160+40*sincronizado, 250, 20);
+			usadaRAM.setName("estudioRAM");
+			panelMensajes.add(usadaRAM);
+			
+			//MEMORIA RAM LIBRE: ANTES, DURANTE Y DESPUES DEL PROCESO
+			libreRAM= new JLabel("RAM libre: " + memoriaLibre + " MB");
+			libreRAM.setBounds(410, 160+60*sincronizado, 250, 20);
+			libreRAM.setName("estudioRAM");
+			panelMensajes.add(libreRAM);
+			
+			//MEMORIA RAM TOTAL: ANTES, DURANTE Y DESPUES DEL PROCESO
+			reservadaRAM= new JLabel("RAM reservada JVM: " + memoriaTotal + " MB");
+			reservadaRAM.setBounds(410, 160+80*sincronizado, 250, 20);
+			reservadaRAM.setName("estudioRAM");
+			panelMensajes.add(reservadaRAM);
+			
+	    	//REFRESCA EL JPANEL PARA QUE APAREZCAN LOS COMPONENTES AÑADIDOS, COMO SI SE ACTUALIZARA
+	    	PanelHallNovela.revalidate();
+	    	PanelHallNovela.repaint();
+		}
+		if(sincronizado==2)
+		{
+			//CALCULO DE LA OCUPACION DE LOS RECURSOS DEL PC
+		    Runtime runtime = Runtime.getRuntime();
 
-	    System.out.println("===== " + mensaje + " =====");
-	    System.out.println("RAM usada: " + memoriaUsada + " MB");
-	    System.out.println("RAM libre: " + memoriaLibre + " MB");
-	    System.out.println("RAM reservada JVM: " + memoriaTotal + " MB");
-	    System.out.println();
+		    long memoriaUsada =
+		            (runtime.totalMemory() - runtime.freeMemory())
+		            / 1024 / 1024;
+
+		    long memoriaTotal =
+		            runtime.totalMemory()
+		            / 1024 / 1024;
+
+		    long memoriaLibre =
+		            runtime.freeMemory()
+		            / 1024 / 1024;
+		    
+		    //MENSAJE DINAMICO
+			mensajeDinamico=new JLabel("=== " + mensaje + " ===");
+			mensajeDinamico.setBounds(410, 160+20+90*(sincronizado-1), 250, 20);
+			mensajeDinamico.setName("estudioRAM");
+			panelMensajes.add(mensajeDinamico);
+			
+			//MEMORIA RAM USADA: ANTES, DURANTE Y DESPUES DEL PROCESO
+			usadaRAM= new JLabel("RAM usada: " + memoriaUsada + " MB");
+			usadaRAM.setBounds(410, 160+40+90*(sincronizado-1), 250, 20);
+			usadaRAM.setName("estudioRAM");
+			panelMensajes.add(usadaRAM);
+			
+			//MEMORIA RAM LIBRE: ANTES, DURANTE Y DESPUES DEL PROCESO
+			libreRAM= new JLabel("RAM libre: " + memoriaLibre + " MB");
+			libreRAM.setBounds(410,160+60+90*(sincronizado-1), 250, 20);
+			libreRAM.setName("estudioRAM");
+			panelMensajes.add(libreRAM);
+			
+			//MEMORIA RAM TOTAL: ANTES, DURANTE Y DESPUES DEL PROCESO
+			reservadaRAM= new JLabel("RAM reservada JVM: " + memoriaTotal + " MB");
+			reservadaRAM.setBounds(410,160+80+90*(sincronizado-1), 250, 20);
+			reservadaRAM.setName("estudioRAM");
+			panelMensajes.add(reservadaRAM);
+			
+	    	//REFRESCA EL JPANEL PARA QUE APAREZCAN LOS COMPONENTES AÑADIDOS, COMO SI SE ACTUALIZARA
+	    	PanelHallNovela.revalidate();
+	    	PanelHallNovela.repaint();
+		}
+		if(sincronizado==3)
+		{
+			//CALCULO DE LA OCUPACION DE LOS RECURSOS DEL PC
+		    Runtime runtime = Runtime.getRuntime();
+
+		    long memoriaUsada =
+		            (runtime.totalMemory() - runtime.freeMemory())
+		            / 1024 / 1024;
+
+		    long memoriaTotal =
+		            runtime.totalMemory()
+		            / 1024 / 1024;
+
+		    long memoriaLibre =
+		            runtime.freeMemory()
+		            / 1024 / 1024;
+		    
+		    //MENSAJE DINAMICO
+			mensajeDinamico=new JLabel("=== " + mensaje + " ===");
+			mensajeDinamico.setBounds(410, 160+20+90*(sincronizado-1), 250, 20);
+			mensajeDinamico.setName("estudioRAM");
+			panelMensajes.add(mensajeDinamico);
+			
+			//MEMORIA RAM USADA: ANTES, DURANTE Y DESPUES DEL PROCESO
+			usadaRAM= new JLabel("RAM usada: " + memoriaUsada + " MB");
+			usadaRAM.setBounds(410, 160+40+90*(sincronizado-1), 250, 20);
+			usadaRAM.setName("estudioRAM");
+			panelMensajes.add(usadaRAM);
+			
+			//MEMORIA RAM LIBRE: ANTES, DURANTE Y DESPUES DEL PROCESO
+			libreRAM= new JLabel("RAM libre: " + memoriaLibre + " MB");
+			libreRAM.setBounds(410,160+60+90*(sincronizado-1), 250, 20);
+			libreRAM.setName("estudioRAM");
+			panelMensajes.add(libreRAM);
+			
+			//MEMORIA RAM TOTAL: ANTES, DURANTE Y DESPUES DEL PROCESO
+			reservadaRAM= new JLabel("RAM reservada JVM: " + memoriaTotal + " MB");
+			reservadaRAM.setBounds(410,160+80+90*(sincronizado-1), 250, 20);
+			reservadaRAM.setName("estudioRAM");
+			panelMensajes.add(reservadaRAM);
+			
+			//DIAPOSITIVAS IMPLICADAS INICIO Y FINAL
+			mensajeDiapositivas= new JLabel("INICIAL: "+(Integer)this.getDiapositivaInicial()+" FINAL: "+(Integer)this.getDiapositivaFinal());
+			mensajeDiapositivas.setBounds(410, 160+100+90*(sincronizado-1), 250, 20);
+			mensajeDiapositivas.setName("estudioRAM");
+			panelMensajes.add(mensajeDiapositivas);
+			
+	    	//REFRESCA EL JPANEL PARA QUE APAREZCAN LOS COMPONENTES AÑADIDOS, COMO SI SE ACTUALIZARA
+	    	PanelHallNovela.revalidate();
+	    	PanelHallNovela.repaint();
+		}
 	}
 }
 
