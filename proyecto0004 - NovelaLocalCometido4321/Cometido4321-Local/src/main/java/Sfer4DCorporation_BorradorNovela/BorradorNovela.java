@@ -6,6 +6,12 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -17,30 +23,27 @@ import javax.swing.SpinnerNumberModel;
 
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.sl.usermodel.Placeholder;
-import org.apache.poi.xslf.usermodel.*;
 import org.apache.poi.util.IOUtils;
+import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xslf.usermodel.XSLFNotes;
+import org.apache.poi.xslf.usermodel.XSLFShape;
+import org.apache.poi.xslf.usermodel.XSLFSlide;
+import org.apache.poi.xslf.usermodel.XSLFTextShape;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BorradorNovela implements ActionListener
 {
     //0) DECLARACION DE TITULOS DE GRUPOS BOTONERAS Y SNIPPER SELECTOR DE DIAPOSITIVA
-    private JLabel nombreSector;
-    private JButton aceptar,volver;
-    
-    private SpinnerNumberModel pagina;
-    private JSpinner selectorPagina;
-    
+	    //0.1) BORRADOR UNA PAGINA y BORRADOR VARIAS PAGINAS
+			private JLabel nombreSector;
+		    private JButton aceptar,volver;
+		    
+		    private SpinnerNumberModel pagina;
+		    private JSpinner selectorPagina;
     //1) DECLARACION DEL JPANEL TABLERO
     private JPanel PanelHallNovela;
-       
+    
     //2) DECLARACION DE VARIABLE SELECTOR DE OPERACIÓN DEL BORRADOR
     private int semaforoBorrador;
     private boolean mensajeFueraRango=false;
@@ -53,42 +56,59 @@ public class BorradorNovela implements ActionListener
 		//3.2) CONSUMO DE MEMORIA RAM Y DISCO
 		private JLabel maxRAM,mensajeDinamico,usadaRAM,libreRAM,reservadaRAM,mensajeDiapositivas;
     
-	public BorradorNovela(JPanel PanelHallNovela)
-	{
-		//4) COLOCACION DEL TITULO DE PRESENTACION
-			nombreSector = new JLabel("SECTOR BORRADOR UNA PÁGINA");
+	public BorradorNovela(JPanel PanelHallNovela,int selector)
+	{		
+		//4) COLOCACION DE ELEMENTOS DEL SELECTOR BORRADOR-UNA SOLA PAGINA
+		  //4.1) COLOCACION DEL TITULO DE PRESENTACION
+			switch(selector)
+			{
+				case 1:
+				{
+					nombreSector = new JLabel("SECTOR BORRADOR UNA PÁGINA");
+					break;
+				}
+				case 2:
+				{
+					nombreSector = new JLabel("SECTOR BORRADOR VARIAS PÁGINAS");
+					break;
+				}
+				default:
+				{
+					//no hace nada porque esta fuera del selector
+				}
+			}
 			nombreSector.setFont(new Font("Segoe UI", Font.BOLD, 15));
 			nombreSector.setForeground(new Color(102, 0, 102));
 			nombreSector.setBounds(400, 60, 300, 20);
 			PanelHallNovela.add(nombreSector);
-		
-		//5) COLOCA LOS NUEVOS COMPONENTES SOBRE EL MISMO MENU DE OPCIONES: SPINNER Y BOTONES
-	    	SpinnerNumberModel modelo = new SpinnerNumberModel(
-	    	        1,    // valor inicial
-	    	        1,    // mínimo
-	    	        5000,  // máximo
-	    	        1     // incremento
-	    	);
-	    	selectorPagina = new JSpinner(modelo);
-	    	selectorPagina.setBounds(470, 100, 100, 20);
-	    	PanelHallNovela.add(selectorPagina);
-    	
-	    	aceptar= new JButton("ACEPTAR");
-	    	aceptar.setBounds(410, 150, 100, 20);
-	    	PanelHallNovela.add(aceptar);
-	    	aceptar.addActionListener(this);
+			
+			//4.2) COLOCA LOS NUEVOS COMPONENTES SOBRE EL MISMO MENU DE OPCIONES: SPINNER Y BOTONES
+		    	SpinnerNumberModel modelo = new SpinnerNumberModel(
+		    	        1,    // valor inicial
+		    	        1,    // mínimo
+		    	        5000,  // máximo
+		    	        1     // incremento
+		    	);
+		    	selectorPagina = new JSpinner(modelo);
+		    	selectorPagina.setBounds(470, 100, 100, 20);
+		    	PanelHallNovela.add(selectorPagina);
 	    	
-	    	volver= new JButton("VOLVER");
-	    	volver.setBounds(530, 150, 100, 20);
-	    	PanelHallNovela.add(volver);
-	    	volver.addActionListener(this);
-    	
-    	//6) REFRESCA EL JPANEL PARA QUE APAREZCAN LOS COMPONENTES AÑADIDOS, COMO SI SE ACTUALIZARA
-	    	PanelHallNovela.revalidate();
-	    	PanelHallNovela.repaint();
-	    
-	    //7) SE GUARDA EL JPANEL PARA EL POSTERIOR USO
-	    	this.setPanelHallNovela(PanelHallNovela);
+		    	aceptar= new JButton("ACEPTAR");
+		    	aceptar.setBounds(410, 150, 100, 20);
+		    	PanelHallNovela.add(aceptar);
+		    	aceptar.addActionListener(this);
+		    	
+		    	volver= new JButton("VOLVER");
+		    	volver.setBounds(530, 150, 100, 20);
+		    	PanelHallNovela.add(volver);
+		    	volver.addActionListener(this);
+	    	
+	    	//4.3) REFRESCA EL JPANEL PARA QUE APAREZCAN LOS COMPONENTES AÑADIDOS, COMO SI SE ACTUALIZARA
+		    	PanelHallNovela.revalidate();
+		    	PanelHallNovela.repaint();
+		    
+		    //4.4) SE GUARDA EL JPANEL PARA EL POSTERIOR USO
+		    	this.setPanelHallNovela(PanelHallNovela);		    	
 	}
 	
 	@Override
@@ -98,17 +118,20 @@ public class BorradorNovela implements ActionListener
 		{
 			switch(this.getSemaforoBorrador())
 			{
-				case 1:
+				case 1,2:
 				{
-				    //ACTUALIZACION DE DATOS DE DIAPOSITIVA INICIAL Y FINAL QUE COINCIDEN
-				       //ATENCION, COMO ES UNA SOLA PAGINA, TANTO EL VALOR INICIAL COMO EL FINAL COINCIDEN
-				    this.informacionExtraida((Integer) selectorPagina.getValue(), (Integer) selectorPagina.getValue());
-					break;
-				}
-				case 2:
-				{
-				    //ACTUALIZACION DE DATOS DE DIAPOSITIVA INICIAL Y FINAL QUE COINCIDEN
-				       //ATENCION, COMO SON VARIAS DIAPOSITIVAS, EL VALOR INICIAL ES 1 Y EL FINAL ES EL ELEGIDO
+				    if(this.getSemaforoBorrador()==1)
+				    {
+					//ACTUALIZACION DE DATOS DE DIAPOSITIVA INICIAL Y FINAL QUE COINCIDEN
+					  //ATENCION, COMO ES UNA SOLA PAGINA, TANTO EL VALOR INICIAL COMO EL FINAL COINCIDEN
+						this.informacionExtraida((Integer) selectorPagina.getValue(), (Integer) selectorPagina.getValue());
+				    }
+				    else
+				    {
+					 //ACTUALIZACION DE DATOS DE DIAPOSITIVA INICIAL Y FINAL QUE COINCIDEN
+					   //ATENCION, COMO SON VARIAS DIAPOSITIVAS, EL VALOR INICIAL ES 1 Y EL FINAL ES EL ELEGIDO
+						this.informacionExtraida(1,(Integer) selectorPagina.getValue());
+				    }
 					break;
 				}
 				case 3:
@@ -131,6 +154,13 @@ public class BorradorNovela implements ActionListener
 				case 1:{this.desactivarInterfazUnaPaginaBorrador(1);break;}
 				case 2:{this.desactivarInterfazUnaPaginaBorrador(2);break;}
 				case 3:{this.desactivarInterfazUnaPaginaBorrador(3);break;}
+			}
+			for(Component c : PanelHallNovela.getComponents())
+			{
+			    if(c instanceof JButton)
+			    {
+			        c.setEnabled(true);
+			    }
 			}
 		}
 	}
@@ -173,7 +203,7 @@ public class BorradorNovela implements ActionListener
 	{
 		switch(selector)
 		{
-			case 1:
+			case 1,2:
 			{
 			    //1) DESACTIVACION DE BOTONES DEL SUBMENU BORRADOR UNA PAGINA
 			    this.nombreSector.setVisible(false);
@@ -191,7 +221,6 @@ public class BorradorNovela implements ActionListener
 				    if(componente instanceof JLabel)
 				    {
 				        JLabel lbl = (JLabel) componente;
-
 				        if("estudioRAM".equals(lbl.getName()))
 				        {
 				            lbl.setVisible(false);
@@ -199,11 +228,6 @@ public class BorradorNovela implements ActionListener
 				    }
 				}
 			break;
-			}
-			case 2:
-			{
-				
-				break;
 			}
 			case 3:
 			{
@@ -237,9 +261,9 @@ public class BorradorNovela implements ActionListener
 	{
 		switch(selector)
 		{
-			case 1:
+			case 1,2:
 			{
-				//BORRADOR DE UNA SOLA PAGINA
+				//BORRADOR DE UNA SOLA PAGINA y BORRADOR DE VARIAS PAGINAS
 			    //1) DECLARACION DE TITULOS DE GRUPOS BOTONERAS
 			    this.nombreSector.setVisible(true);
 			    
@@ -249,12 +273,6 @@ public class BorradorNovela implements ActionListener
 			    //3) DECLARACION DE BOTONES IMPLICADOS
 			    this.aceptar.setVisible(true);
 			    this.volver.setVisible(true);
-				break;
-			}
-			case 2:
-			{
-				//BORRADOR DE VARIAS PAGINAS
-				
 				break;
 			}
 			case 3:
